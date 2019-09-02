@@ -1,0 +1,25 @@
+def final projectId = "provisionSpringBoot"
+def final componentId = "init-beSpringBoot"
+def final credentialsId = "cd-user-with-password"
+def sharedLibraryRepository
+def dockerRegistry
+node {
+  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+library identifier: 'ods-library@production', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: sharedLibraryRepository,
+   credentialsId: credentialsId])
+
+odsPipeline(
+  image: "${dockerRegistry}/cd/jenkins-slave-base",
+  projectId: projectId,
+  componentId: componentId,
+
+) { context ->
+  stage('Build') {
+      echo "FUU"
+  }
+}
