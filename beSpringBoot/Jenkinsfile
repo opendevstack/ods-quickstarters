@@ -1,0 +1,98 @@
+
+def final credentialsId = "cd-user-with-password"
+def sharedLibraryRepository
+def dockerRegistry
+
+
+  environment {
+       field = 'some'
+   }
+node {
+  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+def conts = containerTemplate( 
+            name: 'jnlp',
+            image: "${dockerRegistry}/cd/jenkins-slave-base",
+            workingDir: '/tmp',
+            alwaysPullImage: true,
+            args: ''
+        )
+
+def pod_label = "hanswurst";
+def PROJECT = env.project_id;
+def COMPONENT = env.component_id.toLowerCase();
+def PACKAGE = env.package_name;
+def GROUP = "org.osi";
+def git_url_http = env.git_url_http
+def git_url_ssh = env.git_url_ssh
+def nexus_host ="https://nexus-cd.192.168.56.101.nip.io";
+
+def springQuickstarterBasepath = "beSpringBoot";
+
+podTemplate(
+      label: pod_label,
+      cloud: 'openshift',
+      containers: [conts],
+      volumes: [],
+      serviceAccount: 'jenkins'
+    ) {
+        node(pod_label) {
+          stage('checkout quickstarter'){
+            checkout scm
+          }
+          stage('Install tailor') {
+            // somehow its already installed. 
+          }
+          stage('Install Spring') {
+              sh 'curl -s "https://get.sdkman.io" | bash'
+              sh '/bin/bash -lc "source /home/jenkins/.sdkman/bin/sdkman-init.sh && sdk install springboot $SPRING_CLI_VERSION && spring --version"'
+          }
+          stage('SpringIt') {
+            sh "/home/jenkins/.sdkman/candidates/springboot/current/bin/spring init \
+                --build=gradle \
+                --java-version='1.8' \
+                --groupId=${PROJECT} \
+                --artifactId=${COMPONENT} \
+                --package-name='${PACKAGE}' \
+                --packaging=jar \
+                --dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
+                  ${COMPONENT}"
+            withEnv(["COMPONENT=${COMPONENT}","GROUP=${GROUP}","SCRIPT_DIR=${springQuickstarterBasepath}"]) {
+              sh "sh ./${springQuickstarterBasepath}/postProcessProjectsettings.sh"            
+            }
+          }
+
+          stage('Setup Openshift'){
+            sh "sh common/scripts/create-component.sh -p ${PROJECT} -c ${COMPONENT} -ne ${nexus_host} --force"
+          }
+          stage('create Jenkinsfile') {
+            sh "sh common/scripts/renderJenkinsTemplate.sh \
+                  --source ${springQuickstarterBasepath}/files/Jenkinsfile.template \
+                  --target ${COMPONENT}/Jenkinsfile \
+                  --url ${git_url_http} \
+                  --project-id ${PROJECT} \
+                  --component-id ${COMPONENT}  \
+                  --component-type ${springQuickstarterBasepath}"
+          }
+                    stage('create Sonarq') {
+            sh "sh common/scripts/renderSonarqubeTemplate.sh \
+                  --source ${springQuickstarterBasepath}/files/sonar-project.properties.template \
+                  --target ${COMPONENT}/sonar-project.properties \
+                  --project-id ${PROJECT} \
+                  --component-id ${COMPONENT}  \
+                  --component-type ${springQuickstarterBasepath}"
+          }
+          stage('Push it'){
+            writeFile file: "/home/jenkins/.netrc", text: "machine 192.168.56.31 login cd_user password cd_user"
+            sh "sh common/scripts/git_push.sh --dir ${COMPONENT} --url ${git_url_http}"
+          }
+      }
+}
+
+
+
+
+
+

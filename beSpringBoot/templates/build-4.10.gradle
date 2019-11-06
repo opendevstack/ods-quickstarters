@@ -1,0 +1,82 @@
+plugins {
+	id 'org.asciidoctor.convert' version '1.5.3'
+	id 'org.springframework.boot' version '2.1.3.RELEASE'
+	id 'java'
+    id 'maven'
+    id 'jacoco'
+}
+
+project.ext
+{
+		nexus_url =  "${project.findProperty('nexus_url') ?: System.getenv('NEXUS_HOST')}"
+		nexus_user =  "${project.findProperty('nexus_user') ?: System.getenv('NEXUS_USERNAME')}"
+		nexus_pw =  "${project.findProperty('nexus_pw') ?: System.getenv('NEXUS_PASSWORD')}"  
+        nexus_folder = "candidates"
+  
+        snippetsDir = file('build/generated-snippets')
+}
+
+ext['spring-restdocs.version'] = '2.0.2.RELEASE'
+
+apply plugin: 'io.spring.dependency-management'
+
+group = '__GROUP__'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+	maven () {
+        url "${nexus_url}/repository/jcenter/"
+        credentials {
+          username = "${nexus_user}"
+          password = "${nexus_pw}"
+        }
+      }
+
+      maven () {
+        url "${nexus_url}/repository/maven-public/"
+        credentials {
+          username = "${nexus_user}"
+          password = "${nexus_pw}"
+        }
+      }
+
+      maven () {
+        url "${nexus_url}/repository/atlassian_public/"
+        credentials {
+          username = "${nexus_user}"
+          password = "${nexus_pw}"
+        }
+      }
+
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-jersey'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'org.springframework.security:spring-security-test'
+  
+    testCompile "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"  
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+bootJar {
+    archiveName    "app.jar"
+    destinationDir  file("$buildDir/../docker")
+}
