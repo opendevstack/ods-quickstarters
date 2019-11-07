@@ -1,14 +1,18 @@
 
-def final credentialsId = "cd-user-with-password"
-def sharedLibraryRepository
+def projectId = env.PROJECT_ID;
+def componentId = env.COMPONENT_ID.toLowerCase();
+def packageName = env.PACKAGE_NAME;
+def gitUrlHttp = env.GIT_URL_HTTP
+def gitUrlSsh = env.GIT_URL_SSH
+def group = "org.osi";
+def nexusHost = env.NEXUS_HOST;
+
+
+def credentialsId = "cd-user-with-password"
+def springQuickstarterBasepath = "beSpringBoot";
 def dockerRegistry
 
-
-  environment {
-       field = 'some'
-   }
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
@@ -20,25 +24,17 @@ def conts = containerTemplate(
             args: ''
         )
 
-def pod_label = "hanswurst";
-def PROJECT = env.project_id;
-def COMPONENT = env.component_id.toLowerCase();
-def PACKAGE = env.package_name;
-def GROUP = "org.osi";
-def git_url_http = env.git_url_http
-def git_url_ssh = env.git_url_ssh
-def nexus_host ="https://nexus-cd.192.168.56.101.nip.io";
+def podLabel = "quickstarter-beSpringBoot-" + projectId;
 
-def springQuickstarterBasepath = "beSpringBoot";
 
 podTemplate(
-      label: pod_label,
+      label: podLabel,
       cloud: 'openshift',
       containers: [conts],
       volumes: [],
       serviceAccount: 'jenkins'
     ) {
-        node(pod_label) {
+        node(podLabel) {
           stage('checkout quickstarter'){
             checkout scm
           }
@@ -53,40 +49,40 @@ podTemplate(
             sh "/home/jenkins/.sdkman/candidates/springboot/current/bin/spring init \
                 --build=gradle \
                 --java-version='1.8' \
-                --groupId=${PROJECT} \
-                --artifactId=${COMPONENT} \
-                --package-name='${PACKAGE}' \
+                --groupId=${projectId} \
+                --artifactId=${componentId} \
+                --package-name='${packageName}' \
                 --packaging=jar \
                 --dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
-                  ${COMPONENT}"
-            withEnv(["COMPONENT=${COMPONENT}","GROUP=${GROUP}","SCRIPT_DIR=${springQuickstarterBasepath}"]) {
+                  ${componentId}"
+            withEnv(["COMPONENT=${componentId}","GROUP=${group}","SCRIPT_DIR=${springQuickstarterBasepath}"]) {
               sh "sh ./${springQuickstarterBasepath}/postProcessProjectsettings.sh"            
             }
           }
 
           stage('Setup Openshift'){
-            sh "sh common/scripts/create-component.sh -p ${PROJECT} -c ${COMPONENT} -ne ${nexus_host} --force"
+            sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
           }
           stage('create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
                   --source ${springQuickstarterBasepath}/files/Jenkinsfile.template \
-                  --target ${COMPONENT}/Jenkinsfile \
-                  --url ${git_url_http} \
-                  --project-id ${PROJECT} \
-                  --component-id ${COMPONENT}  \
+                  --target ${componentId}/Jenkinsfile \
+                  --url ${gitUrlHttp} \
+                  --project-id ${projectId} \
+                  --component-id ${componentId}  \
                   --component-type ${springQuickstarterBasepath}"
           }
                     stage('create Sonarq') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \
                   --source ${springQuickstarterBasepath}/files/sonar-project.properties.template \
-                  --target ${COMPONENT}/sonar-project.properties \
-                  --project-id ${PROJECT} \
-                  --component-id ${COMPONENT}  \
+                  --target ${componentId}/sonar-project.properties \
+                  --project-id ${projectId} \
+                  --component-id ${componentId}  \
                   --component-type ${springQuickstarterBasepath}"
           }
           stage('Push it'){
             writeFile file: "/home/jenkins/.netrc", text: "machine 192.168.56.31 login cd_user password cd_user"
-            sh "sh common/scripts/git_push.sh --dir ${COMPONENT} --url ${git_url_http}"
+            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
           }
       }
 }
