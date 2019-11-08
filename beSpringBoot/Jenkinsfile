@@ -81,6 +81,8 @@ podTemplate(
                   --component-id ${componentId}  \
                   --component-type ${springQuickstarterBasepath}"
           }
+          // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
+          // Check if Jenkinsfile.template etc. are also copied (they should not be!)
           stage('Push to remote') {
             // FIX: Machine IP and cd_user credentials
             writeFile file: "/home/jenkins/.netrc", text: "machine 192.168.56.31 login cd_user password cd_user"
