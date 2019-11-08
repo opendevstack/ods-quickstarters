@@ -22,6 +22,7 @@ def conts = containerTemplate(
             image: "${dockerRegistry}/cd/jenkins-slave-base:2",
             workingDir: '/tmp',
             alwaysPullImage: true,
+            // TODO: Check if args: '${computer.jnlpmac} ${computer.name}' is needed
             args: ''
         )
 
