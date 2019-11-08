@@ -19,7 +19,7 @@ node {
 
 def conts = containerTemplate( 
             name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-base:2",
+            image: "${dockerRegistry}/cd/jenkins-slave-maven:2",
             workingDir: '/tmp',
             alwaysPullImage: true,
             // TODO: Check if args: '${computer.jnlpmac} ${computer.name}' is needed
