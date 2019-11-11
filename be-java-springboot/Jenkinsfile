@@ -14,12 +14,13 @@ def gitHost
 
 // vars from jenkins master
 node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
-            def hostPattern = ~/(\/\/|\@)([0-9a-zA-Z\-\_.]*)[\/:]/
-            def matcher = hostPattern.matcher(gitUrlHttp);
-            matcher.find();
-            gitHost = matcher.group(2)
+    dockerRegistry = env.DOCKER_REGISTRY
+    nexusHost = env.NEXUS_HOST
+
+    def hostPattern = ~/(\/\/|\@)([0-9a-zA-Z\-\_.]*)[\/:]/
+    def matcher = hostPattern.matcher(gitUrlHttp);
+    matcher.find();
+    gitHost = matcher.group(2)
 }
 
 def conts = containerTemplate( 
@@ -92,7 +93,6 @@ podTemplate(
             withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
               writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
             }
-            sh "cat /home/jenkins/.netrc"
             sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
           }
       }
