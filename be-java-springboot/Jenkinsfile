@@ -1,20 +1,25 @@
-// FIX: Either move into node, or remove the node block if possible ...
-def projectId = env.PROJECT_ID;
-def componentId = env.COMPONENT_ID.toLowerCase();
-def packageName = env.PACKAGE_NAME;
+// build params
+def projectId = env.PROJECT_ID
+def componentId = env.COMPONENT_ID.toLowerCase()
+def packageName = env.PACKAGE_NAME
 def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
-def group = "org.osi";
-def nexusHost = env.NEXUS_HOST;
+def group = "org.osi"
 
-def credentialsId = "cd-user-with-password"
-// FIX: Name of quickstarter directory to be-java-springboot
-// TODO: Retrieve automatically? E.g. via BuildConfig/jenkinsfilePath
-def springQuickstarterBasepath = "beSpringBoot";
+def credentialsId = projectId + "-cd-cd-user-with-password"
+def springQuickstarterBasepath = "be-java-springboot"
+def nexusHost
 def dockerRegistry
+def gitHost
 
+// vars from jenkins master
 node {
   dockerRegistry = env.DOCKER_REGISTRY
+  nexusHost = env.NEXUS_HOST
+            def hostPattern = ~/(\/\/|\@)([0-9a-zA-Z\-\_.]*)[\/:]/
+            def matcher = hostPattern.matcher(gitUrlHttp);
+            matcher.find();
+            gitHost = matcher.group(2)
 }
 
 def conts = containerTemplate( 
@@ -26,7 +31,7 @@ def conts = containerTemplate(
             args: ''
         )
 
-def podLabel = "quickstarter-beSpringBoot-" + projectId + "-" +componentId;
+def podLabel = "quickstarter-" + springQuickstarterBasepath + "-" + projectId + "-" +componentId;
 
 
 podTemplate(
@@ -84,8 +89,10 @@ podTemplate(
           // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
           // Check if Jenkinsfile.template etc. are also copied (they should not be!)
           stage('Push to remote') {
-            // FIX: Machine IP and cd_user credentials
-            writeFile file: "/home/jenkins/.netrc", text: "machine 192.168.56.31 login cd_user password cd_user"
+            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
+              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
+            }
+            sh "cat /home/jenkins/.netrc"
             sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
           }
       }
