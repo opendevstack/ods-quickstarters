@@ -11,16 +11,11 @@ def springQuickstarterBasepath = "be-java-springboot"
 def nexusHost
 def dockerRegistry
 def gitHost
-
 // vars from jenkins master
 node {
     dockerRegistry = env.DOCKER_REGISTRY
     nexusHost = env.NEXUS_HOST
-
-    def hostPattern = ~/(\/\/|\@)([0-9a-zA-Z\-\_.]*)[\/:]/
-    def matcher = hostPattern.matcher(gitUrlHttp);
-    matcher.find();
-    gitHost = matcher.group(2)
+    gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
 def conts = containerTemplate( 
