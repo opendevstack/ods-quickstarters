@@ -67,22 +67,20 @@ podTemplate(
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${springQuickstarterBasepath}/files/Jenkinsfile.template \
+                  --source ${springQuickstarterBasepath}/Jenkinsfile.template \
                   --target ${componentId}/Jenkinsfile \
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
                   --component-type ${springQuickstarterBasepath}"
-            sh "rm ${springQuickstarterBasepath}/files/Jenkinsfile.template"
           }
           stage('Create sonar-project.properties') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${springQuickstarterBasepath}/files/sonar-project.properties.template \
+                  --source ${springQuickstarterBasepath}/sonar-project.properties.template \
                   --target ${componentId}/sonar-project.properties \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
                   --component-type ${springQuickstarterBasepath}"
-            sh "rm ${springQuickstarterBasepath}/files/sonar-project.properties.template"
           }
           // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
           // Check if Jenkinsfile.template etc. are also copied (they should not be!)
