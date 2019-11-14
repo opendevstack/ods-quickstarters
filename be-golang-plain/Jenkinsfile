@@ -47,9 +47,9 @@ podTemplate(
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('write go.mod') {
-            sh "echo 'module example.com/${projectId}/${componentId}' > go.mod"
-            sh "echo '' >> go.mod"
-            sh "echo 'go 1.12' >> go.mod"            
+            sh "echo 'module example.com/${projectId}/${componentId}' > ${componentId}/go.mod"
+            sh "echo '' >>  ${componentId}/go.mod"
+            sh "echo 'go 1.12' >>  ${componentId}/go.mod"            
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
