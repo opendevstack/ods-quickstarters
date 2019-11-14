@@ -42,7 +42,6 @@ podTemplate(
           }
           stage('initialize target folder ' + componentId) {
               sh "mkdir -p ${componentId}"
-
           }
           stage('copy files from quickstart to generated project') {
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
