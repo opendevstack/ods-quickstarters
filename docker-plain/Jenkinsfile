@@ -45,7 +45,6 @@ podTemplate(
 
           }
           stage('copy files from quickstart to generated project') {
-              sh "find ./"
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {
