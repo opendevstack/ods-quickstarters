@@ -6,7 +6,7 @@ def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
 def group = "org.osi"
 
-def credentialsId = projectId + "-cd-cd-user-with-password"
+def credentialsId = "${projectId}-cd-cd-user-with-password"
 def springQuickstarterBasepath = "be-java-springboot"
 def nexusHost
 def dockerRegistry
@@ -27,7 +27,7 @@ def conts = containerTemplate(
             args: ''
         )
 
-def podLabel = "quickstarter-" + springQuickstarterBasepath + "-" + projectId + "-" +componentId;
+def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
 
 
 podTemplate(

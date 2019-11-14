@@ -6,7 +6,7 @@ def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
 def group = "org.osi"
 
-def credentialsId = projectId + "-cd-cd-user-with-password"
+def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "docker-plain"
 def nexusHost
 def dockerRegistry
@@ -26,7 +26,7 @@ def conts = containerTemplate(
             args: ''
         )
 
-def podLabel = "quickstarter-" + quickstarterBasepath + "-" + projectId + "-" +componentId;
+def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
 
 
 podTemplate(
@@ -40,7 +40,7 @@ podTemplate(
           stage('Checkout quickstarter') {
             checkout scm
           }
-          stage('initialize target folder ' + componentId) {
+          stage("initialize target folder ${componentId}") {
               sh "mkdir -p ${componentId}"
           }
           stage('copy files from quickstart to generated project') {
