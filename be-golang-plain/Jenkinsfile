@@ -6,7 +6,7 @@ def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
 def group = "org.osi"
 
-def credentialsId = projectId + "-cd-cd-user-with-password"
+def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-golang-plain"
 def nexusHost
 def dockerRegistry
