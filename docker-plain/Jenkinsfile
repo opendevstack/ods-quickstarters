@@ -45,6 +45,7 @@ podTemplate(
 
           }
           stage('copy files from quickstart to generated project') {
+              sh "find ./"
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {
@@ -58,7 +59,6 @@ podTemplate(
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
                   --component-type ${quickstarterBasepath}"
-            sh "rm ${quickstarterBasepath}/files/Jenkinsfile.template"
           }
           stage('Create sonar-project.properties') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \
@@ -67,7 +67,6 @@ podTemplate(
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
                   --component-type ${quickstarterBasepath}"
-            sh "rm ${quickstarterBasepath}/files/sonar-project.properties.template"
           }
           stage('Push to remote') {
             withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
