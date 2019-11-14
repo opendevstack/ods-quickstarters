@@ -87,6 +87,7 @@ podTemplate(
           // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
           // Check if Jenkinsfile.template etc. are also copied (they should not be!)
           stage('Push to remote') {
+            sh "find /"
             withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
               writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
             }
