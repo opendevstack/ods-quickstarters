@@ -40,7 +40,7 @@ podTemplate(
           stage('Checkout quickstarter') {
             checkout scm
           }
-          stage('initialize target folder ' + componentId) {
+          stage("initialize target folder ${componentId}") {
               sh "mkdir -p ${componentId}"
           }
           stage('copy files from quickstart to generated project') {
