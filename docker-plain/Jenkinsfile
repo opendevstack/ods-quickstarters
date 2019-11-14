@@ -52,7 +52,7 @@ podTemplate(
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/files/Jenkinsfile.template \
+                  --source ${quickstarterBasepath}/Jenkinsfile.template \
                   --target ${componentId}/Jenkinsfile \
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
@@ -61,7 +61,7 @@ podTemplate(
           }
           stage('Create sonar-project.properties') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/files/sonar-project.properties.template \
+                  --source ${quickstarterBasepath}/sonar-project.properties.template \
                   --target ${componentId}/sonar-project.properties \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
