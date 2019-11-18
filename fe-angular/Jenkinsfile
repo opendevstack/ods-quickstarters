@@ -42,7 +42,7 @@ podTemplate(
             checkout scm
           }
           stage("update angular cli") {
-              sh "npm install -g @angular/cli@}${angularCliVersion} && ng version"
+              sh "npm install -g @angular/cli@${angularCliVersion} && ng version"
           }
           stage("init Project") {
               sh "./init.sh --project ${projectId} --component ${componentId} --group ${group}"
