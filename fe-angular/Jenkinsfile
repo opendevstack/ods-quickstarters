@@ -45,7 +45,7 @@ podTemplate(
               sh "npm install -g @angular/cli@${angularCliVersion} && ng version"
           }
           stage("init Project") {
-              sh "${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
+              sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
