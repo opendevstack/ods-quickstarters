@@ -6,7 +6,6 @@ set -eu
 # * build configs: pipelines
 # * build configs: images
 # * services
-# * routes
 
 # Use -gt 1 to consume two arguments per pass in the loop (e.g. each
 # argument has a corresponding value to go with it).
@@ -24,7 +23,6 @@ tailor_version=$(${TAILOR} version)
 echo "Using tailor ${tailor_version} from ${tailor_exe}"
 
 DEBUG=false
-ROUTE="false"
 STATUS=false
 FORCE=false
 while [[ $# -gt 0 ]]
@@ -38,14 +36,6 @@ case $key in
     ;;
     -c|--component)
     COMPONENT="$2"
-    shift # past argument
-    ;;
-    -r|--route)
-    ROUTE="$2"
-    shift # past argument
-    ;;
-    -n|--routename)
-    ROUTE_NAME="$2"
     shift # past argument
     ;;
     -ne|--nexus)
@@ -92,7 +82,6 @@ if [ -z ${NEXUS_HOST+x} ]; then
     exit 1;
 else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
 
-echo "Route=${ROUTE}"
 echo "Params: ${tailor_verbose}"
 
 if $STATUS; then
