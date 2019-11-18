@@ -20,11 +20,12 @@ esac; shift; done
 
 
 mkdir $COMPONENT
+cd $COMPONENT
 
 echo "generate project"
 yo --no-insight node-express-typescript
 
-cd $COMPONENT
+
 
 
 echo "fix nexus repo path"
