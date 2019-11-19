@@ -49,7 +49,7 @@ podTemplate(
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
                   --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target  ${componentId}/Jenkinsfile \
+                  --target ${componentId}/Jenkinsfile \
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \

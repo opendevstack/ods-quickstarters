@@ -21,7 +21,7 @@ esac; shift; done
 
 
 echo "generate project from local template"
-   sbt -v new file://./akka-http-quickstart-scala.g8 --name=$COMPONENT
+   sbt -v new file://$SCRIPT_DIR/akka-http-quickstart-scala.g8 --name=$COMPONENT
  
 cd $COMPONENT 
 
