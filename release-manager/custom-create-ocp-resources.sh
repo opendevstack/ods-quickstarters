@@ -31,4 +31,4 @@ cd ${SCRIPT_DIR}/../common/ocp-config/cd-docgen
 echo "create trigger secret"
 SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
-tailor --non-interactive update --namespace=${PROJECT}-cd --param=COMPONENT=${COMPONENT} --param=PROJECT=${PROJECT} --param=TRIGGER_SECRET=${SECRET} --selector app="${PROJECT}-docgen",template=cd-docgen
+tailor --non-interactive update --namespace=${PROJECT}-cd --param=COMPONENT=${COMPONENT} --param=PROJECT=${PROJECT} --param=TRIGGER_SECRET=${SECRET} --selector app="${PROJECT}-docgen",template=cd-docgen --force
