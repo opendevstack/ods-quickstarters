@@ -48,7 +48,7 @@ podTemplate(
               sh "cp -v ${quickstarterBasepath}/README.md ${componentId}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh custom-create-component.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} --force"
+            sh "sh  ${quickstarterBasepath}/custom-create-component.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
