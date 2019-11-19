@@ -25,7 +25,7 @@ echo "Using tailor ${tailor_version} from ${tailor_exe}"
 
 DEBUG=false
 STATUS=false
-
+FORCE=false
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -53,6 +53,9 @@ case $key in
     -d|--debug)
     DEBUG=true;
     ;;
+    --force)
+    FORCE=true
+    ;;
     *)
     echo "Unknown option: $1. Exiting."
     exit 1
@@ -64,6 +67,10 @@ if $DEBUG; then
   tailor_verbose="-v"
 else
   tailor_verbose=""
+fi
+
+if $FORCE; then
+  tailor_verbose+=" --force"
 fi
 
 if [ -z ${PROJECT+x} ]; then
