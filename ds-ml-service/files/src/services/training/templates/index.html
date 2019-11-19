@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ git["name"] }} - Training Service</title>
+
+</head>
+<body>
+<h1>{{ git["name"]}} - Training Service</h1>
+<table>
+    <tbody>
+    <tr>
+        <td>Repository Name:</td>
+        <td>
+            <pre>{{git["name"]}}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td>Branch:</td>
+        <td>
+            <pre>{{git["branch"]}}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td>Commit:</td>
+        <td>
+            <pre>{{git["commit"]}}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td>Short Commit:</td>
+        <td>
+            <pre>{{git["commit_short"]}}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Last Change:<br/>
+            <pre>{{ git["last_change"] }}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Status:</h2>
+<pre>{{ status }}</pre>
+</body>
+</html>
