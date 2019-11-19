@@ -40,11 +40,8 @@ podTemplate(
           stage('Checkout quickstarter') {
             checkout scm
           }
-          stage("create ${componentId}") {
-                  sh "sbt -v new file://./${quickstarterBasepath}/akka-http-quickstart-scala.g8 --name=${componentId}"
-          }
-          stage('copy files from quickstart to generated project') {
-              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
+          stage("init project") {
+            sh "cd ${quickstarterBasepath}; sh ./init.sh --project ${projectId} --component ${componentId} --group ${group}"
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
