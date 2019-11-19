@@ -47,7 +47,7 @@ podTemplate(
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh  ${quickstarterBasepath}/custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} -h 'your.main.openshift.app.route.uri.host'  -oa '@globals.openshift_apihost@' -r 'your-registry-host:your-registry-port' -oc 'https://your-openshift-console' "
+            sh "cd ${quickstarterBasepath} ; sh ./custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} -h 'your.main.openshift.app.route.uri.host'  -oa '@globals.openshift_apihost@' -r 'your-registry-host:your-registry-port' -oc 'https://your-openshift-console' "
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \

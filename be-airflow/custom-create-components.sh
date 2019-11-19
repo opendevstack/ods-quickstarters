@@ -112,7 +112,7 @@ for ENV in ${environments[@]} ; do
     oc process -f templates/postgresql-persistent.yaml | oc create -n ${PROJECT}-${ENV} -f -
 
     # Creating ElasticSearch resources
-    oc process -f ../../ocp-templates/templates/elasticsearch/elasticsearch-persistent-master-template.yaml \
+    oc process -f ../common/ocp-templates/templates/elasticsearch/elasticsearch-persistent-master-template.yaml \
         COMPONENT_NAME=airflow-elasticsearch \
         CLUSTER_NAME=airflow \
         NAMESPACE=${PROJECT}-${ENV} \
