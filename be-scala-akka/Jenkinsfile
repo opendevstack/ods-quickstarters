@@ -8,7 +8,6 @@ def group = "org.osi"
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-scala-akka"
-def scalaVersion = "2.11.8"
 def nexusHost
 def dockerRegistry
 def gitHost
@@ -41,13 +40,8 @@ podTemplate(
           stage('Checkout quickstarter') {
             checkout scm
           }
-          stage("setup") {
-              sh "sh /tmp/set_java_proxy.sh"
-          }
           stage("create ${componentId}") {
-              withEnv(["HOME='/home/jenkins'","SBT_CREDENTIALS='/home/jenkins/.sbt/credentials'","SBT_OPTS='-Duser.home=/home/jenkins'"]) {
                   sh "sbt -v new file:///./${quickstarterBasepath}/akka-http-quickstart-scala.g8 --name=${componentId}"
-            }
           }
           stage('copy files from quickstart to generated project') {
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
