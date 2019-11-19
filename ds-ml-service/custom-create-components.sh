@@ -107,7 +107,7 @@ tailor_update_in_dir() {
     fi
 }
 
-OCP_CONFIG="${SCRIPT_DIR}/../ocp-config/"
+OCP_CONFIG="${SCRIPT_DIR}/../common/ocp-config/"
 
 # iterate over different environments
 for devenv in dev test ; do
