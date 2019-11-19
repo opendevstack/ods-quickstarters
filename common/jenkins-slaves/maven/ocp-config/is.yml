@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-maven
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-slave-maven
+    labels:
+      app: jenkins-slave-maven
+  spec:
+    dockerImageRepository: jenkins-slave-maven
+    lookupPolicy:
+      local: false
