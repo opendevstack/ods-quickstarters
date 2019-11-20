@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-golang
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-slave-golang
+    labels:
+      app: jenkins-slave-golang
+  spec:
+    dockerImageRepository: jenkins-slave-golang
+    lookupPolicy:
+      local: false

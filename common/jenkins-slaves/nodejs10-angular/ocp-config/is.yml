@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-nodejs10-angular
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-slave-nodejs10-angular
+    labels:
+      app: jenkins-slave-nodejs10-angular
+  spec:
+    dockerImageRepository: jenkins-slave-nodejs10-angular
+    lookupPolicy:
+      local: false
