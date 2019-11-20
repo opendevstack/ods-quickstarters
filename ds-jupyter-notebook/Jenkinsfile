@@ -4,7 +4,7 @@ def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
 def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
-def group = "org.osi"
+def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "ds-jupyter-notebook"
