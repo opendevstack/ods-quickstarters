@@ -20,7 +20,7 @@ node {
 
 def conts = containerTemplate( 
             name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-maven:2",
+            image: "${dockerRegistry}/cd/jenkins-slave-maven",
             workingDir: '/tmp',
             alwaysPullImage: true,
             args: ''
