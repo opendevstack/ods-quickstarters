@@ -3,7 +3,6 @@ set -eux
 
 # Get directory of this script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd ..
 
 while [[ "$#" > 0 ]]; do case $1 in
   -p=*|--project=*) PROJECT="${1#*=}";;
