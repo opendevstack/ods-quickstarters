@@ -1,0 +1,46 @@
+# config to don't allow the browser to render the page inside a frame or iframe
+# and avoid clickjacking http://en.wikipedia.org/wiki/Clickjacking
+# if you need to allow [i]frames, you can use SAMEORIGIN or even set an uri with ALLOW-FROM uri
+# https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options
+add_header X-Frame-Options SAMEORIGIN;
+
+# when serving user-supplied content, include a X-Content-Type-Options: nosniff header along with the Content-Type: header,
+# to disable content-type sniffing on some browsers.
+add_header X-Content-Type-Options nosniff;
+
+# This header enables the Cross-site scripting (XSS) filter built into most recent web browsers.
+# It's usually enabled by default anyway, so the role of this header is to re-enable the filter for
+# this particular website if it was disabled by the user.
+add_header X-XSS-Protection "1; mode=block" always;
+
+# config to enable HSTS(HTTP Strict Transport Security) https://developer.mozilla.org/en-US/docs/Security/HTTP_Strict_Transport_Security
+# to avoid ssl stripping https://en.wikipedia.org/wiki/SSL_stripping#SSL_stripping
+# also https://hstspreload.org/
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+server {
+    listen       8080;
+    server_name  localhost;
+
+    gzip on;
+    gzip_types      text/html text/css application/javascript application/json;
+    gzip_min_length 1024;
+
+    # don't send the nginx version number in error pages and Server header
+    server_tokens off;
+
+    location / {
+      root /docroot;
+      index  index.html;
+      # this is for angular
+      try_files $uri$args $uri$args/ $uri $uri/ /index.html =404;
+    }
+
+    error_page  404              /index.html;
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+}

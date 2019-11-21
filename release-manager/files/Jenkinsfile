@@ -1,0 +1,45 @@
+@Library('ods-mro-jenkins-shared-library@production')
+
+@Library('ods-jenkins-shared-library@production')
+
+def project = [:]
+def repos   = []
+
+/*
+ * Use classic pipeline here because of blue ocean (1.18+) rendering bugs
+ * with declarative pipelines.
+ */ 
+node {
+
+    checkout scm
+
+    def debugOn = true
+    withEnv (mroEnvironment(debugOn)) {
+
+        stage('Init') {
+            def result = phaseInit()
+            project = result.project
+            repos = result.repos
+        }
+
+        stage('Build') {
+            phaseBuild(project, repos)
+        }
+
+        stage('Deploy') {
+            phaseDeploy(project, repos)
+        }
+
+        stage('Test') {
+            phaseTest(project, repos)
+        }
+
+        stage('Release') {
+            phaseRelease(project, repos)
+        }
+
+        stage('Finalize') {
+            phaseFinalize(project, repos)
+        }
+    }
+}

@@ -1,0 +1,23 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+
+# Forced Language (optional)
+sonar.language=py
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8
+
+# Exclude test files from coverage analysis
+sonar.coverage.exclusions=src/tests/**
+
+# Define unit test information inside the python project
+sonar.python.xunit.reportPath=build/test-results/test/nosetests.xml
+
+# Define coverage information inside the python project
+sonar.python.coverage.reportPaths=build/test-results/coverage/coverage.xml

@@ -1,0 +1,23 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+
+# Forced Language: type script
+sonar.language=ts
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8
+
+# Exclude test files from coverage analysis
+sonar.coverage.exclusions=**/*.spec.ts
+
+# Exclude non type script files from coverage analysis
+sonar.exclusions=**/*.html,**/*.scss,**/*.json,**/*.ico,**/*.svg
+
+# Define coverage information inside the Angular project
+sonar.typescript.lcov.reportPaths=coverage/lcov.info

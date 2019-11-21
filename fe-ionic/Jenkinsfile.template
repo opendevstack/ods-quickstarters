@@ -1,0 +1,70 @@
+/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
+def final projectId = '@project_id@'
+def final componentId = '@component_id@'
+def final credentialsId = "${projectId}-cd-cd-user-with-password"
+def sharedLibraryRepository
+def dockerRegistry
+node {
+  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+library identifier: 'ods-library@production', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: sharedLibraryRepository,
+   credentialsId: credentialsId])
+
+/*
+  See readme of shared library for usage and customization
+  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
+  eg. to create and set your own builder slave instead of
+  the node js slave used here - the code of the slave can be found at
+  https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/nodejs8-angular
+ */
+odsPipeline(
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular",
+  projectId: projectId,
+  componentId: componentId,
+  branchToEnvironmentMapping: [
+    'master': 'test',
+    '*': 'dev'
+  ]
+) { context ->
+  stageBuild(context)
+  stageUnitTest(context)
+  stageLint(context)
+  stageScanForSonarqube(context)
+  stageStartOpenshiftBuild(context)
+  stageDeployToOpenshift(context)
+}
+
+def stageBuild(def context) {
+  stage('Build') {
+    withEnv(["TAGVERSION=${context.tagversion}"]) {
+      sh "yarn global add ionic@3.19.0"
+      sh "yarn install"
+      if ('master'.equals(context.gitBranch)) {
+        sh "npm run ionic:build --prod"
+      } else {
+        sh "npm run ionic:build"
+      }
+    }
+    sh "cp -r www docker/dist"
+  }
+}
+
+def stageUnitTest(def context) {
+  try {
+    stage('Unit Test') {
+      sh "yarn test -- --single-run --progress false"
+    }
+  } finally {
+    junit 'build/test-results/test/test-results.xml'
+  }
+}
+
+def stageLint(def context) {
+  stage('Lint') {
+    sh "npm run lint"
+  }
+}

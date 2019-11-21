@@ -1,0 +1,85 @@
+// build params
+def projectId = env.PROJECT_ID
+def componentId = env.COMPONENT_ID.toLowerCase()
+def packageName = env.PACKAGE_NAME
+def gitUrlHttp = env.GIT_URL_HTTP
+def gitUrlSsh = env.GIT_URL_SSH
+
+def group = env.GROUP_ID
+
+def credentialsId = "${projectId}-cd-cd-user-with-password"
+def quickstarterBasepath = "release-manager"
+def nexusHost
+def dockerRegistry
+def gitHost
+def gitIsHttps;
+def gitBaseUrl;
+// vars from jenkins master
+node {
+    dockerRegistry = env.DOCKER_REGISTRY
+    nexusHost = env.NEXUS_HOST
+    gitHost =  env.BITBUCKET_HOST.split(":")[0]
+    gitBaseUrl = env.BITBUCKET_HOST;
+}
+
+def conts = containerTemplate( 
+            name: 'jnlp',
+            image: "${dockerRegistry}/cd/jenkins-slave-maven",
+            workingDir: '/tmp',
+            alwaysPullImage: true,
+            args: ''
+        )
+
+def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+
+
+podTemplate(
+      label: podLabel,
+      cloud: 'openshift',
+      containers: [conts],
+      volumes: [],
+      serviceAccount: 'jenkins'
+    ) {
+        node(podLabel) {
+          stage('Checkout quickstarter') {
+            checkout scm
+            gitIsHttps = sh(returnStdout: true, script: 'git config remote.origin.url').trim().startsWith("https");
+          }
+          stage('checkout ods-config'){
+             def bitbucketHost = gitIsHttps ? "https://" : "http://";
+             bitbucketHost += gitBaseUrl;
+             checkout([
+                $class: 'GitSCM',    
+                branches: [[name: '*/production']],
+                doGenerateSubmoduleConfigurations: false, 
+                extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ods-config']],
+                submoduleCfg: [], 
+                userRemoteConfigs: [[credentialsId: credentialsId, url: bitbucketHost + '/scm/opendevstack/ods-configuration.git']] 
+            ])
+          }
+          stage("initialize target folder ${componentId}") {
+              sh "mkdir -p ${componentId}"
+          }
+          stage('copy files from quickstart to generated project') {
+              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
+          }
+          stage('configure metadata.yml') {
+              sh "sed 's|@project_id@|'${projectId}'|g' ${quickstarterBasepath}/metadata.yml.tmpl > ${componentId}/metadata.yml"
+          }
+          stage('Setup OpenShift resources') {
+            sh "cd ${quickstarterBasepath} ; sh ./custom-create-ocp-resources.sh -p ${projectId} -c ${componentId}"
+          }          
+          stage('Push to remote') {
+            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
+              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
+            }
+            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
+          }
+      }
+}
+
+
+
+
+
+
