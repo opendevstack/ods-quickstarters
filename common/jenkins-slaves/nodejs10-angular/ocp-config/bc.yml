@@ -20,7 +20,7 @@ objects:
     resources: {}
     runPolicy: Serial
     source:
-      contextDir: jenkins-slaves/nodejs10-angular
+      contextDir: common/jenkins-slaves/nodejs10-angular
       git:
         ref: production
         uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
