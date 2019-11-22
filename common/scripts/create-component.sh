@@ -25,6 +25,8 @@ echo "Using tailor ${tailor_version} from ${tailor_exe}"
 DEBUG=false
 STATUS=false
 FORCE=false
+QSBASE=
+QSBASE_ABS=
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -85,6 +87,15 @@ if [ -z ${NEXUS_HOST+x} ]; then
     echo "NEXUS_HOST is unset, but required";
     exit 1;
 else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
+if [ ! -z "${QSBASE}" ]; then
+  if [ -d "${QSBASE}" ]; then
+    QSBASE_ABS="$( cd "${QSBASE}" && pwd )"
+  else
+    echo "No directory at ${QSBASE}, check -qs|--qsbasepath argument."
+    echo "Current working directory is: $(pwd)"
+    exit 1
+  fi
+fi
 
 echo "Params: ${tailor_verbose}"
 
@@ -99,7 +110,9 @@ tailor_update_in_dir() {
     if [ ${STATUS} = "true" ]; then
         $DEBUG && echo 'exec:' cd  "$dir" '&&'
         $DEBUG && echo 'exec:'     ${TAILOR} $tailor_verbose status "$@"
+        set +e
         cd "$dir" && ${TAILOR} $tailor_verbose status "$@"
+        set -e
     else
         $DEBUG && echo 'exec:' cd "$dir" '&&'
         $DEBUG && echo 'exec:    ' ${TAILOR} $tailor_verbose --non-interactive update "$@"
@@ -118,10 +131,10 @@ for devenv in dev test ; do
         "--param=ENV=${devenv}"
         )
 
-    if [ ! -z "${QSBASE}" ]; then
-      for envfile in "${QSBASE}/ocp-$devenv.env" "${QSBASE}/ocp.env" ; do
-        if [ -f "$envfile" ]; then
-          TAILOR_BASE_ARGS+=(--param-file "$envfile")
+    if [ ! -z "${QSBASE_ABS}" ]; then
+      for name in "ocp-$devenv.env" "ocp.env" ; do
+        if [ -f "${QSBASE_ABS}/$name" ]; then
+          TAILOR_BASE_ARGS+=(--param-file "${QSBASE_ABS}/$name")
           break
         fi
       done
