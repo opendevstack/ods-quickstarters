@@ -1,5 +1,5 @@
-name: ods-project-quickstarters
-title: ODS Project Quickstarters
+name: ods-quickstarters
+title: ODS Quickstarters
 version: latest
 nav: 
 - modules/ROOT/nav.adoc

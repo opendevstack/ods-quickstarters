@@ -300,7 +300,7 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 
 == Builder slave used
 
-https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/python[jenkins-slave-python]
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/python[jenkins-slave-python]
 
 == Frameworks used
 

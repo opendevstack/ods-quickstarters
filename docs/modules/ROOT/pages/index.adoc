@@ -32,7 +32,7 @@ This repository contains quickstarters, which are basically templates that help 
 * xref::airflow.adoc[Airflow]
 * xref::e2e-cypress.adoc[E2E test - Cypress]
 
-Next to those, there is a https://github.com/opendevstack/ods-project-quickstarters/blob/master/boilerplates/be-docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
+Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/be-docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
 
 All quickstarters are used by the https://github.com/opendevstack/ods-provisioning-app[Provisioning App] to create a new component which basically consists of resources in OpenShift (typically `BuildConfig`, `ImageStream`, `DeploymentConfig` and `Service`) and a BitBucket repository.
 
@@ -42,7 +42,7 @@ This repository in BitBucket will contain:
 * A `Jenkinsfile` describing how to build the component, delegating most of the work to the xref:ods-jenkins-shared-library:ROOT:index.adoc[shared library]
 * A `sonar-project.properties` file configuring how the source code is analyzed by SonarQube
 
-Next to those, each quickstarter can also provide its own https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves[Jenkins slave images].
+Next to those, each quickstarter can also provide its own https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves[Jenkins slave images].
 
 == Usage
 
@@ -69,8 +69,8 @@ Note that those scripts might need parameters to work, and often need to be adju
 == Contributing new quickstarters
 If you contribute a new quickstarter / boilerplate - please use the provided `README.adoc` templates
 
-. for a `jenkins-slave` - the https://github.com/opendevstack/ods-project-quickstarters/blob/master/docs/modules/ROOT/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
-. for a `boilerplace`- the https://github.com/opendevstack/ods-project-quickstarters/blob/master/docs/modules/ROOT/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
+. for a `jenkins-slave` - the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
+. for a `boilerplace`- the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
 
 == Upgrade an existing Git repository to OpenDevStack
 

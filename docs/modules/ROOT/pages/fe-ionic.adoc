@@ -96,8 +96,8 @@ When the code in your git repository is updated the `Jenkinsfile` comes into act
 == Builder Slave used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
 
 == Known Limitation
 
-Ionic Pro builds needs to be configured separately as described https://github.com/opendevstack/ods-project-quickstarters/blob/5da91c9d190b0eb96bf53b393e355e355e18bfdf/boilerplates/fe-ionic/files/README.md[here]
+Ionic Pro builds needs to be configured separately as described https://github.com/opendevstack/ods-quickstarters/blob/5da91c9d190b0eb96bf53b393e355e355e18bfdf/boilerplates/fe-ionic/files/README.md[here]

@@ -115,7 +115,7 @@ In Jenkinsfile, there are various stages
 == Builder Slave used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
 
 == Known limitations
 
