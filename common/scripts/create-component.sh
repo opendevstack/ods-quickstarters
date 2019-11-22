@@ -30,6 +30,10 @@ do
 key="$1"
 
 case $key in
+    -qs|--qsbasepath)
+    QSBASE="$2"
+    shift # past argument
+    ;;
     -p|--project)
     PROJECT="$2"
     shift # past argument
@@ -113,6 +117,15 @@ for devenv in dev test ; do
         "--param=COMPONENT=${COMPONENT}" \
         "--param=ENV=${devenv}"
         )
+
+    if [ ! -z "${QSBASE}" ]; then
+      for envfile in "${QSBASE}/ocp-$devenv.env" "${QSBASE}/ocp.env" ; do
+        if [ -f "$envfile" ]; then
+          TAILOR_BASE_ARGS+=(--param-file "$envfile")
+          break
+        fi
+      done
+    fi
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
 
