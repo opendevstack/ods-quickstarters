@@ -1,4 +1,4 @@
-# Plain docker image (be-docker-plain)
+# Plain Docker image (docker-plain)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 

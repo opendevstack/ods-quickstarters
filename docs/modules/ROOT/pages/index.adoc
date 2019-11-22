@@ -10,7 +10,7 @@ This repository contains quickstarters, which are basically templates that help 
 
 === Backend Quickstarter
 
-* xref::be-docker-plain.adoc[Backend - Docker/Plain]
+* xref::docker-plain.adoc[Backend - Docker/Plain]
 * xref::be-golang.adoc[Backend - Golang]
 * xref::be-java-springboot.adoc[Backend - SpringBoot/Java]
 * xref::be-node-express.adoc[Backend - NodeJS/Express]
@@ -32,7 +32,7 @@ This repository contains quickstarters, which are basically templates that help 
 * xref::airflow.adoc[Airflow]
 * xref::e2e-cypress.adoc[E2E test - Cypress]
 
-Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/be-docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
+Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
 
 All quickstarters are used by the https://github.com/opendevstack/ods-provisioning-app[Provisioning App] to create a new component which basically consists of resources in OpenShift (typically `BuildConfig`, `ImageStream`, `DeploymentConfig` and `Service`) and a BitBucket repository.
 
