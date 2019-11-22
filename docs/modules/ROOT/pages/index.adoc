@@ -1,0 +1,85 @@
+:toc: macro
+
+= OpenDevStack Quickstarters
+
+toc::[]
+
+== Overview
+
+This repository contains quickstarters, which are basically templates that help to start out with a component quickly. The available quickstarters are:
+
+=== Backend Quickstarter
+
+* xref::be-docker-plain.adoc[Backend - Docker/Plain]
+* xref::be-golang.adoc[Backend - Golang]
+* xref::be-java-springboot.adoc[Backend - SpringBoot/Java]
+* xref::be-node-express.adoc[Backend - NodeJS/Express]
+* xref::be-python-flask.adoc[Backend - Python/Flask]
+* xref::be-scala-akka.adoc[Backend - Scala/Akka]
+
+=== Frontend Quickstarter
+* xref::fe-angular.adoc[Frontend - Angular]
+* xref::fe-ionic.adoc[Mobile - Ionic]
+* xref::fe-react.adoc[Frontend - React]
+* xref::fe-vue.adoc[Frontend - Vue]
+
+=== Data Science Quickstarter
+* xref::ds-ml-service.adoc[Data Science - Machine Learning]
+* xref::ds-jupyter-notebook.adoc[Data Science - Jupyter Notebook]
+* xref::ds-rshiny-app.adoc[Data Science - R-Shiny]
+
+=== Other Quickstarter
+* xref::airflow.adoc[Airflow]
+* xref::e2e-cypress.adoc[E2E test - Cypress]
+
+Next to those, there is a https://github.com/opendevstack/ods-project-quickstarters/blob/master/boilerplates/be-docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
+
+All quickstarters are used by the https://github.com/opendevstack/ods-provisioning-app[Provisioning App] to create a new component which basically consists of resources in OpenShift (typically `BuildConfig`, `ImageStream`, `DeploymentConfig` and `Service`) and a BitBucket repository.
+
+This repository in BitBucket will contain:
+
+* Some boilerplate code
+* A `Jenkinsfile` describing how to build the component, delegating most of the work to the xref:ods-jenkins-shared-library:ROOT:index.adoc[shared library]
+* A `sonar-project.properties` file configuring how the source code is analyzed by SonarQube
+
+Next to those, each quickstarter can also provide its own https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves[Jenkins slave images].
+
+== Usage
+
+The quickstarters are not used directly, but triggered via the https://github.com/opendevstack/ods-provisioning-app[provisioning app]. Login there to pick
+a quickstarter, give it a name and provision it. The provisioning app delegates the executation to a
+job in Rundeck (defined in YML files in the rundeck folder), which then clones this repository and executes the files (e.g. `init.sh`) within.
+
+== Changing existing quickstarters
+
+As the quickstarters are triggered via Rundeck, the changes need to be on the `production` branch in order to be "live". As an alternative, you can copy the job in Rundeck and point it to the branch you
+are working on.
+
+To test out things locally, you can mimick what Rundeck. The general procedure is:
+
+. Clone the repository
+. Go into a quickstarter folder, e.g. `be-node-express`
+. Run `build.sh` (if it exists)
+. Run `init.sh`
+. Run `renderJenkinsTemplate.sh` from the root of the repository
+. Run `renderSonarqubeTemplate.sh` from the root of the repository
+
+Note that those scripts might need parameters to work, and often need to be adjusted slightly to work (e.g. removing ``chown``ing to `rundeck` user).
+
+== Contributing new quickstarters
+If you contribute a new quickstarter / boilerplate - please use the provided `README.adoc` templates
+
+. for a `jenkins-slave` - the https://github.com/opendevstack/ods-project-quickstarters/blob/master/docs/modules/ROOT/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
+. for a `boilerplace`- the https://github.com/opendevstack/ods-project-quickstarters/blob/master/docs/modules/ROOT/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
+
+== Upgrade an existing Git repository to OpenDevStack
+
+Push your repository into the newly created bitbucket project (and note the name of the repo & project)
+
+Logon to rundeck and pick the `common/prepare-continuous-integration` rundeck job
+
+. Pick the technology target thru `component type` - this will ensure you get the right jenkins file based on the technology you pick - and should fit the technology you have built your application with
+. Provide `quickstarter_directory` - this can be any filesystem directory - usually in `/tmp/<component name>` where the git repository will be cloned to
+. Provide `project_id` - this is the project name you noted in step (0)
+. Provide `component_id`- this is the name of the component (from step 0) that will be rendered into the jenkins template, and also used as name for the openshift resources
+. Provide `git_url_http/ssh` - this is the URL to clone and commit to for the job.

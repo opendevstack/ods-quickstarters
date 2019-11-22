@@ -1,0 +1,27 @@
+* xref:ROOT:index.adoc[Introduction]
+//Backend Quickstarters
+* xref:ROOT:be-docker-plain.adoc[BE Docker Plain]
+* xref:ROOT:be-golang.adoc[BE Golang]
+* xref:ROOT:be-java-springboot.adoc[BE Java / Spring Boot]
+* xref:ROOT:be-node-express.adoc[BE Node Express]
+* xref:ROOT:be-python-flask.adoc[BE Python Flask]
+* xref:ROOT:be-scala-akka.adoc[BE Scala Akka]
+
+
+//Frontend Quickstarters
+* xref:ROOT:fe-angular.adoc[FE Angular]
+* xref:ROOT:fe-ionic.adoc[FE Ionic]
+* xref:ROOT:fe-react.adoc[FE React]
+* xref:ROOT:fe-vue.adoc[FE Vue]
+
+// Data Science Quickstarters
+* xref:ROOT:ds-ml-service.adoc[Data Science Machine Learning Service]
+* xref:ROOT:ds-jupyter-notebook.adoc[Data Science Jupyter Notebook]
+* xref:ROOT:ds-rshiny-app.adoc[Data Science RShiny app]
+//Other Quickstarters
+* xref:ROOT:airflow.adoc[Airflow]
+* xref:ROOT:e2e-cypress.adoc[Cypress E2E testing Quickstarters]
+
+
+
+

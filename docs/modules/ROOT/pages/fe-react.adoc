@@ -1,0 +1,89 @@
+= Frontend react.js (fe-react)
+
+React quickstarter project
+
+## Purpose of this quickstarter
+
+This quickstarter generates a React project for developing webpages.
+
+It contains the basic setup for https://www.docker.com/[Docker], https://jenkins.io/[Jenkins], https://www.sonarqube.org/[SonarQube] and https://www.openshift.com/[OpenShift], so you have your CI/CD process out of the box.
+
+## What files / architecture is generated?
+
+----
+├── Jenkinsfile - This file contains Jenkins build configuration settings
+├── LICENSE
+├── README.md
+├── docker - This folder contains Docker configuration settings
+│   ├── Dockerfile
+│   └── nginx.vh.default.conf.nginx
+├── package.json - This file contains scripts to run and node packages dependencies for project
+├── sonar-project.properties - This file contains SonarQube configuration settings
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+└── src
+    ├── App.js
+    ├── App.test.js
+    ├── Router.js
+    ├── common
+    │   └── components
+    │       └── PageNotFound.js
+    ├── history.js
+    ├── home
+    │   ├── components
+    │   │   └── Repo.js
+    │   ├── containers
+    │   │   └── UserRepos.js
+    │   ├── epics
+    │   │   ├── fetchUserRepos.js
+    │   │   └── index.js
+    │   ├── index.js
+    │   └── reducers
+    │       ├── applyUserRepos.duck.js
+    │       └── index.js
+    ├── index.js
+    ├── registerServiceWorker.js
+    ├── rootEpic.js
+    ├── rootReducer.js
+    ├── store.js
+    └── theme.js
+
+10 directories, 28 files
+----
+
+## Frameworks used
+
+* https://facebook.github.io/react/[React js - {caret}16.4.0]
+* http://redux.js.org/[Redux js - {caret}4.0.0-rc.1]
+* https://material-ui.com[material-ui]
+
+## Usage - how do you start after you provisioned this quickstarter
+
+As pre-requisite you'll need to have installed:
+
+* https://nodejs.org/en/download/[node]
+* npm which is bundled with the node installation
+* https://git-scm.com/downloads[git]
+
+Once you have you developer environment set up you can simply:
+
+* Clone your generated git repository and `cd` to your folder
+* Run command `npm install` in project directory to install npm dependencies.
+* Run `npm run start` command to start the dev server, it will open your browser at `+http://localhost:8080/+`
+
+## How this quickstarter is built thru Jenkins
+
+The `Jenkinsfile` contains the configuration that customizes the core pipeline implemented by https://github.com/opendevstack/ods-jenkins-shared-library[jenkins shared library].
+
+When the code in your git repository is updated the `Jenkinsfile` comes into action with the following stages for this quickstarter:
+
+* *Build* - Installs the dependencies of your project with `npm install`, generates the build by running `yarn build`. Finally, it copies the output folder `build` into `docker/dist`.
+* *Unit Test* - Runs unit test cases by executing `yarn test` command, if any test fails, the build is marked as failed.
+* *Lint* - Profiler that ensures code best practices by running `npm run lint` command, if linting is not passing, the build is marked as failed also.
+
+## Builder Slave used
+
+This quickstarter uses
+https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.

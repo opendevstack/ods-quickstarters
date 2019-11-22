@@ -1,0 +1,129 @@
+= Backend Java Spring Boot Quickstarter
+
+== Purpose of this quickstarter
+
+Use this quickstarter to generate a https://www.tutorialspoint.com/spring_boot/index.htm[spring boot] based project.
+
+It will provide a java 8 project with preconfigured gradle build and CI/CD integration (Jenkinsfile).
+
+== What files / architecture is generated?
+
+Under the hook this quickstarter runs the https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#cli-init[spring boot cli init command].
+The quickstarter uses the *latest* available spring boot cli version to generate the spring boot project.
+
+This is implemented in the script `init.sh` (open it to understand the internal of the code generation of this quickstarter).
+
+When provisioning this quickstarter in the provisioning app a spring boot project will be generated and pushed to your git repository.
+
+The generated project requires java 8 and include the required gradle build and wrapper artifact.
+
+== Project Structure
+
+The generated spring boot project contains following folders:
+
+* `src` (maven based java project structure)
+* `gradle` (gradle wrapper portable distribution)
+* `docker` (include the `Dockerfile` used to build the image to be deployed during CI/CD to openshift)
+
+== Gradle Support
+
+The generated project includes a gradlew wrapper which is a portable distribution of gradle.
+It allows you to easily build the project without any further tool installation other than java.
+
+=== Gradle Artifacts
+
+You´ll find in the project following gradle artifacts:
+
+* `build.gradle` (build definition)
+* `gradlew.bat`
+* `gradlew`
+* `gradle/wrapper/gradle-wrapper.jar`
+* `gradle/wrapper/gradle.properties`
+* `settings.gradlew`
+
+NOTE: gradle.properties is missing. This is on purpose, because you need to define it on your own by providing your nexus configuration.
+
+=== Nexus configuration in gradle.properties
+
+You´ll need to create `gradle.properties` yourself and add following properties:
+
+```
+nexus_url=<URL_OF_YOUR_NEXUS_SERVER>
+nexus_user=<YOUR_NEXUS_USERNAME>
+nexus_pw=<YOUR_NEXUS_PASSWORD>
+```
+
+Optionaly you can add
+
+```
+nexus_folder_releases=<FOLDER_TO_UPLOAD_RELEASE_ARTEFACTS> (ie. maven-releases)
+nexus_folder_snapshot=<FOLDER_TO_UPLOAD_SNAPSHOT_ARTEFACTS> (ie. maven-snapshots)
+```
+
+
+If you do not want to use Nexus at all, just define the following property:
+```
+no_nexus=true
+```
+
+Run `gradlew -v` to verify the installed version of gradle wrapper.
+
+=== Uploading artifacts via gradle
+The build is prepared to upload generated artifacts to a nexus repository via the gradle `maven-puplish` plugin.
+If the artifact has a SNAPSHOT-Version, the nexus folder `maven-snapshots` is used, otherwise it uses the folder `maven-releases`.
+This folders are used per default.
+
+You can override this default configuraiton by specifing the properties `nexus_folder_releases` and `nexus_folder_releases`
+in `gradle.properties`. Overriding this configuration can also be achieved by setting the  environment variables `NEXUS_FOLDER_RELEASES` and `NEXUS_FOLDER_SNAPSHOTS`.
+
+NOTE: Upload to nexus is prepared in Jenkinsfile, but disabled per default. See section <<quickstarter-build,How this quickstarter is built thru jenkins>> below for details.
+
+== Dependencies and Frameworks used
+
+The generated spring boot project is preconfigured with some third party dependencies (i.e.
+ `--dependencies="web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security"`), which are defined in the script `init.sh` (open it to understand the internal of the code generation of this quickstarter).
+
+Look in method ```dependencies``` in the file ```build.gradle``` to review the defined dependencies.
+
+=== ODS Integration (Jenkinsfile)
+The project includes a special artifact that enables it to integrate with OpenDevStack CI/CD infrastructure.
+The `Jenkinsfile` provides this capability.
+Basically it is the script that is executed in Jenkins every time a push to your git repository is done. More on this below.
+
+== Usage - how do you start after you provisioned this quickstarter
+After the provisioning the provisioning app will display the url of git repository.
+This git repository contains the generated project artifacts as describe above in <<project-structure,Project Structure>>.
+
+To start working with it you´ll need to clone the git repository in your local development environment.
+After cloning it use `./gradlew build` to verify that the project compiles and test runs.
+
+NOTE: java 8 or later version is required to run gradlew and compile java classes.
+
+== How this quickstarter is built thru jenkins
+The `Jenkinsfile` implements the CI/CD pipeline of your project.
+
+The `Jenkinsfile` is kind of configuration that customizes the core pipeline implemented by https://github.com/opendevstack/ods-jenkins-shared-library[jenkins shared library].
+It is highly recommended that you familiarize with this file and library.
+
+It is executed in Jenkins every time a push to your git repository is done.
+Basically, the tasks implemented by this pipeline are:
+
+. clone the branch in the Jenkins environment
+. run the java build by calling method `stageBuild`
+. execute sonarqube analysis (via calling shared library method `stageScanForSonarqube`)
+. Optionally: deploy to nexus (via calling method `stageUploadToNexus`). Note that this is disabled per default. To enable, please remove the
+comment on line `stageUploadToNexus` in  `Jenkinsfile`
+. build a docker image (via shared library method `stageStartOpenshiftBuild`)
+. deploy the docker image to openshift (via shared library method `stageDeployToOpenshift`)
+
+NOTE: The 2nd step executes `gradlew build` to compile your project and create a distribution as `jar` file.
+This file is copied to the `docker` folder to be included in the docker image when the image is built in step 5.
+
+== Builder Slave used
+
+This quickstarter uses
+https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/maven[Maven builder slave] Jenkins builder slave.
+
+== Known limitations
+
+NA
