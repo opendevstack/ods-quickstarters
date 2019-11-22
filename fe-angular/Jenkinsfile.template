@@ -49,7 +49,6 @@ def stageBuild(def context) {
     }
     sh "cp -r dist/${context.componentId} docker/dist"
   }
-  }
 }
 
 def stageUnitTest(def context) {
@@ -67,4 +66,3 @@ def stageLint(def context) {
     sh "npm run lint"
   }
 }
-
