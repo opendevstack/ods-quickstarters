@@ -22,7 +22,7 @@ library identifier: 'ods-library@production', retriever: modernSCM(
   https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base
  */ 
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-base",
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
@@ -43,15 +43,28 @@ odsPipeline(
 
 def stageBuild(def context) {
   stage('Build') {
-    // copy any other artifacts if needed
-    // sh "cp -r build docker/dist"
-    // the docker context passed in /docker
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
+      sh "npm install"
+      sh "npm run build"
+    }
+    sh "cp -r dist/${context.componentId} docker/dist"
+  }
   }
 }
 
 def stageUnitTest(def context) {
-  stage('Unit Test') {
-    // if needed add your unit tests here
+  try {
+    stage('Unit Test') {
+      sh "npm run test"
+    }
+  } finally {
+    junit 'build/test-results/test/test-results.xml'
+  }
+}
+
+def stageLint(def context) {
+  stage('Lint') {
+    sh "npm run lint"
   }
 }
 
