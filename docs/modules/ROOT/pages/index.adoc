@@ -11,11 +11,12 @@ This repository contains quickstarters, which are basically templates that help 
 === Backend Quickstarter
 
 * xref::docker-plain.adoc[Backend - Docker/Plain]
-* xref::be-golang.adoc[Backend - Golang]
+* xref::be-golang-plain.adoc[Backend - Golang]
 * xref::be-java-springboot.adoc[Backend - SpringBoot/Java]
-* xref::be-node-express.adoc[Backend - NodeJS/Express]
+* xref::be-typescript-express.adoc[Backend - NodeJS/Express]
 * xref::be-python-flask.adoc[Backend - Python/Flask]
 * xref::be-scala-akka.adoc[Backend - Scala/Akka]
+* xref::be-airflow.adoc[Airflow]
 
 === Frontend Quickstarter
 * xref::fe-angular.adoc[Frontend - Angular]
@@ -26,10 +27,9 @@ This repository contains quickstarters, which are basically templates that help 
 === Data Science Quickstarter
 * xref::ds-ml-service.adoc[Data Science - Machine Learning]
 * xref::ds-jupyter-notebook.adoc[Data Science - Jupyter Notebook]
-* xref::ds-rshiny-app.adoc[Data Science - R-Shiny]
+* xref::ds-rshiny.adoc[Data Science - R-Shiny]
 
 === Other Quickstarter
-* xref::airflow.adoc[Airflow]
 * xref::e2e-cypress.adoc[E2E test - Cypress]
 
 Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/docker-plain/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
