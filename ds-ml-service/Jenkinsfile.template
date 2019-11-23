@@ -61,7 +61,7 @@ def stageLinter(def context) {
 
 def stageBuild(def context) {
     stage('Prepare Docker Builds') {
-        sh './build.sh'
+        sh 'sh build.sh'
     }
 }
 
@@ -206,7 +206,7 @@ def stageCustomDeployToOpenshift(def context, def stageName, def componentId) {
 
         waitForTrainingPod(context, componentId)
 
-        // MRO final stage 
+        // MRO final stage
         if(componentId.contains('prediction')) {
             def ocpLatestImage = sh(returnStdout: true, script:"oc get istag ${componentId}:latest -n ${context.targetProject} -o jsonpath='{.image.dockerImageReference}'", label : "find last image").trim()
 
