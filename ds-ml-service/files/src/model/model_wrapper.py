@@ -1,5 +1,4 @@
-import joblib
-
+from sklearn.externals import joblib
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 

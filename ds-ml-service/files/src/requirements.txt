@@ -4,7 +4,7 @@ flask-executor==0.8.3
 pandas==0.23.4
 scikit-learn==0.20.2
 numpy==1.16.0
-joblib==0.13.1
-fabric==2.4.0
+fabric==2.5.0
 Flask-HTTPAuth==3.2.4
 dvc==0.35.7
+gunicorn==19.9.0

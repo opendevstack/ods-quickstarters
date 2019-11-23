@@ -9,5 +9,4 @@ fi
 echo "service type:"
 echo $SERVICE_TYPE
 
-exec python services/$SERVICE_TYPE/app.py --port  8080
-
+exec gunicorn -b :8080 services.$SERVICE_TYPE.app:gunicorn_app
