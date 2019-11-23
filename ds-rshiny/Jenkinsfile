@@ -18,7 +18,7 @@ node {
     gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
-def conts = containerTemplate( 
+def conts = containerTemplate(
             name: 'jnlp',
             image: "${dockerRegistry}/cd/jenkins-slave-maven",
             workingDir: '/tmp',
@@ -47,7 +47,7 @@ podTemplate(
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+            sh "sh common/scripts/create-rshiny.sh -p ${projectId} -c ${componentId} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \

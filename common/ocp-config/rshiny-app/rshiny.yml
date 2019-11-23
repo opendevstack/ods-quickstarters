@@ -21,42 +21,14 @@ parameters:
   description: The version to be used.
   value: latest
   required: true
-- description: Authentication Crowd user
-  displayName: crowd user
-  name: CROWD_RSHINY_REALM_USER
-  required: true
-- description: Authentication Crowd pw
-  displayName: crowd pw
-  name: CROWD_RSHINY_REALM_PW
-  required: true
 - name: NEXUS_URL
   required: true
 - name: NEXUS_USERNAME
   required: true
 - name: NEXUS_PASSWORD
   required: true
-- description: The application domain
-  displayName: app domain
-  name: OD_OCP_SOURCE_APP_DOMAIN
-  required: true
 objects:
-  # Route form this component to authproxy
-  - apiVersion: v1
-    kind: Route
-    metadata:
-      creationTimestamp: null
-      name: ${COMPONENT}
-    spec:
-      host: ${COMPONENT}-${PROJECT}-${ENV}.${OD_OCP_SOURCE_APP_DOMAIN}
-      port:
-        targetPort: 80-tcp
-      tls:
-        termination: edge
-      to:
-        kind: Service
-        name: ${COMPONENT}-authproxy
-        weight: 100
-      wildcardPolicy: None
+
   - apiVersion: v1
     kind: Service
     metadata:
