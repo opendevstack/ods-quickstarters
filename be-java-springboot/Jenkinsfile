@@ -8,6 +8,7 @@ def group = "org.osi"
 
 def credentialsId = projectId + "-cd-cd-user-with-password"
 def springQuickstarterBasepath = "be-java-springboot"
+def springCliVersion = "2.2.1.RELEASE"
 def nexusHost
 def dockerRegistry
 def gitHost
@@ -43,8 +44,7 @@ podTemplate(
           }
           stage('Install spring') {
               sh 'curl -s "https://get.sdkman.io" | bash'
-              // TODO: $SPRING_CLI_VERSION is not set - fix this
-              sh '/bin/bash -lc "source /home/jenkins/.sdkman/bin/sdkman-init.sh && sdk install springboot $SPRING_CLI_VERSION && spring --version"'
+              sh "/bin/bash -lc 'source /home/jenkins/.sdkman/bin/sdkman-init.sh && sdk install springboot ${springCliVersion} && spring --version'"
           }
           stage('Build spring project') {
             // TODO: Check if spring is in the PATH or think about alternative path
