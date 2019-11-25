@@ -21,11 +21,9 @@ parameters:
   description: The version to be used.
   value: latest
   required: true
-- name: NEXUS_URL
+- name: NEXUS_HOST
   required: true
 - name: NEXUS_USERNAME
-  required: true
-- name: NEXUS_PASSWORD
   required: true
 objects:
 
@@ -100,7 +98,7 @@ objects:
           containers:
           - env:
             - name: NEXUS_URL
-              value: '${NEXUS_URL}'
+              value: '${NEXUS_HOST}'
             - name: NEXUS_USERNAME
               value: '${NEXUS_USERNAME}'
             - name: NEXUS_PASSWORD
