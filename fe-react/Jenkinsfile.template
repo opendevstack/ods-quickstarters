@@ -22,7 +22,7 @@ library identifier: 'ods-library@production', retriever: modernSCM(
   https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular
  */
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular",
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
