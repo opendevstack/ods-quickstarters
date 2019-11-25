@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-maven
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-slave-maven
+    labels:
+      app: jenkins-slave-maven
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-slave-maven:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-slaves/maven
+      git:
+        ref: production
+        uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: Dockerfile.rhel7
+        env:
+          - name: NEXUS_HOST
+            value: ${NEXUS_URL}
+          - name: NEXUS_USERNAME
+            value: ${NEXUS_USERNAME}
+          - name: NEXUS_PASSWORD
+            value: ${NEXUS_PASSWORD}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-slave-base:latest
+      type: Docker
+    triggers: []
+parameters:
+- name: REPO_BASE
+  required: true
+- name: NEXUS_URL
+  required: true
+- name: NEXUS_USERNAME
+  required: true
+- name: NEXUS_PASSWORD
+  required: true

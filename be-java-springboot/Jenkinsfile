@@ -4,10 +4,10 @@ def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
 def gitUrlHttp = env.GIT_URL_HTTP
 def gitUrlSsh = env.GIT_URL_SSH
-def group = "org.osi"
+def group = env.GROUP_ID
 
-def credentialsId = projectId + "-cd-cd-user-with-password"
-def springQuickstarterBasepath = "be-java-springboot"
+def credentialsId = "${projectId}-cd-cd-user-with-password"
+def quickstarterBasepath = "be-java-springboot"
 def springCliVersion = "2.2.1.RELEASE"
 def nexusHost
 def dockerRegistry
@@ -21,14 +21,14 @@ node {
 
 def conts = containerTemplate( 
             name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-maven:2",
+            image: "${dockerRegistry}/cd/jenkins-slave-maven",
             workingDir: '/tmp',
             alwaysPullImage: true,
             // TODO: Check if args: '${computer.jnlpmac} ${computer.name}' is needed
             args: ''
         )
 
-def podLabel = "quickstarter-" + springQuickstarterBasepath + "-" + projectId + "-" +componentId;
+def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
 
 
 podTemplate(
@@ -57,8 +57,8 @@ podTemplate(
                 --packaging=jar \
                 --dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
                   ${componentId}"
-            withEnv(["COMPONENT=${componentId}","GROUP=${group}","SCRIPT_DIR=${springQuickstarterBasepath}"]) {
-              sh "sh ./${springQuickstarterBasepath}/postProcessProjectsettings.sh"            
+            withEnv(["COMPONENT=${componentId}","GROUP=${group}","SCRIPT_DIR=${quickstarterBasepath}"]) {
+              sh "sh ./${quickstarterBasepath}/postProcessProjectsettings.sh"            
             }
           }
 
@@ -67,22 +67,20 @@ podTemplate(
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${springQuickstarterBasepath}/files/Jenkinsfile.template \
+                  --source ${quickstarterBasepath}/Jenkinsfile.template \
                   --target ${componentId}/Jenkinsfile \
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
-                  --component-type ${springQuickstarterBasepath}"
-            sh "rm ${springQuickstarterBasepath}/files/Jenkinsfile.template"
+                  --component-type ${quickstarterBasepath}"
           }
           stage('Create sonar-project.properties') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${springQuickstarterBasepath}/files/sonar-project.properties.template \
+                  --source ${quickstarterBasepath}/sonar-project.properties.template \
                   --target ${componentId}/sonar-project.properties \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
-                  --component-type ${springQuickstarterBasepath}"
-            sh "rm ${springQuickstarterBasepath}/files/sonar-project.properties.template"
+                  --component-type ${quickstarterBasepath}"
           }
           // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
           // Check if Jenkinsfile.template etc. are also copied (they should not be!)

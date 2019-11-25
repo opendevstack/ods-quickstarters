@@ -1,0 +1,14 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+
+# Forced Language (optional)
+sonar.language=scala
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8

@@ -1,0 +1,14 @@
+html, body {
+  background-color: #61E786;
+  color: #0A2342;
+  height: 100%;
+}
+
+h1 {
+  color: #2CA58D;
+}
+
+.container {
+  background-color: #FFFDF7;
+  min-height: 100%;
+}

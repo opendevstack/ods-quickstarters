@@ -1,0 +1,86 @@
+/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
+def final projectId = '@project_id@'
+def final componentId = '@component_id@'
+def final credentialsId = "${projectId}-cd-cd-user-with-password"
+def sharedLibraryRepository
+def dockerRegistry
+node {
+  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+library identifier: 'ods-library@production', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: sharedLibraryRepository,
+   credentialsId: credentialsId])
+
+/*
+  See readme of shared library for usage and customization
+  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
+  eg. to create and set your own builder slave instead of
+  the base slave used here - the code of the base slave can be found at
+  https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base
+ */
+odsPipeline(
+  image: "${dockerRegistry}/cd/jenkins-slave-golang",
+  projectId: projectId,
+  componentId: componentId,
+  branchToEnvironmentMapping: [
+    'master': 'test',
+    '*': 'dev'
+  ]
+) { context ->
+  stageCheckFormat(context)
+  stageLint(context)
+  stageScanForSonarqube(context)
+  stageUnitTest(context)
+  stageBuild(context)
+  stageStartOpenshiftBuild(context)
+  stageDeployToOpenshift(context)
+}
+
+def stageCheckFormat(def context) {
+  stage('Check Format') {
+    def unformatted = sh(script: 'gofmt -l .', returnStdout: true)
+    if (unformatted) {
+      println "Unformatted files:\n${unformatted}"
+      error 'All files need to be gofmt\'d. Please run: gofmt -w .'
+    }
+  }
+}
+
+def stageLint(def context) {
+  stage('Lint') {
+    withEnv(["CGO_ENABLED=0", "GOCACHE=${WORKSPACE}/.cache"]) {
+      sh "golangci-lint run"
+    }
+  }
+}
+
+def stageBuild(def context) {
+  stage('Build') {
+    def binary = "app_linux_amd64"
+    withEnv(["CGO_ENABLED=0", "GOCACHE=${WORKSPACE}/.cache"]) {
+      sh "go build -o docker/${binary}"
+    }
+  }
+}
+
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+    withEnv(["CGO_ENABLED=0", "GOCACHE=${WORKSPACE}/.cache"]) {
+      sh 'mkdir -p build/test-results/test'
+      def gopkgs = sh(script: 'go list ./... | grep -v /vendor', returnStdout: true).trim()
+      withEnv(["GOPKGS=${gopkgs}"]) {
+        def status = sh(script: 'go test -v -cover $GOPKGS 2>&1 > test-results.txt', returnStatus: true)
+        sh 'cat test-results.txt | go-junit-report > build/test-results/test/report.xml'
+        junit 'build/test-results/test/report.xml'
+        sh 'rm test-results.txt'
+        if (status != 0) {
+          error "go test -v -cover $GOPKGS failed!"
+        }
+      }
+    }
+  }
+}
+

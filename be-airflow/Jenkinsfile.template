@@ -1,0 +1,84 @@
+def final projectId = '@project_id@'
+def final componentId = 'airflow-worker'
+def final credentialsId = "${projectId}-cd-cd-user-with-password"
+def sharedLibraryRepository
+def dockerRegistry
+node {
+    sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
+    dockerRegistry = env.DOCKER_REGISTRY
+}
+
+library identifier: 'ods-library@production', retriever: modernSCM(
+    [$class       : 'GitSCMSource',
+        remote       : sharedLibraryRepository,
+        credentialsId: credentialsId])
+
+// See readme of shared library for usage and customization.
+odsPipeline(
+    image: "${dockerRegistry}/cd/jenkins-slave-airflow",
+    projectId: projectId,
+    componentId: componentId,
+    openshiftBuildTimeout: 25,
+    testResults : 'artifacts',
+    branchToEnvironmentMapping: [
+            'master': 'test',
+            '*'     : 'dev'
+    ]
+) { context ->
+    stageDAGTest(context)
+    stageUnitTest(context)
+    stageBuild(context)
+    stageStartOpenshiftBuild(context)
+    stageTagImage(context)
+    stagePublishDAGs(context)
+}
+
+def stageDAGTest(def context) {
+    stage('DAG Integrity Tests') {
+        sh './test_dag_integrity.sh'
+    }
+}
+
+def stageUnitTest(def context) {
+    stage('Unit Tests') {
+        sh "pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHost.tokenize('//')[1]} -r src/requirements.txt --user"
+        sh './test_all.sh'
+        junit 'artifacts/**/*.xml'
+    }
+}
+
+def stageBuild(def context) {
+    stage('Build') {
+        sh './build.sh'
+    }
+}
+
+def stageTagImage(def context) {
+    stage('Tag build') {
+        if (!context.environment) {
+            println("Skipping for empty environment ...")
+            return
+        }
+        openshiftTag(
+            srcStream: context.componentId,
+            srcTag: context.tagversion,
+            destStream: context.componentId,
+            destTag: "latest",
+            namespace: context.targetProject
+        )
+    }
+}
+
+def stagePublishDAGs(def context) {
+    stage('Publish DAGs') {
+        def airflow_webserver_info = sh(returnStdout: true, script: "oc get pods --sort-by=.status.startTime --no-headers -l component=airflow-webserver -n ${context.targetProject} | tail -n1").trim().split(/\s+/)
+        def airflow_scheduler_info = sh(returnStdout: true, script: "oc get pods --sort-by=.status.startTime --no-headers -l component=airflow-scheduler -n ${context.targetProject} | tail -n1").trim().split(/\s+/)
+
+        if (airflow_webserver_info[2] != "Running" || airflow_scheduler_info[2] != "Running") {
+            error("Airflow cluster is not running or does not exist")
+        }
+
+        sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dags ${airflow_webserver_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
+        sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dags ${airflow_scheduler_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
+    }
+}

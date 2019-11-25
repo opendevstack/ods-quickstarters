@@ -1,0 +1,74 @@
+// build params
+def projectId = env.PROJECT_ID
+def componentId = env.COMPONENT_ID.toLowerCase()
+def packageName = env.PACKAGE_NAME
+def gitUrlHttp = env.GIT_URL_HTTP
+def gitUrlSsh = env.GIT_URL_SSH
+def group = env.GROUP_ID
+
+def credentialsId = "${projectId}-cd-cd-user-with-password"
+def quickstarterBasepath = "ds-jupyter-notebook"
+def nexusHost
+def dockerRegistry
+def gitHost
+// vars from jenkins master
+node {
+    dockerRegistry = env.DOCKER_REGISTRY
+    nexusHost = env.NEXUS_HOST
+    gitHost =  env.BITBUCKET_HOST.split(":")[0]
+}
+
+def conts = containerTemplate( 
+            name: 'jnlp',
+            image: "${dockerRegistry}/cd/jenkins-slave-maven",
+            workingDir: '/tmp',
+            alwaysPullImage: true,
+            args: ''
+        )
+
+def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+
+
+podTemplate(
+      label: podLabel,
+      cloud: 'openshift',
+      containers: [conts],
+      volumes: [],
+      serviceAccount: 'jenkins'
+    ) {
+        node(podLabel) {
+          stage('Checkout quickstarter') {
+            checkout scm
+          }
+          stage("initialize target folder ${componentId}") {
+              sh "mkdir -p ${componentId}"
+          }
+          stage('copy files from quickstart to generated project') {
+              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
+          }
+          stage('Setup OpenShift resources') {
+            sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+          }
+          stage('Create Jenkinsfile') {
+            sh "sh common/scripts/renderJenkinsTemplate.sh \
+                  --source ${quickstarterBasepath}/Jenkinsfile.template \
+                  --target ${componentId}/Jenkinsfile \
+                  --url ${gitUrlHttp} \
+                  --project-id ${projectId} \
+                  --component-id ${componentId}  \
+                  --component-type ${quickstarterBasepath}"
+          }
+          stage('Push to remote') {
+            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
+              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
+            }
+            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
+          }
+      }
+}
+
+
+
+
+
+

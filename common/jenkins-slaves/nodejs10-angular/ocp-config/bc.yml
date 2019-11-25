@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-nodejs10-angular
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-slave-nodejs10-angular
+    labels:
+      app: jenkins-slave-nodejs10-angular
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-slave-nodejs10-angular:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-slaves/nodejs10-angular
+      git:
+        ref: production
+        uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: Dockerfile.rhel7
+        env:
+          - name: NEXUS_HOST
+            value: ${NEXUS_URL}
+          - name: NEXUS_AUTH
+            value: ${NEXUS_AUTH}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-slave-base:latest
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers: []
+parameters:
+- name: NEXUS_URL
+  required: true
+- name: NEXUS_AUTH
+  required: true
+- name: REPO_BASE
+  required: true
