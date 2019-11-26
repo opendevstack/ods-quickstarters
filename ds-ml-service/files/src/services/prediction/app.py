@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from flask import jsonify, request
 
@@ -74,3 +75,6 @@ if __name__ == '__main__':
         app.config['USERS'][username] = password
 
     app.run('0.0.0.0', flask_args.port, debug=debug_mode() or flask_args.debug)
+else:
+    initialize_logging(path="prediction.log", debug=os.getenv('DEBUG', False))
+    gunicorn_app = app

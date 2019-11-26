@@ -2,6 +2,15 @@ apiVersion: v1
 kind: Template
 metadata:
   name: jenkins-slave-golang
+parameters:
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+  value: production
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -15,14 +24,14 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: jenkins-slave-golang:latest
+        name: jenkins-slave-golang:${ODS_IMAGE_TAG}
     postCommit: {}
     resources: {}
     runPolicy: Serial
     source:
       contextDir: common/jenkins-slaves/golang
       git:
-        ref: production
+        ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
@@ -32,10 +41,7 @@ objects:
         dockerfilePath: Dockerfile.rhel7
         from:
           kind: ImageStreamTag
-          name: jenkins-slave-base:latest
+          name: jenkins-slave-base:${ODS_IMAGE_TAG}
       type: Docker
     successfulBuildsHistoryLimit: 5
     triggers: []
-parameters:
-- name: REPO_BASE
-  required: true

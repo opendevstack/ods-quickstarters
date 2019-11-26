@@ -183,3 +183,6 @@ if __name__ == '__main__':
 
     initialize_logging("training.log", flask_args.debug)
     app.run('0.0.0.0', flask_args.port, debug=debug_mode() or flask_args.debug)
+else:
+    initialize_logging(path="training.log", debug=os.getenv('DEBUG', False))
+    gunicorn_app = app

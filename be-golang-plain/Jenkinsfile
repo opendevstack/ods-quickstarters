@@ -1,4 +1,6 @@
 // build params
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def projectId = env.PROJECT_ID
 def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
@@ -13,18 +15,18 @@ def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
-    dockerRegistry = env.DOCKER_REGISTRY
-    nexusHost = env.NEXUS_HOST
-    gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  dockerRegistry = env.DOCKER_REGISTRY
+  nexusHost = env.NEXUS_HOST
+  gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
 def conts = containerTemplate( 
-            name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-maven",
-            workingDir: '/tmp',
-            alwaysPullImage: true,
-            args: ''
-        )
+  name: 'jnlp',
+  image: "${dockerRegistry}/cd/jenkins-slave-golang:${odsImageTag}",
+  workingDir: '/tmp',
+  alwaysPullImage: true,
+  args: ''
+)
 
 def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
 
@@ -49,7 +51,7 @@ podTemplate(
           stage('write go.mod') {
             sh "echo 'module example.com/${projectId}/${componentId}' > ${componentId}/go.mod"
             sh "echo '' >>  ${componentId}/go.mod"
-            sh "echo 'go 1.12' >>  ${componentId}/go.mod"            
+            sh "echo 'go 1.12' >>  ${componentId}/go.mod"
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
@@ -61,7 +63,9 @@ podTemplate(
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
+                  --component-type ${quickstarterBasepath} \
+                  --ods-image-tag ${odsImageTag} \
+                  --ods-git-ref ${odsGitRef}"
           }
           stage('Create sonar-project.properties') {
             sh "sh common/scripts/renderSonarqubeTemplate.sh \

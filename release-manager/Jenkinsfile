@@ -1,4 +1,6 @@
 // build params
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def projectId = env.PROJECT_ID
 def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
@@ -16,22 +18,21 @@ def gitIsHttps;
 def gitBaseUrl;
 // vars from jenkins master
 node {
-    dockerRegistry = env.DOCKER_REGISTRY
-    nexusHost = env.NEXUS_HOST
-    gitHost =  env.BITBUCKET_HOST.split(":")[0]
-    gitBaseUrl = env.BITBUCKET_HOST;
+  dockerRegistry = env.DOCKER_REGISTRY
+  nexusHost = env.NEXUS_HOST
+  gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  gitBaseUrl = env.BITBUCKET_HOST
 }
 
 def conts = containerTemplate( 
-            name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-maven",
-            workingDir: '/tmp',
-            alwaysPullImage: true,
-            args: ''
-        )
+  name: 'jnlp',
+  image: "${dockerRegistry}/cd/jenkins-slave-base:${odsImageTag}",
+  workingDir: '/tmp',
+  alwaysPullImage: true,
+  args: ''
+)
 
 def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
-
 
 podTemplate(
       label: podLabel,

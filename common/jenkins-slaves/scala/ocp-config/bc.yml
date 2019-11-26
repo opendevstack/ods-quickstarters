@@ -2,6 +2,21 @@ apiVersion: v1
 kind: Template
 metadata:
   name: jenkins-slave-scala
+parameters:
+- name: NEXUS_URL
+  required: true
+- name: NEXUS_USERNAME
+  required: true
+- name: NEXUS_PASSWORD
+  required: true
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+  value: production
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -14,14 +29,14 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: jenkins-slave-scala:latest
+        name: jenkins-slave-scala:${ODS_IMAGE_TAG}
     postCommit: {}
     resources: {}
     runPolicy: Serial
     source:
       contextDir: common/jenkins-slaves/scala
       git:
-        ref: production
+        ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
@@ -38,15 +53,6 @@ objects:
             value: ${NEXUS_PASSWORD}
         from:
           kind: ImageStreamTag
-          name: jenkins-slave-base:latest
+          name: jenkins-slave-base:${ODS_IMAGE_TAG}
       type: Docker
     triggers: []
-parameters:
-- name: NEXUS_URL
-  required: true
-- name: NEXUS_USERNAME
-  required: true
-- name: NEXUS_PASSWORD
-  required: true
-- name: REPO_BASE
-  required: true

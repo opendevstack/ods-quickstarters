@@ -8,14 +8,14 @@ node {
     dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@production', retriever: modernSCM(
+library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
     [$class       : 'GitSCMSource',
         remote       : sharedLibraryRepository,
         credentialsId: credentialsId])
 
 // See readme of shared library for usage and customization.
 odsPipeline(
-    image: "${dockerRegistry}/cd/jenkins-slave-airflow",
+    image: "${dockerRegistry}/cd/jenkins-slave-airflow:@ods_image_tag@",
     projectId: projectId,
     componentId: componentId,
     openshiftBuildTimeout: 25,
