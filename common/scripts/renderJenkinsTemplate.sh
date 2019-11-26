@@ -19,7 +19,7 @@ do
             git_url_http="$2"
             shift # past argument
             ;;
-       -p|--project-id)
+        -p|--project-id)
             project_id="$2"
             shift # past argument
             ;;
