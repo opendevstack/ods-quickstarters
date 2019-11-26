@@ -131,13 +131,9 @@ for devenv in dev test ; do
         "--param=ENV=${devenv}"
         )
 
-    if [ ! -z "${QSBASE_ABS}" ]; then
-      for name in "ocp-$devenv.env" "ocp.env" ; do
-        if [ -f "${QSBASE_ABS}/$name" ]; then
-          TAILOR_BASE_ARGS+=(--param-file "${QSBASE_ABS}/$name")
-          break
-        fi
-      done
+    env_file="${QSBASE_ABS}/ocp.env"
+    if [ -f "$env_file" ]; then
+      TAILOR_BASE_ARGS+=(--param-file "$env_file")
     fi
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
