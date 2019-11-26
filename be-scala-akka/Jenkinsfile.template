@@ -9,7 +9,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@production', retriever: modernSCM(
+library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
   [$class: 'GitSCMSource',
    remote: sharedLibraryRepository,
    credentialsId: credentialsId])
@@ -22,7 +22,7 @@ library identifier: 'ods-library@production', retriever: modernSCM(
   https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/scala
  */ 
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-scala",
+  image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
