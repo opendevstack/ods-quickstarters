@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-airflow
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-slave-airflow
+    labels:
+      app: jenkins-slave-airflow
+  spec:
+    dockerImageRepository: jenkins-slave-airflow
+    lookupPolicy:
+      local: false

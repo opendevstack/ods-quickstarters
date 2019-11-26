@@ -1,0 +1,28 @@
+id: @project_id@
+name: Project @project_id@
+description: Description of @project_id@.
+
+services:
+  bitbucket:
+    credentials:
+      id: @project_id@-cd-cd-user-with-password
+  jira:
+    credentials:
+      id: @project_id@-cd-cd-user-with-password
+  nexus:
+    repository:
+      name: leva-documentation
+
+#repositories:
+#  - id: A
+#    url: https://github.com/my-org/my-repo-A.git
+#    branch: master
+#    type: ods
+#  - id: B
+#    name: my-repo-B
+#    branch: master
+#    type: ods
+#  - id: C
+#    type: ods
+
+repositories: []

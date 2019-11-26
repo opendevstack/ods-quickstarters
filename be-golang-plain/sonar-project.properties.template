@@ -1,0 +1,19 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=.
+sonar.exclusions=**/*_test.go,**/vendor/**
+
+sonar.tests=.
+sonar.test.inclusions=**/*_test.go
+sonar.test.exclusions=**/vendor/**
+
+# change to your programming language
+# sonar.language=
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8

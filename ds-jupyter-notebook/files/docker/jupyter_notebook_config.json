@@ -1,0 +1,9 @@
+{
+  "NotebookApp": {
+    "token": "",
+    "ip": "0.0.0.0",
+    "notebook_dir": "/opt/app-root/src/work",
+    "port": 8080,
+    "open_browser": false
+  }
+}

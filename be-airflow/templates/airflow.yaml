@@ -1,0 +1,380 @@
+apiVersion: v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      cluster: airflow
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-credentials
+  stringData:
+    fernetkey: ${AIRFLOW_FERNET_KEY}
+  type: Opaque
+- apiVersion: v1
+  data:
+    AIRFLOW_EXECUTOR: openshift_plugin.OpenShiftExecutor
+    AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: ${OC_DOCKER_REGISTRY}/${NAMESPACE}/airflow-worker
+    AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: latest
+    AIRFLOW__OAUTH__ACCESS_TOKEN_URL: ${OC_API_URL}/oauth/token
+    AIRFLOW__OAUTH__AUTHORIZE_URL: ${OC_API_URL}/oauth/authorize
+    AIRFLOW__OAUTH__BASE_URL: ${OC_API_URL}
+    AIRFLOW__OAUTH__CLIENT_ID: system:serviceaccount:${NAMESPACE}:airflow
+    AIRFLOW__OAUTH__USER_INFO_URL: ${OC_API_URL}/apis/user.openshift.io/v1/users/~
+    AIRFLOW__OPENSHIFT_PLUGIN__ACCESS_ROLES: admin,edit
+    AIRFLOW__OPENSHIFT_PLUGIN__OPENSHIFT_CONSOLE_URL: ${OC_CONSOLE_URL}
+    AIRFLOW__OPENSHIFT_PLUGIN__SUPERUSER_ROLES: admin
+    ELASTICSEARCH_URL: http://airflow-elasticsearch.${NAMESPACE}.svc:9200
+    POSTGRES_HOST: airflow-postgresql.${NAMESPACE}.svc
+  kind: ConfigMap
+  metadata:
+    labels:
+      cluster: airflow
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-environment
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-scheduler
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-scheduler
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-webserver
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-webserver
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-scheduler
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-scheduler
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      cluster: airflow
+      component: airflow-scheduler
+      deploymentconfig: airflow-scheduler
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          cluster: airflow
+          component: airflow-scheduler
+          deploymentconfig: airflow-scheduler
+      spec:
+        containers:
+        - env:
+          - name: FERNET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: fernetkey
+                name: airflow-credentials
+          - name: AIRFLOW_COMMAND
+            value: scheduler
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: airflow-postgresql
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: airflow-postgresql
+          - name: POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: airflow-postgresql
+          - name: ELASTICSEARCH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: airflow-elasticsearch-credentials
+          - name: ELASTICSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: airflow-elasticsearch-credentials
+          envFrom:
+          - configMapRef:
+              name: airflow-environment
+          image: ${SHARED_IMAGE_NAMESPACE}/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          imagePullPolicy: Always
+          name: airflow-scheduler
+          ports: []
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 500Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/app-root/src/airflow/dags
+            name: airflow-scheduler-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: airflow-scheduler-data
+          persistentVolumeClaim:
+            claimName: airflow-scheduler
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - airflow-scheduler
+        from:
+          kind: ImageStreamTag
+          name: ${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          namespace: ${SHARED_IMAGE_NAMESPACE}
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-webserver
+    name: airflow-webserver
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      cluster: airflow
+      component: airflow-webserver
+      deploymentconfig: airflow-webserver
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          cluster: airflow
+          component: airflow-webserver
+          deploymentconfig: airflow-webserver
+      spec:
+        containers:
+        - env:
+          - name: FERNET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: fernetkey
+                name: airflow-credentials
+          - name: AIRFLOW_COMMAND
+            value: webserver
+          - name: AIRFLOW__OAUTH__CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: ${OPENSHIFT_OAUTH_SERVICE_ACCOUNT_SECRET}
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: airflow-postgresql
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: airflow-postgresql
+          - name: POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: airflow-postgresql
+          - name: ELASTICSEARCH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: username
+                name: airflow-elasticsearch-credentials
+          - name: ELASTICSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: airflow-elasticsearch-credentials
+          envFrom:
+          - configMapRef:
+              name: airflow-environment
+          image: ${SHARED_IMAGE_NAMESPACE}/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          imagePullPolicy: Always
+          name: airflow-webserver
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 500Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/app-root/src/airflow/dags
+            name: airflow-webserver-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: airflow-webserver-data
+          persistentVolumeClaim:
+            claimName: airflow-webserver
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - airflow-webserver
+        from:
+          kind: ImageStreamTag
+          name: ${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          namespace: ${SHARED_IMAGE_NAMESPACE}
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      cluster: airflow
+      component: airflow-webserver
+      deploymentconfig: airflow-webserver
+    name: airflow-webserver
+  spec:
+    ports:
+    - name: airflow-webserver-default
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      cluster: airflow
+      component: airflow-webserver
+      deploymentconfig: airflow-webserver
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      cluster: airflow
+      component: airflow-webserver
+      deploymentconfig: airflow-webserver
+      ods.quickstarter: airflow-quickstarter
+    name: airflow-webserver
+  spec:
+    host: airflow-webserver-${NAMESPACE}.${OPENSHIFT_APP_HOST}
+    port:
+      targetPort: airflow-webserver-default
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: airflow-webserver
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-worker
+    name: airflow-worker
+  spec:
+    dockerImageRepository: airflow-worker
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      cluster: airflow
+      component: airflow-worker
+    name: airflow-worker
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: airflow-worker:latest
+    runPolicy: Serial
+    source:
+      type: Binary
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: airflow:1.10.3
+          namespace: shared-services
+      type: Docker
+parameters:
+- description: Namespace where ElasticSearch is being deployed
+  name: NAMESPACE
+  required: true
+- description: Url of the OpenShift API
+  name: OC_API_URL
+  required: true
+- description: URL of the OpenShift Console
+  name: OC_CONSOLE_URL
+  required: true
+- description: Host:IP of the openshift docker image registry
+  name: OC_DOCKER_REGISTRY
+  required: true
+- description: Namespace where the shared images are stored
+  name: SHARED_IMAGE_NAMESPACE
+  value: shared-services
+- description: 'Airflow shared image stream name '
+  name: AIRFLOW_IMAGE_NAME
+  value: airflow
+- description: Airflow shared image tag which should be used
+  name: AIRFLOW_IMAGE_TAG
+  value: 1.10.3
+- description: Fernet key for securing stored Airflow Connection
+  name: AIRFLOW_FERNET_KEY
+  required: true
+- description: Size of the PVC for Airflow Webserver and Scheduler
+  name: VOLUME_CAPACITY
+  value: 512Mi
+- description: Host for all OpenShift app routes
+  name: OPENSHIFT_APP_HOST
+  required: true
+- description: OAuth service account token secret
+  name: OPENSHIFT_OAUTH_SERVICE_ACCOUNT_SECRET
+  required: true

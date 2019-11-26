@@ -1,0 +1,11 @@
+= (jenkins slave name)
+
+== Introduction / Used for building `&lt;language&gt;`
+
+…
+The image is built in the global `cd` project and is named `jenkins-slave-&lt;NAME&gt;`.<br>
+it can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-&lt;NAME&gt;`
+
+== Features / what's in, which plugins, …
+
+== Known limitations
