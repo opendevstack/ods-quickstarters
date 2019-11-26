@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
 set -eu
 
-# This script sets up the resource objects for a certain component:
+# This script is currently being used for ds-rshiny and ds-jupyter-notebook
+# components. It sets up the following resource objects:
 # * image streams
 # * build configs: pipelines
 # * build configs: images
+# *·secrets
 # * services
 # * routes
-
-# Use -gt 1 to consume two arguments per pass in the loop (e.g. each
-# argument has a corresponding value to go with it).
-# Use -gt 0 to consume one or more arguments per pass in the loop (e.g.
-# some arguments don't have a corresponding value to go with it such
-# as in the --default example).
-# note: if this is set to -gt 0 the /etc/hosts part is not recognized ( may be a bug )
 
 # support pointing to patched tailor using TAILOR environment variable
 : ${TAILOR:=tailor}
@@ -135,16 +130,16 @@ for devenv in dev test ; do
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
 
-    tailor_update_in_dir "${OCP_CONFIG}/rshiny-app" \
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
         secret/nexus
 
-    tailor_update_in_dir "${OCP_CONFIG}/rshiny-app" \
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
-        --selector "app=${PROJECT}-${COMPONENT},template=rshiny"
+        --selector "app=${PROJECT}-${COMPONENT},template=ds-component"
 
-    tailor_update_in_dir "${OCP_CONFIG}/rshiny-app" \
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
-        --selector "app=${PROJECT}-${COMPONENT},template=rshiny-authproxy"
+        --selector "app=${PROJECT}-${COMPONENT},template=ds-component-oauthproxy"
 
 done

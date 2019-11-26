@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: rshiny
+  template: ds-component
   app: '${PROJECT}-${COMPONENT}'
 parameters:
 - description: The name of the application project.
