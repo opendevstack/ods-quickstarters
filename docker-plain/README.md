@@ -1,8 +1,8 @@
-# Plain docker image (be-docker-plain)
+# Plain Docker image (docker-plain)
 
-Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-project-quickstarters/latest/index.html)
+Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 
-Please update documentation in the [antora page direcotry](https://github.com/opendevstack/ods-project-quickstarters/tree/master/docs/modules/ROOT/pages)
+Please update documentation in the [antora page direcotry](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
 
 ## Release Manager compatibility
 
@@ -12,4 +12,4 @@ Being generic, this component does not produce any test results, which are curre
 
 2) Your component has to provide these test results to the [Jenkins JUnit plugin](https://plugins.jenkins.io/junit) via its `junit` step function.
 
-Please feel free to consult our existing quickstarters. An example can be found in the `be-springboot` quickstarter's [Jenkinsfile](https://github.com/opendevstack/ods-project-quickstarters/blob/master/boilerplates/be-springboot/Jenkinsfile).
+Please feel free to consult our existing quickstarters. An example can be found in the `be-springboot` quickstarter's [Jenkinsfile](https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/be-springboot/Jenkinsfile).

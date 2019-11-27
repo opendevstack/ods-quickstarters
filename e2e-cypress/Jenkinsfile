@@ -1,4 +1,6 @@
 // build params
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def projectId = env.PROJECT_ID
 def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
@@ -13,21 +15,20 @@ def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
-    dockerRegistry = env.DOCKER_REGISTRY
-    nexusHost = env.NEXUS_HOST
-    gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  dockerRegistry = env.DOCKER_REGISTRY
+  nexusHost = env.NEXUS_HOST
+  gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
 def conts = containerTemplate( 
-            name: 'jnlp',
-            image: "${dockerRegistry}/cd/jenkins-slave-maven",
-            workingDir: '/tmp',
-            alwaysPullImage: true,
-            args: ''
-        )
+  name: 'jnlp',
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular:${odsImageTag}",
+  workingDir: '/tmp',
+  alwaysPullImage: true,
+  args: ''
+)
 
 def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
-
 
 podTemplate(
       label: podLabel,
@@ -56,7 +57,9 @@ podTemplate(
                   --url ${gitUrlHttp} \
                   --project-id ${projectId} \
                   --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
+                  --component-type ${quickstarterBasepath} \
+                  --ods-image-tag ${odsImageTag} \
+                  --ods-git-ref ${odsGitRef}"
           }
           stage('Push to remote') {
             withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {

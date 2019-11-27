@@ -19,7 +19,7 @@ do
             git_url_http="$2"
             shift # past argument
             ;;
-       -p|--project-id)
+        -p|--project-id)
             project_id="$2"
             shift # past argument
             ;;
@@ -35,6 +35,14 @@ do
             source="$2"
             shift # past argument
             ;;
+        -i|--ods-image-tag)
+            ods_image_tag="$2"
+            shift # past argument
+            ;;
+        -r|--ods-git-ref)
+            ods_git_ref="$2"
+            shift # past argument
+            ;;
         *)
             # unknown option
             ;;
@@ -45,5 +53,5 @@ done
 
 
 # replace placeholders
-echo "target: $target, url: $git_url_http, project-id: $project_id, component-id: $component_id, component-type: $component_type"
-sed 's|@project_id@|'$project_id'|g; s|@component_id@|'$component_id'|g; s|@component_type@|'$component_type'|g; s|@git_url_http@|'$git_url_http'|g' $source > $target
+echo "target: $target, url: $git_url_http, project-id: $project_id, component-id: $component_id, component-type: $component_type, image-tag: $ods_image_tag, git-ref: $ods_git_ref"
+sed 's|@project_id@|'$project_id'|g; s|@component_id@|'$component_id'|g; s|@component_type@|'$component_type'|g; s|@git_url_http@|'$git_url_http'|g;  s|@ods_image_tag@|'$ods_image_tag'|g; s|@ods_git_ref@|'$ods_git_ref'|g' $source > $target

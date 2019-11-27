@@ -9,7 +9,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@production', retriever: modernSCM(
+library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
   [$class: 'GitSCMSource',
    remote: sharedLibraryRepository,
    credentialsId: credentialsId])
@@ -19,10 +19,10 @@ library identifier: 'ods-library@production', retriever: modernSCM(
   @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
   eg. to create and set your own builder slave instead of
   the python slave used here - the code of the python slave can be found at
-  https://github.com/opendevstack/ods-project-quickstarters/tree/master/jenkins-slaves/python
+  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/python
  */
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-python",
+  image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [

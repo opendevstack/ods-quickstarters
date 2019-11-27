@@ -7,7 +7,7 @@ All these slaves inherit from the [slave-base](https://github.com/opendevstack/o
 Inside your `jenkinsfile` you can configure which slave is used by changing the `image` property to your imagestream (e.g. in case it's in a `project`-cd namespace and not in the global `CD` one).
 ```
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-maven"
+  image: "${dockerRegistry}/cd/jenkins-slave-maven:latest"
 ```
 the ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-shared-library) takes care about starting the `jenkins slave` during the build as pod in your `project`s `cd` namespace with the `jenkins` service account.
 

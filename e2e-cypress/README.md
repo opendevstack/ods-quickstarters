@@ -1,6 +1,6 @@
 # End-to-end tests with cypress (e2e-cypress)
 
-Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-project-quickstarters/latest/index.html)
+Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 
-Please update documentation in the [antora page direcotry](https://github.com/opendevstack/ods-project-quickstarters/tree/master/docs/modules/ROOT/pages)
+Please update documentation in the [antora page direcotry](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
 

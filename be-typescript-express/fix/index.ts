@@ -1,9 +1,9 @@
-export * from "./greeter";
-import * as express from "express";
-import {Application} from "express";
+
 import bodyParser = require("body-parser");
 import weatherRouter from "./routes/weather";
-const app: Application = express();
+export * from "./greeter";
+import * as express from "express";
+const app: express.Application = express();
 
 app.use(bodyParser.json({type: "application/json"}));
 
@@ -13,5 +13,6 @@ app.use("/api/weather", weatherRouter);
 // initialize the webserver
 const port = process.env.PORT || "8080";
 app.listen(port, () => {
+    // tslint:disable-next-line:no-console
     console.info(`App listening on port ${port}!`);
 });
