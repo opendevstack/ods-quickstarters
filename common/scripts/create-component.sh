@@ -25,7 +25,6 @@ echo "Using tailor ${tailor_version} from ${tailor_exe}"
 DEBUG=false
 STATUS=false
 FORCE=false
-QSBASE=
 QSBASE_ABS=
 while [[ $# -gt 0 ]]
 do
@@ -87,12 +86,15 @@ if [ -z ${NEXUS_HOST+x} ]; then
     echo "NEXUS_HOST is unset, but required";
     exit 1;
 else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
-if [ ! -z "${QSBASE}" ]; then
+if [ -z ${QSBASE+x} ]; then
+    echo "QSBASE is unset, but required";
+    exit 1;
+else
   if [ -d "${QSBASE}" ]; then
+    echo "QSBASE=${QSBASE}"
     QSBASE_ABS="$( cd "${QSBASE}" && pwd )"
   else
-    echo "No directory at ${QSBASE}, check -qs|--qsbasepath argument."
-    echo "Current working directory is: $(pwd)"
+    echo "No directory at ${QSBASE}, check -qs|--qsbasepath argument. Current working directory is: $(pwd)"
     exit 1
   fi
 fi
