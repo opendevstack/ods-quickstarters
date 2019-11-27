@@ -19,10 +19,10 @@ library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
   @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
   eg. to create and set your own builder slave instead of 
   the node js slave used here - the code of the slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular
+  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular
  */ 
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular:@ods_image_tag@",
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
