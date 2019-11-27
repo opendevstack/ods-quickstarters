@@ -1,0 +1,3 @@
+ignore-unknown-parameters true
+
+serviceaccount,secret,svc,route,bc,is,dc
