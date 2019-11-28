@@ -22,7 +22,7 @@ node {
 
 def conts = containerTemplate( 
   name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular:${odsImageTag}",
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:${odsImageTag}",
   workingDir: '/tmp',
   alwaysPullImage: true,
   args: ''
