@@ -42,10 +42,6 @@ case $key in
     OC_DOCKER_REGISTRY="$2"
     shift # past argument
     ;;
-    -h|--oc-route-host)
-    OPENSHIFT_APP_HOST="$2"
-    shift # past argument
-    ;;
     *)
             # unknown option
     ;;
@@ -73,10 +69,6 @@ if [ -z ${OC_DOCKER_REGISTRY+x} ]; then
     echo "OC_DOCKER_REGISTRY is unset, but required";
     exit 1;
 else echo "OC_DOCKER_REGISTRY=${OC_DOCKER_REGISTRY}"; fi
-if [ -z ${OPENSHIFT_APP_HOST+x} ]; then
-    echo "OPENSHIFT_APP_HOST is unset, but required";
-    exit 1;
-else echo "OPENSHIFT_APP_HOST=${OPENSHIFT_APP_HOST}"; fi
 
 environments=(test dev)
 # iterate over different environments
@@ -126,7 +118,6 @@ for ENV in ${environments[@]} ; do
         OC_CONSOLE_URL=${OC_CONSOLE_URL} \
         OC_DOCKER_REGISTRY=${OC_DOCKER_REGISTRY} \
         AIRFLOW_FERNET_KEY=${FERNET_KEY} \
-        OPENSHIFT_APP_HOST=${OPENSHIFT_APP_HOST} \
         OPENSHIFT_OAUTH_SERVICE_ACCOUNT_SECRET=${SA_TOKEN} \
         NAMESPACE=${PROJECT}-${ENV} | oc create -n ${PROJECT}-${ENV} -f -
 

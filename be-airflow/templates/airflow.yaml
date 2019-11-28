@@ -302,7 +302,6 @@ objects:
       ods.quickstarter: airflow-quickstarter
     name: airflow-webserver
   spec:
-    host: airflow-webserver-${NAMESPACE}.${OPENSHIFT_APP_HOST}
     port:
       targetPort: airflow-webserver-default
     tls:
@@ -372,9 +371,6 @@ parameters:
 - description: Size of the PVC for Airflow Webserver and Scheduler
   name: VOLUME_CAPACITY
   value: 512Mi
-- description: Host for all OpenShift app routes
-  name: OPENSHIFT_APP_HOST
-  required: true
 - description: OAuth service account token secret
   name: OPENSHIFT_OAUTH_SERVICE_ACCOUNT_SECRET
   required: true
