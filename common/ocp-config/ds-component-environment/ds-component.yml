@@ -16,6 +16,16 @@ parameters:
   displayName: Environment
   name: ENV
   required: true
+- name: MEMORY_LIMIT
+  displayName: Memory Limit
+  description: Maximum amount of memory available for the container.
+  value: 1Gi
+  required: true
+- name: MEMORY_REQUEST
+  displayName: Memory Request
+  description: Minimum amount of memory requested for the container.
+  value: 512Mi
+  required: true
 - name: TAGVERSION
   displayName: tag version
   description: The version to be used.
@@ -111,7 +121,11 @@ objects:
             ports:
             - containerPort: 8080
               protocol: TCP
-            resources: {}
+            resources:
+              limits:
+                memory: '${MEMORY_LIMIT}'
+              requests:
+                memory: '${MEMORY_REQUEST}'
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
