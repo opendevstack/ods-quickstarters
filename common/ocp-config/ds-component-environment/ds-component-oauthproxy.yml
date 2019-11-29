@@ -16,6 +16,16 @@ parameters:
   displayName: Environment
   name: ENV
   required: true
+- name: MEMORY_LIMIT
+  displayName: Memory Limit
+  description: Maximum amount of memory available for the container.
+  value: 256Mi
+  required: true
+- name: MEMORY_REQUEST
+  displayName: Memory Request
+  description: Minimum amount of memory requested for the container.
+  value: 128Mi
+  required: true
 - description: Session secret.
   displayName: Session secret
   from: '[a-zA-Z0-9]{16}'
@@ -90,6 +100,11 @@ objects:
           - name: oauth-proxy
             image: openshift/oauth-proxy:latest
             imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                memory: '${MEMORY_LIMIT}'
+              requests:
+                memory: '${MEMORY_REQUEST}'
             ports:
             - containerPort: 8443
               protocol: TCP

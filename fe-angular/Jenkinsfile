@@ -21,7 +21,7 @@ node {
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
-def conts = containerTemplate( 
+def conts = containerTemplate(
   name: 'jnlp',
   image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:${odsImageTag}",
   workingDir: '/tmp',
@@ -49,7 +49,7 @@ podTemplate(
               sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
