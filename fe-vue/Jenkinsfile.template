@@ -15,7 +15,7 @@ library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
 
 // See readme of shared library for usage and customization.
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs8-angular:@ods_image_tag@",
+  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [

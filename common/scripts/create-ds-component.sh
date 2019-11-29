@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
 set -eu
 
-# This script sets up the resource objects for a certain component:
+# This script is currently being used for ds-rshiny and ds-jupyter-notebook
+# components. It sets up the following resource objects:
 # * image streams
 # * build configs: pipelines
 # * build configs: images
+# *·secrets
 # * services
-
-# Use -gt 1 to consume two arguments per pass in the loop (e.g. each
-# argument has a corresponding value to go with it).
-# Use -gt 0 to consume one or more arguments per pass in the loop (e.g.
-# some arguments don't have a corresponding value to go with it such
-# as in the --default example).
-# note: if this is set to -gt 0 the /etc/hosts part is not recognized ( may be a bug )
+# * routes
 
 # support pointing to patched tailor using TAILOR environment variable
 : ${TAILOR:=tailor}
@@ -25,16 +21,11 @@ echo "Using tailor ${tailor_version} from ${tailor_exe}"
 DEBUG=false
 STATUS=false
 FORCE=false
-QSBASE_ABS=
 while [[ $# -gt 0 ]]
 do
 key="$1"
 
 case $key in
-    -qs|--qsbasepath)
-    QSBASE="$2"
-    shift # past argument
-    ;;
     -p|--project)
     PROJECT="$2"
     shift # past argument
@@ -43,8 +34,16 @@ case $key in
     COMPONENT="$2"
     shift # past argument
     ;;
-    -ne|--nexus)
+    -nh|--nexushost)
     NEXUS_HOST="$2"
+    shift # past argument
+    ;;
+    -nu|--nexususername)
+    NEXUS_USERNAME="$2"
+    shift # past argument
+    ;;
+    -np|--nexuspassword)
+    NEXUS_PASSWORD="$2"
     shift # past argument
     ;;
     --status)
@@ -86,19 +85,14 @@ if [ -z ${NEXUS_HOST+x} ]; then
     echo "NEXUS_HOST is unset, but required";
     exit 1;
 else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
-if [ -z ${QSBASE+x} ]; then
-    echo "QSBASE is unset, but required";
+if [ -z ${NEXUS_USERNAME+x} ]; then
+    echo "NEXUS_USERNAME is unset, but required";
     exit 1;
-else
-  if [ -d "${QSBASE}" ]; then
-    echo "QSBASE=${QSBASE}"
-    QSBASE_ABS="$( cd "${QSBASE}" && pwd )"
-  else
-    echo "No directory at ${QSBASE}, check -qs|--qsbasepath argument. Current working directory is: $(pwd)"
-    exit 1
-  fi
+else echo "NEXUS_USERNAME=${NEXUS_USERNAME}"; fi
+if [ -z ${NEXUS_PASSWORD+x} ]; then
+    echo "NEXUS_PASSWORD is unset, but required";
+    exit 1;
 fi
-
 echo "Params: ${tailor_verbose}"
 
 if $STATUS; then
@@ -112,9 +106,7 @@ tailor_update_in_dir() {
     if [ ${STATUS} = "true" ]; then
         $DEBUG && echo 'exec:' cd  "$dir" '&&'
         $DEBUG && echo 'exec:'     ${TAILOR} $tailor_verbose status "$@"
-        set +e
         cd "$dir" && ${TAILOR} $tailor_verbose status "$@"
-        set -e
     else
         $DEBUG && echo 'exec:' cd "$dir" '&&'
         $DEBUG && echo 'exec:    ' ${TAILOR} $tailor_verbose --non-interactive update "$@"
@@ -130,18 +122,24 @@ for devenv in dev test ; do
         "--namespace=${PROJECT}-${devenv}" \
         "--param=PROJECT=${PROJECT}" \
         "--param=COMPONENT=${COMPONENT}" \
-        "--param=ENV=${devenv}"
+        "--param=ENV=${devenv}" \
+        "--param=NEXUS_HOST=${NEXUS_HOST}" \
+        "--param=NEXUS_USERNAME=${NEXUS_USERNAME}" \
+        "--param=NEXUS_PASSWORD=${NEXUS_PASSWORD}"
         )
-
-    env_file="${QSBASE_ABS}/ocp.env"
-    if [ -f "$env_file" ]; then
-      TAILOR_BASE_ARGS+=(--param-file "$env_file")
-    fi
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
 
-    tailor_update_in_dir "${OCP_CONFIG}/component-environment" \
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
-        --selector app="${PROJECT}-${COMPONENT}",template=component-template
+        secret/nexus
+
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
+        "${TAILOR_BASE_ARGS[@]}" \
+        --selector "app=${PROJECT}-${COMPONENT},template=ds-component"
+
+    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
+        "${TAILOR_BASE_ARGS[@]}" \
+        --selector "app=${PROJECT}-${COMPONENT},template=ds-component-oauthproxy"
 
 done
