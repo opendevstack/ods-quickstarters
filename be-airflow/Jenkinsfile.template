@@ -35,21 +35,21 @@ odsPipeline(
 
 def stageDAGTest(def context) {
     stage('DAG Integrity Tests') {
-        sh './test_dag_integrity.sh'
+        sh 'sh test_dag_integrity.sh'
     }
 }
 
 def stageUnitTest(def context) {
     stage('Unit Tests') {
         sh "pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHost.tokenize('//')[1]} -r src/requirements.txt --user"
-        sh './test_all.sh'
+        sh 'sh test_all.sh'
         junit 'artifacts/**/*.xml'
     }
 }
 
 def stageBuild(def context) {
     stage('Build') {
-        sh './build.sh'
+        sh 'sh build.sh'
     }
 }
 
