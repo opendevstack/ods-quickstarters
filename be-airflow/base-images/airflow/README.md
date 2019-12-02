@@ -129,4 +129,3 @@ Airflow deployment config.
 **All Airflow configuration, including OpenShift Plugin configuration,
 can be done using environment variables** as documented in
 https://airflow.apache.org/howto/set-config.html.
-

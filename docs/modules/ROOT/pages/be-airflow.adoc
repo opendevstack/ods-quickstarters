@@ -11,8 +11,10 @@ repository for all workers. As illustrated bellow:
 
 image::Airflow Architecture Diagram.png?raw=true[Airflow Architecture]
 
-All Airflow images are based on `shared-service/airflow` image stream. All documentation can be found at
-https://github.com/opendevstack/ods-core/tree/master/shared-images/airflow
+All Airflow images are based on your `<project_id>-cd/airflow` image stream.
+
+All base-images documentation can be found at
+https://github.com/opendevstack/ods-quickstarter/tree/master/be-airflow/base-images[be-airflow/base-images]
 
 To deploy the quickstarter *the component name must be `airflow-worker`* otherwise nothing will be created
 
@@ -80,7 +82,8 @@ can be found using the label `cluster=airflow`. The created resources are:
 
 === Examples
 
-All examples files are simple examples and they are only needed for guiding the first development steps. They can be deleted!
+All examples files are simple examples and they are only needed for guiding the first development steps.
+They can be deleted!
 
 == Features
 
@@ -102,4 +105,4 @@ Airflow web server and Airflow scheduler
 
 == Configuration of Airflow
 
-The configuration of all deployments is documented in https://github.com/opendevstack/ods-core/tree/master/shared-images/airflow
+The configuration of all deployments is documented in https://github.com/opendevstack/ods-quickstarter/tree/master/be-airflow/base-images/airflow[Airflow base-images] folder in ods-quickstarters/be-airflow

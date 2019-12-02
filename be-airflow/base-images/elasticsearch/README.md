@@ -6,7 +6,7 @@ This provides a containerized [ElasticSearch](https://www.elastic.co/products/el
 
 ## Templates
 
-There are 4 templates used for creating ElasticSearch instances in [ODS Project QuickStarters Template folder in GitHub](https://github.com/opendevstack/ods-quickstarters/tree/master/common/ocp-templates/templates/elasticsearch)
+There are 4 templates used for creating ElasticSearch instances in [ODS Project QuickStarters Template folder in GitHub](https://github.com/opendevstack/ods-quickstarters/tree/master/be-airflow/templates/elasticsearch)
 
 * `elasticsearch-ephemeral-master-template.yaml` : Ephemeral ElasticSearch master node and Kibana
 * `elasticsearch-persistent-master-template.yaml` : Persistent ElasticSearch master node and Kibana
@@ -131,4 +131,3 @@ If any additional configuration to ElasticSearch is needed, a configuration yaml
 |ELASTICSEARCH_PASSWORD|String| Initial ElasticSerach superuser password |
 |ELASTICSEARCH_CLUSTERNAME|String| Name of the ElasticSearch cluster|
 |ES_JAVA_OPTS|String| JVM options for ElasticSearch. Normally used for memory setting|
-
