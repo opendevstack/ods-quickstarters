@@ -18,7 +18,6 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
   nexusHost = env.NEXUS_HOST
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
-  registry = env.DOCKER_REGISTRY
 }
 
 def conts = containerTemplate(
@@ -49,7 +48,10 @@ podTemplate(
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {
-            sh "cd ${quickstarterBasepath} ; sh ./custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} -r ${registry} -oa '@globals.openshift_apihost@' -oc 'https://your-openshift-console' "
+            sh "cd ${quickstarterBasepath} ; sh ./custom-create-components.sh \
+                  -p ${projectId} -c ${componentId} -b ${gitUrlHttp.split('/'+projectId)[0]} \
+                  -ne ${nexusHost} -r ${dockerRegistry} -gr ${odsGitRef} \
+                  -oa 'your-openshift-apihost' -oc 'https://your-openshift-console' "
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \

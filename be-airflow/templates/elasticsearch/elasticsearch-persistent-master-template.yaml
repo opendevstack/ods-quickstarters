@@ -132,7 +132,7 @@ objects:
                       name: ${COMPONENT_NAME}-credentials
                 - name: ELASTICSEARCH_CLUSTERNAME
                   value: ${CLUSTER_NAME}
-              image: shared-services/elasticsearch:7.0.0
+              image: ${PROJECT_ID}-cd/elasticsearch:7.0.0
               imagePullPolicy: Always
               name: ${COMPONENT_NAME}
               ports:
@@ -170,7 +170,7 @@ objects:
             from:
               kind: ImageStreamTag
               name: elasticsearch:7.0.0
-              namespace: shared-services
+              namespace: ${PROJECT_ID}-cd
           type: ImageChange
         - type: ConfigChange
     status:
@@ -276,6 +276,9 @@ objects:
     status:
       ingress: null
 parameters:
+  - name: PROJECT_ID
+    description: Project identifier
+    required: true
   - description: Name of the elastic search deployment/node
     name: COMPONENT_NAME
     required: true

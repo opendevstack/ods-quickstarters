@@ -1,5 +1,5 @@
 # This is a dummy value which OpenShift replaces during build time
-FROM oc.registry.url/shared-services/airflow:1.10.3
+FROM oc.registry.url/projectid-cd/airflow:1.10.3
 
 ARG nexusHostWithBasicAuth
 

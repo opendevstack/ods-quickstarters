@@ -126,7 +126,7 @@ objects:
           envFrom:
           - configMapRef:
               name: airflow-environment
-          image: ${SHARED_IMAGE_NAMESPACE}/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          image: ${PROJECT_ID}-cd/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
           imagePullPolicy: Always
           name: airflow-scheduler
           ports: []
@@ -158,7 +158,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
-          namespace: ${SHARED_IMAGE_NAMESPACE}
+          namespace: ${PROJECT_ID}-cd
       type: ImageChange
     - type: ConfigChange
 - apiVersion: apps.openshift.io/v1
@@ -231,7 +231,7 @@ objects:
           envFrom:
           - configMapRef:
               name: airflow-environment
-          image: ${SHARED_IMAGE_NAMESPACE}/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          image: ${PROJECT_ID}-cd/${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
           imagePullPolicy: Always
           name: airflow-webserver
           ports:
@@ -265,7 +265,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
-          namespace: ${SHARED_IMAGE_NAMESPACE}
+          namespace: ${PROJECT_ID}-cd
       type: ImageChange
     - type: ConfigChange
 - apiVersion: v1
@@ -340,10 +340,13 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: airflow:1.10.3
-          namespace: shared-services
+          name: ${AIRFLOW_IMAGE_NAME}:${AIRFLOW_IMAGE_TAG}
+          namespace: ${PROJECT_ID}-cd
       type: Docker
 parameters:
+- name: PROJECT_ID
+  description: Project identifier
+  required: true
 - description: Namespace where ElasticSearch is being deployed
   name: NAMESPACE
   required: true
@@ -356,9 +359,6 @@ parameters:
 - description: Host:IP of the openshift docker image registry
   name: OC_DOCKER_REGISTRY
   required: true
-- description: Namespace where the shared images are stored
-  name: SHARED_IMAGE_NAMESPACE
-  value: shared-services
 - description: 'Airflow shared image stream name '
   name: AIRFLOW_IMAGE_NAME
   value: airflow

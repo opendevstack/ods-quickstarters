@@ -26,6 +26,10 @@ case $key in
     BITBUCKET_REPO="$2"
     shift # past argument
     ;;
+    -gr|--gitref)
+    ODS_GIT_REF="$2"
+    shift # past argument
+    ;;
     -ne|--nexus)
     NEXUS_HOST="$2"
     shift # past argument
@@ -69,13 +73,30 @@ if [ -z ${OC_DOCKER_REGISTRY+x} ]; then
     echo "OC_DOCKER_REGISTRY is unset, but required";
     exit 1;
 else echo "OC_DOCKER_REGISTRY=${OC_DOCKER_REGISTRY}"; fi
-
+if [ -z ${BITBUCKET_REPO+x} ]; then
+    echo "BITBUCKET_REPO is unset, but required";
+    exit 1;
+else echo "BITBUCKET_REPO=${BITBUCKET_REPO}"; fi
+if [ -z ${ODS_GIT_REF+x} ]; then
+    echo "ODS_GIT_REF is unset, but required";
+    exit 1;
+else echo "ODS_GIT_REF=${ODS_GIT_REF}"; fi
 environments=(test dev)
 # iterate over different environments
 echo "--------------"
 oc version
 echo "--------------"
 
+echo "creating airflow base images"
+oc process -f templates/base-images.yaml \
+    PROJECT_ID=${PROJECT} \
+    ODS_GIT_REF=${ODS_GIT_REF} \
+    REPO_BASE=${BITBUCKET_REPO} | oc create -n ${PROJECT}-cd -f -
+
+oc start-build airflow -n ${PROJECT}-cd --follow
+oc start-build elasticsearch -n ${PROJECT}-cd --follow
+
+echo "creating airflow cluster"
 for ENV in ${environments[@]} ; do
 
     RESOURCES=$(oc get dc,bc,svc,secret,pvc,route,sa,rolebinding,cm,is -l cluster=airflow --ignore-not-found -n ${PROJECT}-${ENV})
@@ -104,7 +125,8 @@ for ENV in ${environments[@]} ; do
     oc process -f templates/postgresql-persistent.yaml | oc create -n ${PROJECT}-${ENV} -f -
 
     # Creating ElasticSearch resources
-    oc process -f ../common/ocp-templates/templates/elasticsearch/elasticsearch-persistent-master-template.yaml \
+    oc process -f templates/elasticsearch/elasticsearch-persistent-master-template.yaml \
+        PROJECT_ID=${PROJECT} \
         COMPONENT_NAME=airflow-elasticsearch \
         CLUSTER_NAME=airflow \
         NAMESPACE=${PROJECT}-${ENV} \
