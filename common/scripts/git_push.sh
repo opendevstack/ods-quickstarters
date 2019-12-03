@@ -12,8 +12,6 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 cd $directory
-git config --global user.email "undefined"
-git config --global user.name "CD System User"
 
 # clone first (there is ALWAYS a remote repo!)
 git clone "$git_url_http"
