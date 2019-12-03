@@ -16,8 +16,8 @@ the ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 1. [nodeJS 10](nodejs10-angular/README.md)
 1. [Scala & SBT](scala/README.md)
 1. [Python](python/README.md)
-
-If you create a new slave please add a `README.md` inside its directory, based on [this template](../__JENKINS_SLAVE_TEMPLATE_README.md). 
+1. [GoLang](golang/README.md)
+1. [Airflow](airflow/README.md)
 
 ## OCP config / installation
 
