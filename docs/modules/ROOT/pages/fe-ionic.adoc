@@ -96,7 +96,7 @@ When the code in your git repository is updated the `Jenkinsfile` comes into act
 == Builder Slave used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular[Nodejs10-Angular builder slave] Jenkins builder slave.
 
 == Known Limitation
 
