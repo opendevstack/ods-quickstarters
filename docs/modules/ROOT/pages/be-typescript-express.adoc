@@ -54,7 +54,7 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 == Builder Slave used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs8-angular[Nodejs8-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular[Nodejs10-Angular builder slave] Jenkins builder slave.
 
 == Known limitations
 
