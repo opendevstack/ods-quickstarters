@@ -31,6 +31,9 @@ else
 	mv "$cloned_git_fld_name"/.[!.]* .
 fi
 
+git config user.email "undefined"
+git config user.name "CD System User"
+
 rm -rf "$cloned_git_fld_name"
 
 git add --all .
