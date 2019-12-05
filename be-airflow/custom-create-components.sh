@@ -136,6 +136,7 @@ for ENV in ${environments[@]} ; do
 
     # Create Airflow resources
     oc process -f templates/airflow.yaml \
+        PROJECT_ID=${PROJECT} \
         OC_API_URL=${OC_API_URL} \
         OC_CONSOLE_URL=${OC_CONSOLE_URL} \
         OC_DOCKER_REGISTRY=${OC_DOCKER_REGISTRY} \
