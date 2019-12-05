@@ -62,6 +62,8 @@ RUN buildDeps=' \
     && pipDeps="\
        pytz \
        pyOpenSSL \
+       paramiko \
+       sshtunnel \
        ndg-httpsclient \
        pyasn1 \
        requests-oauthlib==1.1.0 \
