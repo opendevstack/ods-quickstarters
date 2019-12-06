@@ -211,7 +211,6 @@ class OpenshiftClusterView(BaseView, SuperUserMixin, LoggingMixin):
         }, {
             "from": "airflow-webserver",
             "to": "airflow-elasticsearch"
-
         }, {
             "to": "airflow-scheduler",
             "from": "airflow-elasticsearch"

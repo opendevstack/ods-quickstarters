@@ -8,7 +8,7 @@ setuptools.setup(name='airflow-openshift-plugin',
                  packages=setuptools.find_packages(),
                  install_requires=[
                      'apache-airflow[kubernetes]>=1.10.2, <2.0.0',
-                     'intercepts'
+                     'intercepts==0.3.1'
                  ],
                  include_package_data=True,
                  entry_points={

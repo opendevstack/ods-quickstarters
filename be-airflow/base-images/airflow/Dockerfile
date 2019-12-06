@@ -27,7 +27,8 @@ LABEL   "name"="openshift3/airflow" \
         "io.k8s.display-name"="Airflow ${AIRFLOW_VERSION}" \
         "com.redhat.component"="airflow-rhel7-docker"
 
-ARG PYTHON_DEPS="Flask==1.0.0 tzlocal<2.0.0.0,>=1.5.0.0"
+ARG PYTHON_DEPS="Flask==1.0.0 tzlocal==1.5.1 urllib3==1.25.3 thrift==0.11.0 tabulate==0.8.3 six==1.12.0 PyYAML==5.1.2 \
+                    pytzdata==2019.2 python-dateutil==2.8.0 Pygments==2.4.2 pyasn1-modules==0.2.6 psutil==5.6.3"
 
 ARG AIRFLOW_DEPS=""
 
@@ -60,12 +61,12 @@ RUN buildDeps=' \
         git \
     ' \
     && pipDeps="\
-       pytz \
-       pyOpenSSL \
-       paramiko \
-       sshtunnel \
-       ndg-httpsclient \
-       pyasn1 \
+       pytz==2019.2 \
+       pyOpenSSL==19.0.0 \
+       paramiko==2.6.0 \
+       sshtunnel==0.1.5 \
+       ndg-httpsclient==0.5.1 \
+       pyasn1==0.4.6 \
        requests-oauthlib==1.1.0 \
        apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     " \
