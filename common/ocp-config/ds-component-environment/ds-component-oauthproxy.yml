@@ -32,19 +32,8 @@ parameters:
   generate: expression
   name: SESSION_SECRET
   required: true
-- name: NEXUS_PASSWORD
-  value: NEXUS_PASSWORD
-  required: true
 
 objects:
-
-  - apiVersion: v1
-    data:
-      password: '${NEXUS_PASSWORD}'
-    kind: Secret
-    metadata:
-      name: nexus
-    type: opaque
 
   - apiVersion: v1
     kind: ServiceAccount

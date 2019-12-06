@@ -1,8 +1,8 @@
-= Data Science Rshiny Application
+= Data Science R Shiny Application
 
 == Purpose of this quickstarter
 
-Provisions a Rshiny application within openshift using crowd authentification.
+Provisions a R Shiny application within OpenShift using crowd authentification.
 
 == What files / architecture is generated?
 
@@ -10,25 +10,26 @@ Provisions a Rshiny application within openshift using crowd authentification.
 .
 ├── Jenkinsfile - This file contains Jenkins build configuration settings
 ├── README.md - This readme file
-├── docker - This folder contains Docker configuration settings and main R shiny app
+├── docker - This folder contains Docker configuration settings and main R Shiny app
     ├── Dockerfile
     └── app.R
 ----
 
 == Frameworks used
 
-https://www.tutorialspoint.com/r/index.htm[R]/https://shiny.rstudio.com/tutorial/[Rshiny]
+* https://www.tutorialspoint.com/r/index.htm[R]
+* https://shiny.rstudio.com/tutorial[Shiny]
 
 == Usage - how do you start after you provisioned this quickstarter
 
-The quickstarter sets up two pods in openshift. The rshiny application is routed through a https://github.com/opendevstack/ods-core/tree/master/shared-images/nginx-authproxy-crowd[crowd authentication proxy].
+The quickstarter sets up two pods in OpenShift. The `ds-rshiny` application is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy].
 
 == How this quickstarter is built through jenkins
 
 The build pipeline is defined in the `Jenkinsfile` in the project root. The main stages of the pipeline are:
 
-. Start openshift build
-. Deploy image to openshift
+. Start OpenShift build
+. Deploy image to OpenShift
 
 == Builder slave used
 

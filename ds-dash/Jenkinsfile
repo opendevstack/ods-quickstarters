@@ -8,7 +8,7 @@ def gitUrlHttp = env.GIT_URL_HTTP
 def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "ds-jupyter-notebook"
+def quickstarterBasepath = "ds-dash"
 def dockerRegistry
 def gitHost
 

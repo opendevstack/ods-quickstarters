@@ -34,18 +34,6 @@ case $key in
     COMPONENT="$2"
     shift # past argument
     ;;
-    -nh|--nexushost)
-    NEXUS_HOST="$2"
-    shift # past argument
-    ;;
-    -nu|--nexususername)
-    NEXUS_USERNAME="$2"
-    shift # past argument
-    ;;
-    -np|--nexuspassword)
-    NEXUS_PASSWORD="$2"
-    shift # past argument
-    ;;
     --status)
     STATUS=true
     ;;
@@ -81,18 +69,6 @@ if [ -z ${COMPONENT+x} ]; then
     echo "COMPONENT is unset, but required";
     exit 1;
 else echo "COMPONENT=${COMPONENT}"; fi
-if [ -z ${NEXUS_HOST+x} ]; then
-    echo "NEXUS_HOST is unset, but required";
-    exit 1;
-else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
-if [ -z ${NEXUS_USERNAME+x} ]; then
-    echo "NEXUS_USERNAME is unset, but required";
-    exit 1;
-else echo "NEXUS_USERNAME=${NEXUS_USERNAME}"; fi
-if [ -z ${NEXUS_PASSWORD+x} ]; then
-    echo "NEXUS_PASSWORD is unset, but required";
-    exit 1;
-fi
 echo "Params: ${tailor_verbose}"
 
 if $STATUS; then
@@ -122,17 +98,10 @@ for devenv in dev test ; do
         "--namespace=${PROJECT}-${devenv}" \
         "--param=PROJECT=${PROJECT}" \
         "--param=COMPONENT=${COMPONENT}" \
-        "--param=ENV=${devenv}" \
-        "--param=NEXUS_HOST=${NEXUS_HOST}" \
-        "--param=NEXUS_USERNAME=${NEXUS_USERNAME}" \
-        "--param=NEXUS_PASSWORD=${NEXUS_PASSWORD}"
+        "--param=ENV=${devenv}"
         )
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
-
-    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
-        "${TAILOR_BASE_ARGS[@]}" \
-        secret/nexus
 
     tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \

@@ -31,10 +31,6 @@ parameters:
   description: The version to be used.
   value: latest
   required: true
-- name: NEXUS_HOST
-  required: true
-- name: NEXUS_USERNAME
-  required: true
 objects:
 
   - apiVersion: v1
@@ -106,17 +102,7 @@ objects:
             name: ${COMPONENT}
         spec:
           containers:
-          - env:
-            - name: NEXUS_URL
-              value: '${NEXUS_HOST}'
-            - name: NEXUS_USERNAME
-              value: '${NEXUS_USERNAME}'
-            - name: NEXUS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: nexus
-            imagePullPolicy: IfNotPresent
+          - imagePullPolicy: IfNotPresent
             name: ${COMPONENT}
             ports:
             - containerPort: 8080
