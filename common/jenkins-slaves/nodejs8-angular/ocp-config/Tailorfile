@@ -1,6 +1,0 @@
-namespace cd
-selector app=jenkins-slave-nodejs8-angular
-param-file ../../../../../ods-configuration/ods-core.env
-param-file ../../../../../ods-configuration/ods-quickstarters.env
-ignore-unknown-parameters true
-bc,is

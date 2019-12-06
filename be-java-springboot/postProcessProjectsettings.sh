@@ -12,6 +12,8 @@ version=$(grep /gradle-. gradle/wrapper/gradle-wrapper.properties | cut -d "-" -
 
 echo "gradle version: $version"
 
+USE_LEGACY_NEXUS_UPLOAD_SCRIPT=0
+
 if [[ $version == "4.9" ]]; then
 	sed -i.bak '/springBootVersion =/a \
 	    nexus_url = "\${project.findProperty("nexus_url") ?: System.getenv("NEXUS_HOST")}"\
@@ -19,13 +21,13 @@ if [[ $version == "4.9" ]]; then
 	    nexus_user = "\${project.findProperty("nexus_user") ?: System.getenv("NEXUS_USERNAME")}"\
 	    nexus_pw = "\${project.findProperty("nexus_pw") ?: System.getenv("NEXUS_PASSWORD")}"\
 	' build.gradle
-	
+
 	sed -i.bak "s/\(apply plugin: 'java'\)/\1\napply plugin: 'maven'\napply plugin: 'jacoco'/g" build.gradle
-	
+
 	# by default no jar task in there .. we need to add it.
 	echo -e "bootJar {\n    archiveName    \"app.jar\"\n    destinationDir  file(\"\044buildDir/../docker\")\n}" >> build.gradle
 
-	# add nexus 
+	# add nexus
 	sed -i.bak 's/mavenCentral()/maven () {\
 	        url "${nexus_url}\/repository\/jcenter\/"\
 	        credentials {\
@@ -49,23 +51,28 @@ if [[ $version == "4.9" ]]; then
 	          password = "${nexus_pw}"\
 	        }\
 	      }\
-	/g' build.gradle	
+	/g' build.gradle
+	USE_LEGACY_NEXUS_UPLOAD_SCRIPT=1
 else
 	templateFile=../$SCRIPT_DIR/templates/build-$version.gradle
-	echo "using $templateFile" 
+	echo "using $templateFile"
 	# this allows quick config, new version - add new template, done
 	if [[ -f "$templateFile" ]]; then
 		echo "found specific gradle version template"
 		mv $templateFile build.gradle
-	else 
+		USE_LEGACY_NEXUS_UPLOAD_SCRIPT=1
+	else
 		# default
 		mv ../$SCRIPT_DIR/templates/build-4.10.gradle build.gradle
+		USE_LEGACY_NEXUS_UPLOAD_SCRIPT=0
 	fi
 	sed -i.bak "s|__GROUP__|$GROUP|g" build.gradle
 fi
 
-rm build.gradle.bak	
+rm build.gradle.bak
 
+if [[ $USE_LEGACY_NEXUS_UPLOAD_SCRIPT == 1 ]]; then
+  echo "add legacy nexus upload script to build.gradle"
 cat >> build.gradle <<EOL
 uploadArchives {
     repositories{
@@ -80,6 +87,9 @@ uploadArchives {
     }
 }
 EOL
+else
+  echo "do not add legacy nexus upload script to build.gradle"
+fi
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)

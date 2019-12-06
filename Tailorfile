@@ -1,0 +1,6 @@
+context-dir common/jenkins-slaves/airflow/ocp-config
+context-dir common/jenkins-slaves/golang/ocp-config
+context-dir common/jenkins-slaves/maven/ocp-config
+context-dir common/jenkins-slaves/nodejs10-angular/ocp-config
+context-dir common/jenkins-slaves/python/ocp-config
+context-dir common/jenkins-slaves/scala/ocp-config

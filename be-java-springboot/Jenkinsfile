@@ -5,7 +5,6 @@ def projectId = env.PROJECT_ID
 def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
 def gitUrlHttp = env.GIT_URL_HTTP
-def gitUrlSsh = env.GIT_URL_SSH
 def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
@@ -21,7 +20,7 @@ node {
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
-def conts = containerTemplate( 
+def conts = containerTemplate(
   name: 'jnlp',
   image: "${dockerRegistry}/cd/jenkins-slave-maven:${odsImageTag}",
   workingDir: '/tmp',
@@ -58,12 +57,12 @@ podTemplate(
                 --dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
                   ${componentId}"
             withEnv(["COMPONENT=${componentId}","GROUP=${group}","SCRIPT_DIR=${quickstarterBasepath}"]) {
-              sh "sh ./${quickstarterBasepath}/postProcessProjectsettings.sh"            
+              sh "sh ./${quickstarterBasepath}/postProcessProjectsettings.sh"
             }
           }
 
           stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \

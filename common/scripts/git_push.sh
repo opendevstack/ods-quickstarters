@@ -12,8 +12,6 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 cd $directory
-git config --global user.email "undefined"
-git config --global user.name "CD System User"
 
 # clone first (there is ALWAYS a remote repo!)
 git clone "$git_url_http"
@@ -32,6 +30,9 @@ else
 	mv "$cloned_git_fld_name"/* .
 	mv "$cloned_git_fld_name"/.[!.]* .
 fi
+
+git config user.email "undefined"
+git config user.name "CD System User"
 
 rm -rf "$cloned_git_fld_name"
 

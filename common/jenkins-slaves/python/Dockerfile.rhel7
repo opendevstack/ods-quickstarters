@@ -35,3 +35,8 @@ RUN pip3 install --upgrade pip \
 # Configure PIP SSL validation
 RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
     && pip config list
+
+# Enables default user to access $HOME folder
+RUN chgrp -R 0 $HOME && \
+    chmod -R g+rw $HOME
+
