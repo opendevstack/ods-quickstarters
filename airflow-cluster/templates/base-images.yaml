@@ -30,7 +30,7 @@ objects:
     resources: {}
     runPolicy: Serial
     source:
-      contextDir: be-airflow/base-images/elasticsearch
+      contextDir: airflow-cluster/base-images/elasticsearch
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
@@ -62,7 +62,7 @@ objects:
     resources: {}
     runPolicy: Serial
     source:
-      contextDir: be-airflow/base-images/airflow
+      contextDir: airflow-cluster/base-images/airflow
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git

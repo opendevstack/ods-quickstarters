@@ -19,7 +19,7 @@
 * xref:ROOT:ds-jupyter-notebook.adoc[Data Science Jupyter Notebook]
 * xref:ROOT:ds-rshiny.adoc[Data Science RShiny app]
 //Other Quickstarters
-* xref:ROOT:be-airflow.adoc[Airflow]
+* xref:ROOT:airflow-cluster.adoc[Airflow]
 * xref:ROOT:e2e-cypress.adoc[Cypress E2E testing Quickstarters]
 
 

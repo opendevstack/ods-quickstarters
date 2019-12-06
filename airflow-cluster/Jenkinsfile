@@ -9,7 +9,7 @@ def gitUrlSsh = env.GIT_URL_SSH
 def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-airflow"
+def quickstarterBasepath = "airflow-cluster"
 def nexusHost
 def dockerRegistry
 def gitHost

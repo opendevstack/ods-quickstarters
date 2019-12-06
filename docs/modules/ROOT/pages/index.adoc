@@ -16,7 +16,7 @@ This repository contains quickstarters, which are basically templates that help 
 * xref::be-typescript-express.adoc[Backend - NodeJS/Express]
 * xref::be-python-flask.adoc[Backend - Python/Flask]
 * xref::be-scala-akka.adoc[Backend - Scala/Akka]
-* xref::be-airflow.adoc[Airflow]
+* xref::airflow-cluster.adoc[Airflow]
 
 === Frontend Quickstarter
 * xref::fe-angular.adoc[Frontend - Angular]
