@@ -106,3 +106,8 @@ Airflow web server and Airflow scheduler
 == Configuration of Airflow
 
 The configuration of all deployments is documented in https://github.com/opendevstack/ods-quickstarter/tree/master/airflow-cluster/base-images/airflow[Airflow base-images] folder in ods-quickstarters/airflow-cluster
+
+NOTE: once the cluster is provisioned in OpenShift you need to change in the `airflow-environment` configmap any occurence of the following strings:
+- `your-openshift-apihost`
+- `your-openshift-console`
+to the right values for your cluster. Finally, redeploy `airflow-webserver` and `airflow-scheduler` to apply the configurations.
