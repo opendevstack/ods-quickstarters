@@ -10,7 +10,7 @@ It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-airflow`
 1. Python 3.6
 2. PIP
 3. NodeJS 8.x
-4. Airflow 1.10.2
+4. Airflow 1.10.3
 
 ## Known limitations
 Not (yet) Nexus package manager aware and no special HTTP Proxy configuration

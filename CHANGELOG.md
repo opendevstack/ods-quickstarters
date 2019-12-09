@@ -4,8 +4,8 @@
 
 ### Changed
 
-- Switch to OAuth proxy in jupyter-notebook and r-shiny quickstarters ([#424](https://github.com/opendevstack/ods-project-quickstarters/issues/424)).
-
+- Switch to OAuth proxy in jupyter-notebook and r-shiny quickstarters ([#46](https://github.com/opendevstack/ods-quickstarters/issues/46)).
+- Airflow Quickstarter fully provisioned in user's ODS project ([#60](https://github.com/opendevstack/ods-quickstarters/issues/60))
 
 ## [1.2.0] - 2019-10-10
 

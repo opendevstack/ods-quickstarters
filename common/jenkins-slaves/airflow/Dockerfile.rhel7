@@ -2,7 +2,7 @@ FROM cd/jenkins-slave-base
 
 LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
-ARG AIRFLOW_VERSION=1.10.2
+ARG AIRFLOW_VERSION=1.10.3
 ARG PYTHON_DEPS=""
 ARG AIRFLOW_DEPS=""
 
