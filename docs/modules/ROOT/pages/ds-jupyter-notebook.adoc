@@ -2,30 +2,30 @@
 
 == Purpose of this quickstarter
 
-Provision a shared jupyter notebook within openshift for rapid prototyping of data science applications using crowd authentification
+Provision a shared Jupyter Notebook within OpenShift for rapid prototyping of data science applications using OpenShift OAuth.
 
 == What files / architecture is generated?
 
 ----
-+-- Jenkinsfile
-+-- docker
-| +-- Dockerfile
-| +-- jupyter_notebook_config.json
-| +-- requirements.txt
-| +-- run.sh
-+-- src
-+-- init.sh
+.
+├── Jenkinsfile
+└── docker
+    ├── Dockerfile
+    ├── jupyter_notebook_config.json
+    ├── requirements.txt
+    └── run.sh
 ----
 
 == Frameworks used
 
-https://docs.python.org/3.6/tutorial/[python 3.6] + https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/[jupyter]
+* https://docs.python.org/3.6/tutorial/[Python 3.6]
+* https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/[Jupyter]
 
 == Usage - how do you start after you provisioned this quickstarter
 
-The quickstarter sets up two pods in openshift. The jupyter notebook is routed through a https://github.com/opendevstack/ods-core/tree/master/shared-images/nginx-authproxy-crowd[crowd authentication proxy].
+The quickstarter sets up two pods in OpenShift. The `ds-jupyter-notebook` instance is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
 
-The directory `/app/src/work/storage` is created where code can be organized using installed git. +
+The directory `/opt/app-root/src/work` is created where code can be organized using installed git. +
 Please consider mounting a persistent volume claim for this path. +
 New python requirements are specified using the `requirements.txt`
 
@@ -33,9 +33,8 @@ New python requirements are specified using the `requirements.txt`
 
 The build pipeline is defined in the `Jenkinsfile` in the project root. The main stages of the pipeline are:
 
-. Patch the build configs and inject nexus credentials for installing python dependencies over nexus pypi repository
-. Start openshift build
-. Deploy image to openshift
+. Start OpenShift build
+. Deploy image to OpenShift
 
 == Builder slave used
 
@@ -43,4 +42,4 @@ https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base[jenkins-
 
 == Known limitions
 
-Consider if sufficient computing resources can be provided by the openshift cluster.
+Consider if sufficient computing resources can be provided by the OpenShift cluster.
