@@ -9,17 +9,15 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "ds-ml-service"
-def nexusHost
 def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
   dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
-def conts = containerTemplate( 
+def conts = containerTemplate(
   name: 'jnlp',
   image: "${dockerRegistry}/cd/jenkins-slave-python:${odsImageTag}",
   workingDir: '/tmp',
@@ -48,7 +46,7 @@ podTemplate(
               sh "cp -v ${quickstarterBasepath}/README.md ${componentId}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh  ${quickstarterBasepath}/custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} -ne ${nexusHost} --force"
+            sh "sh  ${quickstarterBasepath}/custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
