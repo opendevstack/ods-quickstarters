@@ -43,10 +43,6 @@ case $key in
     COMPONENT="$2"
     shift # past argument
     ;;
-    -ne|--nexus)
-    NEXUS_HOST="$2"
-    shift # past argument
-    ;;
     --status)
     STATUS=true
     ;;
@@ -82,10 +78,6 @@ if [ -z ${COMPONENT+x} ]; then
     echo "COMPONENT is unset, but required";
     exit 1;
 else echo "COMPONENT=${COMPONENT}"; fi
-if [ -z ${NEXUS_HOST+x} ]; then
-    echo "NEXUS_HOST is unset, but required";
-    exit 1;
-else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
 if [ -z ${QSBASE+x} ]; then
     echo "QSBASE is unset, but required";
     exit 1;

@@ -11,13 +11,11 @@ def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-typescript-express"
 def yoVersion = "3.0.0"
 def generatorVersion = "0.5.1"
-def nexusHost
 def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
   dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
@@ -50,7 +48,7 @@ podTemplate(
               sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
           }
           stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
@@ -79,9 +77,3 @@ podTemplate(
           }
       }
 }
-
-
-
-
-
-
