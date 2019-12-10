@@ -9,13 +9,11 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "airflow-cluster"
-def nexusHost
 def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
   dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
@@ -49,7 +47,7 @@ podTemplate(
           stage('Setup OpenShift resources') {
             sh "cd ${quickstarterBasepath} ; sh ./custom-create-components.sh \
                   -p ${projectId} -c ${componentId} -b ${gitUrlHttp.split('/'+projectId)[0]} \
-                  -ne ${nexusHost} -r ${dockerRegistry} -gr ${odsGitRef} \
+                  -r ${dockerRegistry} -gr ${odsGitRef} \
                   -oa 'your-openshift-apihost' -oc 'https://your-openshift-console' "
           }
           stage('Create Jenkinsfile') {
@@ -79,9 +77,3 @@ podTemplate(
           }
       }
 }
-
-
-
-
-
-

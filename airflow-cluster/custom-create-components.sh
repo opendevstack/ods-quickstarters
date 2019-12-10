@@ -30,10 +30,6 @@ case $key in
     ODS_GIT_REF="$2"
     shift # past argument
     ;;
-    -ne|--nexus)
-    NEXUS_HOST="$2"
-    shift # past argument
-    ;;
     -oc|--oc-console)
     OC_CONSOLE_URL="$2"
     shift # past argument
@@ -57,10 +53,6 @@ if [ -z ${PROJECT+x} ]; then
     echo "PROJECT is unset, but required";
     exit 1;
 else echo "PROJECT=${PROJECT}"; fi
-if [ -z ${NEXUS_HOST+x} ]; then
-    echo "NEXUS_HOST is unset, but required";
-    exit 1;
-else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
 if [ -z ${OC_API_URL+x} ]; then
     echo "OC_API_URL is unset, but required";
     exit 1;

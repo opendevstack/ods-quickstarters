@@ -9,13 +9,11 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-golang-plain"
-def nexusHost
 def dockerRegistry
 def gitHost
 // vars from jenkins master
 node {
   dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
   gitHost =  env.BITBUCKET_HOST.split(":")[0]
 }
 
@@ -53,7 +51,7 @@ podTemplate(
             sh "echo 'go 1.12' >>  ${componentId}/go.mod"
           }
           stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} -ne ${nexusHost} --force"
+            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
@@ -82,9 +80,3 @@ podTemplate(
           }
       }
 }
-
-
-
-
-
-
