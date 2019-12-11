@@ -1,6 +1,5 @@
 namespace cd
 selector app=jenkins-slave-golang
 param-file ../../../../../ods-configuration/ods-core.env
-param-file ../../../../../ods-configuration/ods-quickstarters.env
 ignore-unknown-parameters true
 bc,is
