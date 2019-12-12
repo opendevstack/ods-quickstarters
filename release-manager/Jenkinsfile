@@ -11,6 +11,7 @@ def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "release-manager"
 def dockerRegistry
 def gitHost
+def bitbucketUrl
 
 // vars from jenkins master
 node {
@@ -39,6 +40,12 @@ podTemplate(
 
     stage('Checkout quickstarter') {
       checkout scm
+      def useHttps = sh(
+        returnStdout: true,
+        script: 'git config remote.origin.url'
+      ).trim().startsWith("https");
+      def bitbucketScheme = useHttps ? 'https://' : 'http://'
+      bitbucketUrl = bitbucketScheme + gitHost
     }
 
     stage("initialize target folder ${componentId}") {
