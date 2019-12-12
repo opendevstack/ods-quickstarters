@@ -44,9 +44,6 @@ podTemplate(
           stage('copy files from quickstart to generated project') {
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
                   --source ${quickstarterBasepath}/Jenkinsfile.template \
