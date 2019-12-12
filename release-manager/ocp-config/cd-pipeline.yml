@@ -3,6 +3,23 @@ kind: Template
 labels:
   template: cd-docgen
   app: '${PROJECT}-docgen'
+parameters:
+  - name: COMPONENT
+    displayName: Component
+    description: The name of the application component.
+    required: true
+  - name: PROJECT
+    displayName: Application
+    description: The name of the application project.
+    required: true
+  - name: REPO_BASE
+    displayName: Repository Base
+    description: The base URI to your application project.
+    required: true
+  - name: TRIGGER_SECRET
+    displayName: Trigger secret
+    description: The trigger secret for the pipeline.
+    required: true
 objects:
   - apiVersion: v1
     kind: BuildConfig
@@ -38,20 +55,3 @@ objects:
           allowEnv: true
           secret: '${TRIGGER_SECRET}'
         type: Generic
-parameters:
-  - name: COMPONENT
-    displayName: Component
-    description: The name of the application component.
-    required: true
-  - name: PROJECT
-    displayName: Application
-    description: The name of the application project.
-    required: true
-  - name: REPO_BASE
-    displayName: Repository Base
-    description: The base URI to your application project.
-    required: true
-  - name: TRIGGER_SECRET
-    displayName: Trigger secret
-    description: The trigger secret for the pipeline.
-    required: true    
