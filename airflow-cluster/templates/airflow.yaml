@@ -132,9 +132,11 @@ objects:
           ports: []
           resources:
             limits:
-              memory: 1Gi
+              cpu: '${CPU_LIMIT}'
+              memory: '${MEMORY_LIMIT}'
             requests:
-              memory: 500Mi
+              cpu: '${CPU_REQUEST}'
+              memory: '${MEMORY_REQUEST}'
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -239,9 +241,11 @@ objects:
             protocol: TCP
           resources:
             limits:
-              memory: 1Gi
+              cpu: '${CPU_LIMIT}'
+              memory: '${MEMORY_LIMIT}'
             requests:
-              memory: 500Mi
+              cpu: '${CPU_REQUEST}'
+              memory: '${MEMORY_REQUEST}'
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -373,4 +377,24 @@ parameters:
   value: 512Mi
 - description: OAuth service account token secret
   name: OPENSHIFT_OAUTH_SERVICE_ACCOUNT_SECRET
+  required: true
+- name: MEMORY_LIMIT
+  displayName: Memory Limit
+  description: Maximum amount of memory available for the container.
+  value: 1Gi
+  required: true
+- name: MEMORY_REQUEST
+  displayName: Memory Request
+  description: Minimum amount of memory requested for the container.
+  value: 512Mi
+  required: true
+- name: CPU_LIMIT
+  displayName: CPU Limit
+  description: Maximum amount of CPU available for the container.
+  value: 900m
+  required: true
+- name: CPU_REQUEST
+  displayName: CPU Request
+  description: Minimum amount of CPU requested for the container.
+  value: 50m
   required: true

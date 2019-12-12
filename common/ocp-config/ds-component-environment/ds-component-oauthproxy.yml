@@ -26,6 +26,16 @@ parameters:
   description: Minimum amount of memory requested for the container.
   value: 128Mi
   required: true
+- name: CPU_LIMIT
+  displayName: CPU Limit
+  description: Maximum amount of CPU available for the container.
+  value: 250m
+  required: true
+- name: CPU_REQUEST
+  displayName: CPU Request
+  description: Minimum amount of CPU requested for the container.
+  value: 50m
+  required: true
 - description: Session secret.
   displayName: Session secret
   from: '[a-zA-Z0-9]{16}'
@@ -102,8 +112,10 @@ objects:
             imagePullPolicy: IfNotPresent
             resources:
               limits:
+                cpu: '${CPU_LIMIT}'
                 memory: '${MEMORY_LIMIT}'
               requests:
+                cpu: '${CPU_REQUEST}'
                 memory: '${MEMORY_REQUEST}'
             ports:
             - containerPort: 8443
