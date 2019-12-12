@@ -62,7 +62,7 @@ podTemplate(
 
     stage('Setup OpenShift resources') {
       dir(quickstarterBasepath) {
-        sh "sh ./create-ocp-resources.sh -p ${projectId} -c ${componentId} -r ${bitbucketUrl}/scm"
+        sh "sh ./create-ocp-resources.sh -p ${projectId} -c ${componentId} -b ${bitbucketUrl}"
       }
     }
 

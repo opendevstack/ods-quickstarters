@@ -3,6 +3,25 @@ kind: Template
 labels:
   template: cd-docgen
   app: '${PROJECT}-docgen'
+parameters:
+  - name: PROJECT
+    displayName: Application
+    description: The name of the application project.
+    required: true
+  - name: BITBUCKET_URL
+    displayName: Application
+    description: The URL of your bitbucket server.
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 512Mi
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 256Mi
+    required: true
 objects:
   - apiVersion: v1
     kind: Service
@@ -64,7 +83,7 @@ objects:
               terminationMessagePolicy: File
               env:
                 - name: BITBUCKET_URL
-                  value: 'https://${BITBUCKET_HOST}'
+                  value: '${BITBUCKET_URL}'
                 - name: BITBUCKET_USERNAME
                   valueFrom:
                     secretKeyRef:
@@ -96,22 +115,3 @@ objects:
               name: 'docgen:latest'
               namespace: cd
           type: ImageChange
-parameters:
-  - name: PROJECT
-    displayName: Application
-    description: The name of the application project.
-    required: true
-  - name: BITBUCKET_HOST
-    displayName: Application
-    description: The host of your bitbucket server.
-    required: true
-  - name: MEMORY_LIMIT
-    displayName: Memory Limit
-    description: Maximum amount of memory available for the container.
-    value: 512Mi
-    required: true
-  - name: MEMORY_REQUEST
-    displayName: Memory Request
-    description: Minimum amount of memory requested for the container.
-    value: 256Mi
-    required: true

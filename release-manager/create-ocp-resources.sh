@@ -9,8 +9,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   -c|--component) COMPONENT="$2"; shift;;
   -p=*|--project=*) PROJECT="${1#*=}";;
   -p|--project) PROJECT="$2"; shift;;
-  -r=*|--repo-base=*) REPO_BASE="${1#*=}";;
-  -r|--repo-base) REPO_BASE="$2"; shift;;
+  -b=*|--bitbucket=*) BITBUCKET_URL="${1#*=}";;
+  -b|--bitbucket) BITBUCKET_URL="$2"; shift;;
 
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
@@ -31,7 +31,8 @@ tailor --namespace=${PROJECT}-cd --non-interactive --force \
   --param=COMPONENT=${COMPONENT} \
   --param=PROJECT=${PROJECT} \
   --param=TRIGGER_SECRET=${SECRET} \
-  --param=REPO_BASE=${REPO_BASE} \
+  --param=BITBUCKET_URL=${BITBUCKET_URL} \
+  --param=REPO_BASE=${BITBUCKET_URL}/scm \
   --selector app="${PROJECT}-docgen",template=cd-docgen
 
 
