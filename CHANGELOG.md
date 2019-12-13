@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [2.0] - 2019-12-13
+
 ### Added
 - Quickstarter-specific memory quotas ([#12](https://github.com/opendevstack/ods-quickstarters/issues/12))
 - Quickstarter-specific CPU quotas ([#74](https://github.com/opendevstack/ods-quickstarters/issues/74))
