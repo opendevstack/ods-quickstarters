@@ -5,9 +5,9 @@
 ### Added
 - Quickstarter-specific memory quotas ([#12](https://github.com/opendevstack/ods-quickstarters/issues/12))
 - Quickstarter-specific CPU quotas ([#74](https://github.com/opendevstack/ods-quickstarters/issues/74))
-- Add 'release-manager.yml' to each quickstarter ([#53](hhttps://github.com/opendevstack/ods-quickstarters/issues/53))
-- Enable WSGI for ds-ml-service quickstarter ([#37](hhttps://github.com/opendevstack/ods-quickstarters/issues/37))
-- Add central Tailorfile to easily compare resources ([#44](hhttps://github.com/opendevstack/ods-quickstarters/issues/44))
+- Add 'release-manager.yml' to each quickstarter ([#53](https://github.com/opendevstack/ods-quickstarters/issues/53))
+- Enable WSGI for ds-ml-service quickstarter ([#37](https://github.com/opendevstack/ods-quickstarters/issues/37))
+- Add central Tailorfile to easily compare resources ([#44](https://github.com/opendevstack/ods-quickstarters/issues/44))
 
 ### Changed
 - Quickstarters have been renamed for more consistency when they were moved from `ods-project-quickstarters`
