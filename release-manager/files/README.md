@@ -2,6 +2,16 @@
 
 The release manager supports the orchestration of multiple repositories into a live application.
 
+## File Structure
+
+```
+.
+├── docs         # Fall-back document chapter templates for (LeVA) compliance reports.
+├── Jenkinsfile  # The release manager pipeline.
+├── README.md
+└── metadata.yml # Configuration of the release manager pipeline and its repositories.
+```
+
 ## Configuration
 
 ### Automated Resolution of Dependencies
@@ -22,12 +32,43 @@ repositories:
   - id: C
 ```
 
-If a named repository wants to announce a dependency on another repo, the dependency needs to be listed in that repository's `.pipeline-config.yml`, simply by referring to its `repo.id` as defined in `metadata.yml`:
+If a named repository wants to announce a dependency on another repo, the dependency needs to be listed in that repository's `release-manager.yml`, simply by referring to its `repo.id` as defined in `metadata.yml`:
 
 ```
 dependencies:
   - A
 ```
+
+The library supports the following repository types: `ods`, `ods-service`, and `ods-test`. Setting a repository type is required so the orchestrator can make correct assumptions based on the nature of the component at hand:
+
+```
+id: PHOENIX
+name: Project Phoenix
+
+repositories:
+  - id: A
+    url: https://github.com/my-org/my-repo-A.git
+    branch: master
+    type: ods
+  - id: B
+    name: my-repo-B
+    branch: master
+    type: ods
+  - id: C
+    type: ods
+```
+
+#### Repository Type: ods
+
+This type designates ODS components designed for _code development_. Such repositories are based on quickstarters whose names start with `be-`, `ds-`, or `fe-`, for _backend_, _data science_, and _frontend_, respectively. This is the default type.
+
+#### Repository Type: ods-service
+
+This type designates ODS components designed for _running some service_. Examples include repositories based on the `airflow-cluster` quickstarter.
+
+#### Repository Type: ods-test
+
+This type designates ODS components designed for _running automated tests against a live application_. Such repositories are based on quickstarters whose names start with `e2e-`.
 
 ### Automated Resolution of Repository Git URL
 
