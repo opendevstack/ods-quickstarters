@@ -1,2 +1,8 @@
 ---
+metadata:
+  name: Vue.js
+  description: Vue.js is an open-source Model–view–viewmodel JavaScript framework for building user interfaces and single-page applications.
+  supplier: https://vuejs.org
+  version: 2.6
+
 dependencies: []

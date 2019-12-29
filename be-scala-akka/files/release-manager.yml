@@ -1,2 +1,8 @@
 ---
+metadata:
+  name: Scala
+  description: Scala is a general-purpose programming language providing support for functional programming and a strong static type system.
+  supplier: https://www.scala-lang.org
+  version: 2.12.6
+
 dependencies: []

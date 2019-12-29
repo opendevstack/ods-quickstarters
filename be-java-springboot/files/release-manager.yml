@@ -1,2 +1,8 @@
 ---
+metadata:
+  name: OpenJDK
+  description: OpenJDK is a free and open-source implementation of the Java Platform, Standard Edition.
+  supplier: https://openjdk.java.net
+  version: 11
+
 dependencies: []
