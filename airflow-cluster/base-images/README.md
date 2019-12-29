@@ -1,6 +1,6 @@
 # Airflow base images
 
-Images used in [ods-quickstarters/airflow-cluster](https://github.com/opendevstack/ods-quickstarters/airflow-cluster)
+Images used in [ods-quickstarters/airflow-cluster](https://github.com/opendevstack/ods-quickstarters/tree/master/airflow-cluster)
 
 ## Contents
 
