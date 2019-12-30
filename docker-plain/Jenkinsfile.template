@@ -43,7 +43,7 @@ odsPipeline(
 
 def stageBuild(def context) {
   stage('Build') {
-    // copy any other artifacts if needed
+    // copy any other artifacts, if needed
     // sh "cp -r build docker/dist"
     // the docker context passed in /docker
   }
@@ -51,7 +51,7 @@ def stageBuild(def context) {
 
 def stageUnitTest(def context) {
   stage('Unit Test') {
-    // if needed add your unit tests here
+    // add your unit tests here, if needed
   }
 }
 
