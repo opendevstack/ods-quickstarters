@@ -47,6 +47,8 @@ podTemplate(
             sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
           }
           stage('Create Jenkinsfile') {
+            sh "pwd"
+            sh "ls -la"
             sh "sh common/scripts/renderJenkinsTemplate.sh \
                   --source ${quickstarterBasepath}/Jenkinsfile.template \
                   --target ${componentId}/Jenkinsfile \
