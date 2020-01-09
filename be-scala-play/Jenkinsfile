@@ -41,7 +41,7 @@ podTemplate(
             checkout scm
           }
           stage("init project") {
-            sh "cd ${quickstarterBasepath}; sbt -v new playframework/play-scala-seed.g8 --name=${componentId}"
+            sh "cd ${quickstarterBasepath}; sbt -no-colors -v new playframework/play-scala-seed.g8 --name=${componentId}"
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
