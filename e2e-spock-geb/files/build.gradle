@@ -18,7 +18,10 @@ buildscript {
     }
 }
 
-apply plugin: 'groovy'
+plugins {
+  id 'java'
+  id 'groovy'
+}
 
 repositories {
     if (no_nexus) {
@@ -77,6 +80,9 @@ sourceSets {
         groovy {
             srcDir 'src/test/integration/groovy'
         }
+        java {
+            srcDir 'src/test/integration/java'
+        }
         resources {
             srcDir 'src/test/resources'
         }
@@ -87,6 +93,9 @@ sourceSets {
     acceptance {
         groovy {
             srcDir 'src/test/acceptance/groovy'
+        }
+        java {
+            srcDir 'src/test/acceptance/java'
         }
         resources {
             srcDir 'src/test/resources'
@@ -99,34 +108,64 @@ sourceSets {
 configurations {
     integrationCompile.extendsFrom testCompile
     integrationRuntime.extendsFrom testRuntime
-    
+
     acceptanceCompile.extendsFrom testCompile
     acceptanceRuntime.extendsFrom testRuntime
 }
 
-task integration(type: Test) {
-    description = 'Runs integration tests.'
+task integrationJava(type: Test) {
+    description = 'Runs integration tests (Java).'
     group = 'verification'
+
+    // Mandatory to run JUnit 5 test
+    useJUnitPlatform()
 
     ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
     testClassesDirs = sourceSets.integration.output.classesDirs
     classpath = sourceSets.integration.runtimeClasspath
 }
 
-task acceptance(type: Test) {
-    description = 'Runs acceptance tests.'
+task integrationGroovy(type: Test) {
+    description = 'Runs integration tests (Groovy).'
+    group = 'verification'
+
+    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+
+    // To launch integration-java before integration-groovy
+    dependsOn integrationJava
+}
+
+task acceptanceJava(type: Test) {
+    description = 'Runs acceptance tests (Java).'
+    group = 'verification'
+
+    // Mandatory to run JUnit 5 test
+    useJUnitPlatform()
+
+    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
+    testClassesDirs = sourceSets.acceptance.output.classesDirs
+    classpath = sourceSets.acceptance.runtimeClasspath
+
+    // To launch integration-groovy before acceptance-java
+    dependsOn integrationGroovy
+}
+
+task acceptanceGroovy(type: Test) {
+    description = 'Runs acceptance tests (Groovy).'
     group = 'verification'
 
     ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
     testClassesDirs = sourceSets.acceptance.output.classesDirs
     classpath = sourceSets.acceptance.runtimeClasspath
-    
-    // To launch integration before acceptance
-    dependsOn integration
+
+    // To launch acceptance-java before acceptance-groovy
+    dependsOn acceptanceJava
 }
 
 // Test phase (gradle test) depends on acceptance
 test {
-  dependsOn acceptance  
+  dependsOn acceptanceGroovy
 }
 

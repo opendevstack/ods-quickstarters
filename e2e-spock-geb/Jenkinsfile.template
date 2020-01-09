@@ -47,7 +47,7 @@ def stageTest(def context) {
 
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}"]) {
       def status = sh(script: "./gradlew clean test --stacktrace --no-daemon -Dtest.ignoreFailures=true", returnStatus: true)
-      junit(testResults:"'build/test-results/acceptance/*.xml, build/test-results/integration/*.xml", allowEmptyResults:true)
+      junit(testResults:"build/test-results/acceptance*/*.xml, build/test-results/integration*/*.xml", allowEmptyResults:true)
       if (status != 0) {
         error "Tests failed!"
       }
