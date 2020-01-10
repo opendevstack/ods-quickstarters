@@ -51,11 +51,13 @@ def stageUnitTest(def context) {
 
 Assuming your component contains source code you want to have delivered by the _Release Manager_, the execution of tests and the reporting of their results is mandatory. For this, your component will have to...
 
+- define `name`, `description`, `supplier`, and `version` metadata for your component in `files/release-manager.yml`
+
 - place the test results in the xUnit XML format in a path known to `context.testResults` (defaults to `build/test-results/test`)
 
 - provide these test results to the link:https://plugins.jenkins.io/junit[Jenkins JUnit plugin] via its `junit` step function.
 
-Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot/Jenkinsfile.template[be-java-springboot].
+Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
 
 == Builder Slave used
 
