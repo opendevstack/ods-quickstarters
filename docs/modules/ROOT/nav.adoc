@@ -7,7 +7,6 @@
 * xref:ROOT:be-python-flask.adoc[BE Python Flask]
 * xref:ROOT:be-scala-akka.adoc[BE Scala Akka]
 
-
 //Frontend Quickstarters
 * xref:ROOT:fe-angular.adoc[FE Angular]
 * xref:ROOT:fe-ionic.adoc[FE Ionic]
@@ -18,10 +17,8 @@
 * xref:ROOT:ds-ml-service.adoc[Data Science Machine Learning Service]
 * xref:ROOT:ds-jupyter-notebook.adoc[Data Science Jupyter Notebook]
 * xref:ROOT:ds-rshiny.adoc[Data Science RShiny app]
+
 //Other Quickstarters
 * xref:ROOT:airflow-cluster.adoc[Airflow]
 * xref:ROOT:e2e-cypress.adoc[Cypress E2E testing Quickstarters]
-
-
-
-
+* xref:ROOT:release-manager.adoc[Release Managerr]

@@ -14,7 +14,7 @@ image::Airflow Architecture Diagram.png?raw=true[Airflow Architecture]
 All Airflow images are based on your `<project_id>-cd/airflow` image stream.
 
 All documentation regarding the base images used in this quickstarter can be found at
-https://github.com/opendevstack/ods-quickstarter/tree/master/airflow-cluster/base-images[airflow-cluster/base-images]
+https://github.com/opendevstack/ods-quickstarters/tree/master/airflow-cluster/base-images[airflow-cluster/base-images]
 
 To deploy the quickstarter *the component name must be `airflow-worker`* otherwise nothing will be created
 
@@ -106,7 +106,7 @@ Airflow web server and Airflow scheduler
 
 == Configuration of Airflow
 
-The configuration of all deployments is documented in https://github.com/opendevstack/ods-quickstarter/tree/master/airflow-cluster/base-images/airflow[Airflow base-images] folder in ods-quickstarters/airflow-cluster
+The configuration of all deployments is documented in https://github.com/opendevstack/ods-quickstarters/tree/master/airflow-cluster/base-images/airflow[Airflow base-images] folder in ods-quickstarters/airflow-cluster
 
 NOTE: once the cluster is provisioned in OpenShift you need to change in the `airflow-environment` configmap any occurence of the following strings:
 - `your-openshift-apihost`
