@@ -26,6 +26,7 @@ User this is a Angular project quickstarter if you want to build a frontend. It 
 ├── karma.conf.js
 ├── package-lock.json - It describes the exact tree that was generated, such that subsequent installs are able to generate identical trees, regardless of intermediate dependency updates.
 ├── package.json - This file contains scripts to run and node packages dependencies for project
+├── release-manager.yml - Configuration file for the Release Manager
 ├── sonar-project.properties - This file contains SonarQube configuration settings
 ├── src
 │   ├── app
@@ -48,8 +49,6 @@ User this is a Angular project quickstarter if you want to build a frontend. It 
 ├── tsconfig.json
 ├── tsconfig.spec.json
 ├── tslint.json
-
-7 directories, 31 files
 ----
 
 == Frameworks used

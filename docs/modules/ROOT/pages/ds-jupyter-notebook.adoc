@@ -9,11 +9,12 @@ Provision a shared Jupyter Notebook within OpenShift for rapid prototyping of da
 ----
 .
 ├── Jenkinsfile
-└── docker
-    ├── Dockerfile
-    ├── jupyter_notebook_config.json
-    ├── requirements.txt
-    └── run.sh
+├── docker
+│   ├── Dockerfile
+│   ├── jupyter_notebook_config.json
+│   ├── requirements.txt
+│   └── run.sh
+└── release-manager.yml - Configuration file for the Release Manager
 ----
 
 == Frameworks used

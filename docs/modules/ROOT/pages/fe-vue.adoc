@@ -43,6 +43,7 @@ The boilerplate files are generated using the https://cli.vuejs.org/[Vue CLI 3.4
 │   ├── index.html
 │   ├── manifest.json
 │   └── robots.txt
+├── release-manager.yml - Configuration file for the Release Manager
 ├── sonar-project.properties
 ├── src
 │   ├── App.vue

@@ -33,9 +33,8 @@ This is a cypress e2e testing project quickstarter with basic setup for https://
 │   │   └── index.ts
 │   ├── tsconfig.json
 │   └── tslint.json
-└── init.sh
-
-9 directories, 16 files
+├── init.sh
+└── release-manager.yml - Configuration file for the Release Manager
 ----
 
 == Frameworks used

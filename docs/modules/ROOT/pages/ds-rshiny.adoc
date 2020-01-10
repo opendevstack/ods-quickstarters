@@ -9,9 +9,10 @@ Provisions a R Shiny application within OpenShift using OpenShift OAuth.
 ----
 .
 ├── Jenkinsfile - This file contains Jenkins build configuration settings
-└── docker - This folder contains Docker configuration settings and main R Shiny app
-    ├── Dockerfile
-    └── app.R
+├── docker - This folder contains Docker configuration settings and main R Shiny app
+│   ├── Dockerfile
+│   └── app.R
+└── release-manager.yml - Configuration file for the Release Manager
 ----
 
 == Frameworks used
