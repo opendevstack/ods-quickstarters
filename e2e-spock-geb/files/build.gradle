@@ -117,7 +117,7 @@ task integrationJava(type: Test) {
     description = 'Runs integration tests (Java).'
     group = 'verification'
 
-    // Mandatory to run JUnit 5 test
+    // Mandatory to run JUnit 5 test 
     useJUnitPlatform()
 
     ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
