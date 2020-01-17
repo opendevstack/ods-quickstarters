@@ -6,9 +6,9 @@ import (
 )
 
 func FindDeploymentConfig(depoymentConfigs *v1.DeploymentConfigList, depoymentConfigName string) error {
-	for _, buildConfig := range depoymentConfigs.Items {
+	for _, deploymentConfig := range depoymentConfigs.Items {
 
-		if depoymentConfigName == buildConfig.Name {
+		if depoymentConfigName == deploymentConfig.Name {
 			return nil
 		}
 	}
