@@ -85,8 +85,8 @@ email_key = metadata.name
 oauth_permission_backend=airflow_oauth.contrib.auth.backends.openshift_permission_backend
 ```
 
-NOTE: if SSL verification fails when calling oauth callback, users can load known CA or set
-environment variable `PYTHONHTTPSVERIFY` to `0`.
+NOTE: if SSL verification fails when calling oauth callback, users can import the host certificate chain using `AIRFLOW_HOSTS_TO_TRUST` or set
+environment variable `AIRFLOW__HTTP_CLIENT__INSECURE` to `true`.
 
 ### OpenShift Plugin Settings
 
