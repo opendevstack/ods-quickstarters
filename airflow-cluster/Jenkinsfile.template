@@ -80,5 +80,7 @@ def stagePublishDAGs(def context) {
 
         sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dags ${airflow_webserver_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
         sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dags ${airflow_scheduler_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
+        sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dag_deps ${airflow_webserver_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
+        sh "oc rsync --no-perms=true --delete=true --exclude=.keep --exclude=__pycache__ src/dag_deps ${airflow_scheduler_info[0]}:/opt/app-root/src/airflow/ -n ${context.targetProject}"
     }
 }
