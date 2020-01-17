@@ -111,6 +111,7 @@ and Secrets. They are:
 | Name | Type | Description|
 |-----|------|------------|
 |**AIRFLOW_COMMAND**| String (Required) | Airflow command that should be executed or empty for a custom commands. It will define if the container will behave as the webserver, schediler and so on.  The availabled options are: 'webserver', 'worker', 'scheduler', 'flower' or 'version' |
+|AIRFLOW_HOSTS_TO_TRUST| String (Required) | A semi-colon separeted list of hosts to be trusted in the format <hostname1>:<port1>;<hostname2>:<port2>;... . This host will have their certificate chain automaticaly trusted |
 |POSTGRES_HOST| String (Required) | Postgresql host to which Airflow should connect |
 |POSTGRES_PORT|String| Postgresql port to which Airflow should connect. Default: 5432 |
 |POSTGRES_USER|String (Required) | Postgresql username which Airflow should use |

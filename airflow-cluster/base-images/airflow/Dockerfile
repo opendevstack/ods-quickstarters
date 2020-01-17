@@ -115,7 +115,9 @@ RUN pip install ${HOME}/oauth \
     && mkdir -p /var/log/filebeat \
     && chgrp -R 0 /var/log/filebeat  \
     && chmod -R g=u /var/log/filebeat  \
-    && chmod g+r /etc/filebeat/filebeat.yml
+    && chmod g+r /etc/filebeat/filebeat.yml \
+    && chgrp -R 0 /etc/pki/ca-trust \
+    && chmod -R g=u /etc/pki/ca-trust
 
 RUN if [ -n "${PYTHON_DEPS}" ]; then \
         if [[ ! -z ${NEXUS_URL} ]]; \
