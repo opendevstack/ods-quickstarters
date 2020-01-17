@@ -29,15 +29,16 @@ from flask_oauthlib.client import OAuth
 from airflow import models, configuration
 from airflow.utils.db import provide_session
 from airflow.utils.log.logging_mixin import LoggingMixin
-import os, ssl
-
-if (os.environ.get('PYTHONHTTPSVERIFY', '') is '0' and
-    getattr(ssl, '_create_unverified_context', None)):
-    ssl._create_default_https_context = ssl._create_unverified_context
-
+import ssl
 
 log = LoggingMixin().log
 
+if configuration.conf.has_section("http_client") \
+        and configuration.conf.has_option("http_client", "insecure") \
+        and configuration.conf.getboolean("http_client", "insecure") \
+        and getattr(ssl, '_create_unverified_context', None):
+    ssl._create_default_https_context = ssl._create_unverified_context
+    log.warn("Airflow is using an insecure HTTP client. ROOT CA check is disabled.")
 
 def get_config_param(param):
     return str(configuration.conf.get('oauth', param))
