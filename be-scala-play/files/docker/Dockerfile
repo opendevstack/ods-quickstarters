@@ -1,8 +1,8 @@
 FROM openjdk:8-jre-alpine
 
 WORKDIR /app
-COPY lib/* /app/lib
-COPY conf /app/conf
+COPY lib/* /app/lib/
+COPY conf /app/conf/
 
 EXPOSE 8080
 

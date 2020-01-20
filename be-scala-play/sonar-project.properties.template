@@ -5,7 +5,7 @@ sonar.projectKey=@project_id@-@component_id@
 sonar.projectName=@project_id@-@component_id@
 
 # Comma-separated paths to directories with sources (required)
-sonar.sources=src
+sonar.sources=app
 
 # Forced Language (optional)
 sonar.language=scala
