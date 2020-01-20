@@ -39,7 +39,7 @@ odsPipeline(
 def stageBuild(def context) {
   stage('Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
-      sh "sbt clean test copyDockerFiles"
+      sh "sbt clean scalafmtSbtCheck scalafmtCheckAll test copyDockerFiles"
     }
   }
 }
