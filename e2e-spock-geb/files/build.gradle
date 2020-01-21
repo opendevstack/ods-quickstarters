@@ -76,6 +76,20 @@ dependencies {
 }
 
 sourceSets {
+    installation {
+        groovy {
+            srcDir 'src/test/installation/groovy'
+        }
+        java {
+            srcDir 'src/test/installation/java'
+        }
+        resources {
+            srcDir 'src/test/resources'
+        }
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+    }
+
     integration {
         groovy {
             srcDir 'src/test/integration/groovy'
@@ -106,6 +120,9 @@ sourceSets {
 }
 
 configurations {
+    installationCompile.extendsFrom testCompile
+    installationRuntime.extendsFrom testRuntime
+
     integrationCompile.extendsFrom testCompile
     integrationRuntime.extendsFrom testRuntime
 
@@ -113,59 +130,52 @@ configurations {
     acceptanceRuntime.extendsFrom testRuntime
 }
 
-task integrationJava(type: Test) {
-    description = 'Runs integration tests (Java).'
-    group = 'verification'
-
-    // Mandatory to run JUnit 5 test 
-    useJUnitPlatform()
-
-    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
-    testClassesDirs = sourceSets.integration.output.classesDirs
-    classpath = sourceSets.integration.runtimeClasspath
+class TestExecutionPhases {
+    static final String INSTALLATION = "installation"
+    static final String INTEGRATION = "integration"
+    static final String ACCEPTANCE = "acceptance"
 }
 
-task integrationGroovy(type: Test) {
-    description = 'Runs integration tests (Groovy).'
-    group = 'verification'
-
-    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
-    testClassesDirs = sourceSets.integration.output.classesDirs
-    classpath = sourceSets.integration.runtimeClasspath
-
-    // To launch integration-java before integration-groovy
-    dependsOn integrationJava
+class TestLanguages {
+    static final String JAVA = "java"
+    static final String GROOVY = "groovy"
 }
 
-task acceptanceJava(type: Test) {
-    description = 'Runs acceptance tests (Java).'
-    group = 'verification'
-
-    // Mandatory to run JUnit 5 test
-    useJUnitPlatform()
-
-    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
-    testClassesDirs = sourceSets.acceptance.output.classesDirs
-    classpath = sourceSets.acceptance.runtimeClasspath
-
-    // To launch integration-groovy before acceptance-java
-    dependsOn integrationGroovy
+def generateTaskName(def type, def language) {
+    return "${type}-${language}"
 }
 
-task acceptanceGroovy(type: Test) {
-    description = 'Runs acceptance tests (Groovy).'
-    group = 'verification'
+// Task to create in a parametrized way Tests task
+def executeTest(def type, def language) {
+    return tasks.create(generateTaskName(type, language), Test) {
+        description = "Runs ${type} tests ${language}."
+        group = "verification"
 
-    ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
-    testClassesDirs = sourceSets.acceptance.output.classesDirs
-    classpath = sourceSets.acceptance.runtimeClasspath
+        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
+            // Mandatory to run JUnit 5 test but incompatible with groovy tests
+            useJUnitPlatform()
+        }
 
-    // To launch acceptance-java before acceptance-groovy
-    dependsOn acceptanceJava
+        ignoreFailures = Boolean.getBoolean("test.ignoreFailures")
+        testClassesDirs = sourceSets["${type}"].output.classesDirs
+        classpath = sourceSets["${type}"].runtimeClasspath
+    }
 }
 
-// Test phase (gradle test) depends on acceptance
 test {
-  dependsOn acceptanceGroovy
+    // To create the tasks
+    dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA)
+    dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)
+    dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)
+    dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)
+    dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)
+    dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY)
+
+    // To define the order
+    tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)
+    tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)
+    tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)
+    tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)
+    tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA)
 }
 
