@@ -9,8 +9,8 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-typescript-express"
-def yoVersion = "3.0.0"
-def generatorVersion = "0.5.1"
+def yoVersion = "3.1.1"
+def generatorVersion = "4.2.2"
 def dockerRegistry
 def gitHost
 // vars from jenkins master
