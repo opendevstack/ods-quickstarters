@@ -21,6 +21,7 @@
 //Other Quickstarters
 * xref:ROOT:airflow-cluster.adoc[Airflow]
 * xref:ROOT:e2e-cypress.adoc[Cypress E2E testing Quickstarters]
+* xref:ROOT:e2e-spock-geb.adoc[Spock and Geb E2E testing Quickstarters]
 
 
 
