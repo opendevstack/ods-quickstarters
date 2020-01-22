@@ -20,6 +20,7 @@ TRY_LOOP="20"
 : "${POSTGRES_DATABASE:="airflow"}"
 : "${START_FILE_BEAT:="1"}"
 : "${AIRFLOW_COMMAND:=}"
+: "${AIRFLOW_HOSTS_TO_TRUST:=}"
 
 # Defaults and back-compat
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
@@ -37,6 +38,16 @@ fi
 sed -i -e 's@__airflow_home__@'"$AIRFLOW_HOME"'@g' $AIRFLOW_HOME/airflow.cfg
 sed -i -e 's|__elastic_host__|'"$ELASTICSEARCH_FULL_URL"'|g' $AIRFLOW_HOME/airflow.cfg
 sed -i -e 's|__namespace__|'"$AIRFLOW__KUBERNETES__NAMESPACE"'|g' $AIRFLOW_HOME/airflow.cfg
+
+
+if [[ ! -z "${AIRFLOW_HOSTS_TO_TRUST}" ]]; then
+  IFS=';' read -r -a HOSTS_TO_TRUST <<< "${AIRFLOW_HOSTS_TO_TRUST}"
+  for HOST_TO_TRUST in "${HOSTS_TO_TRUST[@]}"; do
+    FILE_NAME=$(echo "${HOST_TO_TRUST}" | tr -cd '[:alnum:]')
+    openssl s_client -showcerts -connect ${HOST_TO_TRUST} </dev/null 2>/dev/null | openssl x509 -outform PEM > /etc/pki/ca-trust/source/anchors/${FILE_NAME}.pem
+  done
+  update-ca-trust extract
+fi
 
 
 AIRFLOW__CORE__LOAD_EXAMPLES=False

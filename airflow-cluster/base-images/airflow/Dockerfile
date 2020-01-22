@@ -115,7 +115,9 @@ RUN pip install ${HOME}/oauth \
     && mkdir -p /var/log/filebeat \
     && chgrp -R 0 /var/log/filebeat  \
     && chmod -R g=u /var/log/filebeat  \
-    && chmod g+r /etc/filebeat/filebeat.yml
+    && chmod g+r /etc/filebeat/filebeat.yml \
+    && chgrp -R 0 /etc/pki/ca-trust \
+    && chmod -R g=u /etc/pki/ca-trust
 
 RUN if [ -n "${PYTHON_DEPS}" ]; then \
         if [[ ! -z ${NEXUS_URL} ]]; \
@@ -125,6 +127,8 @@ RUN if [ -n "${PYTHON_DEPS}" ]; then \
     fi
 
 USER 1001
+
+ENV PYTHONPATH="${AIRFLOW_HOME}/dag_deps:${PYTHONPATH}"
 
 # Only the port for the webserver (8080) is exposed. Exposing the ports for flower
 # and for the http server on the worker is not advisable but if need this should be changed.
