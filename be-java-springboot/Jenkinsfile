@@ -9,7 +9,7 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-java-springboot"
-def springCliVersion = "2.2.1.RELEASE"
+def springCliVersion = "2.2.4.RELEASE"
 def dockerRegistry
 def gitHost
 // vars from jenkins master
