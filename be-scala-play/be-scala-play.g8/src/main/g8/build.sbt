@@ -9,6 +9,8 @@ lazy val root = (project in file("."))
 
 scalaVersion := "2.13.1"
 
+credentials += Credentials(Path.userHome / ".sbt" / "credentials")
+
 val compileDependencies = Seq(
   guice,
   "net.logstash.logback" % "logstash-logback-encoder" % "6.3"
