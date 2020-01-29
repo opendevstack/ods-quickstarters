@@ -1,0 +1,6 @@
+---
+metadata:
+  name: be-java-springboot
+  description: Spring Boot version 2.2.1.RELEASE, java source compatibility 11, OpenJDK 11, OS alpine 64b
+  supplier: https://adoptopenjdk.net
+  version: 2.x

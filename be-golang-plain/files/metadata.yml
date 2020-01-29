@@ -1,0 +1,6 @@
+---
+metadata:
+  name: be-golang-plain
+  description: go 1.12, OS alpine 64b
+  supplier: https://golang.org
+  version: 2.x

@@ -1,0 +1,7 @@
+---
+metadata:
+  name: be-scala-akka
+  description: Scala 2.12.6, AKKA HTTP 10.1.4, AKKA 2.5.16, OpenJDK 8, Alpine
+  supplier: https://www.scala-lang.org
+  version: 2.x
+

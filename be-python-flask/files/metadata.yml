@@ -1,0 +1,6 @@
+---
+metadata:
+  name: be-python-flask
+  description: flask unpinned, python 3.7.0
+  supplier: https://www.palletsprojects.com/p/flask/
+  version: 2.x

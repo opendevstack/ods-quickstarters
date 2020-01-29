@@ -1,0 +1,6 @@
+---
+metadata:
+  name: airflow-cluster
+  description: airflow 1.10.3, python 3.6, OS debian-slim 9.11 64b
+  supplier: apache, https://airflow.apache.org
+  version: 2.x
