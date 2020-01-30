@@ -1,6 +1,6 @@
 name: ods-quickstarters
 title: ODS Quickstarters
-version: 2.0
+version: latest
 nav: 
 - modules/ROOT/nav.adoc
 
