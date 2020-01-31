@@ -1,5 +1,7 @@
 # ODS Quickstarters
 
+![](https://github.com/opendevstack/ods-quickstarters/workflows/Continous%20Integration%20Tests/badge.svg?branch=master)
+
 ## Introduction
 
 This repository contains quickstarters, which are basically boilerplates that help to start out with a component quickly.
