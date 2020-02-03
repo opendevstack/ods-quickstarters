@@ -1,7 +1,7 @@
 ---
 metadata:
-  name: be-scala-akka
-  description: Scala 2.12.6, AKKA HTTP 10.1.4, AKKA 2.5.16, OpenJDK 8, Alpine
+  name: Scala
+  description: "Scala is a general-purpose programming language providing support for functional programming and a strong static type system. Technologies: Scala 2.12.6, AKKA HTTP 10.1.4, AKKA 2.5.16, OpenJDK 8, Alpine"
   supplier: https://www.scala-lang.org
   version: 2.x
 

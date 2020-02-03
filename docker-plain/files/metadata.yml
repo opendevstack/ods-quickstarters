@@ -1,0 +1,6 @@
+---
+metadata:
+  name: plain docker alpine image
+  description: alpine latest
+  supplier: docker.com
+  version: 2.x
