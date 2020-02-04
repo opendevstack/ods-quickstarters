@@ -34,6 +34,7 @@ This is a cypress e2e testing project quickstarter with basic setup for https://
 │   ├── tsconfig.json
 │   └── tslint.json
 ├── init.sh
+├── metadata.yml - Metadata about the project
 └── release-manager.yml - Configuration file for the Release Manager
 ----
 

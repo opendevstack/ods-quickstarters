@@ -13,6 +13,7 @@ or that you need to "OpenShiftify", by setting an (non-root) execution user, etc
 ├── README.md
 ├── docker - Contains Dockerfile for the build
 │   └── Dockerfile
+├── metadata.yml - Metadata about the project
 ├── release-manager.yml - Configuration file for the Release Manager
 └── sonar-project.properties  - SonarQube Configuration
 ----

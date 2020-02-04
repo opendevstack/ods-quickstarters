@@ -18,6 +18,7 @@ It contains the basic setup for https://www.docker.com/[Docker], https://jenkins
 │   ├── Dockerfile
 │   └── nginx.vh.default.conf.nginx
 ├── package.json - This file contains scripts to run and node packages dependencies for project
+├── metadata.yml - Metadata about the project
 ├── release-manager.yml - Configuration file for the Release Manager
 ├── sonar-project.properties - This file contains SonarQube configuration settings
 ├── public
