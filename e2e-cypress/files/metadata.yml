@@ -1,0 +1,6 @@
+---
+metadata:
+  name: Cypress
+  description: "Cypress is a JavaScript-based end-to-end testing framework that doesn't use Selenium at all. It is built on top of Mocha, which is again a feature-rich JavaScript test framework running on and in the browser, making asynchronous testing simple and fun. Technologies: Cypress 3.6, TypeScript 3.1"
+  supplier: https://www.cypress.io
+  version: 2.x

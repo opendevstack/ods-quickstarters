@@ -75,6 +75,8 @@ can be found using the label `cluster=airflow`. The created resources are:
 │       └── test_dag_integrity.py        # DAG integrity test
 ├── Jenkinsfile
 ├── build.sh                             # Build script
+├── metadata.yml                         # Component metadata
+├── release-manager.yml                  # Configuration file for the Release Manager
 ├── sonar-project.properties
 ├── test_all.sh                          # Script for running all tests
 └── test_dag_integrity.sh                # Script for running DAG integrity tests
