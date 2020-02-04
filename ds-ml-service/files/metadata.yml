@@ -1,6 +1,6 @@
 ---
 metadata:
   name: Data Science Industrialization Boilerplate
-  description: "This boilerplate enables data scientists to develop, serve, version models within a CI/CD pipeline hosted on OpenShift with the goal in mind that one does not have to take care/change much of the needed pipeline and infrastructure. Technologies: Python 3.6, flask 1.0.2, pandas 0.23.4"
+  description: "This boilerplate enables data scientists to develop, serve, version models within a CI/CD pipeline hosted on OpenShift with the goal in mind that one does not have to take care/change much of the needed pipeline and infrastructure. Technologies: Python 3.6, Flask 1.0, Pandas 0.23"
   supplier: Boehringer Ingelheim
   version: 2.x
