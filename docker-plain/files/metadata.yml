@@ -1,6 +1,6 @@
 ---
 metadata:
-  name: plain docker alpine image
-  description: alpine latest
-  supplier: docker.com
+  name: Docker
+  description: A plain component to dockerize your existing application.
+  supplier: https://www.opendevstack.org/
   version: 2.x

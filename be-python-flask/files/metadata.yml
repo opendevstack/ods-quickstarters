@@ -1,6 +1,6 @@
 ---
 metadata:
-  name: be-python-flask
+  name: Flask
   description: "Flask is a micro web framework written in Python. Technologies: flask unpinned, python 3.7.0"
   supplier: https://www.palletsprojects.com/p/flask/
   version: 2.x

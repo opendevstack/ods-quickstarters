@@ -2,5 +2,5 @@
 metadata:
   name: Apache Airflow
   description: "Airflow is a platform created by community to programmatically author, schedule and monitor workflows. Technologies: airflow 1.10.3, python 3.6"
-  supplier: apache, https://airflow.apache.org
+  supplier: https://airflow.apache.org
   version: 2.x
