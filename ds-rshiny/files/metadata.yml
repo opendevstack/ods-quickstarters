@@ -1,0 +1,6 @@
+---
+metadata:
+  name: R Shiny
+  description: "Shiny is an R package that makes it easy to build interactive web apps straight from R. Technologies: R Shiny unpinned"
+  supplier: https://shiny.rstudio.com
+  version: 2.x
