@@ -33,7 +33,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 │        ├── __init__.py
 │        └── tests.py
 ├── init.sh
-├── metadata.yml - Metadata about the project
+├── metadata.yml - Component metadata
 ├── release-manager.yml - Configuration file for the Release Manager
 └── sonar-project.properties - This file contains SonarQube configuration settings
 ----

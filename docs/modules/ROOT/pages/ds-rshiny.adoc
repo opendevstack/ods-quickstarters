@@ -12,7 +12,7 @@ Provisions a R Shiny application within OpenShift using OpenShift OAuth.
 ├── docker - This folder contains Docker configuration settings and main R Shiny app
 │   ├── Dockerfile
 │   └── app.R
-├── metadata.yml - Metadata about the project
+├── metadata.yml - Component metadata
 └── release-manager.yml - Configuration file for the Release Manager
 ----
 

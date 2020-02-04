@@ -30,7 +30,7 @@ An example Akka HTTP Server implementation is generated with a little user regis
 │           └── com
 │               └── example
 │                   └── UserRoutesSpec.scala
-├── metadata.yml - Metadata about the project
+├── metadata.yml - Component metadata
 └── release-manager.yml - Configuration file for the Release Manager
 ----
 

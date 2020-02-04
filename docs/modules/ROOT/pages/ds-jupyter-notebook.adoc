@@ -14,7 +14,7 @@ Provision a shared Jupyter Notebook within OpenShift for rapid prototyping of da
 │   ├── jupyter_notebook_config.json
 │   ├── requirements.txt
 │   └── run.sh
-├── metadata.yml - Metadata about the project
+├── metadata.yml - Component metadata
 └── release-manager.yml - Configuration file for the Release Manager
 ----
 
