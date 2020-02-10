@@ -1,6 +1,5 @@
 ---
-metadata:
-  name: Angular
-  description: "Angular is a TypeScript-based open-source web application framework led by the Angular Team at Google and by a community of individuals and corporations. Technologies: Angular 8.0"
-  supplier: https://angular.io
-  version: 2.x
+name: Angular
+description: "Angular is a TypeScript-based open-source web application framework led by the Angular Team at Google and by a community of individuals and corporations. Technologies: Angular 8.0"
+supplier: https://angular.io
+version: 2.x
