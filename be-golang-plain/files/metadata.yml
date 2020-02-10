@@ -1,6 +1,5 @@
 ---
-metadata:
-  name: Go
-  description: "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. Technologies: Go 1.12"
-  supplier: https://golang.org
-  version: 2.x
+name: Go
+description: "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. Technologies: Go 1.12"
+supplier: https://golang.org
+version: 2.x
