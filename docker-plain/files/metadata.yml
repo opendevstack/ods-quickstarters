@@ -1,0 +1,5 @@
+---
+name: Docker
+description: A plain component to dockerize an existing application.
+supplier: https://www.opendevstack.org
+version: 2.x

@@ -18,6 +18,8 @@ The files are generated using a https://yeoman.io/[yeoman] generator for https:/
 │   └── Dockerfile
 ├── package-lock.json - Commit this file as well when you update your dependencies
 ├── package.json - This file contains all the npm dependencies and build commands for the project.
+├── metadata.yml - Component metadata
+├── release-manager.yml - Configuration file for the Release Manager
 ├── sonar-project.properties  - SonarQube Configuration
 ├── src
 │   ├── greeter.ts
@@ -29,7 +31,6 @@ The files are generated using a https://yeoman.io/[yeoman] generator for https:/
 │   └── index-spec.ts
 ├── tsconfig.json - TypeScript Configuration file
 └── tslint.json - TypeScript Linter Configuration
-4 directories, 14 files
 ----
 
 == Frameworks used

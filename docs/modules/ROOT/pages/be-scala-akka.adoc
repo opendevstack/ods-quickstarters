@@ -16,22 +16,22 @@ An example Akka HTTP Server implementation is generated with a little user regis
 ├── project
 │   ├── build.properties
 │   └── plugins.sbt
-└── src
-    ├── main
-    │   └── scala
-    │       └── com
-    │           └── example
-    │               ├── JsonSupport.scala
-    │               ├── QuickstartServer.scala
-    │               ├── UserRegistryActor.scala
-    │               └── UserRoutes.scala
-    └── test
-        └── scala
-            └── com
-                └── example
-                    └── UserRoutesSpec.scala
-
-10 directories, 8 files
+├── src
+│   ├── main
+│   │   └── scala
+│   │       └── com
+│   │           └── example
+│   │               ├── JsonSupport.scala
+│   │               ├── QuickstartServer.scala
+│   │               ├── UserRegistryActor.scala
+│   │               └── UserRoutes.scala
+│   └── test
+│       └── scala
+│           └── com
+│               └── example
+│                   └── UserRoutesSpec.scala
+├── metadata.yml - Component metadata
+└── release-manager.yml - Configuration file for the Release Manager
 ----
 
 == Frameworks used
