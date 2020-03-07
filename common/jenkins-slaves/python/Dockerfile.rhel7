@@ -1,9 +1,10 @@
 FROM cd/jenkins-slave-base
 
-MAINTAINER Michael Sauter <michael.sauter@boehringer-ingelheim.com>
+LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
-ENV PYTHON_VERSION=3.6.0
-ENV INSTALL_PKGS="yum-utils gcc make openssl-devel zlib-devel"
+ENV PYTHON_VERSION=3.6.10
+ENV VENV_VERSION=20.0.9
+ENV INSTALL_PKGS="yum-utils gcc make openssl-devel zlib-devel sqlite-devel"
 
 RUN set -x \
     && yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
@@ -30,7 +31,7 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
 # Upgrade PIP
 RUN pip3 install --upgrade pip \
     && pip3 -V \
-    && pip3 install virtualenv pycodestyle
+    && pip3 install virtualenv==${VENV_VERSION}
 
 # Configure PIP SSL validation
 RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
@@ -39,4 +40,3 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 # Enables default user to access $HOME folder
 RUN chgrp -R 0 $HOME && \
     chmod -R g+rw $HOME
-

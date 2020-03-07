@@ -42,6 +42,7 @@ podTemplate(
               sh "mkdir -p ${componentId}"
           }
           stage('copy files from quickstart to generated project') {
+              sh "cp -rv ${quickstarterBasepath}/README.md ${quickstarterBasepath}/files"
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
           }
           stage('Setup OpenShift resources') {

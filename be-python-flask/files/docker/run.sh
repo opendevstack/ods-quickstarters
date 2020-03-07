@@ -6,4 +6,4 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
-cd src && exec python3 app.py
+cd src && exec gunicorn -b :8080 main:app
