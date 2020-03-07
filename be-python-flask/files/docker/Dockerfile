@@ -1,4 +1,4 @@
-FROM python:3.7.0-slim
+FROM python:3.6.10-slim
 
 LABEL maintainer="Andras Gyacsok <andras.gyacsok@boehringer-ingelheim.com>"
 

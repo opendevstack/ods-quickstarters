@@ -1,5 +1,5 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-omit = *tests*
+omit = *_test*
        *__init__*
