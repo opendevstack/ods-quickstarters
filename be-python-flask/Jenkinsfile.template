@@ -46,6 +46,7 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
       virtualenv testsuite
       . ./testsuite/bin/activate
       pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r tests/requirements.txt
+      pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}
     """
