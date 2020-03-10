@@ -17,7 +17,7 @@ sonar.sourceEncoding=UTF-8
 sonar.coverage.exclusions=src/tests/**
 
 # Define unit test information inside the python project
-sonar.python.xunit.reportPath=build/test-results/test/nosetests.xml
+sonar.python.xunit.reportPath=build/test-results/test/tests.xml
 
 # Define coverage information inside the python project
 sonar.python.coverage.reportPaths=build/test-results/coverage/coverage.xml

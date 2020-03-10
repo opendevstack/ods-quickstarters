@@ -30,49 +30,62 @@ odsPipeline(
     '*': 'dev'
   ]
 ) { context ->
+  stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
+  stageScanForSonarqube(context)
   stageBuild(context)
   stageStartOpenshiftBuild(context, [nexusHostWithBasicAuth: context.nexusHostWithBasicAuth, nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]])
   stageDeployToOpenshift(context)
 }
 
+def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithoutScheme) {
+  String testLocation = 'build/test-results/test'
+  String coverageLocation = 'build/test-results/coverage'
+
+  stage('Prepare Test Suite') {
+    sh """
+      virtualenv testsuite
+      . ./testsuite/bin/activate
+      pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r tests/requirements.txt
+      pip check
+      mkdir -p ${testLocation}
+      mkdir -p ${coverageLocation}
+    """
+  }
+
+  stage('Lint') {
+    sh """
+      . ./testsuite/bin/activate
+      mypy src
+      flake8 --max-line-length=120 src
+    """
+  }
+
+  stage('Test') {
+    def status = sh(
+      script: """
+        . ./testsuite/bin/activate
+        cd src
+        python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=. ../tests/
+        mv tests.xml ../${testLocation}
+        mv coverage.xml ../${coverageLocation}
+        mv .coverage ../${coverageLocation}
+      """,
+      returnStatus: true
+    )
+
+    junit "${testLocation}/tests.xml"
+
+    if (status != 0) {
+      error "Unit tests failed!"
+    }
+  }
+}
+
 def stageBuild(def context) {
-  withEnv(["TAGVERSION=${context.tagversion}"]) {
-      stage('Test') {
-        String testLocation = 'build/test-results/test';
-        String coverageLocation = 'build/test-results/coverage';
-        def status = sh(
-          script: """
-            pip install --user virtualenv &&
-            virtualenv venv &&
-            . \$(pwd)/venv/bin/activate &&
-            pip install -r src/test_requirements.txt &&
-            export PYTHONPATH="src" &&
-            mkdir -p ${testLocation} &&
-            mkdir -p ${coverageLocation} &&
-            cd src/tests &&
-            nosetests -v --with-xunit --xunit-file=../../${testLocation}/nosetests.xml --with-coverage --cover-xml --cover-xml-file=../../${coverageLocation}/coverage.xml --cover-erase --cover-inclusive --cover-package=..
-          """,
-          returnStatus: true
-        )
-        junit "${testLocation}/nosetests.xml"
-        stageScanForSonarqube(context)
-        if (status != 0) {
-          error "One or more unit tests failed!"
-        }
-      }
-      stage('PEP8') {
-        // Stage is VERY IMPORTANT! Do not remove or comment!
-        sh """
-          cd src &&
-          pycodestyle --show-source --show-pep8 . &&
-          pycodestyle --statistics -qq .
-        """
-      }
-      stage('Build') {
-         sh """
-           mkdir docker/dist
-           cp -r src docker/dist
-         """
-      }
+  stage('Build') {
+    sh """
+      mkdir docker/dist
+      cp -rv src docker/dist
+    """
   }
 }

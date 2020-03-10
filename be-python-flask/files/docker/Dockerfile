@@ -1,4 +1,4 @@
-FROM python:3.7.0-slim
+FROM python:3.6.10-slim
 
 LABEL maintainer="Andras Gyacsok <andras.gyacsok@boehringer-ingelheim.com>"
 
@@ -66,7 +66,8 @@ WORKDIR ${projectHome}
 RUN if [ ! -z ${nexusHostWithBasicAuth} ]; \
     then pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} --upgrade pip && pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r src/requirements.txt; \
     else pip install --upgrade pip && pip install -r src/requirements.txt; \
-    fi
+    fi && \
+    pip check
 
 USER 1001
 
