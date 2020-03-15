@@ -21,6 +21,7 @@ buildscript {
 plugins {
   id 'java'
   id 'groovy'
+  id 'com.adarshr.test-logger' version "2.0.0"
 }
 
 repositories {
@@ -181,3 +182,6 @@ test {
     tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA)
 }
 
+testlogger {
+    showStandardStreams true
+}
