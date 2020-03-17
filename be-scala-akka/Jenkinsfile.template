@@ -28,7 +28,7 @@ odsPipeline(
 }
 
 def stageBuild(def context) {
-  stage('Build') {
+  stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
       sh "sbt test"
     }
