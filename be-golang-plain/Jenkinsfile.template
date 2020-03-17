@@ -9,7 +9,7 @@ node {
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.odsPipeline(
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customizations
   image: "${dockerRegistry}/cd/jenkins-slave-golang:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
