@@ -9,10 +9,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@')
 
 /*
   See readme of shared library for usage and customization
@@ -34,7 +31,7 @@ odsPipeline(
 }
 
 def stageTest(def context) {
-  stage('Test') {
+  stage('Integration Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
       sh "npm install"
       sh "npm run lint"

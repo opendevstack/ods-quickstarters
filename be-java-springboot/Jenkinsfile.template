@@ -9,10 +9,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@')
 
 /*
   See readme of shared library for usage and customization
@@ -43,7 +40,7 @@ def stageBuild(def context) {
   if (springBootEnv.contains('-dev')) {
     springBootEnv = 'dev'
   }
-  stage('Build') {
+  stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}"]) {
       def status = sh(script: "./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
       junit 'build/test-results/test/*.xml'

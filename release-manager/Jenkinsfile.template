@@ -1,6 +1,6 @@
-@Library('ods-mro-jenkins-shared-library@production')
+@Library('ods-mro-jenkins-shared-library@@ods_git_ref@')
 
-@Library('ods-jenkins-shared-library@production')
+@Library('ods-jenkins-shared-library@@ods_git_ref@')
 
 def project = [:]
 def repos   = []
