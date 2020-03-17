@@ -1,4 +1,0 @@
-@Library(['ods-mro-jenkins-shared-library@production', 'ods-jenkins-shared-library@production']) _
-
-def config = [debug: true]
-mroPipeline(config)

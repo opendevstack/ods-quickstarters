@@ -11,14 +11,20 @@ node {
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@')
 
-// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
+/*
+  See readme of shared library for usage and customization
+  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
+  eg. to create and set your own builder slave instead of 
+  the scala/sbt slave used here - the code of the sbt slave can be found at
+  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/scala
+ */ 
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'dev',
-    // 'release/*': 'test'
+    'master': 'test',
+    '*': 'dev'
   ]
 ) { context ->
   stageBuild(context)
@@ -28,10 +34,9 @@ odsPipeline(
 }
 
 def stageBuild(def context) {
-  stage('Build') {
+  stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
-      sh "sbt test"
+      sh "sbt clean scalafmtSbtCheck scalafmtCheckAll test copyDockerFiles"
     }
-    sh "sbt assembly"
   }
 }
