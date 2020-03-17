@@ -14,20 +14,14 @@ library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
    remote: sharedLibraryRepository,
    credentialsId: credentialsId])
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
-  the scala/sbt slave used here - the code of the sbt slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/scala
- */ 
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
   stageBuild(context)

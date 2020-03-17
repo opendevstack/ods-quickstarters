@@ -13,14 +13,14 @@ library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
    remote: sharedLibraryRepository,
    credentialsId: credentialsId])
 
-// See readme of shared library for usage and customization.
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
   stageBuild(context)
