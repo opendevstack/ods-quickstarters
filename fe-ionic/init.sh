@@ -17,11 +17,62 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-
-mkdir -p $COMPONENT
+echo "generate project"
+ionic start $COMPONENT blank
 
 cd $COMPONENT
 
+echo "Configure headless chrome in karma.conf.j2"
+read -r -d "" CHROME_CONFIG << EOM || true
+    browsers: \['ChromeNoSandboxHeadless'\],\\
+\\
+    customLaunchers: {\\
+      ChromeNoSandboxHeadless: {\\
+        base: 'Chrome',\\
+        flags: \[\\
+          '--no-sandbox',\\
+          // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md\\
+          '--headless',\\
+          '--disable-gpu',\\
+          // Without a remote debugging port, Google Chrome exits immediately.\\
+          ' --remote-debugging-port=9222',\\
+        \],\\
+      },\\
+    },
+EOM
+sed -i "s|\s*browsers: \['Chrome'\],|$CHROME_CONFIG|" ./karma.conf.js
+sed -i "s|\(browsers:\)|    \1|g" ./karma.conf.js
+
+echo "Configure required plugins in karma.conf.js"
+sed -i "/plugins: \[/a\     \ require('karma-junit-reporter')," ./karma.conf.js
+
+echo "Configure junit xml reporter in karma.conf.js"
+read -r -d "" UNIT_XML_CONFIG << EOM || true
+    reporters: \['progress', 'junit', 'kjhtml'\],\\
+\\
+    junitReporter: {\\
+      outputDir: './build/test-results/test',\\
+      outputFile: 'test-results.xml',\\
+      useBrowserName: false,\\
+      xmlVersion: 1\\
+    },
+EOM
+sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.conf.js
+
+echo "Configure headless chrome in protractor.conf.js"
+read -r -d '' PROTRACTOR_CONFIG << EOM || true
+    'browserName': 'chrome',\\
+    'chromeOptions': {\\
+      'args': \[\\
+        'headless',\\
+        'no-sandbox',\\
+        'disable-web-security'\\
+      \]\\
+    },
+EOM
+
+sed -i "s|\s*'browserName': 'chrome'|$PROTRACTOR_CONFIG|" ./e2e/protractor.conf.js
+sed -i "s|\('browserName'\)|    \1|g" ./e2e/protractor.conf.js
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
@@ -29,4 +80,7 @@ sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/
 rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
+rm ./package.json
+rm ./tslint.json
 cp -rv $SCRIPT_DIR/files/. .
+sed -i "s/\$COMPONENT/${COMPONENT}/" ./package.json

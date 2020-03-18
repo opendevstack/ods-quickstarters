@@ -9,6 +9,7 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "fe-ionic"
+def ionicVersion = "3.9.2"
 def dockerRegistry
 def gitHost
 // vars from jenkins master
@@ -37,6 +38,9 @@ podTemplate(
         node(podLabel) {
           stage('Checkout quickstarter') {
             checkout scm
+          }
+          stage("update ionic cli") {
+              sh "npm install -g @ionic@${ionicVersion} && ionic version"
           }
           stage("init Project") {
               sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
