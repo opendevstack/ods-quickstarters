@@ -16,7 +16,7 @@ node {
     dockerRegistry = env.DOCKER_REGISTRY
 }
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@')
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
