@@ -6,14 +6,16 @@ services:
   bitbucket:
     credentials:
       id: @project_id@-cd-cd-user-with-password
-  jira:
-    credentials:
-      id: @project_id@-cd-cd-user-with-password
+
+# uncomment to use jira 	  
+#  jira:
+#    credentials:
+#      id: @project_id@-cd-cd-user-with-password
   nexus:
     repository:
       name: leva-documentation
 
-#repositories:
+repositories: []
 #  - id: A
 #    url: https://github.com/my-org/my-repo-A.git
 #    branch: master
@@ -25,4 +27,3 @@ services:
 #  - id: C
 #    type: ods
 
-repositories: []
