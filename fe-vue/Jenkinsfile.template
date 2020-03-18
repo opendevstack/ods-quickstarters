@@ -8,7 +8,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@')
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See readme of shared library for usage and customization.
 odsPipeline(

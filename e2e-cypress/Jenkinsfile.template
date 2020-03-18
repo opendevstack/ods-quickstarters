@@ -9,7 +9,7 @@ node {
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@')
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 /*
   See readme of shared library for usage and customization
@@ -31,8 +31,15 @@ odsPipeline(
 }
 
 def stageTest(def context) {
+
+  def openShiftPublicHost
+  node {
+    def stableUrl = env.SONAR_SERVER_URL
+    openShiftPublicHost = stableUrl.substring(stableUrl.indexOf(".") + 1)
+  }
+  
   stage('Integration Test') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_PUBLIC_HOST=${openShiftPublicHost}"]) {
       sh "npm install"
       sh "npm run lint"
       sh "npm run build"
