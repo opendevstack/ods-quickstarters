@@ -1,3 +1,2 @@
 /* generated jenkins file used for building and deploying the releasemanager and components of @project_id@ */
-@Library('ods-mro-jenkins-shared-library@@ods_git_ref@')
-
+ @Library(['ods-mro-jenkins-shared-library@@ods_git_ref@', 'ods-jenkins-shared-library@@ods_git_ref@']) _
