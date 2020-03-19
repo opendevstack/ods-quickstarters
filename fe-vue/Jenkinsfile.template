@@ -1,10 +1,8 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
