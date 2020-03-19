@@ -1,45 +1,8 @@
+/* generated jenkins file used for building and deploying the releasemanager and components of @project_id@ */
 @Library('ods-mro-jenkins-shared-library@@ods_git_ref@')
-
 @Library('ods-jenkins-shared-library@@ods_git_ref@')
 
-def project = [:]
-def repos   = []
+// Simple entrypoint to mro shared library stage. Check out readme for more information.
+def config = [debug: true]
 
-/*
- * Use classic pipeline here because of blue ocean (1.18+) rendering bugs
- * with declarative pipelines.
- */ 
-node {
-
-    checkout scm
-
-    def debugOn = true
-    withEnv (mroEnvironment(debugOn)) {
-
-        stage('Init') {
-            def result = phaseInit()
-            project = result.project
-            repos = result.repos
-        }
-
-        stage('Build') {
-            phaseBuild(project, repos)
-        }
-
-        stage('Deploy') {
-            phaseDeploy(project, repos)
-        }
-
-        stage('Test') {
-            phaseTest(project, repos)
-        }
-
-        stage('Release') {
-            phaseRelease(project, repos)
-        }
-
-        stage('Finalize') {
-            phaseFinalize(project, repos)
-        }
-    }
-}
+mroPipeline(config)
