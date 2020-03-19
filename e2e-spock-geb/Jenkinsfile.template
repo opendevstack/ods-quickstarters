@@ -2,17 +2,12 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 /*
   See readme of shared library for usage and customization
@@ -48,7 +43,7 @@ def stageTest(def context) {
     openShiftPublicHost = stableUrl.substring(stableUrl.indexOf(".") + 1)
   }
 
-  stage('Test') {
+  stage('Integration Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_PUBLIC_HOST=${openShiftPublicHost}"]) {
       def status = sh(script: "./gradlew clean test --stacktrace --no-daemon", returnStatus: true)
       junit(testResults:"build/test-results/installation*/*.xml, build/test-results/integration*/*.xml, build/test-results/acceptance*/*.xml", allowEmptyResults:true)
