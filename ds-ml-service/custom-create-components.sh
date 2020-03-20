@@ -139,8 +139,8 @@ for devenv in dev test ; do
             oc set triggers dc/${COMPONENT}-${type} --from-config -n ${PROJECT}-${devenv}
         fi
 
-        # setting up resource limits: maximum of 2 CPU and 2GB memory, minimum of 0.25 CPU and 256MB memory
-        oc set resources dc ${COMPONENT}-${type} --limits=cpu=2,memory=2Gi --requests=cpu=256m,memory=256Mi -n ${PROJECT}-${devenv}
+        # setting up resource limits: maximum of 2 CPU and 512MB memory, minimum of 0.25 CPU and 256MB memory
+        oc set resources dc ${COMPONENT}-${type} --limits=cpu=2,memory=512Mi --requests=cpu=256m,memory=256Mi -n ${PROJECT}-${devenv}
 
     done
 done
