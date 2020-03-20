@@ -3,8 +3,6 @@ FROM cd/jenkins-slave-base
 LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
 ARG AIRFLOW_VERSION=1.10.3
-ARG PYTHON_DEPS=""
-ARG AIRFLOW_DEPS=""
 
 ENV AIRFLOW_HOME=$HOME/airflow
 ENV AIRFLOW_GPL_UNIDECODE yes
@@ -57,9 +55,6 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt && \
     pip config list
 
 # Airflow
-ARG PYTHON_DEPS="Flask==1.0.0 tzlocal==1.5.1 urllib3==1.25.3 thrift==0.11.0 tabulate==0.8.3 six==1.12.0 PyYAML==5.1.2 \
-                    pytzdata==2019.2 python-dateutil==2.8.0 Pygments==2.4.2 pyasn1-modules==0.2.6 psutil==5.6.3"
-
 RUN buildDeps=' \
         freetds-devel \
         krb5-devel \
@@ -71,17 +66,17 @@ RUN buildDeps=' \
         git \
     ' \
     && pipDeps="\
-        ${PYTHON_DEPS} \
-       pytz==2019.2 \
-       pyOpenSSL==19.0.0 \
-       paramiko==2.6.0 \
+       pytz==2019.3 \
+       pyOpenSSL==19.1.0 \
+       paramiko==2.7.1 \
        sshtunnel==0.1.5 \
        ndg-httpsclient==0.5.1 \
-       pyasn1==0.4.6 \
-       requests-oauthlib==1.1.0 \
-       unittest-xml-reporting \
+       pyasn1==0.4.8 \
+       requests-oauthlib==1.3.0 \
+       unittest-xml-reporting==3.0.2 \
        apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     " \
+    && airflowFixDeps="redis==3.4.1 flask==1.0.1 jinja2==2.10.0 werkzeug==0.14.1" \
     && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && yum install --assumeyes \
         $buildDeps \
@@ -90,13 +85,15 @@ RUN buildDeps=' \
         curl \
         rsync \
         nmap-ncat \
-    && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \    
+    && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \
     && if [[ ! -z ${NEXUS_URL} ]]; \
-        then pip install -U -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple pip setuptools wheel \
-        && pip install -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple $pipDeps; \
+        then pip install -U -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple pip setuptools wheel \
+        && pip install -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple $pipDeps \
+        && pip install -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple $airflowFixDeps; \
         else pip install -U pip setuptools wheel \
-        && pip install $pipDeps; \
-    fi \    
+        && pip install $pipDeps \
+        && pip install $airflowFixDeps; \
+    fi \
     && yum clean all \
     && rm -rf /var/cache/yum
 
