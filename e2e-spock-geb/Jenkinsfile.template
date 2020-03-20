@@ -25,7 +25,7 @@ odsPipeline(
     '*': 'dev'
   ]
 ) { context ->
-  stagePrepare(def context)
+  stagePrepare(context)
   stageScanForSonarqube(context)
   stageTest(context)
 }
