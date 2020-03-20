@@ -57,6 +57,9 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt && \
     pip config list
 
 # Airflow
+ARG PYTHON_DEPS="Flask==1.0.0 tzlocal==1.5.1 urllib3==1.25.3 thrift==0.11.0 tabulate==0.8.3 six==1.12.0 PyYAML==5.1.2 \
+                    pytzdata==2019.2 python-dateutil==2.8.0 Pygments==2.4.2 pyasn1-modules==0.2.6 psutil==5.6.3"
+
 RUN buildDeps=' \
         freetds-devel \
         krb5-devel \
@@ -64,9 +67,18 @@ RUN buildDeps=' \
         openssl-devel \
         libffi-devel \
         postgresql-devel \
-        mariadb-devel \
         git \
     ' \
+    && pipDeps="\
+       pytz==2019.2 \
+       pyOpenSSL==19.0.0 \
+       paramiko==2.6.0 \
+       sshtunnel==0.1.5 \
+       ndg-httpsclient==0.5.1 \
+       pyasn1==0.4.6 \
+       requests-oauthlib==1.1.0 \
+       apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
+    " \
     && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && yum install --assumeyes \
         $buildDeps \
@@ -76,14 +88,18 @@ RUN buildDeps=' \
         rsync \
         nmap-ncat \
     && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \
-    && pip install -U pip setuptools wheel \
-    && pip install pytz \
-    && pip install pyOpenSSL \
-    && pip install ndg-httpsclient \
-    && pip install unittest-xml-reporting \
-    && pip install pyasn1 \
-    && pip install apache-airflow[crypto,rabbitmq,celery,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
-    && pip install 'redis>=3.2.0,<4' \
+    && if [ -n "${PYTHON_DEPS}" ]; then \
+        if [[ ! -z ${NEXUS_URL} ]]; \
+            then pip install -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple -U ${PYTHON_DEPS}; \
+            else pip install -U ${PYTHON_DEPS}; \
+        fi \
+    fi \
+    && if [[ ! -z ${NEXUS_URL} ]]; \
+        then pip install -U -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple pip setuptools wheel \
+        && pip install -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple $pipDeps; \
+        else pip install -U pip setuptools wheel \
+        && pip install $pipDeps; \
+    fi \
     && yum clean all \
     && rm -rf /var/cache/yum
 
