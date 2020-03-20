@@ -55,6 +55,14 @@ podTemplate(
                   --ods-image-tag ${odsImageTag} \
                   --ods-git-ref ${odsGitRef}"
           }
+          stage('Create sonar-project.properties') {
+            sh "sh common/scripts/renderSonarqubeTemplate.sh \
+                  --source ${quickstarterBasepath}/sonar-project.properties.template \
+                  --target ${componentId}/sonar-project.properties \
+                  --project-id ${projectId} \
+                  --component-id ${componentId}  \
+                  --component-type ${quickstarterBasepath}"
+          }		  
           stage('Push to remote') {
             withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
               writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
