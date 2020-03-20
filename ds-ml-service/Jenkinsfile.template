@@ -28,6 +28,7 @@ odsPipeline(
     componentId: componentId,
     testResults : 'tests-results',
     openshiftBuildTimeout: 25,
+    openshiftRolloutTimeout: 10,
     branchToEnvironmentMapping: [
         'master': 'dev',
         // 'release/*': 'test'
