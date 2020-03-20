@@ -25,8 +25,13 @@ odsPipeline(
     '*': 'dev'
   ]
 ) { context ->
+  stagePrepare(def context)
   stageScanForSonarqube(context)
   stageTest(context)
+}
+
+def stagePrepare(def context) {
+  sh "mkdir -p target/classes"
 }
 
 def stageTest(def context) {
@@ -44,8 +49,9 @@ def stageTest(def context) {
   }
 
   stage('Integration Test') {
+	sh (script: "chmod a+x gradle*", label : "allow gradle to execute")
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_PUBLIC_HOST=${openShiftPublicHost}"]) {
-      def status = sh(script: "./gradlew clean test --stacktrace --no-daemon", returnStatus: true)
+      def status = sh(script: " ./gradlew clean test --stacktrace --no-daemon", returnStatus: true)
       junit(testResults:"build/test-results/installation*/*.xml, build/test-results/integration*/*.xml, build/test-results/acceptance*/*.xml", allowEmptyResults:true)
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration*/*.xml', allowEmpty: true)
