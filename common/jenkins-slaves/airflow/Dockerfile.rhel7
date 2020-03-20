@@ -67,9 +67,11 @@ RUN buildDeps=' \
         openssl-devel \
         libffi-devel \
         postgresql-devel \
+        mariadb-devel \
         git \
     ' \
     && pipDeps="\
+        ${PYTHON_DEPS} \
        pytz==2019.2 \
        pyOpenSSL==19.0.0 \
        paramiko==2.6.0 \
@@ -77,6 +79,7 @@ RUN buildDeps=' \
        ndg-httpsclient==0.5.1 \
        pyasn1==0.4.6 \
        requests-oauthlib==1.1.0 \
+       unittest-xml-reporting \
        apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     " \
     && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
@@ -87,19 +90,13 @@ RUN buildDeps=' \
         curl \
         rsync \
         nmap-ncat \
-    && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \
-    && if [ -n "${PYTHON_DEPS}" ]; then \
-        if [[ ! -z ${NEXUS_URL} ]]; \
-            then pip install -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple -U ${PYTHON_DEPS}; \
-            else pip install -U ${PYTHON_DEPS}; \
-        fi \
-    fi \
+    && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \    
     && if [[ ! -z ${NEXUS_URL} ]]; \
         then pip install -U -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple pip setuptools wheel \
         && pip install -i https://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${NEXUS_URL:8}/repository/pypi-all/simple $pipDeps; \
         else pip install -U pip setuptools wheel \
         && pip install $pipDeps; \
-    fi \
+    fi \    
     && yum clean all \
     && rm -rf /var/cache/yum
 
