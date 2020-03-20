@@ -46,8 +46,8 @@ objects:
               value: dev
             - name: version
               value: WIP
-            - name: sourceEnvironment
-              value: dev
+            - name: releaseStatusJiraIssueKey
+              value: ''
           jenkinsfilePath: Jenkinsfile
         type: JenkinsPipeline
       triggers:

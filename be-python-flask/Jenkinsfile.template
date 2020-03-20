@@ -2,17 +2,12 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
@@ -31,7 +26,7 @@ odsPipeline(
 
 def stageBuild(def context) {
   withEnv(["TAGVERSION=${context.tagversion}"]) {
-      stage('Test') {
+  stage('Unit Test') {
         String testLocation = 'build/test-results/test';
         String coverageLocation = 'build/test-results/coverage';
         def status = sh(
