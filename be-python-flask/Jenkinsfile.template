@@ -20,6 +20,7 @@ odsPipeline(
   ]
 ) { context ->
   stageBuild(context)
+  stageScanForSonarqube(context)
   stageStartOpenshiftBuild(context, [nexusHostWithBasicAuth: context.nexusHostWithBasicAuth, nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]])
   stageDeployToOpenshift(context)
 }
