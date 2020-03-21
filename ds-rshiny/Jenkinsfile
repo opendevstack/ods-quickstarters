@@ -53,6 +53,16 @@ podTemplate(
           }
           stage('Setup OpenShift resources') {
             sh "sh common/scripts/create-ds-component.sh -p ${projectId} -c ${componentId} -nh ${nexusHost} -nu ${nexusUsername} -np ${nexusPassword} --force"
+            for (def env : ['dev', 'test']) {
+              sh """oc patch bc ${componentId} --type=json --patch '
+                        [{"op":
+                          "replace", "path": "/spec/resources",
+                          "value": {
+                            "limits":{"cpu":"1","memory":"2Gi"},
+                            "requests":{"cpu":"500m","memory":"1Gi"}
+                          }
+                        }]' -n ${projectId}-${env}"""
+            }
           }
           stage('Create Jenkinsfile') {
             sh "sh common/scripts/renderJenkinsTemplate.sh \
