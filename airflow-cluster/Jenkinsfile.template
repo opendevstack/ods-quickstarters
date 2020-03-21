@@ -28,6 +28,7 @@ odsPipeline(
     stageDAGTest(context)
     stageUnitTest(context)
     stageBuild(context)
+    stageScanForSonarqube(context)
     stageStartOpenshiftBuild(context)
     stageTagImage(context)
     stagePublishDAGs(context)
