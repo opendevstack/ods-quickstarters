@@ -30,12 +30,10 @@ def stageBuild(def context) {
     withEnv(["TAGVERSION=${context.tagversion}"]){
       sh "sbt test"
 
-      sh 'pwd'
-      sh 'ls -la target/test-reports'
       junit 'target/test-reports/**/*.xml'
-      sh 'mkdir -p build/test-results/test'
+
+      sh 'mkdir -p build/test-results/test/'
       sh 'cp target/test-reports/*.xml build/test-results/test/'
-      sh 'ls -la build/test-results/test'
 
     }
     sh "sbt assembly"
