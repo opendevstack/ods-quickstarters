@@ -17,10 +17,10 @@ library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
 /*
   See readme of shared library for usage and customization
   @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
+  eg. to create and set your own builder slave instead of
   the maven/gradle slave used here - the code of the slave can be found at
   https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/maven
- */ 
+ */
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-maven:@ods_image_tag@",
   projectId: projectId,
@@ -46,7 +46,6 @@ def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}"]) {
       def status = sh(script: "./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
-      junit 'build/test-results/test/*.xml'
       if (status != 0) {
         error "Build failed!"
       }
