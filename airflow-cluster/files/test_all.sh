@@ -2,7 +2,7 @@
 
 if `python -c "import xmlrunner" 2> /dev/null`; then
     MODULE=xmlrunner
-    OUTPUT="-o ./artifacts"
+    OUTPUT="-o ./build/test-results/test"
 else
     MODULE=unittest
     OUTPUT=""
