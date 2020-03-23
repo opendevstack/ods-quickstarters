@@ -14,6 +14,7 @@ odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
+  testResults: "target/test-reports",
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
