@@ -41,8 +41,6 @@ def stageUnitTest(def context) {
     stage('Unit Test') {
       sh "npm run test"
     }
-  } finally {
-    junit 'build/test-results/test/test-results.xml'
   }
 }
 
