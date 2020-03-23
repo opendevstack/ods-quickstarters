@@ -97,7 +97,6 @@ def stageIntegrationTestTraining(def context) {
         sh(returnStdout: true, script: "oc -n ${context.targetProject} exec ${trainingPodInfo[0]} bash ./run_integration_tests.sh")
         sh(returnStdout: true, script: "oc -n ${context.targetProject} exec ${trainingPodInfo[0]} cat nosetests.xml > testresults.xml")
         sh "mkdir -p tests-results && mv testresults.xml tests-results/"
-        junit 'tests-results/testresults.xml'
     }
 }
 
