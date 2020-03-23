@@ -40,7 +40,6 @@ def stageUnitTest(def context) {
     stage('Unit Tests') {
         sh "pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHost.tokenize('//')[1]} -r src/requirements.txt --user"
         sh 'sh test_all.sh'
-        junit 'artifacts/**/*.xml'
     }
 }
 
