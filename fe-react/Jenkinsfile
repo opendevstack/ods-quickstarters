@@ -40,7 +40,7 @@ podTemplate(
           }
           stage("generate ${componentId}") {
               sh "npm init react-app ${componentId}"
-              sh "npm --prefix ${componentId} i jest-junit@9.0.0"
+              sh "npm --prefix ${componentId} i jest-junit"
           }
           stage('copy files from quickstart to generated project') {
               sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
