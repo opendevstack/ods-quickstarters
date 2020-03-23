@@ -43,9 +43,6 @@ podTemplate(
           stage("init yo") {
             sh "npm install -g yo@${yoVersion} && npm install -g generator-node-express-typescript@${generatorVersion}"
             sh "yo --generators"
-            sh "npm install typescript@3.2.1"
-            sh "npm install jest -g"
-            sh "npm install jest-junit --save-dev"
           }
           stage("init Project") {
               sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
