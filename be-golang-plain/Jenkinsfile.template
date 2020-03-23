@@ -2,32 +2,21 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of
-  the base slave used here - the code of the base slave can be found at
-  https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base
- */
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-golang:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
   stageCheckFormat(context)
@@ -74,8 +63,6 @@ def stageUnitTest(def context) {
       withEnv(["GOPKGS=${gopkgs}"]) {
         def status = sh(script: 'go test -v -cover $GOPKGS 2>&1 > test-results.txt', returnStatus: true)
         sh 'cat test-results.txt | go-junit-report > build/test-results/test/report.xml'
-        junit 'build/test-results/test/report.xml'
-        sh 'rm test-results.txt'
         if (status != 0) {
           error "go test -v -cover $GOPKGS failed!"
         }

@@ -2,7 +2,6 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 def trainingRoute
 def trainingPodInfo
@@ -12,25 +11,22 @@ def trainingComponentId = "${componentId}-training-service"
 def predictionComponentId = "${componentId}-prediction-service"
 
 node {
-    sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
     dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-    [$class       : 'GitSCMSource',
-        remote       : sharedLibraryRepository,
-        credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// See readme of shared library for usage and customization.
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
     image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
     projectId: projectId,
     componentId: componentId,
     testResults : 'tests-results',
     openshiftBuildTimeout: 25,
+    openshiftRolloutTimeout: 10,
     branchToEnvironmentMapping: [
-        'master': 'test',
-        '*'     : 'dev'
+        'master': 'dev',
+        // 'release/*': 'test'
     ]
 ) { context ->
     stageScanForSonarqube(context)
@@ -46,7 +42,7 @@ odsPipeline(
 }
 
 def stageLinter(def context) {
-    stage('Linter') {
+    stage('Lint') {
         // PEP8
         sh '''
         pycodestyle --show-source --show-pep8 --max-line-length 100 src/model/*
@@ -60,13 +56,13 @@ def stageLinter(def context) {
 }
 
 def stageBuild(def context) {
-    stage('Prepare Docker Builds') {
+    stage('Build') {
         sh 'sh build.sh'
     }
 }
 
 def stageUnitTestsTraining(def context) {
-    stage('Unittests') {
+    stage('Unit Test') {
         trainingPodInfo = sh(returnStdout: true, script:"oc get pods --sort-by=.status.startTime --no-headers -n ${context.targetProject} | grep ${context.componentId}-training-service | tail -n1").trim().split(/\s+/)
         print("Running Unit Tests in pod ${trainingPodInfo[0]}")
         sh(returnStdout: true, script: "oc exec ${trainingPodInfo[0]} bash ./run_unittests.sh -n ${context.targetProject}")

@@ -2,32 +2,21 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of
-  the python slave used here - the code of the python slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/python
- */
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
   stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
@@ -60,7 +49,7 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
     """
   }
 
-  stage('Test') {
+  stage('Unit Test') {
     def status = sh(
       script: """
         . ./testsuite/bin/activate
@@ -72,8 +61,6 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
       """,
       returnStatus: true
     )
-
-    junit "${testLocation}/tests.xml"
 
     if (status != 0) {
       error "Unit tests failed!"

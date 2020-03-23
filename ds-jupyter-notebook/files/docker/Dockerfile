@@ -22,7 +22,8 @@ USER 1001
 RUN if [ ! -z ${nexusHostWithBasicAuth} ]; \
     then pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} --upgrade pip && pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r requirements.txt; \
     else pip install --upgrade pip && pip install -r requirements.txt; \
-    fi
+    fi && \
+    pip check
 
 USER root
 

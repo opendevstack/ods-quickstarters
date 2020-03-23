@@ -60,6 +60,18 @@ podTemplate(
       sh "sed 's|@project_id@|'${projectId}'|g' ${quickstarterBasepath}/metadata.yml.tmpl > ${componentId}/metadata.yml"
     }
 
+	stage('Create Jenkinsfile') {
+	  sh "sh common/scripts/renderJenkinsTemplate.sh \
+		  --source ${quickstarterBasepath}/Jenkinsfile.template \
+		  --target ${componentId}/Jenkinsfile \
+		  --url ${gitUrlHttp} \
+		  --project-id ${projectId} \
+		  --component-id ${componentId}  \
+		  --component-type ${quickstarterBasepath} \
+		  --ods-image-tag ${odsImageTag} \
+		  --ods-git-ref ${odsGitRef}"
+	}
+	
     stage('Setup OpenShift resources') {
       dir(quickstarterBasepath) {
         sh "sh ./create-ocp-resources.sh -p ${projectId} -c ${componentId} -b ${bitbucketUrl}"

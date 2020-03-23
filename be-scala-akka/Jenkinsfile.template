@@ -2,32 +2,22 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
 def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
 def dockerRegistry
 node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
-  the scala/sbt slave used here - the code of the sbt slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/scala
- */ 
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsPipeline(
   image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
   projectId: projectId,
   componentId: componentId,
+  testResults: "target/test-reports",  
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
   stageBuild(context)
@@ -37,7 +27,7 @@ odsPipeline(
 }
 
 def stageBuild(def context) {
-  stage('Test') {
+  stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
       sh "sbt test"
     }
