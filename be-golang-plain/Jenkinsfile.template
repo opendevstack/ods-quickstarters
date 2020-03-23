@@ -63,8 +63,6 @@ def stageUnitTest(def context) {
       withEnv(["GOPKGS=${gopkgs}"]) {
         def status = sh(script: 'go test -v -cover $GOPKGS 2>&1 > test-results.txt', returnStatus: true)
         sh 'cat test-results.txt | go-junit-report > build/test-results/test/report.xml'
-        junit 'build/test-results/test/report.xml'
-        sh 'rm test-results.txt'
         if (status != 0) {
           error "go test -v -cover $GOPKGS failed!"
         }
