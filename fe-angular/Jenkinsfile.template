@@ -21,11 +21,7 @@ odsPipeline(
 ) { context ->
   stageBuild(context)
   stageUnitTest(context)
-  /*
-   * if you want to introduce scanning, uncomment
-   * 
-   * stageScanForSonarqube(context)
-   */ 
+  stageScanForSonarqube(context)
   stageStartOpenshiftBuild(context)
   stageDeployToOpenshift(context)
 }
