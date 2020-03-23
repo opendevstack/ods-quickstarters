@@ -37,10 +37,8 @@ def stageBuild(def context) {
 }
 
 def stageUnitTest(def context) {
-  try {
-    stage('Unit Test') {
-      sh "npm run test"
-    }
+  stage('Unit Test') {
+    sh "npm run test"
   }
 }
 
