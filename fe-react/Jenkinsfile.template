@@ -37,11 +37,7 @@ def stageBuild(def context) {
 }
 
 def stageUnitTest(def context) {
-  try {
-    stage('Unit Test') {
-    	sh "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' CI=true npm test -- --reporters=default --reporters=jest-junit"
-    }
-  } finally {
-    junit 'build/test-results/test/test-results.xml'
+  stage('Unit Test') {
+    sh "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' CI=true npm test -- --reporters=default --reporters=jest-junit"
   }
 }
