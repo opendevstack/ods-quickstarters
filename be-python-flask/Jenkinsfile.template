@@ -62,8 +62,6 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
       returnStatus: true
     )
 
-    junit "${testLocation}/tests.xml"
-
     if (status != 0) {
       error "Unit tests failed!"
     }
