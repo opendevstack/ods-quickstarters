@@ -43,8 +43,9 @@ def stageBuild(def context) {
           """,
           returnStatus: true
         )
-        junit "${testLocation}/nosetests.xml"
+
         stageScanForSonarqube(context)
+
         if (status != 0) {
           error "One or more unit tests failed!"
         }
