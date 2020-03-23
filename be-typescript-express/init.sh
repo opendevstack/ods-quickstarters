@@ -24,7 +24,9 @@ cd $COMPONENT
 
 echo "generate project"
 yo --no-insight node-express-typescript
-
+npm install typescript@3.2.1
+npm install jest -g
+npm install jest-junit --save-dev
 
 
 
