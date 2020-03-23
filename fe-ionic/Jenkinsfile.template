@@ -43,12 +43,8 @@ def stageBuild(def context) {
 }
 
 def stageUnitTest(def context) {
-  try {
-    stage('Unit Test') {
-      sh "yarn test -- --single-run --progress false"
-    }
-  } finally {
-    junit 'build/test-results/test/test-results.xml'
+  stage('Unit Test') {
+    sh "yarn test -- --single-run --progress false"
   }
 }
 
