@@ -22,6 +22,8 @@ def conts = containerTemplate(
   image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:${odsImageTag}",
   workingDir: '/tmp',
   alwaysPullImage: true,
+  resourceRequestMemory: '1Gi',
+  resourceLimitMemory: '2Gi',
   args: ''
 )
 
