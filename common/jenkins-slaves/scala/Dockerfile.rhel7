@@ -61,7 +61,6 @@ RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_HOST|$NEXUS_HOST|g" > $HOME/.s
     cd /tmp/scala && \
     . /tmp/set_java_proxy.sh && \
     export SBT_OPTS=$JAVA_OPTS" -Duser.home=/home/jenkins" && \
-    if [[ $HTTP_PROXY != "" ]]; then echo "HTTPS proxy set - SBT bug - remove nexus repos"; rm $HOME/.sbt/repositories; rm /usr/share/sbt/conf/sbtopts; rm /usr/share/sbt-launcher-packaging/conf/sbtopts; fi && \
     sbt -v run && echo "c" && \
     rm -rf target	
 
