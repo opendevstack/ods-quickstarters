@@ -40,7 +40,7 @@ podTemplate(
             checkout scm
           }
           stage("update ionic cli") {
-              sh "npm install -g @ionic@${ionicVersion} && ionic version"
+              sh "npm install -g ionic@${ionicVersion} && ionic version"
           }
           stage("init Project") {
               sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
