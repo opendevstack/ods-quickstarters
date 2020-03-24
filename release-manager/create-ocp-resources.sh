@@ -15,11 +15,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-echo "update jenkins master with required environment variable"
-oc -n ${PROJECT}-cd set triggers dc/jenkins --from-config --remove
-oc -n ${PROJECT}-cd set env dc/jenkins --env=DOCGEN_URL=http://docgen.${PROJECT}-cd.svc:8080
-oc -n ${PROJECT}-cd set triggers dc/jenkins --from-config # re-deploys Jenkins
-
 echo "create docgen service"
 cd ${SCRIPT_DIR}/ocp-config
 
