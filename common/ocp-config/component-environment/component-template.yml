@@ -41,7 +41,6 @@ parameters:
     displayName: Completion Deadline Seconds
     description: how long the docker build of the component can last before it is canceled
     value: "1800"
-    required: true
 objects:
   - apiVersion: v1
     kind: Service
@@ -73,7 +72,7 @@ objects:
     metadata:
       name: ${COMPONENT}
     spec:
-      completionDeadlineSeconds: ${COMPLETION_DEADLINE_SECONDS}
+      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
       failedBuildsHistoryLimit: 5
       nodeSelector: null
       output:
