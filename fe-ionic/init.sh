@@ -17,11 +17,10 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-
-mkdir -p $COMPONENT
+echo "generate project"
+ionic start $COMPONENT blank --no-deps --no-git
 
 cd $COMPONENT
-
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
@@ -29,4 +28,7 @@ sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/
 rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
+rm ./package.json
+rm ./tslint.json
 cp -rv $SCRIPT_DIR/files/. .
+sed -i "s/\$COMPONENT/${COMPONENT}/" ./package.json
