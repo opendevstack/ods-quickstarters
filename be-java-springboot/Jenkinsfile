@@ -9,7 +9,7 @@ def group = env.GROUP_ID
 
 def credentialsId = "${projectId}-cd-cd-user-with-password"
 def quickstarterBasepath = "be-java-springboot"
-def springCliVersion = "2.2.4.RELEASE"
+def springCliVersion = "2.2.6.RELEASE"
 def dockerRegistry
 def gitHost
 // vars from jenkins master
@@ -48,7 +48,7 @@ podTemplate(
                     -d dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
                     -d platformVersion=${springCliVersion} \
                     -d packaging=jar \
-                    -d jvmVersion=1.8 \
+                    -d jvmVersion=1.11 \
                     -d groupId=${projectId} \
                     -d artifactId=${componentId} \
                     -d name=${componentId} \
