@@ -20,8 +20,8 @@ buildscript {
 }
 
 plugins {
-    id 'org.asciidoctor.convert' version '1.5.3'
-    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'org.asciidoctor.convert' version '2.4.0'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'java'
     id 'maven'
     id 'jacoco'
@@ -29,7 +29,7 @@ plugins {
 }
 
 
-ext['spring-restdocs.version'] = '2.0.2.RELEASE'
+ext['spring-restdocs.version'] = '2.0.4.RELEASE'
 
 apply plugin: 'io.spring.dependency-management'
 
