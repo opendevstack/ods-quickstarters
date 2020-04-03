@@ -13,12 +13,16 @@
 - release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - Inject OpenShift project and cluster public host into env ([#156](https://github.com/opendevstack/ods-quickstarters/pull/156))
+- Unify stage names and import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 
 ### Fixed
 
 - ds-ml-service: provisioning ([#122](https://github.com/opendevstack/ods-quickstarters/pull/122))
-- ds-ml-service: deployment ([#135](https://github.com/opendevstack/ods-quickstarters/pull/135)
+- ds-ml-service: deployment ([#135](https://github.com/opendevstack/ods-quickstarters/pull/135))
 - be-java-springboot: using curl start.spring.io instead of spring init cli to avoid proxy issues ([#132](https://github.com/opendevstack/ods-quickstarters/pull/132))
+- ds-ml-service: fix rollout timeout and resource limits ratio ([#171](https://github.com/opendevstack/ods-quickstarters/pull/171))
+- airflow: fix jenkins slaves dependencies ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
+- ds-rshiny: fix bc resources and deps ([#176](https://github.com/opendevstack/ods-quickstarters/pull/176))
 
 ## [2.0] - 2019-12-13
 
