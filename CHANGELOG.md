@@ -5,7 +5,7 @@
 ### Added
 - Add env releaseStatusJiraIssueKey ([#157](https://github.com/opendevstack/ods-quickstarters/pull/157))
 - Add test-logger plugin for e2e-spock-geb ([#155](https://github.com/opendevstack/ods-quickstarters/pull/155))
-
+- Add `metadata.yml` from `master` to all quickstarters ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 
 ### Changed
 
@@ -14,7 +14,8 @@
 - release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - Inject OpenShift project and cluster public host into env ([#156](https://github.com/opendevstack/ods-quickstarters/pull/156))
-- Unify stage names and import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
+- Unify stage names ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
+- Import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 - airflow: add sonarqube stage ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 
 ### Fixed
