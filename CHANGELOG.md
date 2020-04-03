@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+### Added
+- Add env releaseStatusJiraIssueKey ([#157](https://github.com/opendevstack/ods-quickstarters/pull/157))
+- Add test-logger plugin for e2e-spock-geb ([#155](https://github.com/opendevstack/ods-quickstarters/pull/155))
+
+### Changed
+
+- be-typescript-express: update yo and generator-node-express-typescript ([#126](https://github.com/opendevstack/ods-quickstarters/pull/126))
+- be-java-springboot: update to 2.2.4.RELEASE ([#129](https://github.com/opendevstack/ods-quickstarters/pull/129))
+- release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
+- Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
+- Inject OpenShift project and cluster public host into env ([#156](https://github.com/opendevstack/ods-quickstarters/pull/156))
+
+### Fixed
+
+- ds-ml-service: provisioning ([#122](https://github.com/opendevstack/ods-quickstarters/pull/122))
+- ds-ml-service: deployment ([#135](https://github.com/opendevstack/ods-quickstarters/pull/135)
+- be-java-springboot: using curl start.spring.io instead of spring init cli to avoid proxy issues ([#132](https://github.com/opendevstack/ods-quickstarters/pull/132))
+
 ## [2.0] - 2019-12-13
 
 ### Added
