@@ -6,6 +6,7 @@
 - Add env releaseStatusJiraIssueKey ([#157](https://github.com/opendevstack/ods-quickstarters/pull/157))
 - Add test-logger plugin for e2e-spock-geb ([#155](https://github.com/opendevstack/ods-quickstarters/pull/155))
 
+
 ### Changed
 
 - be-typescript-express: update yo and generator-node-express-typescript ([#126](https://github.com/opendevstack/ods-quickstarters/pull/126))
@@ -24,6 +25,7 @@
 - ds-ml-service: fix rollout timeout and resource limits ratio ([#171](https://github.com/opendevstack/ods-quickstarters/pull/171))
 - airflow: fix jenkins slaves dependencies ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 - ds-rshiny: fix bc resources and deps ([#176](https://github.com/opendevstack/ods-quickstarters/pull/176))
+- fe-angular: add SonarQube stage ([#172](https://github.com/opendevstack/ods-quickstarters/pull/172))
 
 ## [2.0] - 2019-12-13
 
