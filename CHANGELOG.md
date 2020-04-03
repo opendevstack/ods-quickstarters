@@ -14,6 +14,7 @@
 - Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - Inject OpenShift project and cluster public host into env ([#156](https://github.com/opendevstack/ods-quickstarters/pull/156))
 - Unify stage names and import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
+- airflow: add sonarqube stage ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 
 ### Fixed
 
