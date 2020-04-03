@@ -4,26 +4,25 @@
 
 ### Added
 - Add env releaseStatusJiraIssueKey ([#157](https://github.com/opendevstack/ods-quickstarters/pull/157))
-- Add test-logger plugin for e2e-spock-geb ([#155](https://github.com/opendevstack/ods-quickstarters/pull/155))
+- Add `e2e-spock-geb` quickstarter ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 - Add `metadata.yml` from `master` to all quickstarters ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 
 ### Changed
 
+- Unify stage names ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
+- Import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
+- Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
 - be-typescript-express: update yo and generator-node-express-typescript ([#126](https://github.com/opendevstack/ods-quickstarters/pull/126))
 - be-java-springboot: update to 2.2.4.RELEASE ([#129](https://github.com/opendevstack/ods-quickstarters/pull/129))
 - release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
-- Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
-- Inject OpenShift project and cluster public host into env ([#156](https://github.com/opendevstack/ods-quickstarters/pull/156))
-- Unify stage names ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
-- Import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 - airflow: add sonarqube stage ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 
 ### Fixed
 
 - ds-ml-service: provisioning ([#122](https://github.com/opendevstack/ods-quickstarters/pull/122))
 - ds-ml-service: deployment ([#135](https://github.com/opendevstack/ods-quickstarters/pull/135))
-- be-java-springboot: using curl start.spring.io instead of spring init cli to avoid proxy issues ([#132](https://github.com/opendevstack/ods-quickstarters/pull/132))
 - ds-ml-service: fix rollout timeout and resource limits ratio ([#171](https://github.com/opendevstack/ods-quickstarters/pull/171))
+- be-java-springboot: using curl start.spring.io instead of spring init cli to avoid proxy issues ([#132](https://github.com/opendevstack/ods-quickstarters/pull/132))
 - airflow: fix jenkins slaves dependencies ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 - ds-rshiny: fix bc resources and deps ([#176](https://github.com/opendevstack/ods-quickstarters/pull/176))
 - fe-angular: add SonarQube stage ([#172](https://github.com/opendevstack/ods-quickstarters/pull/172))
