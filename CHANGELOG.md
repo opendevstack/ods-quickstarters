@@ -11,10 +11,10 @@
 
 - Unify stage names ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
 - Import shared library via `@Library` ([#163](https://github.com/opendevstack/ods-quickstarters/pull/163))
-- Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
+- Deploy `master` to `dev` environment ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158))
 - be-typescript-express: update yo and generator-node-express-typescript ([#126](https://github.com/opendevstack/ods-quickstarters/pull/126))
 - be-java-springboot: update to 2.2.4.RELEASE ([#129](https://github.com/opendevstack/ods-quickstarters/pull/129))
-- release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158)
+- release-manager: Use new pipeline entry point ([#158](https://github.com/opendevstack/ods-quickstarters/pull/158))
 - airflow: add sonarqube stage ([#174](https://github.com/opendevstack/ods-quickstarters/pull/174))
 
 ### Fixed
