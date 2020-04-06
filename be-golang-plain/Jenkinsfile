@@ -2,20 +2,14 @@ def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 library("ods-jenkins-shared-library@${odsGitRef}")
 
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
-
 odsQuickstarterPipeline(
-  quickstarterId: 'be-golang-plain',
-  image: "${dockerRegistry}/cd/jenkins-slave-golang:${odsImageTag}",
+  imageStreamTag: "cd/jenkins-slave-golang:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
 
   stage('Write go.mod') {
-    dir(context.outputDir) {
+    dir(context.targetDir) {
       sh "echo 'module example.com/${context.projectId}/${context.componentId}' > go.mod"
       sh "echo '' >> go.mod"
       sh "echo 'go 1.12' >> go.mod"
@@ -23,7 +17,7 @@ odsQuickstarterPipeline(
   }
 
   stage('Setup OpenShift resources') {
-    sh "sh common/scripts/create-component.sh -qs ${context.quickstarterId} -p ${context.projectId} -c ${context.componentId}"
+    sh "sh common/scripts/create-component.sh -qs ${context.sourceDir} -p ${context.projectId} -c ${context.componentId}"
   }
 
   odsQuickstarterStageRenderJenkinsfile(context)
