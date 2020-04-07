@@ -1,29 +1,23 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-scala:@ods_image_tag@",
+odsComponentPipeline(
+  imageStreamTag: 'cd/jenkins-slave-scala:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
-  testResults: "target/test-reports",  
+  testResults: "target/test-reports",
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
   ]
 ) { context ->
   stageBuild(context)
-  stageScanForSonarqube(context)
-  stageStartOpenshiftBuild(context)
-  stageDeployToOpenshift(context)
+  odsComponentStageScanWithSonar(context)
+  odsComponentStageBuildOpenShiftImage(context)
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageBuild(def context) {

@@ -1,17 +1,11 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-golang:@ods_image_tag@",
+odsComponentPipeline(
+  imageStreamTag: 'cd/jenkins-slave-golang:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
@@ -21,11 +15,11 @@ odsPipeline(
 ) { context ->
   stageCheckFormat(context)
   stageLint(context)
-  stageScanForSonarqube(context)
+  odsComponentStageScanWithSonar(context)
   stageUnitTest(context)
   stageBuild(context)
-  stageStartOpenshiftBuild(context)
-  stageDeployToOpenshift(context)
+  odsComponentStageBuildOpenShiftImage(context)
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageCheckFormat(def context) {

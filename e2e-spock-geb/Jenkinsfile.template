@@ -1,31 +1,19 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
-  the maven/gradle slave used here - the code of the slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/maven
- */ 
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-maven:@ods_image_tag@",
+// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
+odsComponentPipeline(
+  imageStreamTag: 'cd/jenkins-slave-maven:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/*': 'test'
   ]
 ) { context ->
-  stageScanForSonarqube(context)
+  odsComponentStageScanWithSonar(context)
   stageTest(context)
 }
 
