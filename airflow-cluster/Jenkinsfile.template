@@ -1,20 +1,13 @@
 def final projectId = '@project_id@'
 def final componentId = 'airflow-worker'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-
-def dockerRegistry
-node {
-    dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-    image: "${dockerRegistry}/cd/jenkins-slave-airflow:@ods_image_tag@",
+odsComponentPipeline(
+    imageStreamTag: 'cd/jenkins-slave-airflow:@ods_image_tag@',
     projectId: projectId,
     componentId: componentId,
-    openshiftBuildTimeout: 25,
     testResults : 'artifacts',
     branchToEnvironmentMapping: [
         'master': 'dev',
@@ -24,8 +17,8 @@ odsPipeline(
     stageDAGTest(context)
     stageUnitTest(context)
     stageBuild(context)
-    stageScanForSonarqube(context)
-    stageStartOpenshiftBuild(context)
+    odsComponentStageScanWithSonar(context)
+    odsComponentStageBuildOpenShiftImage(context, [buildTimeoutMinutes: 25])
     stageTagImage(context)
     stagePublishDAGs(context)
 }

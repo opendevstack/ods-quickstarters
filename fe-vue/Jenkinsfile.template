@@ -1,16 +1,11 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:@ods_image_tag@",
+odsComponentPipeline(
+  imageStreamTag: 'cd/jenkins-slave-nodejs10-angular:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
@@ -21,9 +16,9 @@ odsPipeline(
   stageBuild(context)
   stageUnitTest(context)
   stageLint(context)
-  stageScanForSonarqube(context)
-  stageStartOpenshiftBuild(context)
-  stageDeployToOpenshift(context)
+  odsComponentStageScanWithSonar(context)
+  odsComponentStageBuildOpenShiftImage(context)
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageBuild(def context) {

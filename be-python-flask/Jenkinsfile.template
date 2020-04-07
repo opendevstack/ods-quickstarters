@@ -1,17 +1,11 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
+odsComponentPipeline(
+  imageStreamTag: 'cd/jenkins-slave-python:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
   branchToEnvironmentMapping: [
@@ -20,10 +14,15 @@ odsPipeline(
   ]
 ) { context ->
   stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
-  stageScanForSonarqube(context)
+  odsComponentStageScanWithSonar(context)
   stageBuild(context)
-  stageStartOpenshiftBuild(context, [nexusHostWithBasicAuth: context.nexusHostWithBasicAuth, nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]])
-  stageDeployToOpenshift(context)
+  odsComponentStageBuildOpenShiftImage(context, [
+    buildArgs: [
+      nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
+      nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]
+    ]
+  ])
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithoutScheme) {

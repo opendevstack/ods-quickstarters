@@ -1,8 +1,5 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def dockerRegistry
 def trainingRoute
 def trainingPodInfo
 def trainingPassword
@@ -10,35 +7,32 @@ def trainingUsername
 def trainingComponentId = "${componentId}-training-service"
 def predictionComponentId = "${componentId}-prediction-service"
 
-node {
-    dockerRegistry = env.DOCKER_REGISTRY
-}
-
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 // See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
-odsPipeline(
-    image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
+odsComponentPipeline(
+    imageStreamTag: 'cd/jenkins-slave-python:@ods_image_tag@',
     projectId: projectId,
     componentId: componentId,
     testResults : 'tests-results',
-    openshiftBuildTimeout: 25,
-    openshiftRolloutTimeout: 10,
     branchToEnvironmentMapping: [
         'master': 'dev',
         // 'release/*': 'test'
     ]
 ) { context ->
-    stageScanForSonarqube(context)
+    def buildTimeoutMinutes = 25
+    def rolloutTimeoutMinutes = 10
+
+    odsComponentStageScanWithSonar(context)
     stageBuild(context)
     stageLinter(context)
-    stageCustomStartOpenshiftBuild(context, "Build Training Image" ,trainingComponentId)
-    stageCustomDeployToOpenshift(context, "Deploy Training Pod", trainingComponentId)
+    stageCustomStartOpenshiftBuild(context, "Build Training Image" ,trainingComponentId, buildTimeoutMinutes)
+    stageCustomDeployToOpenshift(context, "Deploy Training Pod", trainingComponentId, rolloutTimeoutMinutes)
     stageUnitTestsTraining(context)
     stageTraining(context)
     stageIntegrationTestTraining(context)
-    stageCustomStartOpenshiftBuild(context, "Build Prediction Image", predictionComponentId)
-    stageCustomDeployToOpenshift(context, "Deploy Prediction Pod", predictionComponentId)
+    stageCustomStartOpenshiftBuild(context, "Build Prediction Image", predictionComponentId, buildTimeoutMinutes)
+    stageCustomDeployToOpenshift(context, "Deploy Prediction Pod", predictionComponentId, rolloutTimeoutMinutes)
 }
 
 def stageLinter(def context) {
@@ -100,13 +94,13 @@ def stageIntegrationTestTraining(def context) {
     }
 }
 
-def stageCustomStartOpenshiftBuild(def context, def stageName, def componentId) {
+def stageCustomStartOpenshiftBuild(def context, def stageName, def componentId, def buildTimeoutMinutes) {
     stage(stageName) {
         if (!context.environment) {
             println("Skipping for empty environment ...")
             return
         }
-        timeout(context.openshiftBuildTimeout) {
+        timeout(buildTimeoutMinutes) {
             patchBuildConfig(context, componentId)
             sh (script: "oc start-build ${componentId} --from-dir docker --follow -n ${context.targetProject}", label : "start openshift build")
         }
@@ -185,7 +179,7 @@ private void patchBuildConfig(def context, def componentId) {
     sh """oc patch bc ${componentId} --type=json --patch '[${patches.join(",")}]' -n ${context.targetProject}"""
 }
 
-def stageCustomDeployToOpenshift(def context, def stageName, def componentId) {
+def stageCustomDeployToOpenshift(def context, def stageName, def componentId, def rolloutTimeoutMinutes) {
     stage(stageName) {
         if (!context.environment) {
             echo "Skipping for empty environment ..."
@@ -226,7 +220,7 @@ def stageCustomDeployToOpenshift(def context, def stageName, def componentId) {
             context,
             context.targetProject,
             componentId,
-            context.openshiftRolloutTimeout,
+            rolloutTimeoutMinutes,
             !imageTriggerEnabled
         )
 
