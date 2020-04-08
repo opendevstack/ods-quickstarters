@@ -89,6 +89,7 @@ dependencies {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 asciidoctor {
@@ -107,6 +108,11 @@ bootJar {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
 
 publishing {
     repositories {
