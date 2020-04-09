@@ -11,6 +11,7 @@ This repository contains quickstarters, which are basically templates that help 
 === Backend Quickstarter
 
 * xref::docker-plain.adoc[Backend - Docker/Plain]
+* xref::be-gateway-nginx.adoc[Backend - Gateway/nginx]
 * xref::be-golang-plain.adoc[Backend - Golang]
 * xref::be-java-springboot.adoc[Backend - SpringBoot/Java]
 * xref::be-typescript-express.adoc[Backend - NodeJS/Express]
