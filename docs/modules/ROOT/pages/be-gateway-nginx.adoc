@@ -1,0 +1,110 @@
+= Backend - nginx  (be-gateway-nginx)
+
+== Purpose of this quickstarter
+
+Use this quickstarter when you want to use https://www.nginx.org[nginx] server wrapped within https://www.openresty.org[OpenResty] dynamic web platform. With this quickstarter you can run many different lightweight server implementations like API gateways and HTTP/TCP/UCP reverse proxys.
+
+== What files / which architecture is generated?
+
+----
+├── docker - Contains Dockerfile for the build
+│   ├── lua - Directory for custom Lua modules
+│   │   └── server-error.lua - Example of server error response module with Lua
+│   ├── Dockerfile - Definition of your nginx gateway container
+│   ├── entrypoint.sh - Enables runtime configurations and runs openresty
+│   └── nginx.conf - The nginx configuration
+├── Jenkinsfile - Contains Jenkins build configuration
+├── metadata.yml - Component metadata
+└── release-manager.yml - Configuration file for the Release Manager
+----
+
+== Frameworks used
+
+- https://www.openresty.org[OpenResty]
+- ODS https://github.com/opendevstack/ods-jenkins-shared-library[Jenkins Shared Library]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+Simply start to configure your nginx.conf to fit your needs. Also, you can develop and/or use different Lua modules:
+
+=== Adding offical Lua modules
+
+One can add official Lua modules by using https://opm.openresty.org/[opm].
+
+In the following code snipped one can see how to add an official Lua module through docker build stage. Inside your Dockerfile:
+
+```docker
+RUN opm install zmartzone/lua-resty-openidc
+```
+
+Then, one can load such module dependency in new modules like:
+
+```lua
+local http = require("resty.openidc")
+```
+
+NOTE: `lua-resty-openidc` module is already provided with the default `Dockerfile`.
+
+=== Using Lua modules
+
+Lua integration in nginx requires following the https://openresty-reference.readthedocs.io/en/latest/Directives/[Directives] provided in its architecture. Notice the importance of the execution order of the directives.
+Most of the directives require being defined inside your server *locations*. See next some possibilities one can make use of
+
+
+`1` - Managing access with *access_by_lua_block*
+
+With this directive one can integrate with Identity Providers via different auth/z standars, such as simple HTTP Basic Auth, OAuth, OIDC:
+
+```lua
+access_by_lua_block {
+    require("your-auth-module").authenticate()
+}
+```
+
+`2` - Managing content with *content_by_lua_block*
+
+This directive handles content definition. See the provided *server-error.lua* module example; by loading the right *ENV* variables in *nginx.conf*, you can add in your error *location* block a custom server error handling:
+
+```lua
+location = /50x.html {
+    content_by_lua_block {
+        require("server-error").make_error()
+    }
+}
+```
+
+`3` - Handle incoming requests with *rewrite_by_lua_block*
+
+One can also make use of the rewrite directive, for example, for filtering/rewriting incoming requests coming from your clients:
+
+```lua
+rewrite_by_lua_block {
+    require("filter-requests-headers").run_filter()
+}
+```
+
+`4` - Handle body responses with *body_filter_by_lua_block*
+
+Filter the body responses comming from your Backend services. For example, one could filter any error response, so to assure filtering stack traces from a JSON object response when running on production:
+
+```lua
+body_filter_by_lua_block {
+    require("filter-error-response").filter_stack_traces()
+}
+```
+
+
+== How this quickstarter is built through Jenkins
+
+There are two steps:
+
+* Build the container image.
+* Deploy.
+
+== Builder Slave used
+
+This quickstarter uses https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base[jenkins-slave-base]
+
+== Known limitations
+
+N/A
