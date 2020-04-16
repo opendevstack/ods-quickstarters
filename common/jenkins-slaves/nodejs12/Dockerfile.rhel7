@@ -1,0 +1,48 @@
+FROM cd/jenkins-slave-base
+
+# Labels consumed by Red Hat build service
+LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \
+      name="openshift3/jenkins-slave-nodejs-rhel7" \
+      version="3.6" \
+      architecture="x86_64" \
+      io.k8s.display-name="Jenkins Slave Nodejs" \
+      io.k8s.description="The jenkins slave nodejs image has the nodejs tools on top of the jenkins slave base image." \
+      io.openshift.tags="openshift,jenkins,slave,nodejs"
+
+ENV NODEJS_VERSION=12 \
+    NPM_CONFIG_PREFIX=$HOME/.npm-global \
+    PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
+    BASH_ENV=/usr/local/bin/scl_enable \
+    ENV=/usr/local/bin/scl_enable \
+    PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
+
+# Install NodeJS
+# https://github.com/nodesource/distributions#installation-instructions-1
+RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
+    yum install -y nodejs && \
+    yum install -y gcc-c++ make
+
+# Install Yarn
+# https://classic.yarnpkg.com/en/docs/install/#centos-stable
+RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
+    yum install -y yarn && \
+    yum clean all -y
+
+COPY npmrc $HOME/.npm-global/etc/npmrc
+
+RUN sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.npm-global/etc/npmrc && \
+    sed -i "s|NEXUS_AUTH|$(echo -n $NEXUS_AUTH | base64)|g" $HOME/.npm-global/etc/npmrc && \
+    npm config set ca=null && \
+    npm config set strict-ssl=false && \
+    node --version && \
+    npm --version && \
+    npx --version && \
+    yarn --version
+
+RUN chgrp -R 0 $HOME && \
+    chmod -R g=u $HOME
+USER 1001
