@@ -1,77 +1,18 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+library("ods-jenkins-shared-library@${odsGitRef}")
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-python-flask"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
-}
+odsQuickstarterPipeline(
+  imageStreamTag: "cd/jenkins-slave-python:${odsImageTag}",
+) { context ->
+  odsQuickstarterStageCopyFiles(context)
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-python:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component-environment']
+  )
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+  odsQuickstarterStageRenderJenkinsfile(context)
 
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage("initialize target folder ${componentId}") {
-              sh "mkdir -p ${componentId}"
-          }
-          stage('copy files from quickstart to generated project') {
-              sh "cp -rv ${quickstarterBasepath}/README.md ${quickstarterBasepath}/files"
-              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Create sonar-project.properties') {
-            sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/sonar-project.properties.template \
-                  --target ${componentId}/sonar-project.properties \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
-          }
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
-      }
+  odsQuickstarterStageRenderSonarProperties(context)
 }
