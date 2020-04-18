@@ -3,21 +3,10 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 library("ods-jenkins-shared-library@${odsGitRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "cd/jenkins-slave-python:${odsImageTag}",
+  imageStreamTag: "cd/jenkins-slave-base:${odsImageTag}",
 ) { context ->
-
   odsQuickstarterStageCopyFiles(context)
-
-  odsQuickstarterStageCreateOpenShiftResources(
-    context,
-    [directory: 'common/ocp-config/component-environment']
-  )
-
-  stage('Setup Custom OpenShift resources') {
-    sh "sh  ${quickstarterBasepath}/custom-create-components.sh -p ${projectId} -c ${componentId} -b ${gitUrlHttp} --force"
-  }
-
+  odsQuickstarterStageCreateOpenShiftResources(context)
   odsQuickstarterStageRenderJenkinsfile(context)
-
   odsQuickstarterStageRenderSonarProperties(context)
 }
