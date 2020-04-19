@@ -1,7 +1,7 @@
 def final projectId = '@project_id@'
 def final componentId = '@component_id@'
-def trainingConfig = [ "componentId" : "${componentId}-training-service"]
-def predictionConfig = [ "componentId" : "${componentId}-prediction-service"]
+def trainingServiceName = "${componentId}-training-service"
+def predictionServiceName = "${componentId}-prediction-service"
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
@@ -22,15 +22,23 @@ odsComponentPipeline(
   stageLint(context)
   stagePrepareBuilds(context)
 
-  odsComponentStageBuildOpenShiftImage(context, trainingConfig)
-  def trainingDeployInfo = odsComponentStageRolloutOpenShiftDeployment(context, trainingConfig)
+  def buildArgs = [
+    "nexusHostWithBasicAuth" : context.nexusHostWithBasicAuth,
+    "nexusHostWithoutScheme" : context.nexusHost.tokenize('//')[1],
+    "serviceType" : ""
+  ]
+
+  buildArgs["serviceType"] = "training"
+  odsComponentStageBuildOpenShiftImage(context, [ "componentId" : trainingServiceName, "buildArgs" : buildArgs ])
+  def trainingDeployInfo = odsComponentStageRolloutOpenShiftDeployment(context, [ "componentId" : trainingServiceName ])
 
   stageTrainingUnitTests(context, trainingDeployInfo.podName)
   stageTraining(context, trainingDeployInfo.podName)
   stageTrainingIntegrationTests(context, trainingDeployInfo.podName)
 
-  odsComponentStageBuildOpenShiftImage (context, predictionConfig)
-  odsComponentStageRolloutOpenShiftDeployment (context, predictionConfig)
+  buildArgs["serviceType"] = "prediction"
+  odsComponentStageBuildOpenShiftImage (context, [ "componentId" : predictionServiceName, "buildArgs" : buildArgs ])
+  odsComponentStageRolloutOpenShiftDeployment (context, [ "componentId" : predictionServiceName ])
 }
 
 def stageLint(def context) {
