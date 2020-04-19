@@ -8,6 +8,7 @@ odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-base:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
+  openshiftBuildTimeout: 30,  
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
