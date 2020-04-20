@@ -18,14 +18,8 @@ odsComponentPipeline(
 
 def stageTest(def context) {
 
-  def openShiftPublicHost
-  node {
-    def stableUrl = env.SONAR_SERVER_URL
-    openShiftPublicHost = stableUrl.substring(stableUrl.indexOf(".") + 1)
-  }
-  
   stage('Integration Test') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_PUBLIC_HOST=${openShiftPublicHost}"]) {
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
       sh "npm install"
       sh "npm run lint"
       sh "npm run build"

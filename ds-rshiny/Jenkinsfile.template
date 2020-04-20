@@ -8,11 +8,14 @@ odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-base:@ods_image_tag@',
   projectId: projectId,
   componentId: componentId,
+  openshiftBuildTimeout: 30,  
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
   ]
 ) { context ->
   odsComponentStageBuildOpenShiftImage(context)
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  // rollout auth proxy - this registers the dc for later promotion
+  odsComponentStageRolloutOpenShiftDeployment (context, ["componentId" : "${context.componentId}-auth-proxy"])
+  odsComponentStageRolloutOpenShiftDeployment (context)
 }
