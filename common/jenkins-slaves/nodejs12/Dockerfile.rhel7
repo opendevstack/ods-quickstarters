@@ -38,10 +38,10 @@ RUN sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.npm-global/etc/npmrc && \
     sed -i "s|NEXUS_AUTH|$(echo -n $NEXUS_AUTH | base64)|g" $HOME/.npm-global/etc/npmrc && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
-    node --version && \
-    npm --version && \
-    npx --version && \
-    yarn --version
+    echo node version: $(node --version) && \
+    echo npm version: $(npm --version) && \
+    echo npx version: $(npx --version) && \
+    echo yarn version: $(yarn --version)
 
 RUN chgrp -R 0 $HOME && \
     chmod -R g=u $HOME
