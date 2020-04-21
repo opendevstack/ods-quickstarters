@@ -25,7 +25,15 @@ Use this quickstarter when you want to use https://www.nginx.org[nginx] server w
 
 == Usage - how do you start after you provisioned this quickstarter
 
-Simply start to configure your nginx.conf to fit your needs. Also, you can develop and/or use different Lua modules:
+Simply start to configure your nginx.conf to fit your needs. Also, you can develop and/or use different Lua modules.
+
+
+=== Routing to your services
+
+In order to route/proxy to services in the same namespace you do not need to define environment variables for their ports and/or hosts.
+
+OpenShift already loads them into the container's environment by following a convention like `<DEPLOYMENT_CONFIG>_SERVICE_HOST` and `<DEPLOYMENT_CONFIG>_SERVICE_PORT`. Please, follow the example provided and comments in the `nginx.conf` file.
+
 
 === Adding offical Lua modules
 
