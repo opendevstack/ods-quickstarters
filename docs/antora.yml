@@ -1,6 +1,2 @@
-name: ods-quickstarters
-title: ODS Quickstarters
-version: 2.0
-nav: 
-- modules/ROOT/nav.adoc
-
+name: opendevstack
+version: 2.x

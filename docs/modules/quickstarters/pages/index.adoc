@@ -39,7 +39,7 @@ All quickstarters are used by the https://github.com/opendevstack/ods-provisioni
 This repository in BitBucket will contain:
 
 * Some boilerplate code
-* A `Jenkinsfile` describing how to build the component, delegating most of the work to the xref:ods-jenkins-shared-library:ROOT:index.adoc[shared library]
+* A `Jenkinsfile` describing how to build the component, delegating most of the work to the xref:jenkins-shared-library:index.adoc[shared library]
 * A `sonar-project.properties` file configuring how the source code is analyzed by SonarQube
 
 Next to those, each quickstarter can also provide its own https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves[Jenkins slave images].
@@ -69,8 +69,8 @@ Note that those scripts might need parameters to work, and often need to be adju
 == Contributing new quickstarters
 If you contribute a new quickstarter / boilerplate - please use the provided `README.adoc` templates
 
-. for a `jenkins-slave` - the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
-. for a `boilerplace`- the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
+. for a `jenkins-slave` - the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
+. for a `boilerplace`- the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
 
 == Upgrade an existing Git repository to OpenDevStack
 
