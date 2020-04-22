@@ -3,12 +3,13 @@ package docker_plain
 import (
 	"encoding/json"
 	"fmt"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	"github.com/opendevstack/ods-quickstarters/tests/utils"
 	"net/http"
 	"strings"
 	"testing"
 	"time"
+
+	coreUtils "github.com/opendevstack/ods-core/tests/utils"
+	"github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -56,7 +57,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	resourcesInTest := utils.Resources{
-		Namespace:         coreUtils.PROJECT_NAME_TEST,
+		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []utils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
 		DeploymentConfigs: []string{componentId},
