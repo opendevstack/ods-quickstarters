@@ -65,8 +65,7 @@ objects:
             name: jenkins-slave-base:${ODS_IMAGE_TAG}
         type: Docker
       successfulBuildsHistoryLimit: 5
-      triggers:
-        - type: "ConfigChange"
+      triggers: []
 message: >-
   The image is built in your active namespace and is named `jenkins-slave-nodejs12`.
 
