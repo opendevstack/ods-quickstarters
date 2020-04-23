@@ -5,11 +5,10 @@ def predictionServiceName = "${componentId}-prediction-service"
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-python:@ods_image_tag@',
-  projectId: projectId,
-  componentId: componentId,
+  projectId: '@project_id@',
+  componentId: '@component_id@',
   testResults : 'tests-results',
   openshiftBuildTimeout: 25,
   openshiftRolloutTimeout: 10,
