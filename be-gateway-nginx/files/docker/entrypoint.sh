@@ -8,8 +8,8 @@ if ! whoami &> /dev/null; then
 fi
 
 # setting up the resolver for nginx
-cat > /usr/local/openresty/nginx/resolver.conf << EOF
+cat > /usr/local/openresty/nginx/conf/resolver.conf << EOF
 $(grep nameserver /etc/resolv.conf | head -n 1 | sed -e 's/nameserver/resolver/' -e 's/$/;/')
 EOF
 
-exec /usr/local/openresty/bin/openresty
+exec "$@"

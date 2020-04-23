@@ -22,4 +22,6 @@ EXPOSE 8080
 
 USER 1001
 
-CMD ["./entrypoint.sh"]
+ENTRYPOINT [ "./entrypoint.sh" ]
+
+CMD ["nginx"]
