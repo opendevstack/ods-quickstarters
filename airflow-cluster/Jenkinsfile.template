@@ -46,12 +46,9 @@ def stageTagImage(def context) {
             println("Skipping for empty environment ...")
             return
         }
-        openshiftTag(
-            srcStream: context.componentId,
-            srcTag: context.tagversion,
-            destStream: context.componentId,
-            destTag: "latest",
-            namespace: context.targetProject
+        sh(
+            script: "oc -n ${context.getTargetProject()} tag ${context.getComponentId()}:${context.getTagversion()} ${context.getComponentId()}:latest",
+            label: "Update latest tag of is/${context.getComponentId()} to ${context.getTagversion()}"
         )
     }
 }
