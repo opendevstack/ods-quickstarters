@@ -8,11 +8,12 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  stage('Write go.mod') {
+  stage('Initialize new Go module') {
     dir(context.targetDir) {
-      sh "echo 'module example.com/${context.projectId}/${context.componentId}' > go.mod"
-      sh "echo '' >> go.mod"
-      sh "echo 'go 1.12' >> go.mod"
+      sh(
+        script: "go mod init example.com/${context.projectId}/${context.projectId}-${context.componentId}",
+        label: 'Initialize new Go module'
+      )
     }
   }
 
