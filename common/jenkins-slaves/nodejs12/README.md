@@ -24,31 +24,3 @@ odsPipeline(
 ## Known limitations
 
 n/a
-
-## Provisioning
-
-### CLI
-
-```bash
-oc process -f ocp-config/template.yaml | oc create -f -
-```
-
-### Manual
-
-Import `ocp-config/template.yaml` into your OpenShift Project and process the template.
-
-## Abandon
-
-### CLI
-
-```bash
-oc delete all --selector app=jenkins-slave-nodejs12
-
-# Optional: delete template from workspace catalog
-oc delete template jenkins-slave-nodejs12
-```
-
-### Manual
-
-- Delete imagestream `jenkins-slave-nodejs12`
-- Delete buildconfig `jenkins-slave-nodejs12`

@@ -66,7 +66,3 @@ objects:
         type: Docker
       successfulBuildsHistoryLimit: 5
       triggers: []
-message: >-
-  The image is built in your active namespace and is named `jenkins-slave-nodejs12`.
-
-  It can be referenced in a `Jenkinsfile` with `<NAMESPACE>/jenkins-slave-nodejs12`.
