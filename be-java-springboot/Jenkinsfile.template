@@ -4,8 +4,6 @@
 
 odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-maven:@ods_image_tag@',
-  projectId: '@project_id@',
-  componentId: '@component_id@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
