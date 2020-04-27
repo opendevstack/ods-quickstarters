@@ -12,18 +12,17 @@ odsComponentPipeline(
     // 'release/*': 'test'
   ]
 ) { context ->
-  odsComponentStageScanWithSonar(context)
-  stageLint(context)
-  stagePrepareBuilds(context)
-
+  def trainingServiceName = "${context.componentId}-training-service"
+  def predictionServiceName = "${context.componentId}-prediction-service"
   def buildArgs = [
     "nexusHostWithBasicAuth" : context.nexusHostWithBasicAuth,
     "nexusHostWithoutScheme" : context.nexusHost.tokenize('//')[1],
     "serviceType" : ""
   ]
 
-  def trainingServiceName = "${context.componentId}-training-service"
-  def predictionServiceName = "${context.componentId}-prediction-service"
+  odsComponentStageScanWithSonar(context)
+  stageLint(context)
+  stagePrepareBuilds(context)
 
   buildArgs["serviceType"] = "training"
   odsComponentStageBuildOpenShiftImage(context, [ "componentId" : trainingServiceName, "buildArgs" : buildArgs ])
