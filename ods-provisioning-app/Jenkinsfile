@@ -6,7 +6,7 @@ odsQuickstarterPipeline(
   imageStreamTag: "cd/jenkins-slave-base:${odsImageTag}",
 ) { context ->
 
-  odsQuickstarterForODSStage (
+  odsQuickstarterForkODSStage (
   	context, 
   	[ "odsComponent" : "ods-provisioning-app" ]
   )
