@@ -21,6 +21,8 @@ odsPipeline(
 4. Nexus configuration
 5. HTTP Proxy awareness
 
-## Known limitations
+## Known Limitations
 
-n/a
+**Coming from `jenkins-slave-nodejs10-angular`:**
+
+There are no more any `angular`, `cypress` and/or `chrome` dependencies included - this is a plain `Node.js v12.x` jenkins slave! If you still need these requirements, you can create a customized jenkins slave and use `jenkins-slave-nodejs12` as base image.
