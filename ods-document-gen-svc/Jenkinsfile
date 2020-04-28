@@ -11,10 +11,5 @@ odsQuickstarterPipeline(
   	[ "odsComponent" : "ods-document-generation-svc" ]
   )
 
-/*
-  // add once prov app OCP resources are in the new shape 
-  // (https://github.com/opendevstack/ods-provisioning-app/issues/423)
-  
   odsQuickstarterStageCreateOpenShiftResources(context)
-*/
 }
