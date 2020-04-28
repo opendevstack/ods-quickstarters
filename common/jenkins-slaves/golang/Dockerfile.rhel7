@@ -4,7 +4,7 @@ LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
 
 ENV GO_VERSION 1.14.2
 
-RUN yum install -y gcc gcc-c++ make
+RUN yum install -y gcc gcc-c++
 
 RUN cd /tmp && \
     curl -LO https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz && \
