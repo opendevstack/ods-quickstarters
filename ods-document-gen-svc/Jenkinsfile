@@ -8,7 +8,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageForkODS (
   	context, 
-  	[ "odsComponent" : "ods-provisioning-app" ]
+  	[ "odsComponent" : "ods-document-generation-svc" ]
   )
 
 /*
