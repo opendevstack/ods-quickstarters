@@ -28,13 +28,6 @@ npm install typescript@3.2.1 --save-dev
 npm install jest -g
 npm install jest-junit --save-dev
 
-
-
-echo "fix nexus repo path"
-repo_path=$(echo "$GROUP" | tr . /)
-sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/Dockerfile
-rm $SCRIPT_DIR/files/docker/Dockerfile.bak
-
 echo "copy custom files & fixes from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
 cp -r $SCRIPT_DIR/fix/. src/

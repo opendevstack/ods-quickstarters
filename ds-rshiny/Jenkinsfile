@@ -1,85 +1,27 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "ds-rshiny"
-def nexusHost
-def nexusUsername
-def nexusPassword
-def dockerRegistry
-def gitHost
+library("ods-jenkins-shared-library@${odsGitRef}")
 
-// vars from jenkins master
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  nexusHost = env.NEXUS_HOST
-  nexusUsername = env.NEXUS_USERNAME
-  nexusPassword = env.NEXUS_PASSWORD
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
-}
+odsQuickstarterPipeline(
+  imageStreamTag: "cd/jenkins-slave-base:${odsImageTag}",
+) { context ->
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-base:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+  odsQuickstarterStageCopyFiles(context)
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+  stage('Setup OpenShift resources') {
+    sh "sh common/scripts/create-ds-component.sh -p ${projectId} -c ${componentId} -nh ${nexusHost} -nu ${nexusUsername} -np ${nexusPassword} --force"
+    for (def env : ['dev', 'test']) {
+      sh """oc patch bc ${componentId} --type=json --patch '
+        [{"op":
+          "replace", "path": "/spec/resources",
+          "value": {
+            "limits":{"cpu":"1","memory":"2Gi"},
+            "requests":{"cpu":"500m","memory":"1Gi"}
+          }
+        }]' -n ${projectId}-${env}"""
+    }
+  }
 
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage("initialize target folder ${componentId}") {
-              sh "mkdir -p ${componentId}"
-          }
-          stage('copy files from quickstart to generated project') {
-              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-ds-component.sh -p ${projectId} -c ${componentId} -nh ${nexusHost} -nu ${nexusUsername} -np ${nexusPassword} --force"
-            for (def env : ['dev', 'test']) {
-              sh """oc patch bc ${componentId} --type=json --patch '
-                        [{"op":
-                          "replace", "path": "/spec/resources",
-                          "value": {
-                            "limits":{"cpu":"1","memory":"2Gi"},
-                            "requests":{"cpu":"500m","memory":"1Gi"}
-                          }
-                        }]' -n ${projectId}-${env}"""
-            }
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
-      }
+  odsQuickstarterStageRenderJenkinsfile(context)
 }

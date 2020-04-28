@@ -25,12 +25,6 @@ echo "generate project from local template"
  
 cd $COMPONENT 
 
-
-echo "fix nexus repo path"
-repo_path=$(echo "$GROUP" | tr . /)
-sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/Dockerfile
-rm $SCRIPT_DIR/files/docker/Dockerfile.bak
-
 echo "copy custom files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
 

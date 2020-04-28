@@ -1,18 +1,18 @@
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
 library("ods-jenkins-shared-library@${odsGitRef}")
 
 odsQuickstarterPipeline(
   imageStreamTag: "cd/jenkins-slave-base:${odsImageTag}",
 ) { context ->
-
   odsQuickstarterStageForkODS (
   	context, 
   	[ "odsComponent" : "ods-provisioning-app" ]
   )
 
 /*
-  // add once prov app OCP resources are in the new shape 
+  // @ FIXME  add once prov app OCP resources are in the new shape 
   // (https://github.com/opendevstack/ods-provisioning-app/issues/423)
   
   odsQuickstarterStageCreateOpenShiftResources(context)
