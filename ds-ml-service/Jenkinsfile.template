@@ -1,14 +1,9 @@
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
-def trainingServiceName = "${componentId}-training-service"
-def predictionServiceName = "${componentId}-prediction-service"
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-python:@ods_image_tag@',
-  projectId: '@project_id@',
-  componentId: '@component_id@',
   testResults : 'tests-results',
   openshiftBuildTimeout: 25,
   openshiftRolloutTimeout: 10,
@@ -17,15 +12,17 @@ odsComponentPipeline(
     // 'release/*': 'test'
   ]
 ) { context ->
-  odsComponentStageScanWithSonar(context)
-  stageLint(context)
-  stagePrepareBuilds(context)
-
+  def trainingServiceName = "${context.componentId}-training-service"
+  def predictionServiceName = "${context.componentId}-prediction-service"
   def buildArgs = [
     "nexusHostWithBasicAuth" : context.nexusHostWithBasicAuth,
     "nexusHostWithoutScheme" : context.nexusHost.tokenize('//')[1],
     "serviceType" : ""
   ]
+
+  odsComponentStageScanWithSonar(context)
+  stageLint(context)
+  stagePrepareBuilds(context)
 
   buildArgs["serviceType"] = "training"
   odsComponentStageBuildOpenShiftImage(context, [ "componentId" : trainingServiceName, "buildArgs" : buildArgs ])

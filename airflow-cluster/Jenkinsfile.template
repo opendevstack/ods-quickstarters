@@ -4,7 +4,6 @@
 
 odsComponentPipeline(
     imageStreamTag: 'cd/jenkins-slave-airflow:@ods_image_tag@',
-    projectId: '@project_id@',
     componentId: 'airflow-worker',
     testResults : 'artifacts',
     branchToEnvironmentMapping: [

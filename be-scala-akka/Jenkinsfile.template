@@ -4,8 +4,6 @@
 
 odsComponentPipeline(
   imageStreamTag: 'cd/jenkins-slave-scala:@ods_image_tag@',
-  projectId: '@project_id@',
-  componentId: '@component_id@',
   testResults: "target/test-reports",
   branchToEnvironmentMapping: [
     'master': 'dev',
