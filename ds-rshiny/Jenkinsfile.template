@@ -10,8 +10,11 @@ odsComponentPipeline(
     // 'release/*': 'test'
   ]
 ) { context ->
+
   odsComponentStageBuildOpenShiftImage(context)
+  
   // rollout auth proxy - this registers the dc for later promotion
   odsComponentStageRolloutOpenShiftDeployment (context, ["componentId" : "${context.componentId}-auth-proxy"])
+  
   odsComponentStageRolloutOpenShiftDeployment (context)
 }

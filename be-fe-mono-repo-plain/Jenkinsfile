@@ -1,5 +1,6 @@
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
 library("ods-jenkins-shared-library@${odsGitRef}")
 
 odsQuickstarterPipeline(

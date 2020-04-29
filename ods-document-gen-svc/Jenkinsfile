@@ -7,11 +7,13 @@ odsQuickstarterPipeline(
   imageStreamTag: "cd/jenkins-slave-maven:${odsImageTag}",
 ) { context ->
 
-  odsQuickstarterStageCopyFiles(context)
+  odsQuickstarterStageForkODS (
+  	context, 
+  	[ "odsComponent" : "ods-document-generation-svc" ]
+  )
 
+  /*
+   * see ocp resources in the openshift directory of the document generation service
+   */
   odsQuickstarterStageCreateOpenShiftResources(context)
-
-  odsQuickstarterStageRenderJenkinsfile(context)
-
-  odsQuickstarterStageRenderSonarProperties(context)
 }

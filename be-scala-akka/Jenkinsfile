@@ -1,75 +1,22 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+library("ods-jenkins-shared-library@${odsGitRef}")
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-scala-akka"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
-}
+odsQuickstarterPipeline(
+  imageStreamTag: "cd/jenkins-slave-scala:${odsImageTag}",
+) { context ->
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-scala:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  resourceRequestMemory: '1Gi',
-  resourceLimitMemory: '2Gi',
-  args: ''
-)
+  stage("init scala akka project") {
+    sh "cd ${context.sourceDir}; sh ./init.sh --project ${context.projectId} --component ${context.componentId} --group ${context.group}"
+  }
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
-
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage("init project") {
-            sh "cd ${quickstarterBasepath}; sh ./init.sh --project ${projectId} --component ${componentId} --group ${group}"
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Create sonar-project.properties') {
-            sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/sonar-project.properties.template \
-                  --target ${componentId}/sonar-project.properties \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
-          }
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
-      }
+  odsQuickstarterStageCopyFiles(context)
+  
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component-environment']
+  )
+  odsQuickstarterStageRenderJenkinsfile(context)
+  
+  odsQuickstarterStageRenderSonarProperties(context)
 }
