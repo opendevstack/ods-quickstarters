@@ -10,16 +10,16 @@ odsQuickstarterPipeline(
   odsQuickstarterStageCopyFiles(context)
 
   stage('Setup OpenShift resources') {
-    sh "sh common/scripts/create-ds-component.sh -p ${projectId} -c ${componentId} -nh ${nexusHost} -nu ${nexusUsername} -np ${nexusPassword} --force"
+    sh "sh common/scripts/create-ds-component.sh -p ${context.projectId} -c ${context.componentId} -nh ${context.nexusHost} -nu ${context.nexusUsername} -np ${context.nexusPassword} --force"
     for (def env : ['dev', 'test']) {
-      sh """oc patch bc ${componentId} --type=json --patch '
+      sh """oc patch bc ${context.componentId} --type=json --patch '
         [{"op":
           "replace", "path": "/spec/resources",
           "value": {
             "limits":{"cpu":"1","memory":"2Gi"},
             "requests":{"cpu":"500m","memory":"1Gi"}
           }
-        }]' -n ${projectId}-${env}"""
+        }]' -n ${context.projectId}-${env}"""
     }
   }
 
