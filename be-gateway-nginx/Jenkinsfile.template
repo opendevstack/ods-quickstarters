@@ -2,14 +2,15 @@
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsComponentPipeline(
-  imageStreamTag: 'cd/jenkins-slave-golang:@ods_image_tag@',
+  imageStreamTag: 'cd/jenkins-slave-base:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
   ]
 ) { context ->
+
   odsComponentStageBuildOpenShiftImage(context)
+
   odsComponentStageRolloutOpenShiftDeployment(context)
 }

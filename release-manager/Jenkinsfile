@@ -9,7 +9,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  stage('configure metadata.yml') {
+  stage('Configure metadata.yml for project') {
     sh "sed 's|@project_id@|'${context.projectId}'|g' ${context.sourceDir}/metadata.yml.tmpl > ${context.componentId}/metadata.yml"
   }
 

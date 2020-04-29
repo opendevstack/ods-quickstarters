@@ -10,14 +10,14 @@ node {
 }
 
 odsQuickstarterPipeline(
-  imageStreamTag: "cd/jenkins-slave-base:${odsImageTag}",
+  imageStreamTag: "cd/jenkins-slave-airflow:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
 
   stage('Setup OpenShift resources') {
     sh "cd ${context.sourceDir} ; sh ./custom-create-components.sh \
-      -p ${context.projectId} -c ${context.componentId} -b ${context.gitUrlHttp.split('/'+projectId)[0]} \
+      -p ${context.projectId} -c ${context.componentId} -b ${context.gitUrlHttp.split('/' + context.projectId)[0]} \
       -r ${dockerRegistry} -gr ${odsGitRef} \
       -oa 'your-openshift-apihost' -oc 'https://your-openshift-console' "
   }
