@@ -18,6 +18,9 @@ odsQuickstarterPipeline(
   stage("init Project") {
       sh "sh ${context.sourceDir}/init.sh --project ${context.projectId} --component ${context.componentId} --group ${context.group}"
   }
+
+  odsQuickstarterStageCopyFiles(context)
+
   odsQuickstarterStageCreateOpenShiftResources(
     context,
     [directory: 'common/ocp-config/component-environment']

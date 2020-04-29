@@ -17,13 +17,10 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-
 echo "generate project"
 ng new $COMPONENT --style=scss --skip-git --skip-install
 
 cd $COMPONENT
-
-
 
 echo "Configure headless chrome in karma.conf.j2"
 read -r -d "" CHROME_CONFIG << EOM || true

@@ -9,6 +9,9 @@ odsQuickstarterPipeline(
   stage("init scala akka project") {
     sh "cd ${context.sourceDir}; sh ./init.sh --project ${context.projectId} --component ${context.componentId} --group ${context.group}"
   }
+
+  odsQuickstarterStageCopyFiles(context)
+  
   odsQuickstarterStageCreateOpenShiftResources(
     context,
     [directory: 'common/ocp-config/component-environment']

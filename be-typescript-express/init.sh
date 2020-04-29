@@ -17,9 +17,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
-
-
-mkdir $COMPONENT
 cd $COMPONENT
 
 echo "generate project"
@@ -28,8 +25,7 @@ npm install typescript@3.2.1 --save-dev
 npm install jest -g
 npm install jest-junit --save-dev
 
-echo "copy custom files & fixes from quickstart to generated project"
-cp -rv $SCRIPT_DIR/files/. .
+echo "copy fixes from quickstart to generated project"
 cp -r $SCRIPT_DIR/fix/. src/
 
 echo "adding directories 'lib' and 'docker' to nyc exlude list to fix coverage test issue"

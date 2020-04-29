@@ -12,5 +12,8 @@ odsQuickstarterPipeline(
   	[ "odsComponent" : "ods-document-generation-svc" ]
   )
 
+  /*
+   * see ocp resources in the openshift directory of the document generation service
+   */
   odsQuickstarterStageCreateOpenShiftResources(context)
 }
