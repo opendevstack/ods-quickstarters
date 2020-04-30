@@ -15,5 +15,8 @@ odsQuickstarterPipeline(
   /*
    * see ocp resources in the openshift directory of the document generation service
    */
-  odsQuickstarterStageCreateOpenShiftResources(context)
+  odsQuickstarterStageCreateOpenShiftResources(
+    context, 
+    [ "directory" : "${context.componentId}/openshift" ]
+  )
 }
