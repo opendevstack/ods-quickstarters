@@ -17,6 +17,9 @@ odsQuickstarterPipeline(
    */
   odsQuickstarterStageCreateOpenShiftResources(
     context, 
-    [ "directory" : "${context.componentId}/openshift" ]
+    [ 
+      "directory" : "${context.componentId}/openshift",
+      "selector" : "app=ods-doc-gen-svc" 
+    ]
   )
 }
