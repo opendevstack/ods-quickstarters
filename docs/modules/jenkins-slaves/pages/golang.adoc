@@ -1,14 +1,14 @@
-# Go Jenkins Slave
+= Go Jenkins Slave
 
-## Introduction
-This slave is used to build / execute / test [Go](https://golang.org) code.
+== Introduction
+This slave is used to build https://golang.org[Go] code.
 
 The image is built in the global `cd` project and is named `jenkins-slave-golang`.
 It can be referenced in a `Jenkinsfile` with e.g. `cd/jenkins-slave-golang:latest`.
 
-## Features / what's in, which plugins, ...
-1. Go 1.12.6
-2. golangci-lint 1.17.1
+== Features
+1. Go 1.14.2
+2. golangci-lint 1.25.0
 
-## Known limitations
+== Known limitations
 Not (yet) Nexus package manager aware and no special HTTP Proxy configuration.

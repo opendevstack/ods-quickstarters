@@ -7,14 +7,26 @@ toc::[]
 
 == Overview
 
-This repository contains quickstarters, which are basically templates that help to start out with a component quickly. The available quickstarters are:
+Quickstarters are basically templates that help to start out with a component quickly.
+A quickstarter provides a specific technology, potentially with a framework setup already, such as Java with Springboot in the case of the `be-java-springboot` quickstarter. Compared to starting out from scratch, using a quickstarter typically helps by:
+
+- setting up a repository in Bitbucket with webhooks to trigger Jenkins builds
+- shipping a `Jenkinsfile` with a pipeline that build and deploys the component (delegating most of the work to the xref:jenkins-shared-library:component-pipeline.adoc[shared library])
+- integrating with SonarQube out-of-the-box
+- setting up OpenShift resources to build and run the component
+- creating a boilerplate application with one or more sample endpoints
+
+Quickstarters are used from the https://github.com/opendevstack/ods-provisioning-app[Provisioning App], which allows to add a component to an existing project by running a quickstarter from the configured list of available quickstarters. This list can contain quickstarters from the official repository, https://github.com/opendevstack/ods-quickstarters[ods-quickstarters], or from some other repository such as internally hosted ones in your Bitbucket instance.
+
+
+== Available, official quickstarters
 
 === Backend Quickstarter
 
-* xref::be-gateway-nginx.adoc[Backend - Gateway/nginx]
-* xref::be-golang-plain.adoc[Backend - Golang]
-* xref::be-java-springboot.adoc[Backend - SpringBoot/Java]
-* xref::be-typescript-express.adoc[Backend - NodeJS/Express]
+* xref::be-gateway-nginx.adoc[Backend - Gateway/Nginx]
+* xref::be-golang-plain.adoc[Backend - Go]
+* xref::be-java-springboot.adoc[Backend - Java/SpringBoot]
+* xref::be-typescript-express.adoc[Backend - TypeScript/Express]
 * xref::be-python-flask.adoc[Backend - Python/Flask]
 * xref::be-scala-akka.adoc[Backend - Scala/Akka]
 * xref::airflow-cluster.adoc[Airflow]
@@ -36,33 +48,11 @@ This repository contains quickstarters, which are basically templates that help 
 
 === ODS Contribution Quickstarter
 * xref::ods-document-gen-svc.adoc[ODS Fork - Document Generation Service]
-* xref::ods-provision-app.adoc[ODS Fork - Provisioning Applications]
+* xref::ods-provisioning-app.adoc[ODS Fork - Provisioning Application]
 
-Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/master/boilerplates/docker-plain/README.md["blank" quickstarter] (xref::docker-plain.adoc[Backend - Docker/Plain]) allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
+Next to those, there is a xref::docker-plain.adoc["blank" quickstarter (Docker/Plain)] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences.
 
-All quickstarters are used by the https://github.com/opendevstack/ods-provisioning-app[Provisioning App] to create a new component which basically consists of resources in OpenShift (typically `BuildConfig`, `ImageStream`, `DeploymentConfig` and `Service`) and a BitBucket repository.
+== Authoring quickstarters
 
-This repository in BitBucket will contain:
-
-* Some boilerplate code
-* A `Jenkinsfile` describing how to build the component, delegating most of the work to the xref:ods-jenkins-shared-library:ROOT:index.adoc[shared library]
-* A `sonar-project.properties` file configuring how the source code is analyzed by SonarQube
-
-Next to those, each quickstarter can also provide its own https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves[Jenkins slave images].
-
-== Usage
-
-The quickstarters are not used directly, but triggered via the https://github.com/opendevstack/ods-provisioning-app[provisioning app]. Login there to pick
-a quickstarter, give it a name and provision it. The provisioning app delegates the execution to a jenkins job,
-located in each quickstarter folder
-
-== Changing existing quickstarters
-
-tbd
-
-== Contributing new quickstarters
-If you contribute a new quickstarter / boilerplate - please use the provided `README.adoc` templates
-
-. for a `jenkins-slave` - the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[`slave template`]
-. for a `boilerplace`- the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/ROOT/pages/__QS_BOILERPLATE_TEMPLATE_README.adoc[`boilerplate`]
+As mentioned above, it is possible to supply your own quickstarters. Pleasee see the xref:authoring-quickstarters.adoc[authoring quickstarters] guide on how to make completely new quickstarters or how to adapt existing quickstarters to your needs.
 
