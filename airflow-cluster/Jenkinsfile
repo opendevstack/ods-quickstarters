@@ -22,8 +22,6 @@ odsQuickstarterPipeline(
       -oa 'your-openshift-apihost' -oc 'https://your-openshift-console' "
   }
 
-  odsQuickstarterStageCreateOpenShiftResources(context)
-
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
