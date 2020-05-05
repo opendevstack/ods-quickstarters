@@ -21,13 +21,11 @@ buildscript {
 
 plugins {
     id 'org.asciidoctor.convert' version '1.5.3'
-    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'java'
-    id 'maven'
     id 'jacoco'
     id 'maven-publish'
 }
-
 
 ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 
@@ -44,29 +42,18 @@ repositories {
         mavenCentral()
     } else {
         println("using nexus repositories")
-        maven() {
-            url "${nexus_url}/repository/jcenter/"
-            credentials {
-                username = "${nexus_user}"
-                password = "${nexus_pw}"
+        def nexusMaven = { repoUrl ->
+            maven {
+                credentials {
+                    username = "${nexus_user}"
+                    password = "${nexus_pw}"
+                }
+                url repoUrl
             }
         }
-
-        maven() {
-            url "${nexus_url}/repository/maven-public/"
-            credentials {
-                username = "${nexus_user}"
-                password = "${nexus_pw}"
-            }
-        }
-
-        maven() {
-            url "${nexus_url}/repository/atlassian_public/"
-            credentials {
-                username = "${nexus_user}"
-                password = "${nexus_pw}"
-            }
-        }
+        nexusMaven("${nexus_url}/repository/jcenter/")
+        nexusMaven("${nexus_url}/repository/maven-public/")
+        nexusMaven("${nexus_url}/repository/atlassian_public/")
     }
 }
 
@@ -81,8 +68,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
-
-    testCompile "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
+    testImplementation "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
     asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
 }
 
@@ -98,14 +84,8 @@ asciidoctor {
 }
 
 bootJar {
-    doLast {
-        println "Copy jar file build/libs/$bootJar.archiveName to docker directory!"
-        copy {
-            from "build/libs/$bootJar.archiveName"
-            into "$buildDir/../docker"
-            rename(bootJar.archiveName, "app.jar")
-        }
-    }
+    archiveFileName = "app.jar"
+    destinationDirectory = file("$buildDir/../docker")
 }
 
 jacocoTestReport {
@@ -135,4 +115,3 @@ publishing {
         }
     }
 }
-
