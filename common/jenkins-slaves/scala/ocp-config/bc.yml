@@ -3,6 +3,9 @@ kind: Template
 metadata:
   name: jenkins-slave-scala
 parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
 - name: NEXUS_URL
   required: true
 - name: NEXUS_USERNAME
@@ -37,7 +40,7 @@ objects:
       contextDir: common/jenkins-slaves/scala
       git:
         ref: ${ODS_GIT_REF}
-        uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
       type: Git

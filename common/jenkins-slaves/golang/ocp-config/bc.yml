@@ -3,6 +3,9 @@ kind: Template
 metadata:
   name: jenkins-slave-golang
 parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
 - name: REPO_BASE
   required: true
 - name: ODS_IMAGE_TAG
@@ -32,7 +35,7 @@ objects:
       contextDir: common/jenkins-slaves/golang
       git:
         ref: ${ODS_GIT_REF}
-        uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
       type: Git
