@@ -1,4 +1,4 @@
-FROM cd/jenkins-slave-base
+FROM ods/jenkins-slave-base
 
 MAINTAINER Richard Attermeyer <richard.attermeyer@opitz-consulting.com>
 
