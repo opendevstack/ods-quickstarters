@@ -4,7 +4,7 @@
 
 The image is built in the global `cd` project and is named `jenkins-slave-&lt;NAME&gt;`.
 
-It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-&lt;NAME&gt;`
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-&lt;NAME&gt;`
 
 == Features
 

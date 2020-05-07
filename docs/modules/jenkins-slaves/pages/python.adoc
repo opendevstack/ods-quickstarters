@@ -4,7 +4,7 @@
 This slave is used to build / execute Python code.
 
 The image is built in the global `cd` project and is named `jenkins-slave-python`.
-It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-python`
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-python`
 
 == Features
 1. https://docs.python.org/3.6[Python 3.6]
