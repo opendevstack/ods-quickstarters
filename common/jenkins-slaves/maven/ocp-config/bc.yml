@@ -3,6 +3,9 @@ kind: Template
 metadata:
   name: jenkins-slave-maven
 parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
 - name: REPO_BASE
   required: true
 - name: NEXUS_URL
@@ -36,7 +39,7 @@ objects:
       contextDir: common/jenkins-slaves/maven
       git:
         ref: ${ODS_GIT_REF}
-        uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
       type: Git

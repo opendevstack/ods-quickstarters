@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: 'cd/jenkins-slave-scala:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-slave-scala:@ods_image_tag@',
   testResults: "target/test-reports",
   branchToEnvironmentMapping: [
     'master': 'dev',

@@ -4,7 +4,7 @@
 This slave is used to build Scala code through SBT (Scala build tool).
 
 The image is built in the global `cd` project and is named `jenkins-slave-scala`.
-It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-scala`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-scala`.
 
 == Features
 . SBT 1.1.6

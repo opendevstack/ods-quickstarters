@@ -1,10 +1,11 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
 def odsGitRef = env.ODS_GIT_REF ?: 'master'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
 library("ods-jenkins-shared-library@${odsGitRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "cd/jenkins-slave-maven:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageForkODS (
