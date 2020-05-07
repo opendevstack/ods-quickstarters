@@ -4,7 +4,7 @@
 This slave is used to build https://golang.org[Go] code.
 
 The image is built in the global `cd` project and is named `jenkins-slave-golang`.
-It can be referenced in a `Jenkinsfile` with e.g. `cd/jenkins-slave-golang:latest`.
+It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-slave-golang:latest`.
 
 == Features
 1. Go 1.14.2

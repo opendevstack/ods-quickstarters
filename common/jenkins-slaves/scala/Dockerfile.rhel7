@@ -1,4 +1,4 @@
-FROM cd/jenkins-slave-base
+FROM ods/jenkins-slave-base
 
 MAINTAINER Clemens Utschig <clemens.utschig-utschig@boehringer-ingelheim.com>
 

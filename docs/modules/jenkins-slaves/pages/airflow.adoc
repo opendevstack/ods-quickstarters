@@ -4,7 +4,7 @@
 This slave is used to build / execute / test https://airflow.apache.org/[Airflow] code for the `airflow-cluster` quickstarter.
 
 The image is built in the global `cd` project and is named `jenkins-slave-airflow`.
-It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-airflow`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-airflow`.
 
 == Features
 1. Python 3.6

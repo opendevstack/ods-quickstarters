@@ -1,3 +1,4 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
@@ -7,7 +8,7 @@ def yoVersion = "3.1.1"
 def generatorVersion = "4.2.2"
 
 odsQuickstarterPipeline(
-  imageStreamTag: "cd/jenkins-slave-nodejs10-angular:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-slave-nodejs10-angular:${odsImageTag}",
 ) { context ->
 
   stage("init yo") {

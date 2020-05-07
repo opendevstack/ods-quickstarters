@@ -1,4 +1,4 @@
-FROM cd/jenkins-slave-base
+FROM ods/jenkins-slave-base
 
 MAINTAINER Michael Sauter <michael.sauter@boehringer-ingelheim.com>
 

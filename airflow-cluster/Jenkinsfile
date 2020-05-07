@@ -1,3 +1,4 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
 def odsGitRef = env.ODS_GIT_REF ?: 'production'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
@@ -10,7 +11,7 @@ node {
 }
 
 odsQuickstarterPipeline(
-  imageStreamTag: "cd/jenkins-slave-airflow:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-slave-airflow:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)

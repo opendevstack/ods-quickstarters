@@ -4,7 +4,7 @@
 This slave is used to build Nodejs based projects, through `npm` or `yarn`.
 
 The image is built in the global `cd` project and is named `jenkins-slave-nodejs10-angular`.
-It can be referenced in a `Jenkinsfile` with `cd/jenkins-slave-nodejs10-angular`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-nodejs10-angular`.
 
 == Features
 1. Nexus configuration

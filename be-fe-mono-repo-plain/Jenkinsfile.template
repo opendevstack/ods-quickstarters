@@ -4,7 +4,7 @@
 
 // depending on what techs are needed, a different slave image may be used below
 odsComponentPipeline(
-  imageStreamTag: 'cd/jenkins-slave-base:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-slave-base:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
