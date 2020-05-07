@@ -13,7 +13,6 @@ parameters:
   value: latest
 - name: ODS_GIT_REF
   required: true
-  value: production
 objects:
 - apiVersion: v1
   kind: BuildConfig
