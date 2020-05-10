@@ -4,7 +4,7 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
 library("ods-jenkins-shared-library@${odsGitRef}")
 
-def ionicVersion = "3.9.2"
+def ionicVersion = "5.4.16"
 
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-slave-nodejs10-angular:${odsImageTag}",
