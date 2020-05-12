@@ -22,6 +22,10 @@ parameters:
     description: Minimum amount of memory requested for the container.
     value: 256Mi
     required: true
+  - name: ODS_NAMESPACE
+    displayName: ODS Namespace
+    description: Namespace where ODS is installed
+    value: ods
 objects:
   - apiVersion: v1
     kind: Service
@@ -68,7 +72,7 @@ objects:
             env: 'cd'
         spec:
           containers:
-            - image: 'cd/docgen:latest'
+            - image: '${ODS_NAMESPACE}/ods-doc-gen-svc:latest'
               imagePullPolicy: IfNotPresent
               name: 'docgen'
               ports:
@@ -112,6 +116,6 @@ objects:
               - 'docgen'
             from:
               kind: ImageStreamTag
-              name: 'docgen:latest'
-              namespace: cd
+              name: 'ods-doc-gen-svc:latest'
+              namespace: ${ODS_NAMESPACE}
           type: ImageChange
