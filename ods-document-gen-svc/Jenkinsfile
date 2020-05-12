@@ -1,0 +1,26 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
+) { context ->
+
+  odsQuickstarterStageForkODS (
+  	context, 
+  	[ "odsComponent" : "ods-document-generation-svc" ]
+  )
+
+  /*
+   * see ocp resources in the openshift directory of the document generation service
+   */
+  odsQuickstarterStageCreateOpenShiftResources(
+    context, 
+    [ 
+      "directory" : "${context.componentId}/openshift",
+      "selector" : "app=ods-doc-gen-svc" 
+    ]
+  )
+}

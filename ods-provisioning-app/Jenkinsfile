@@ -1,0 +1,28 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
+) { context ->
+
+  odsQuickstarterStageForkODS (
+  	context, 
+  	[ "odsComponent" : "ods-provisioning-app" ]
+  )
+
+/*
+  // @ FIXME  add once prov app OCP resources are in the new shape 
+  // (https://github.com/opendevstack/ods-provisioning-app/issues/423)
+  
+  odsQuickstarterStageCreateOpenShiftResources(
+    context, 
+    [ 
+      "directory" : "${context.componentId}/openshift",
+      "selector" : "app=ods-provisioning-app" 
+    ]
+  )
+*/
+}

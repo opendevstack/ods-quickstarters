@@ -1,0 +1,58 @@
+:toc: macro
+
+= OpenDevStack Quickstarters
+:page-aliases: latest@ods-quickstarters:ROOT:index.adoc
+
+toc::[]
+
+== Overview
+
+Quickstarters are basically templates that help to start out with a component quickly.
+A quickstarter provides a specific technology, potentially with a framework setup already, such as Java with Springboot in the case of the `be-java-springboot` quickstarter. Compared to starting out from scratch, using a quickstarter typically helps by:
+
+- setting up a repository in Bitbucket with webhooks to trigger Jenkins builds
+- shipping a `Jenkinsfile` with a pipeline that build and deploys the component (delegating most of the work to the xref:jenkins-shared-library:component-pipeline.adoc[shared library])
+- integrating with SonarQube out-of-the-box
+- setting up OpenShift resources to build and run the component
+- creating a boilerplate application with one or more sample endpoints
+
+Quickstarters are used from the https://github.com/opendevstack/ods-provisioning-app[Provisioning App], which allows to add a component to an existing project by running a quickstarter from the configured list of available quickstarters. This list can contain quickstarters from the official repository, https://github.com/opendevstack/ods-quickstarters[ods-quickstarters], or from some other repository such as internally hosted ones in your Bitbucket instance.
+
+
+== Available, official quickstarters
+
+=== Backend Quickstarter
+
+* xref::be-gateway-nginx.adoc[Backend - Gateway/Nginx]
+* xref::be-golang-plain.adoc[Backend - Go]
+* xref::be-java-springboot.adoc[Backend - Java/SpringBoot]
+* xref::be-typescript-express.adoc[Backend - TypeScript/Express]
+* xref::be-python-flask.adoc[Backend - Python/Flask]
+* xref::be-scala-akka.adoc[Backend - Scala/Akka]
+* xref::airflow-cluster.adoc[Airflow]
+
+=== Frontend Quickstarter
+* xref::fe-angular.adoc[Frontend - Angular]
+* xref::fe-ionic.adoc[Mobile - Ionic]
+* xref::fe-react.adoc[Frontend - React]
+* xref::fe-vue.adoc[Frontend - Vue]
+
+=== Data Science Quickstarter
+* xref::ds-ml-service.adoc[Data Science - Machine Learning]
+* xref::ds-jupyter-notebook.adoc[Data Science - Jupyter Notebook]
+* xref::ds-rshiny.adoc[Data Science - R-Shiny]
+
+=== E2E Test Quickstarter
+* xref::e2e-cypress.adoc[E2E test - Cypress]
+* xref::e2e-spock-geb.adoc[E2E test - Spock / Geb]
+
+=== ODS Contribution Quickstarter
+* xref::ods-document-gen-svc.adoc[ODS Fork - Document Generation Service]
+* xref::ods-provisioning-app.adoc[ODS Fork - Provisioning Application]
+
+Next to those, there is a xref::docker-plain.adoc["blank" quickstarter (Docker/Plain)] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences.
+
+== Authoring quickstarters
+
+As mentioned above, it is possible to supply your own quickstarters. Pleasee see the xref:authoring-quickstarters.adoc[authoring quickstarters] guide on how to make completely new quickstarters or how to adapt existing quickstarters to your needs.
+

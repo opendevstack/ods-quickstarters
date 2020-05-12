@@ -8,8 +8,7 @@ Inside your `jenkinsfile` you can configure which slave is used by changing the 
 
 ```groovy
 odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-maven:latest"
-)
+  image: "<dockerRegistry>/<namespace>/jenkins-slave-maven:<tag>"
 ```
 
 The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-shared-library) takes care about starting the `jenkins slave` during the build as pod in your `project`s `cd` namespace with the `jenkins` service account.

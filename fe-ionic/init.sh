@@ -18,7 +18,7 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 echo "generate project"
-ionic start $COMPONENT blank --no-deps --no-git
+ionic start $COMPONENT blank --type=angular --no-deps --no-git
 
 cd $COMPONENT
 

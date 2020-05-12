@@ -1,0 +1,65 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+
+// depending on what techs are needed, a different slave image may be used below
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-slave-base:@ods_image_tag@',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    // 'release/*': 'test'
+  ]
+) { context ->
+  stageUnitTestFrontend(context)
+  stageUnitTestBackend(context)
+  stageBuildFrontend(context)
+  stageBuildBackend(context)
+
+  // odsComponentStageScanWithSonar(context)
+
+  /* 
+   * componentId maps to the build config name, 
+   * dockerDir points to the directory that contains the dockerfile
+   */
+  odsComponentStageBuildOpenShiftImage(
+    context, [ "componentId" : "${context.componentId}-frontend", "dockerDir" : "docker_fe"])
+  odsComponentStageBuildOpenShiftImage(
+    context, [ "componentId" : "${context.componentId}-backend", "dockerDir" : "docker_be"])
+
+  def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
+
+  stageTestDeployedComponents (context, deploymentInfo)
+}
+
+def stageBuildFrontend(def context) {
+  stage('Build frontend') {
+	// build your frontend
+  }
+}
+
+def stageBuildBackend(def context) {
+  stage('Build backend') {
+	// build your backend
+  }
+}
+
+def stageUnitTestFrontend(def context) {
+  stage('Unit Test Frontend') {
+  	// copy into same test results folder
+  }
+}
+
+def stageUnitTestBackend(def context) {
+  stage('Unit Test Backend') {
+  	// copy into same test results folder
+  }
+}
+
+def stageTestDeployedComponents(def context, def deploymentInfo) {
+  stage('Test Deployed Component') {
+	sh (script : "oc port-forward ${deploymentInfo.podName} 8081 -n ${context.targetProject} &", label : "Setting up port forward for pod ${deploymentInfo.podName}")
+	// wait for port-forward to map the ports or for 10s
+	sh (script : "timeout 10s bash -c 'until ! curl -v --silent http://localhost:8081 2>&1 | grep -m 1 \"Connection refused\"; do sleep 1 ; done'; echo -e \\\\a", 
+        label : "send request to service")
+  }
+}

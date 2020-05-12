@@ -1,0 +1,14 @@
+= Maven / Gradle Jenkins Slave
+
+== Introduction
+This slave is used to build Java code, through Maven or Gradle.
+
+The image is built in the global `cd` project and is named `jenkins-slave-maven`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-maven`.
+
+== Features
+. Nexus configuration for Maven & Gradle
+. HTTP proxy awareness for both builders
+
+== Known limitations
+n/a

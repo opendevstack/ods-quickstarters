@@ -1,0 +1,15 @@
+= Nodejs 10 - Angular Jenkins Slave
+
+== Introduction
+This slave is used to build Nodejs based projects, through `npm` or `yarn`.
+
+The image is built in the global `cd` project and is named `jenkins-slave-nodejs10-angular`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-nodejs10-angular`.
+
+== Features
+1. Nexus configuration
+2. HTTP proxy awareness
+3. Angular CLI & Cypress dependencies pre-installed
+
+== Known limitations
+n/a

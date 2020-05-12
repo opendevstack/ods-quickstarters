@@ -1,18 +1,20 @@
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// See https://www.opendevstack.org/ods-documentation/ods-jenkins-shared-library/latest/index.html for usage and customization.
 odsComponentPipeline(
-  imageStreamTag: 'cd/jenkins-slave-base:@ods_image_tag@',
-  projectId: projectId,
-  componentId: componentId,
+  imageStreamTag: '@ods_namespace@/jenkins-slave-base:@ods_image_tag@',
+  openshiftBuildTimeout: 30,  
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/*': 'test'
   ]
 ) { context ->
+
   odsComponentStageBuildOpenShiftImage(context)
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  
+  // rollout auth proxy - this registers the dc for later promotion
+  odsComponentStageRolloutOpenShiftDeployment (context, ["componentId" : "${context.componentId}-auth-proxy"])
+  
+  odsComponentStageRolloutOpenShiftDeployment (context)
 }

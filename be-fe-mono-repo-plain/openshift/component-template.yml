@@ -1,0 +1,224 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: monorepo-component-template
+  app: '${PROJECT}-${COMPONENT}'
+parameters:
+  - name: PROJECT
+    displayName: Application
+    description: The name of the application project.
+    required: true
+  - name: COMPONENT
+    displayName: Component
+    description: The name of the application component.
+    required: true
+  - name: ENV
+    displayName: Environment
+    description: The environment stage.
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 256Mi
+  - name: MEMORY_REQUEST
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 128Mi
+  - name: CPU_LIMIT
+    displayName: CPU Limit
+    description: Maximum CPU (milli) cores available for the container.
+    value: 100m
+  - name: CPU_REQUEST
+    displayName: CPU Request
+    description: Minimum CPU (milli) cores requested for the container.
+    value: 50m
+  - name: TAGVERSION
+    displayName: tag version
+    description: The version to be used.
+    value: latest
+    required: true
+  - name: COMPLETION_DEADLINE_SECONDS
+    displayName: Completion Deadline Seconds
+    description: how long the docker build of the component can last before it is canceled
+    value: "1800"
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[]'
+      name: '${COMPONENT}-frontend'
+    spec:
+      ports:
+      -   name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: '${PROJECT}-${COMPONENT}'
+        deploymentconfig: '${COMPONENT}'
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[]'
+      name: '${COMPONENT}-backend'
+    spec:
+      ports:
+      -   name: 8081-tcp
+          port: 8081
+          protocol: TCP
+          targetPort: 8081
+      selector:
+        app: '${PROJECT}-${COMPONENT}'
+        deploymentconfig: '${COMPONENT}'
+      sessionAffinity: None
+      type: ClusterIP      
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: '${COMPONENT}-backend'
+    spec:
+      dockerImageRepository: '${COMPONENT}-backend'
+      lookupPolicy:
+        local: false
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: '${COMPONENT}-frontend'
+    spec:
+      dockerImageRepository: '${COMPONENT}-frontend'
+      lookupPolicy:
+        local: false
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: ${COMPONENT}-frontend
+    spec:
+      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
+      failedBuildsHistoryLimit: 5
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${COMPONENT}-frontend:${TAGVERSION}
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        type: Binary
+        binary: {}
+      strategy:
+        type: Docker
+        dockerStrategy: {}
+      successfulBuildsHistoryLimit: 5
+      triggers: []
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: ${COMPONENT}-backend
+    spec:
+      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
+      failedBuildsHistoryLimit: 5
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${COMPONENT}-backend:${TAGVERSION}
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        type: Binary
+        binary: {}
+      strategy:
+        type: Docker
+        dockerStrategy: {}
+      successfulBuildsHistoryLimit: 5
+      triggers: []
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: '${COMPONENT}'
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        app: '${PROJECT}-${COMPONENT}'
+        deploymentconfig: '${COMPONENT}'
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: '${PROJECT}-${COMPONENT}'
+            deploymentconfig: '${COMPONENT}'
+            env: '${ENV}'
+        spec:
+          containers:
+            - image: '${PROJECT}-${ENV}/${COMPONENT}-frontend:${TAGVERSION}'
+              imagePullPolicy: IfNotPresent
+              name: '${COMPONENT}-frontend'
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu:  '${CPU_LIMIT}'
+                  memory: '${MEMORY_LIMIT}'
+                requests:
+                  cpu:  '${CPU_REQUEST}'
+                  memory: '${MEMORY_REQUEST}'
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            - image: '${PROJECT}-${ENV}/${COMPONENT}-backend:${TAGVERSION}'
+              imagePullPolicy: IfNotPresent
+              name: '${COMPONENT}-backend'
+              ports:
+                - containerPort: 8081
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu:  '${CPU_LIMIT}'
+                  memory: '${MEMORY_LIMIT}'
+                requests:
+                  cpu:  '${CPU_REQUEST}'
+                  memory: '${MEMORY_REQUEST}'
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File              
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${COMPONENT}-backend'
+            from:
+              kind: ImageStreamTag
+              name: '${COMPONENT}-backend:${TAGVERSION}'
+              namespace: '${PROJECT}-${ENV}'
+          type: ImageChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${COMPONENT}-frontend'
+            from:
+              kind: ImageStreamTag
+              name: '${COMPONENT}-frontend:${TAGVERSION}'
+              namespace: '${PROJECT}-${ENV}'
+          type: ImageChange

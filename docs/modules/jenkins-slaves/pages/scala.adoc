@@ -1,0 +1,15 @@
+= Scala Jenkins Slave
+
+== Introduction
+This slave is used to build Scala code through SBT (Scala build tool).
+
+The image is built in the global `cd` project and is named `jenkins-slave-scala`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-scala`.
+
+== Features
+. SBT 1.1.6
+. HTTP proxy aware
+. Nexus aware
+
+== Known limitations
+In case HTTP Proxy config is injected through environment variables (including `NO_PROXY`), Nexus configuration is disabled because of an SBT bug.

@@ -1,94 +1,45 @@
-// build params
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
-def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-java-springboot"
-def springCliVersion = "2.2.6.RELEASE"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
-}
+library("ods-jenkins-shared-library@${odsGitRef}")
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-maven:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+def springCliVersion = '2.2.6.RELEASE'
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
+) { context ->
 
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage('Build spring project') {
-            sh "mkdir -p ${componentId}"
-            dir(componentId) {
-              sh "curl https://start.spring.io/starter.tgz \
-                    -d type=gradle-project \
-                    -d language=java \
-                    -d dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
-                    -d platformVersion=${springCliVersion} \
-                    -d packaging=jar \
-                    -d jvmVersion=1.11 \
-                    -d groupId=${projectId} \
-                    -d artifactId=${componentId} \
-                    -d name=${componentId} \
-                    -d description='OpenDevStack%20Demo%20Project%20for%20Spring%20Boot' \
-                    -d packageName='${packageName}' \
-                    | tar -zxvf - "
-            }
-            withEnv(["COMPONENT=${componentId}","GROUP=${group}","SCRIPT_DIR=${quickstarterBasepath}"]) {
-              sh "sh ./${quickstarterBasepath}/postProcessProjectsettings.sh"
-            }
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Create sonar-project.properties') {
-            sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/sonar-project.properties.template \
-                  --target ${componentId}/sonar-project.properties \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
-          }
-          // FIX: Add stage to copy from files directory, replacing cp -rv ../$SCRIPT_DIR/files/. . in postProcessProjectsettings.sh
-          // Check if Jenkinsfile.template etc. are also copied (they should not be!)
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
+  stage('Build spring project') {
+    dir(context.targetDir) {
+      sh "curl https://start.spring.io/starter.tgz \
+            -d type=gradle-project \
+            -d language=java \
+            -d dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
+            -d platformVersion=${springCliVersion} \
+            -d packaging=jar \
+            -d jvmVersion=1.11 \
+            -d groupId=${context.projectId} \
+            -d artifactId=${context.componentId} \
+            -d name=${context.componentId} \
+            -d description='OpenDevStack%20Demo%20Project%20for%20Spring%20Boot' \
+            -d packageName='${context.packageName}' \
+            | tar -zxvf - "
+
+      withEnv(["COMPONENT=${context.componentId}", "GROUP=${context.group}"]) {
+        sh "sh ${env.WORKSPACE}/${context.sourceDir}/postProcessProjectsettings.sh"
       }
+    }
+  }
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component-environment']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderSonarProperties(context)
 }

@@ -1,0 +1,19 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-slave-base:${odsImageTag}",
+) { context ->
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component-environment']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+}

@@ -1,0 +1,16 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-slave-base:@ods_image_tag@',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    // 'release/*': 'test'
+  ]
+) { context ->
+
+  odsComponentStageBuildOpenShiftImage(context)
+
+  odsComponentStageRolloutOpenShiftDeployment(context)
+}

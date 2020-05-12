@@ -1,0 +1,34 @@
+= Authoring Quickstarters
+
+This document describes how you can create your own quickstarter. At the same time, you should be able to find all information required to make changes to an existing quickstarter.
+
+Technically speaking, a quickstarter is just a Jenkins pipeline that fills an existing repository with files. How this is done, and what exactly is run in the pipeline is up to the quickstarter author. Typically though, the pipeline makes use of the xref:jenkins-shared-library:quickstarter-pipeline.adoc[quickstarter pipeline] from the Jenkins shared library, which removes the need to write lots of boilerplate such as running a slave pod, cloning sources, copying files and pushing at the end to the component repository. The rest of the guide assumes that you are using this pipeline.
+
+As the Jenkins pipeline runs on a Jenkins Slave image, you as the author need to pick either an existing slave image (see "Jenkins Slave Images" in the navigation on the left), or <<_creating_modifying_a_jenkins_slave_image,create your own>>.
+
+== Creating / Modifying a quickstarter
+
+The only technical requirement is to have a `Jenkinsfile`, but depending on the purpose of the quickstarter, a quickstarter should provide the following:
+
+- A `Jenkinsfile` in the resulting repository. The best way to do this is by placing a `Jenkinsfile.template` file into the quickstarter repository, and render it via xref:jenkins-shared-library:quickstarter-pipeline.adoc#_odsquickstarterstagerenderjenkinsfile[odsQuickstarterStageRenderJenkinsfile].
+- A `sonar-project.properties` file in the resulting repository. The best way to do this is by placing a `sonar-project.properties.template` file into the quickstarter repository, and render it via xref:jenkins-shared-library:quickstarter-pipeline.adoc#_odsquickstarterstagerendersonarproperties[odsQuickstarterStageRenderSonarProperties].
+- Test setup, e.g. a framework such as JUnit. Test results need to be published in https://llg.cubic.org/docs/junit/[JUnit XML reporting file format]. The results need to be stored at `build/test-results/test` or be configured to a different location.
+- Code Coverage: tests should determine code coverage, and report this to SonarQube.
+- Support for Nexus (pulling dependencies from there)
+- HTTP proxy awareness
+- Documentation. Both for the quickstarter itself (located at https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages, following the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages/$$__QUICKSTARTER_TEMPLATE$$.adoc[quickstarter template]) and any Jenkins slave image (located at https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-slaves/pages, following the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-slaves/pages/$$__JENKINS_SLAVE_TEMPLATE$$.adoc[slave image template]).
+
+If you write any custom stages in the quickstarter pipeline, you have access to the xref:jenkins-shared-library:quickstarter-pipeline.adoc#_pipeline_context[pipeline context].
+
+Usually, quickstarters are triggered through the provisioning app. However, in order to try a new quickstarter, or to try changes to an existing quickstarter which are made in a branch, you can use the `quickstart-with-jenkins/run.sh` script in the https://github.com/BIX-Digital/ods-contrib[BIX-Digital/ods-contrib] repository to provision a quickstarter without registering it with the provisioning app. See its help for usage.
+
+== Creating / Modifying a Jenkins Slave image
+
+It is highly recommended to use the xref:jenkins:slave-base.adoc[jenkins-slave-base] image as a base image. Otherwise it is likely that some features of the shared pipeline don't work. The `jenkins-slave-base` image in turn is based on another base image, e.g. provided by RedHat. The easiest way to get started is to look ath other slave images, such as xref:jenkins-slaves:golang.adoc[Go] and see how that implements its requirements. If you are just building an image for yourself, do the following:
+
+. Copy the folder from one of the Jenkins slaves to your local machine, and adjust as needed. For sure you'll need to update the `Dockerfile`. Also, change the names in the `ocp-config` folder and delete the `Tailorfile` in there. Note that the `BuildConfig` points to a repository and a branch. You will need to push your sources to a matching location.
+. Create the OpenShift resources in your `*-cd` project via https://github.com/opendevstack/tailor[Tailor], e.g. `tailor -n foo-cd --param REPO_BASE=https://bitbucket.example.com/scm --param ODS_IMAGE_TAG=2.x ...`
+. Start a build in the OpenShift web console.
+. Reference the built image from your `Jenkinsfile` like this: `imageStreamTag: 'foo-cd/jenkins-slave-bar:latest'`
+
+If you want to contribute your Jenkins Slave image to OpenDevStack, make sure to add documentation according to the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-slaves/pages/__JENKINS_SLAVE_TEMPLATE_README.adoc[slave image template].

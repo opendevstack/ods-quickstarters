@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $COMPONENT
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "configure in memory database in spring application.properties"
 echo "spring.profiles.active: dev" > src/main/resources/application.properties
@@ -54,7 +54,7 @@ if [[ $version == "4.9" ]]; then
 	/g' build.gradle
 	USE_LEGACY_NEXUS_UPLOAD_SCRIPT=1
 else
-	templateFile=../$SCRIPT_DIR/templates/build-$version.gradle
+	templateFile=$SCRIPT_DIR/templates/build-$version.gradle
 	echo "using $templateFile"
 	# this allows quick config, new version - add new template, done
 	if [[ -f "$templateFile" ]]; then
@@ -63,7 +63,7 @@ else
 		USE_LEGACY_NEXUS_UPLOAD_SCRIPT=1
 	else
 		# default
-		mv ../$SCRIPT_DIR/templates/build-4.10.gradle build.gradle
+		mv $SCRIPT_DIR/templates/build-4.10.gradle build.gradle
 		USE_LEGACY_NEXUS_UPLOAD_SCRIPT=0
 	fi
 	sed -i.bak "s|__GROUP__|$GROUP|g" build.gradle
@@ -90,11 +90,3 @@ EOL
 else
   echo "do not add legacy nexus upload script to build.gradle"
 fi
-
-echo "fix nexus repo path"
-repo_path=$(echo "$GROUP" | tr . /)
-sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" ../$SCRIPT_DIR/files/docker/Dockerfile
-rm ../$SCRIPT_DIR/files/docker/Dockerfile.bak
-
-echo "copy custom files from quickstart to generated project"
-cp -rv ../$SCRIPT_DIR/files/. .
