@@ -11,6 +11,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   -p|--project) PROJECT="$2"; shift;;
   -b=*|--bitbucket=*) BITBUCKET_URL="${1#*=}";;
   -b|--bitbucket) BITBUCKET_URL="$2"; shift;;
+  -n=*|--odsnamespace=*) ODS_NAMESPACE="${1#*=}";;
+  -n|--odsnamespace) ODS_NAMESPACE="$2"; shift;;
 
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
@@ -28,6 +30,7 @@ tailor --namespace=${PROJECT}-cd --non-interactive --force \
   --param=TRIGGER_SECRET=${SECRET} \
   --param=BITBUCKET_URL=${BITBUCKET_URL} \
   --param=REPO_BASE=${BITBUCKET_URL}/scm \
+  --param=ODS_NAMESPACE=${ODS_NAMESPACE} \
   --selector app="${PROJECT}-docgen",template=cd-docgen
 
 
