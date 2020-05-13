@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-slave-nodejs12
+  annotations:
+    description: "This slave is used to build Node.js v12.x based projects, through `npm`, `npx` and `yarn`"
+    iconClass: "icon-jenkins"
+    tags: "jenkins,slave,nodejs"
+labels:
+  app: "jenkins-slave-nodejs12"
+  part-of: "jenkins-slave"
+  template: "jenkins-slave-nodejs12"
+parameters:
+  - name: NEXUS_URL
+    description: "Your Nexus Instance"
+    required: true
+  - name: NEXUS_AUTH
+    description: "Your Nexus Authentication credentials: username:password"
+    required: true
+  - name: REPO_BASE
+    required: true
+  - name: ODS_IMAGE_TAG
+    required: true
+    value: latest
+  - name: ODS_GIT_REF
+    required: true
+    value: production
+objects:
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: jenkins-slave-nodejs12
+    spec:
+      dockerImageRepository: jenkins-slave-nodejs12
+      lookupPolicy:
+        local: false
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: jenkins-slave-nodejs12
+    spec:
+      failedBuildsHistoryLimit: 5
+      output:
+        to:
+          kind: ImageStreamTag
+          name: jenkins-slave-nodejs12:${ODS_IMAGE_TAG}
+      source:
+        contextDir: common/jenkins-slaves/nodejs12
+        git:
+          ref: ${ODS_GIT_REF}
+          uri: ${REPO_BASE}/opendevstack/ods-quickstarters.git
+        sourceSecret:
+          name: cd-user-token
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: Dockerfile.rhel7
+          env:
+            - name: NEXUS_HOST
+              value: ${NEXUS_URL}
+            - name: NEXUS_AUTH
+              value: ${NEXUS_AUTH}
+          from:
+            kind: ImageStreamTag
+            name: jenkins-slave-base:${ODS_IMAGE_TAG}
+        type: Docker
+      successfulBuildsHistoryLimit: 5
+      triggers: []
