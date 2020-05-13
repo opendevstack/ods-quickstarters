@@ -62,9 +62,14 @@ RUN curl --silent --location https://rpm.nodesource.com/setup_10.x | bash - && \
     yum clean all -y
 
 COPY npmrc $HOME/.npm-global/etc/npmrc
+COPY npmrc $HOME/.npmrc
+COPY yarnrc $HOME/.yarnrc
 
 RUN sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.npm-global/etc/npmrc && \
     sed -i "s|NEXUS_AUTH|$(echo -n $NEXUS_AUTH | base64)|g" $HOME/.npm-global/etc/npmrc && \
+    sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.npmrc && \
+    sed -i "s|NEXUS_AUTH|$(echo -n $NEXUS_AUTH | base64)|g" $HOME/.npmrc && \
+    sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.yarnrc && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
     npm install -g @angular/cli@8.0.1 --unsafe-perm=true --allow-root && \
