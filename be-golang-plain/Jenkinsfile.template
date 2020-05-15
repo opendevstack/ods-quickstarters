@@ -11,9 +11,9 @@ odsComponentPipeline(
 ) { context ->
   stageCheckFormat(context)
   stageLint(context)
-  odsComponentStageScanWithSonar(context)
   stageUnitTest(context)
   stageBuild(context)
+  odsComponentStageScanWithSonar(context)
   odsComponentStageBuildOpenShiftImage(context)
   odsComponentStageRolloutOpenShiftDeployment(context)
 }
@@ -51,10 +51,10 @@ def stageUnitTest(def context) {
       sh 'mkdir -p build/test-results/test'
       def gopkgs = sh(script: 'go list ./... | grep -v /vendor', returnStdout: true).trim()
       withEnv(["GOPKGS=${gopkgs}"]) {
-        def status = sh(script: 'go test -v -cover $GOPKGS 2>&1 > test-results.txt', returnStatus: true)
+        def status = sh(script: 'go test -v -coverprofile=coverage.out $GOPKGS 2>&1 > test-results.txt', returnStatus: true)
         sh 'cat test-results.txt | go-junit-report > build/test-results/test/report.xml'
         if (status != 0) {
-          error "go test -v -cover $GOPKGS failed!"
+          error "go test failed!"
         }
       }
     }
