@@ -46,8 +46,8 @@ def stageTagImage(def context) {
             return
         }
         sh(
-            script: "oc -n ${context.getTargetProject()} tag ${context.getComponentId()}:${context.getTagversion()} ${context.getComponentId()}:latest",
-            label: "Update latest tag of is/${context.getComponentId()} to ${context.getTagversion()}"
+            script: "oc -n ${context.targetProject} tag ${context.componentId}:${context.tagversion} ${context.componentId}:latest",
+            label: "Update latest tag of is/${context.componentId} to ${context.tagversion}"
         )
     }
 }

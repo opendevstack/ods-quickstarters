@@ -17,14 +17,14 @@ odsComponentPipeline(
 
   // odsComponentStageScanWithSonar(context)
 
-  /* 
-   * componentId maps to the build config name, 
-   * dockerDir points to the directory that contains the dockerfile
+  /*
+   * resourceName maps to the BuildConfig/ImageStream name,
+   * dockerDir points to the directory that contains the Dockerfile
    */
   odsComponentStageBuildOpenShiftImage(
-    context, [ "componentId" : "${context.componentId}-frontend", "dockerDir" : "docker_fe"])
+    context, [resourceName: "${context.componentId}-frontend", dockerDir: "docker_fe"])
   odsComponentStageBuildOpenShiftImage(
-    context, [ "componentId" : "${context.componentId}-backend", "dockerDir" : "docker_be"])
+    context, [resourceName: "${context.componentId}-backend", dockerDir: "docker_be"])
 
   def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
 
