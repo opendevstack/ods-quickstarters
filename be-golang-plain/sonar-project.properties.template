@@ -17,3 +17,4 @@ sonar.test.exclusions=**/vendor/**
 
 # Encoding of the source files (optional but recommended as default is ASCII)
 sonar.sourceEncoding=UTF-8
+sonar.go.coverage.reportPaths=coverage.out
