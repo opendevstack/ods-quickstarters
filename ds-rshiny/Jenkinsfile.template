@@ -7,7 +7,7 @@ odsComponentPipeline(
   openshiftBuildTimeout: 30,  
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/*': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
 

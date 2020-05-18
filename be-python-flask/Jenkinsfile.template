@@ -6,7 +6,7 @@ odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-slave-python:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/*': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
   stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
