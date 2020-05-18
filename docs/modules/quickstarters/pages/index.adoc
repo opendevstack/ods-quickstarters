@@ -11,8 +11,9 @@ Quickstarters are basically templates that help to start out with a component qu
 A quickstarter provides a specific technology, potentially with a framework setup already, such as Java with Springboot in the case of the `be-java-springboot` quickstarter. Compared to starting out from scratch, using a quickstarter typically helps by:
 
 - setting up a repository in Bitbucket with webhooks to trigger Jenkins builds
-- shipping a `Jenkinsfile` with a pipeline that build and deploys the component (delegating most of the work to the xref:jenkins-shared-library:component-pipeline.adoc[shared library])
-- integrating with SonarQube out-of-the-box
+- shipping a `Jenkinsfile` with a pipeline that builds and deploys the component (delegating most of the work to the xref:jenkins-shared-library:component-pipeline.adoc[shared library])
+- providing a basic test setup with xUnit reports and code coverage
+- integrating with SonarQube out-of-the-box (including code coverage report)
 - setting up OpenShift resources to build and run the component
 - creating a boilerplate application with one or more sample endpoints
 
