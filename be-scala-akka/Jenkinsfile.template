@@ -7,7 +7,7 @@ odsComponentPipeline(
   testResults: "target/test-reports",
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/*': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
   stageBuild(context)

@@ -9,7 +9,7 @@ odsComponentPipeline(
   openshiftRolloutTimeout: 10,
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/*': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
   def trainingServiceName = "${context.componentId}-training-service"

@@ -6,7 +6,7 @@ odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-slave-maven:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/*': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
   stageBuild(context)

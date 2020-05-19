@@ -8,7 +8,7 @@ odsComponentPipeline(
     testResults : 'artifacts',
     branchToEnvironmentMapping: [
         'master': 'dev',
-        // 'release/*': 'test'
+        // 'release/': 'test'
     ]
 ) { context ->
     stageDAGTest(context)
