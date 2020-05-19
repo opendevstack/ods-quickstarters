@@ -1,0 +1,4 @@
+svc,dc,is,bc,cm,pvc
+svc,dc,is,bc,cm,pvc
+
+ignore-path bc:/spec/output/to/name,bc:/spec/output/imageLabels
