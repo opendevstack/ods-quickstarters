@@ -1,31 +1,24 @@
 apiVersion: v1
 kind: Template
-labels:
-  template: cd-docgen
-  app: '${PROJECT}-docgen'
 parameters:
   - name: PROJECT
-    displayName: Application
     description: The name of the application project.
     required: true
   - name: BITBUCKET_URL
-    displayName: Application
     description: The URL of your bitbucket server.
     required: true
   - name: MEMORY_LIMIT
-    displayName: Memory Limit
     description: Maximum amount of memory available for the container.
     value: 512Mi
-    required: true
   - name: MEMORY_REQUEST
-    displayName: Memory Request
     description: Minimum amount of memory requested for the container.
     value: 256Mi
-    required: true
   - name: ODS_NAMESPACE
-    displayName: ODS Namespace
     description: Namespace where ODS is installed
     value: ods
+  - name: ODS_IMAGE_TAG
+    description: Image tag to use
+    required: true
 objects:
   - apiVersion: v1
     kind: Service
@@ -70,7 +63,7 @@ objects:
             env: 'cd'
         spec:
           containers:
-            - image: '${ODS_NAMESPACE}/ods-doc-gen-svc:latest'
+            - image: '${ODS_NAMESPACE}/ods-doc-gen-svc:${ODS_IMAGE_TAG}'
               imagePullPolicy: IfNotPresent
               name: 'docgen'
               ports:
