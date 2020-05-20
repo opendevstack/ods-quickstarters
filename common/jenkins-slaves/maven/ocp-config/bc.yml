@@ -27,13 +27,20 @@ objects:
     labels:
       app: jenkins-slave-maven
   spec:
+    failedBuildsHistoryLimit: 5
     nodeSelector: null
     output:
       to:
         kind: ImageStreamTag
         name: jenkins-slave-maven:${ODS_IMAGE_TAG}
     postCommit: {}
-    resources: {}
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+      requests:
+        cpu: "200m"
+        memory: "1Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-slaves/maven
@@ -57,4 +64,5 @@ objects:
           kind: ImageStreamTag
           name: jenkins-slave-base:${ODS_IMAGE_TAG}
       type: Docker
+    successfulBuildsHistoryLimit: 5
     triggers: []
