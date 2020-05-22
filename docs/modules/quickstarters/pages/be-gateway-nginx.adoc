@@ -2,7 +2,7 @@
 
 == Purpose of this quickstarter
 
-Use this quickstarter when you want to use https://www.nginx.org[nginx] server wrapped within https://www.openresty.org[OpenResty] dynamic web platform. With this quickstarter you can run many different lightweight server implementations like API gateways and HTTP/TCP/UCP reverse proxys.
+Use this quickstarter when you want to use https://www.nginx.org[nginx] server wrapped within https://www.openresty.org[OpenResty] dynamic web platform. With this quickstarter you can run many different lightweight server implementations like API gateways and HTTP/TCP/UDP reverse proxies.
 
 == What files / which architecture is generated?
 
