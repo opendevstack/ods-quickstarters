@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://bix-digital.com",
+  "baseUrl": "http://www.example.com",
   "fixturesFolder": "fixtures",
   "integrationFolder": "build",
   "pluginsFile": "plugins/index.js",
