@@ -6,11 +6,11 @@
     "lint": "tslint --project .",
     "build": "tsc --project .",
     "watch": "npm-run-all --parallel \"build -- --watch\" \"cypress:open\"",
-    "e2e": "npm run e2e-at https://domain.com",
-    "e2e-at": "npm-run-all build \"cypress:run -- --browser chrome --config video=false,baseUrl={1}\" --",
+    "e2e": "npm-run-all build cypress:run",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --config video=false",
-    "all": "npm-run-all lint build cypress:run"
+    "cypress:run": "cypress run --config video=false --browser chrome",
+    "delete-junit-results": "rm build/test-results/test/junit.xml || true",
+    "all": "npm-run-all lint build delete-junit-results cypress:run"
   },
   "private": true,
   "dependencies": {

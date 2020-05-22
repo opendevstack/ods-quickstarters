@@ -1,9 +1,13 @@
 {
-  "baseUrl": "http://localhost:4200",
+  "baseUrl": "http://bix-digital.com",
   "fixturesFolder": "fixtures",
   "integrationFolder": "build",
   "pluginsFile": "plugins/index.js",
   "supportFile": "build/support",
   "viewportWidth": 1376,
-  "viewportHeight": 660
+  "viewportHeight": 660,
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "build/test-results/test/junit.xml"
+  }
 }
