@@ -11,6 +11,4 @@ odsQuickstarterPipeline(
   odsQuickstarterStageCopyFiles(context)
 
   odsQuickstarterStageRenderJenkinsfile(context)
-
-  odsQuickstarterStageRenderSonarProperties(context)
 }
