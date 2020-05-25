@@ -8,21 +8,12 @@ odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
 ) { context ->
 
-  odsQuickstarterStageForkODS (
-  	context, 
-  	[ "odsComponent" : "ods-provisioning-app" ]
+  odsQuickstarterStageForkODS(
+    context,
+    [odsComponent: 'ods-provisioning-app']
   )
 
-/*
-  // @ FIXME  add once prov app OCP resources are in the new shape 
-  // (https://github.com/opendevstack/ods-provisioning-app/issues/423)
-  
-  odsQuickstarterStageCreateOpenShiftResources(
-    context, 
-    [ 
-      "directory" : "${context.componentId}/openshift",
-      "selector" : "app=ods-provisioning-app" 
-    ]
-  )
-*/
+  // OpenShift resources cannot be created here as we do not have access to
+  // the configuration parameters. Users need to create the resources themselves
+  // from the local machine.
 }
