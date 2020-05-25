@@ -8,19 +8,19 @@ odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
 ) { context ->
 
-  odsQuickstarterStageForkODS (
-  	context, 
-  	[ "odsComponent" : "ods-document-generation-svc" ]
+  odsQuickstarterStageForkODS(
+    context,
+    [odsComponent: 'ods-document-generation-svc']
   )
 
   /*
-   * see ocp resources in the openshift directory of the document generation service
+   * see templates in the document generation service
    */
   odsQuickstarterStageCreateOpenShiftResources(
-    context, 
-    [ 
-      "directory" : "${context.componentId}/openshift",
-      "selector" : "app=ods-doc-gen-svc" 
+    context,
+    [
+      directory: "${context.targetDir}/ocp-config",
+      selector: 'app=ods-doc-gen-svc'
     ]
   )
 }
