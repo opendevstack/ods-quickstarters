@@ -17,15 +17,15 @@
 
 # Path to shared boot directory (default: ~/.sbt/boot in 0.11 series)
 #
--sbt-boot /home/jenkins/.sbt/boot  
+#-sbt-boot ~/.sbt/boot
 
 # Path to local Ivy repository (default: ~/.ivy2)
 #
--ivy /home/jenkins/.ivy2
+#-ivy ~/.ivy2
 
 # set memory options
 #
-#-mem   <integer>  
+#-mem   <integer>
 
 # Use local caches for projects, no sharing.
 #
@@ -40,13 +40,13 @@
 
 # Scala version (default: latest release)
 #
-#-scala-home <path>        
+#-scala-home <path>
 #-scala-version <version>
 
 # java version (default: java from PATH, currently $(java -version |& grep version))
 #
 #-java-home <path>
 
--Dsbt.override.build.repos=true 
--Dsbt.boot.credentials=/home/jenkins/.sbt/credentials 
--Dsbt.repository.config=/home/jenkins/.sbt/repositories
+-Duser.home=/home/jenkins
+-Dsbt.override.build.repos=true
+-Dsbt.boot.credentials=~/.sbt/.credentials

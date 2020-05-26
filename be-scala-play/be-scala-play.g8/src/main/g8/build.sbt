@@ -7,9 +7,9 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(PlayKeys.playDefaultPort := 8080)
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.2"
 
-credentials += Credentials(Path.userHome / ".sbt" / "credentials")
+credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 
 val compileDependencies = Seq(
   guice,
@@ -17,7 +17,7 @@ val compileDependencies = Seq(
 )
 
 val testDependencies = Seq(
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
 libraryDependencies ++= compileDependencies ++ testDependencies
