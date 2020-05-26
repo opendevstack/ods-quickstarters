@@ -1,4 +1,4 @@
-namespace cd
+namespace ods
 selector app=jenkins-slave-nodejs12
 param-file ../../../../../ods-configuration/ods-core.env
 ignore-unknown-parameters true
