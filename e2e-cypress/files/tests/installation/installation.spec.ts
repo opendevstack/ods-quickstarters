@@ -1,7 +1,7 @@
-import { LoginCommand } from '../support/commands';
+import { LoginCommand } from '../../support/commands';
 
 /* tslint:disable:no-unused-expression */
-describe('e2e tests', function () {
+describe('installation e2e tests', function () {
 
   it('Application is reachable', function () {
     cy.visit('');

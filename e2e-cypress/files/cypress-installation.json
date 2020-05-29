@@ -1,13 +1,14 @@
 {
   "baseUrl": "http://www.example.com",
   "fixturesFolder": "fixtures",
-  "integrationFolder": "build",
+  "integrationFolder": "build/tests/installation",
   "pluginsFile": "plugins/index.js",
   "supportFile": "build/support",
   "viewportWidth": 1376,
   "viewportHeight": 660,
+  "video": false,
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "build/test-results/test/junit.xml"
+    "mochaFile": "build/test-results/installation-junit.xml"
   }
 }

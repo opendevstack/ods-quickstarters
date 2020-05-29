@@ -1,6 +1,6 @@
 {
   "include": [
-    "integration/**/*.spec.ts",
+    "tests/**/*.spec.ts",
     "support/*.ts",
     "plugins/*.ts",
     "node_modules/cypress"

@@ -1,9 +1,9 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+@Library('ods-jenkins-shared-library@3.x') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-slave-nodejs10-angular:@ods_image_tag@',
+  imageStreamTag: 'ods/jenkins-slave-nodejs10-angular:3.x',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
@@ -17,7 +17,15 @@ def stageTest(def context) {
   stage('Integration Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
       sh "npm install"
-      sh "npm run all"
+      def status = sh(script: "npm run e2e", returnStatus: true)
+      junit(testResults:"build/test-results/*.xml", allowEmptyResults:true)
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
+      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+      if (status != 0) {
+        error "Executing tests failed!"
+      }
     }
   }
+
 }
