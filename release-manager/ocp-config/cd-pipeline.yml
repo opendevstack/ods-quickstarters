@@ -21,8 +21,12 @@ objects:
   - apiVersion: v1
     kind: BuildConfig
     metadata:
+      labels:
+        template: release-manager
       name: '${PROJECT}-mro-pipeline-master'
     spec:
+      failedBuildsHistoryLimit: 5
+      runPolicy: Serial
       source:
         git:
           ref: master
@@ -47,6 +51,7 @@ objects:
               value: ''
           jenkinsfilePath: Jenkinsfile
         type: JenkinsPipeline
+      successfulBuildsHistoryLimit: 5
       triggers:
       - generic:
           allowEnv: true

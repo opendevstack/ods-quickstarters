@@ -18,7 +18,14 @@ odsQuickstarterPipeline(
 
   stage('Setup OpenShift resources') {
     dir(context.sourceDir) {
-      sh "sh ./create-ocp-resources.sh -p ${context.projectId} -c ${context.componentId} -b ${context.bitbucketUrl} -n ${odsNamespace} -i ${odsImageTag}"
+      sh """./create-ocp-resources.sh \
+        --project ${context.projectId} \
+        --component ${context.componentId} \
+        --bitbucket ${context.bitbucketUrl} \
+        --ods-namespace ${odsNamespace} \
+        --ods-image-tag ${odsImageTag}" \
+        --docker-registry ${context.dockerRegistry}
+      """
     }
   }
 }
