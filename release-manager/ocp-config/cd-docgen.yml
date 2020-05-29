@@ -10,6 +10,12 @@ parameters:
   - name: BITBUCKET_URL
     description: The URL of your bitbucket server.
     required: true
+  - name: CPU_LIMIT
+    description: Maximum CPU available for the container.
+    value: "1"
+  - name: CPU_REQUEST
+    description: Minimum CPU requested for the container.
+    value: 100mi
   - name: MEMORY_LIMIT
     description: Maximum amount of memory available for the container.
     value: 512Mi
@@ -77,9 +83,11 @@ objects:
                   protocol: TCP
               resources:
                 limits:
-                  memory: '${MEMORY_LIMIT}'
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
                 requests:
-                  memory: '${MEMORY_REQUEST}'
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               env:
