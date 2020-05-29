@@ -12,3 +12,6 @@ sonar.language=ts
 
 # Encoding of the source files (optional but recommended as default is ASCII)
 sonar.sourceEncoding=UTF-8
+
+# Adding path to LCOV coverage report files
+sonar.javascript.lcov.reportPaths=coverage_output/lcov.info
