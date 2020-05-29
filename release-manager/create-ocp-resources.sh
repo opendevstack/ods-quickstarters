@@ -29,8 +29,8 @@ cd ${SCRIPT_DIR}/ocp-config
 echo "create trigger secret"
 SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
-tailor --namespace=${PROJECT}-cd --non-interactive --force \
-  update \
+tailor --namespace=${PROJECT}-cd --non-interactive \
+  apply \
   --param=COMPONENT=${COMPONENT} \
   --param=PROJECT=${PROJECT} \
   --param=TRIGGER_SECRET=${SECRET} \
