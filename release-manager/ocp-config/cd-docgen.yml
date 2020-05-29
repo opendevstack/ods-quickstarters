@@ -15,13 +15,16 @@ parameters:
     value: "1"
   - name: CPU_REQUEST
     description: Minimum CPU requested for the container.
-    value: 100mi
+    value: 100m
   - name: MEMORY_LIMIT
     description: Maximum amount of memory available for the container.
     value: 512Mi
   - name: MEMORY_REQUEST
     description: Minimum amount of memory requested for the container.
     value: 256Mi
+  - name: DOCKER_REGISTRY
+    description: Image registry
+    required: true
   - name: ODS_NAMESPACE
     description: Namespace where ODS is installed
     value: ods
@@ -75,7 +78,7 @@ objects:
             deploymentconfig: 'docgen'
         spec:
           containers:
-            - image: '${ODS_NAMESPACE}/ods-doc-gen-svc:${ODS_IMAGE_TAG}'
+            - image: '${DOCKER_REGISTRY}/${ODS_NAMESPACE}/ods-doc-gen-svc:${ODS_IMAGE_TAG}'
               imagePullPolicy: IfNotPresent
               name: 'docgen'
               ports:
