@@ -38,6 +38,6 @@ tailor --namespace=${PROJECT}-cd --non-interactive \
   --param=REPO_BASE=${BITBUCKET_URL}/scm \
   --param=ODS_NAMESPACE=${ODS_NAMESPACE} \
   --param=ODS_IMAGE_TAG=${ODS_IMAGE_TAG} \
-  --selector app="${PROJECT}-docgen",template=cd-docgen
+  --selector template=release-manager
 
 

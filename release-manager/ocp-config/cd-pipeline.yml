@@ -21,6 +21,8 @@ objects:
   - apiVersion: v1
     kind: BuildConfig
     metadata:
+      labels:
+        template: release-manager
       name: '${PROJECT}-mro-pipeline-master'
     spec:
       source:
