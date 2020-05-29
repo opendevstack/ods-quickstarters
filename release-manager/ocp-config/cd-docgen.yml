@@ -1,6 +1,9 @@
 apiVersion: v1
 kind: Template
 parameters:
+  - name: ODS_BITBUCKET_PROJECT
+    description: Bitbucket project name.
+    value: opendevstack
   - name: PROJECT
     description: The name of the application project.
     required: true
@@ -93,7 +96,7 @@ objects:
                       key: password
                       name: cd-user-with-password
                 - name: BITBUCKET_DOCUMENT_TEMPLATES_PROJECT
-                  value: opendevstack
+                  value: ${ODS_BITBUCKET_PROJECT}
                 - name: BITBUCKET_DOCUMENT_TEMPLATES_REPO
                   value: ods-document-generation-templates
           dnsPolicy: ClusterFirst
