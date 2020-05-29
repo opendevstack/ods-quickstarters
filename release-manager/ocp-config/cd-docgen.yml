@@ -115,12 +115,3 @@ objects:
       test: false
       triggers:
         - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - 'docgen'
-            from:
-              kind: ImageStreamTag
-              name: 'ods-doc-gen-svc:latest'
-              namespace: ${ODS_NAMESPACE}
-          type: ImageChange
