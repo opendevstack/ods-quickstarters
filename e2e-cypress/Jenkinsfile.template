@@ -1,9 +1,9 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-@Library('ods-jenkins-shared-library@3.x') _
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: 'ods/jenkins-slave-nodejs10-angular:3.x',
+  imageStreamTag: '@ods_namespace@/jenkins-slave-nodejs10-angular:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
