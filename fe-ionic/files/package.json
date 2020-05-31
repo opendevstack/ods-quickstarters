@@ -1,8 +1,6 @@
 {
-  "name": "ionic-quickstart",
-  "version": "0.0.1",
-  "author": "BIX",
-  "private": true,
+  "name": "$COMPONENT",
+  "version": "0.0.0",
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
