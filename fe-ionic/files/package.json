@@ -1,7 +1,6 @@
 {
-  "name": "ionic-quickstart",
-  "version": "0.0.1",
-  "author": "BIX",
+  "name": "$COMPONENT",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -12,7 +11,7 @@
     "serve:e2e": "APP_ENV=e2e ionic-app-scripts serve",
     "serve:prod": "APP_ENV=prod ionic-app-scripts serve",
     "test-coverage": "ng test --code-coverage",
-    "test": "ng test --reporters=junit",
+    "test": "ng test --code-coverage --reporters=junit",
     "e2e": "APP_ENV=e2e ionic-app-scripts build && webdriver-manager update --versions.chrome=2.32 && protractor --webdriver-update false"
   },
   "config": {
@@ -54,6 +53,7 @@
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
+    "karma-junit-reporter": "^1.2.0",
     "karma-jasmine-html-reporter": "^1.4.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
