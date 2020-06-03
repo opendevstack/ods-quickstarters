@@ -1,4 +1,4 @@
-FROM ods/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
 LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
 

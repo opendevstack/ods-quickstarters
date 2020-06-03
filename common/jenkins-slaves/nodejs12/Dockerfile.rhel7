@@ -1,4 +1,4 @@
-FROM cd/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \
@@ -8,6 +8,9 @@ LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \
       io.k8s.display-name="Jenkins Slave Nodejs" \
       io.k8s.description="The jenkins slave nodejs image has the nodejs tools on top of the jenkins slave base image." \
       io.openshift.tags="openshift,jenkins,slave,nodejs"
+
+ARG nexusUrl
+ARG nexusAuth
 
 ENV NODEJS_VERSION=12 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
@@ -32,13 +35,13 @@ RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum
     yum install -y yarn && \
     yum clean all -y
 
-RUN npm config set registry=$NEXUS_HOST/repository/npmjs/ && \
+RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
     npm config set _auth=$(echo -n $NEXUS_AUTH | base64) && \
     npm config set email=no-reply@opendevstack.org && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
-    yarn config set registry $NEXUS_HOST/repository/npmjs/ -g && \
+    yarn config set registry $nexusUrl/repository/npmjs/ -g && \
     echo node version: $(node --version) && \
     echo npm version: $(npm --version) && \
     echo npx version: $(npx --version) && \

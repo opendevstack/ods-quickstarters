@@ -57,10 +57,10 @@ objects:
     strategy:
       dockerStrategy:
         dockerfilePath: Dockerfile.rhel7
-        env:
-          - name: NEXUS_HOST
+        buildArgs:
+          - name: nexusUrl
             value: ${NEXUS_URL}
-          - name: NEXUS_AUTH
+          - name: nexusAuth
             value: ${NEXUS_AUTH}
         from:
           kind: ImageStreamTag

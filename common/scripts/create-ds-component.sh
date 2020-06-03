@@ -18,60 +18,34 @@ tailor_version=$(${TAILOR} version)
 
 echo "Using tailor ${tailor_version} from ${tailor_exe}"
 
-DEBUG=false
-STATUS=false
-FORCE=false
-while [[ $# -gt 0 ]]
-do
-key="$1"
+TAILOR_VERBOSE=""
+TAILOR_NON_INTERACTIVE=""
 
-case $key in
-    -p|--project)
-    PROJECT="$2"
-    shift # past argument
-    ;;
-    -c|--component)
-    COMPONENT="$2"
-    shift # past argument
-    ;;
-    -nh|--nexushost)
-    NEXUS_HOST="$2"
-    shift # past argument
-    ;;
-    -nu|--nexususername)
-    NEXUS_USERNAME="$2"
-    shift # past argument
-    ;;
-    -np|--nexuspassword)
-    NEXUS_PASSWORD="$2"
-    shift # past argument
-    ;;
-    --status)
-    STATUS=true
-    ;;
-    --force)
-    FORCE=true
-    ;;
-    -d|--debug)
-    DEBUG=true;
-    ;;
-    *)
-    echo "Unknown option: $1. Exiting."
-    exit 1
-    ;;
-esac
-shift # past argument or value
-done
+while [[ "$#" -gt 0 ]]; do case $1 in
+  -v|--verbose) TAILOR_VERBOSE="-v"; set -x;;
 
-if $DEBUG; then
-  tailor_verbose="-v"
-else
-  tailor_verbose=""
-fi
+  --non-interactive) TAILOR_NON_INTERACTIVE="--non-interactive";;
 
-if $FORCE; then
-  tailor_verbose+=" --force"
-fi
+  -t=*|--tailor=*) TAILOR="${1#*=}";;
+  -t|--tailor) TAILOR="$2"; shift;;
+
+  -p=*|--project=*) PROJECT="${1#*=}";;
+  -p|--project)     PROJECT="$2"; shift;;
+
+  -c=*|--component=*) COMPONENT="${1#*=}";;
+  -c|--component)     COMPONENT="$2"; shift;;
+
+  --nexus-url=*) NEXUS_URL="${1#*=}";;
+  --nexus-url)   NEXUS_URL="$2"; shift;;
+
+  --nexus-username=*) NEXUS_USERNAME="${1#*=}";;
+  --nexus-username)   NEXUS_USERNAME="$2"; shift;;
+
+  --nexus-password=*) NEXUS_PASSWORD="${1#*=}";;
+  --nexus-password)   NEXUS_PASSWORD="$2"; shift;;
+
+   *) echo "Unknown parameter passed: $1"; usage; exit 1;;
+esac; shift; done
 
 if [ -z ${PROJECT+x} ]; then
     echo "PROJECT is unset, but required";
@@ -81,10 +55,10 @@ if [ -z ${COMPONENT+x} ]; then
     echo "COMPONENT is unset, but required";
     exit 1;
 else echo "COMPONENT=${COMPONENT}"; fi
-if [ -z ${NEXUS_HOST+x} ]; then
-    echo "NEXUS_HOST is unset, but required";
+if [ -z ${NEXUS_URL+x} ]; then
+    echo "NEXUS_URL is unset, but required";
     exit 1;
-else echo "NEXUS_HOST=${NEXUS_HOST}"; fi
+else echo "NEXUS_URL=${NEXUS_URL}"; fi
 if [ -z ${NEXUS_USERNAME+x} ]; then
     echo "NEXUS_USERNAME is unset, but required";
     exit 1;
@@ -93,25 +67,12 @@ if [ -z ${NEXUS_PASSWORD+x} ]; then
     echo "NEXUS_PASSWORD is unset, but required";
     exit 1;
 fi
-echo "Params: ${tailor_verbose}"
-
-if $STATUS; then
-  echo "NOTE:Invoked with --status:  will use tailor status instead of tailor update."
-fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-tailor_update_in_dir() {
+tailor_apply_in_dir() {
     local dir="$1"; shift
-    if [ ${STATUS} = "true" ]; then
-        $DEBUG && echo 'exec:' cd  "$dir" '&&'
-        $DEBUG && echo 'exec:'     ${TAILOR} $tailor_verbose status "$@"
-        cd "$dir" && ${TAILOR} $tailor_verbose status "$@"
-    else
-        $DEBUG && echo 'exec:' cd "$dir" '&&'
-        $DEBUG && echo 'exec:    ' ${TAILOR} $tailor_verbose --non-interactive update "$@"
-        cd "$dir" && ${TAILOR} $tailor_verbose --non-interactive update "$@"
-    fi
+    cd "$dir" && ${TAILOR} ${TAILOR_VERBOSE} ${TAILOR_NON_INTERACTIVE} apply "$@"
 }
 
 OCP_CONFIG="${SCRIPT_DIR}/../ocp-config/"
@@ -123,22 +84,22 @@ for devenv in dev test ; do
         "--param=PROJECT=${PROJECT}" \
         "--param=COMPONENT=${COMPONENT}" \
         "--param=ENV=${devenv}" \
-        "--param=NEXUS_HOST=${NEXUS_HOST}" \
+        "--param=NEXUS_URL=${NEXUS_URL}" \
         "--param=NEXUS_USERNAME=${NEXUS_USERNAME}" \
         "--param=NEXUS_PASSWORD=${NEXUS_PASSWORD}"
         )
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
 
-    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
+    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
         secret/nexus
 
-    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
+    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
         --selector "app=${PROJECT}-${COMPONENT},template=ds-component"
 
-    tailor_update_in_dir "${OCP_CONFIG}/ds-component-environment" \
+    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
         --selector "app=${PROJECT}-${COMPONENT},template=ds-component-oauthproxy"
 

@@ -52,9 +52,9 @@ objects:
       dockerStrategy:
         dockerfilePath: Dockerfile.rhel7
         env:
-          - name: NEXUS_HOST
+          - name: nexusUrl
             value: ${NEXUS_URL}
-          - name: NEXUS_AUTH
+          - name: nexusAuth
             value: ${NEXUS_AUTH}
         from:
           kind: ImageStreamTag

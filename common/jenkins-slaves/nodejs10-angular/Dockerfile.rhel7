@@ -1,4 +1,4 @@
-FROM ods/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
 MAINTAINER Richard Attermeyer <richard.attermeyer@opitz-consulting.com>
 
@@ -11,6 +11,9 @@ LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \
       io.k8s.display-name="Jenkins Slave Nodejs" \
       io.k8s.description="The jenkins slave nodejs image has the nodejs tools on top of the jenkins slave base image." \
       io.openshift.tags="openshift,jenkins,slave,nodejs"
+
+ARG nexusUrl
+ARG nexusAuth
 
 ENV NODEJS_VERSION=8.11 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
@@ -61,13 +64,13 @@ RUN curl --silent --location https://rpm.nodesource.com/setup_10.x | bash - && \
     yum install -y yarn && \
     yum clean all -y
 
-RUN npm config set registry=$NEXUS_HOST/repository/npmjs/ && \
+RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
-    npm config set _auth=$(echo -n $NEXUS_AUTH | base64) && \
+    npm config set _auth=$(echo -n $nexusAuth | base64) && \
     npm config set email=no-reply@opendevstack.org && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
-    yarn config set registry $NEXUS_HOST/repository/npmjs/ -g && \
+    yarn config set registry $nexusUrl/repository/npmjs/ -g && \
     npm install -g @angular/cli@8.0.1 --unsafe-perm=true --allow-root && \
     npm install -g cypress@3.3.1 --unsafe-perm=true --allow-root > /dev/null && \
     npm --version && \

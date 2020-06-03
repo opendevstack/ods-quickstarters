@@ -1,8 +1,10 @@
-FROM ods/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
 LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
-ARG AIRFLOW_VERSION=1.10.3
+ARG nexusUrl
+ARG nexusAuth
+ARG airflowVersion=1.10.3
 
 ENV AIRFLOW_HOME=$HOME/airflow
 ENV AIRFLOW_GPL_UNIDECODE yes
@@ -40,8 +42,8 @@ RUN yum -y install @development && \
                     rh-python36-python-six
 
 # Configuring npm
-RUN sed -i "s|NEXUS_HOST|$NEXUS_HOST|g" $HOME/.npmrc && \
-    sed -i "s|NEXUS_AUTH|$(echo -n $NEXUS_AUTH | base64)|g" $HOME/.npmrc && \
+RUN sed -i "s|NEXUS_URL|$nexusUrl|g" $HOME/.npmrc && \
+    sed -i "s|NEXUS_AUTH|$(echo -n $nexusAuth | base64)|g" $HOME/.npmrc && \
     npm config set ca=null && \
     npm config set strict-ssl=false
 
@@ -74,7 +76,7 @@ RUN buildDeps=' \
        pyasn1==0.4.8 \
        requests-oauthlib==1.3.0 \
        unittest-xml-reporting==3.0.2 \
-       apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
+       apache-airflow[crypto,postgres,hive,jdbc,mysql,ssh,kubernetes,elasticsearch${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${airflowVersion} \
     " \
     && airflowFixDeps="redis==3.4.1 flask==1.0.1 jinja2==2.10.0 werkzeug==0.14.1" \
     && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
@@ -86,10 +88,10 @@ RUN buildDeps=' \
         rsync \
         nmap-ncat \
     && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \
-    && if [[ ! -z ${NEXUS_URL} ]]; \
-        then pip install -U -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple pip setuptools wheel \
-        && pip install -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple $pipDeps \
-        && pip install -i https://${NEXUS_AUTH}@${NEXUS_URL:8}/repository/pypi-all/simple $airflowFixDeps; \
+    && if [[ -n ${nexusUrl} ]]; \
+        then pip install -U -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple pip setuptools wheel \
+        && pip install -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple $pipDeps \
+        && pip install -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple $airflowFixDeps; \
         else pip install -U pip setuptools wheel \
         && pip install $pipDeps \
         && pip install $airflowFixDeps; \

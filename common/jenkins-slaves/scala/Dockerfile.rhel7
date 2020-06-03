@@ -1,4 +1,4 @@
-FROM ods/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
 MAINTAINER Clemens Utschig <clemens.utschig-utschig@boehringer-ingelheim.com>
 
@@ -11,6 +11,10 @@ LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \
       io.k8s.display-name="Jenkins Slave Scala" \
       io.k8s.description="The jenkins slave scala image has the scala tools on top of the jenkins slave base image." \
       io.openshift.tags="openshift,jenkins,slave,scala"
+
+ARG nexusUrl
+ARG nexusUsername
+ARG nexusPassword
 
 ENV HOME=/home/jenkins \
     BASH_ENV=/usr/local/bin/scl_enable \
@@ -51,12 +55,12 @@ COPY sbtopts /usr/share/sbt/conf/sbtopts
 # temp test hw scala / -ivy $HOME/.ivy2 -Dsbt.global.base=$HOME/.sbt
 COPY test/* /tmp/scala/
 
-RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_HOST|$NEXUS_HOST|g" > $HOME/.sbt/repositories.tmp && \
+RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/repositories.tmp && \
     mv $HOME/.sbt/repositories.tmp $HOME/.sbt/repositories  && \
-    NEXUS_SHORT=$(echo $NEXUS_HOST | sed -e "s|https://||g" | sed -e "s|http://||g") && \
-    sed -i.bak -e "s|NEXUS_HOST|$NEXUS_SHORT|g" $HOME/.sbt/credentials && \
-    sed -i.bak -e "s|NEXUS_USERNAME|$NEXUS_USERNAME|g" $HOME/.sbt/credentials && \
-    sed -i.bak -e "s|NEXUS_PASSWORD|$NEXUS_PASSWORD|g" $HOME/.sbt/credentials && \
+    nexusHost=$(echo $nexusUrl | sed -e "s|https://||g" | sed -e "s|http://||g") && \
+    sed -i.bak -e "s|NEXUS_HOST|$nexusHost|g" $HOME/.sbt/credentials && \
+    sed -i.bak -e "s|NEXUS_USERNAME|$nexusUsername|g" $HOME/.sbt/credentials && \
+    sed -i.bak -e "s|NEXUS_PASSWORD|$nexusPassword|g" $HOME/.sbt/credentials && \
     rm $HOME/.sbt/credentials.bak && \
     cd /tmp/scala && \
     . /tmp/set_java_proxy.sh && \
