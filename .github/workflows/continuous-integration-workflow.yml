@@ -12,7 +12,7 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/golang
         run: |
-          docker build -t slave-go-test -f Dockerfile.rhel7
+          docker build --tag slave-go-test --file Dockerfile.rhel7
 
   jenkins-slave-maven:
     name: Jenkins Slave Maven
@@ -25,7 +25,10 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/maven
         run: |
-            docker build -t slave-maven-test -f Dockerfile.rhel7
+            docker build --tag slave-maven-test --file Dockerfile.rhel7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t
 
   jenkins-slave-nodejs10-angular:
     name: Jenkins Slave NodeJS 10 - Angular
@@ -38,7 +41,9 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/nodejs10-angular
         run: |
-            docker build -t slave-nodejs10-angular-test -f Dockerfile.rhel7
+            docker build --tag slave-nodejs10-angular-test --file Dockerfile.rhel7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t
 
   jenkins-slave-nodejs12:
     name: Jenkins Slave NodeJS 12
@@ -51,7 +56,9 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/nodejs12
         run: |
-            docker build -t slave-nodejs12-test -f Dockerfile.rhel7
+            docker build --tag slave-nodejs12-test --file Dockerfile.rhel7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t
 
   jenkins-slave-python:
     name: Jenkins Slave Python
@@ -64,7 +71,10 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/python
         run: |
-            docker build -t slave-python-test -f Dockerfile.rhel7
+            docker build --tag slave-python-test --file Dockerfile.rhel7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t
 
   jenkins-slave-scala:
     name: Jenkins Slave Scala
@@ -77,7 +87,10 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-slaves/scala
         run: |
-            docker build -t slave-scala-test -f Dockerfile.rhel7
+            docker build --tag slave-scala-test --file Dockerfile.rhel7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t
 
 
 #   test:
