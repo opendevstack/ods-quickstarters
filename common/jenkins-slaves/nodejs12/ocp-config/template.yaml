@@ -23,6 +23,8 @@ objects:
   kind: ImageStream
   metadata:
     name: jenkins-slave-nodejs12
+    labels:
+      app: jenkins-slave-nodejs12
   spec:
     dockerImageRepository: jenkins-slave-nodejs12
     lookupPolicy:
@@ -31,6 +33,8 @@ objects:
   kind: BuildConfig
   metadata:
     name: jenkins-slave-nodejs12
+    labels:
+      app: jenkins-slave-nodejs12
   spec:
     failedBuildsHistoryLimit: 5
     output:
