@@ -1,6 +1,6 @@
 FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
-MAINTAINER Richard Attermeyer <richard.attermeyer@opitz-consulting.com>
+LABEL maintainer="Richard Attermeyer <richard.attermeyer@opitz-consulting.com>"
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-slave-nodejs-rhel7-docker" \

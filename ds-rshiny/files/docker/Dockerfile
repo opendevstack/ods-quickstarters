@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Piotr Radkowski <piotr.radkowski@ardigen.com>
+LABEL maintainer="Piotr Radkowski <piotr.radkowski@ardigen.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No

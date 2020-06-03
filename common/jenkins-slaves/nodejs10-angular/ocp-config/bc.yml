@@ -51,7 +51,7 @@ objects:
     strategy:
       dockerStrategy:
         dockerfilePath: Dockerfile.rhel7
-        env:
+        buildArgs:
           - name: nexusUrl
             value: ${NEXUS_URL}
           - name: nexusAuth

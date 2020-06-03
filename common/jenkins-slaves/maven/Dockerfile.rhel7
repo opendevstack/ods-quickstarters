@@ -1,6 +1,6 @@
 FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
-MAINTAINER Michael Sauter <michael.sauter@boehringer-ingelheim.com>
+LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-slave-maven-rhel7-docker" \
