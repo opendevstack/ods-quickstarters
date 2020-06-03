@@ -23,7 +23,7 @@ odsQuickstarterPipeline(
         --component ${context.componentId} \
         --bitbucket ${context.bitbucketUrl} \
         --ods-namespace ${odsNamespace} \
-        --ods-image-tag ${odsImageTag}" \
+        --ods-image-tag ${odsImageTag} \
         --docker-registry ${context.dockerRegistry}
       """
     }
