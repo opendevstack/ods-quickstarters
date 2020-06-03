@@ -1,6 +1,103 @@
-# name: Continous Integration Tests
-# on: [ push, pull_request ]
-# jobs:
+name: Continous Integration Tests
+on: [ push, pull_request ]
+jobs:
+  jenkins-slave-golang:
+    name: Jenkins Slave Go
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-slaves/golang/docker
+        run: |
+          docker build --tag slave-go-test .
+
+  jenkins-slave-maven:
+    name: Jenkins Slave Maven
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-slaves/maven/docker
+        run: |
+            docker build --tag slave-maven-test \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t \
+              .
+
+# jenkins-slave-nodejs10-angular:
+#   name: Jenkins Slave NodeJS 10 - Angular
+#   runs-on: ubuntu-18.04
+#   steps:
+#     -
+#       name: Checkout repository
+#       uses: actions/checkout@v2.0.0
+#     -
+#       name: Build docker image
+#       working-directory: common/jenkins-slaves/nodejs10-angular/docker
+#       run: |
+#           docker build --tag slave-nodejs10-angular-test \
+#             --build-arg nexusUrl=https://nexus.example.com \
+#             --build-arg nexusAuth=developer:s3cr3t \
+#             .
+
+  jenkins-slave-nodejs12:
+    name: Jenkins Slave NodeJS 12
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-slaves/nodejs12/docker
+        run: |
+            docker build --tag slave-nodejs12-test \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
+  jenkins-slave-python:
+    name: Jenkins Slave Python
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-slaves/python/docker
+        run: |
+            docker build --tag slave-python-test \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t \
+              .
+
+# jenkins-slave-scala:
+#   name: Jenkins Slave Scala
+#   runs-on: ubuntu-18.04
+#   steps:
+#     -
+#       name: Checkout repository
+#       uses: actions/checkout@v2.0.0
+#     -
+#       name: Build docker image
+#       working-directory: common/jenkins-slaves/scala/docker
+#       run: |
+#           docker build --tag slave-scala-test \
+#             --build-arg nexusUrl=https://nexus.example.com \
+#             --build-arg nexusUsername=developer \
+#             --build-arg nexusPassword=s3cr3t \
+#             .
+
+
 #   test:
 #     name: Docker plain provisioning
 #     runs-on: ubuntu-16.04

@@ -19,7 +19,7 @@ odsComponentPipeline(
 
 def stageBuild(def context) {
   stage('Build') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_URL=${context.nexusUrl}"]) {
       sh "npm install"
       sh "npm run build"
     }

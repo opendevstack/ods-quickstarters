@@ -1,6 +1,6 @@
-FROM ods/jenkins-slave-base
+FROM opendevstackorg/ods-jenkins-slave-base-centos7:latest
 
-MAINTAINER Michael Sauter <michael.sauter@boehringer-ingelheim.com>
+LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-slave-maven-rhel7-docker" \
@@ -11,6 +11,10 @@ LABEL com.redhat.component="jenkins-slave-maven-rhel7-docker" \
       io.k8s.display-name="Jenkins Slave Maven" \
       io.k8s.description="The jenkins slave maven image has the maven tools on top of the jenkins slave base image." \
       io.openshift.tags="openshift,jenkins,slave,maven"
+
+ARG nexusUrl
+ARG nexusUsername
+ARG nexusPassword
 
 ENV MAVEN_VERSION=3.3 \
     BASH_ENV=/usr/local/bin/scl_enable \
@@ -56,9 +60,9 @@ RUN mv $HOME/.m2/settings.xml $HOME/.m2/settings.xml.orig && \
  xpr="${xpr//\//\\/}" && \
  xpr="${xpr//|/\\|}" && \
  cat $HOME/.m2/settings.xml.orig | sed -e "s|<proxies>|<proxies>$xpr|g" > $HOME/.m2/settings.xml && \
- sed -i "s/__NEXUS_USER/$NEXUS_USERNAME/gi" $HOME/.m2/settings.xml && \
- sed -i "s/__NEXUS_PW/$NEXUS_PASSWORD/gi" $HOME/.m2/settings.xml && \
- sed -i "s|__NEXUS_HOST|$NEXUS_HOST|gi" $HOME/.m2/settings.xml && \
+ sed -i "s/__NEXUS_USER/$nexusUsername/gi" $HOME/.m2/settings.xml && \
+ sed -i "s/__NEXUS_PW/$nexusPassword/gi" $HOME/.m2/settings.xml && \
+ sed -i "s|__NEXUS_URL|$nexusUrl|gi" $HOME/.m2/settings.xml && \
  cat $HOME/.m2/settings.xml
 
 # install gradle ..

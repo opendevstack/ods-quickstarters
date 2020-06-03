@@ -41,7 +41,7 @@ objects:
         memory: "1Gi"
     runPolicy: Serial
     source:
-      contextDir: common/jenkins-slaves/airflow
+      contextDir: common/jenkins-slaves/airflow/docker
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
@@ -50,11 +50,10 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        dockerfilePath: Dockerfile.rhel7
-        env:
-          - name: NEXUS_HOST
+        buildArgs:
+          - name: nexusUrl
             value: ${NEXUS_URL}
-          - name: NEXUS_AUTH
+          - name: nexusAuth
             value: ${NEXUS_AUTH}
         from:
           kind: ImageStreamTag

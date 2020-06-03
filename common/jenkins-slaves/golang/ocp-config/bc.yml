@@ -37,7 +37,7 @@ objects:
         memory: "1Gi"
     runPolicy: Serial
     source:
-      contextDir: common/jenkins-slaves/golang
+      contextDir: common/jenkins-slaves/golang/docker
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
@@ -46,7 +46,6 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        dockerfilePath: Dockerfile.rhel7
         from:
           kind: ImageStreamTag
           name: jenkins-slave-base:${ODS_IMAGE_TAG}

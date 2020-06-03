@@ -15,7 +15,7 @@ odsComponentPipeline(
 def stageTest(def context) {
 
   stage('Integration Test') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_URL=${context.nexusUrl}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
       sh "npm install"
       def status = sh(script: "npm run e2e", returnStatus: true)
       junit(testResults:"build/test-results/*.xml", allowEmptyResults:true)

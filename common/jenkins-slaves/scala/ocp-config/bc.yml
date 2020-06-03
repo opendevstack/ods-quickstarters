@@ -43,7 +43,7 @@ objects:
         memory: "1Gi"
     runPolicy: Serial
     source:
-      contextDir: common/jenkins-slaves/scala
+      contextDir: common/jenkins-slaves/scala/docker
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
@@ -52,13 +52,12 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        dockerfilePath: Dockerfile.rhel7
-        env:
-          - name: NEXUS_HOST
+        buildArgs:
+          - name: nexusUrl
             value: ${NEXUS_URL}
-          - name: NEXUS_USERNAME
+          - name: nexusUsername
             value: ${NEXUS_USERNAME}
-          - name: NEXUS_PASSWORD
+          - name: nexusPassword
             value: ${NEXUS_PASSWORD}
         from:
           kind: ImageStreamTag

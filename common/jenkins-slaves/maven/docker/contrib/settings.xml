@@ -41,21 +41,21 @@
       <repositories>
         <repository>
           <id>mavenpublic</id>
-          <url>__NEXUS_HOST/repository/maven-public</url>
+          <url>__NEXUS_URL/repository/maven-public</url>
           <releases>
             <enabled>true</enabled>
           </releases>
         </repository>
         <repository>
           <id>atlassianpublic</id>
-          <url>__NEXUS_HOST/repository/atlassian_public/</url>
+          <url>__NEXUS_URL/repository/atlassian_public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
         </repository>
         <repository>
           <id>atlassian3rdpartypublic</id>
-          <url>__NEXUS_HOST/repository/atlassian_3rdParty/</url>
+          <url>__NEXUS_URL/repository/atlassian_3rdParty/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -64,21 +64,21 @@
       <pluginRepositories>
         <pluginRepository>
           <id>mavenpublic</id>
-          <url>__NEXUS_HOST/repository/maven-public</url>
+          <url>__NEXUS_URL/repository/maven-public</url>
           <releases>
             <enabled>true</enabled>
           </releases>
         </pluginRepository>
         <pluginRepository>
           <id>atlassianpublic</id>
-          <url>__NEXUS_HOST/repository/atlassian_public/</url>
+          <url>__NEXUS_URL/repository/atlassian_public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
         </pluginRepository>
         <pluginRepository>
           <id>atlassian3rdpartypublic</id>
-          <url>__NEXUS_HOST/repository/atlassian_3rdParty/</url>
+          <url>__NEXUS_URL/repository/atlassian_3rdParty/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
