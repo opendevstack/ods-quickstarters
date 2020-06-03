@@ -1,9 +1,0 @@
-{
-  "baseUrl": "http://localhost:4200",
-  "fixturesFolder": "fixtures",
-  "integrationFolder": "build",
-  "pluginsFile": "plugins/index.js",
-  "supportFile": "build/support",
-  "viewportWidth": 1376,
-  "viewportHeight": 660
-}
