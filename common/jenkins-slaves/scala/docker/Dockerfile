@@ -58,6 +58,7 @@ COPY test/* /tmp/scala/
 RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/repositories.tmp && \
     mv $HOME/.sbt/repositories.tmp $HOME/.sbt/repositories  && \
     nexusHost=$(echo $nexusUrl | sed -e "s|https://||g" | sed -e "s|http://||g") && \
+    nexusHost=$(echo $nexusHost | sed -e "s|:.*||g") && \
     sed -i.bak -e "s|NEXUS_HOST|$nexusHost|g" $HOME/.sbt/credentials && \
     sed -i.bak -e "s|NEXUS_USERNAME|$nexusUsername|g" $HOME/.sbt/credentials && \
     sed -i.bak -e "s|NEXUS_PASSWORD|$nexusPassword|g" $HOME/.sbt/credentials && \
