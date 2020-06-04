@@ -62,8 +62,6 @@ objects:
         deploymentconfig: ${COMPONENT}
       sessionAffinity: None
       type: ClusterIP
-    status:
-      loadBalancer: {}
 
   - apiVersion: v1
     kind: BuildConfig
