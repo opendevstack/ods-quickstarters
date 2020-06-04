@@ -14,22 +14,22 @@ jobs:
         run: |
           docker build --tag slave-go-test .
 
-  jenkins-slave-maven:
-    name: Jenkins Slave Maven
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-slaves/maven/docker
-        run: |
-            docker build --tag slave-maven-test \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusUsername=developer \
-              --build-arg nexusPassword=s3cr3t \
-              .
+# jenkins-slave-maven:
+#   name: Jenkins Slave Maven
+#   runs-on: ubuntu-18.04
+#   steps:
+#     -
+#       name: Checkout repository
+#       uses: actions/checkout@v2.0.0
+#     -
+#       name: Build docker image
+#       working-directory: common/jenkins-slaves/maven/docker
+#       run: |
+#           docker build --tag slave-maven-test \
+#             --build-arg nexusUrl=https://nexus.example.com \
+#             --build-arg nexusUsername=developer \
+#             --build-arg nexusPassword=s3cr3t \
+#             .
 
 # jenkins-slave-nodejs10-angular:
 #   name: Jenkins Slave NodeJS 10 - Angular
