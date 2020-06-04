@@ -13,7 +13,7 @@ odsComponentPipeline(
   odsComponentStageBuildOpenShiftImage(context, [
     buildArgs: [
       nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
-      nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]
+      nexusHostWithoutScheme: context.nexusHostWithoutScheme
     ]
   ])
 

@@ -16,7 +16,7 @@ odsComponentPipeline(
   def predictionServiceName = "${context.componentId}-prediction-service"
   def buildArgs = [
     "nexusHostWithBasicAuth" : context.nexusHostWithBasicAuth,
-    "nexusHostWithoutScheme" : context.nexusHost.tokenize('//')[1],
+    "nexusHostWithoutScheme" : context.nexusHostWithoutScheme,
     "serviceType" : ""
   ]
 
@@ -66,7 +66,7 @@ def stageTrainingUnitTests(def context, def trainingPod) {
 
 def stageTraining(def context, def trainingPod) {
   stage('Train Model') {
-    sh(returnStdout: true, script:"pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHost.tokenize('//')[1]}  requests --user")
+    sh(returnStdout: true, script:"pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme}  requests --user")
 
     def trainingRoute = "http://localhost:8080"
     def trainingPassword = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -o yaml -n ${context.targetProject} | grep password: | cut -d':' -f2 ").trim()
