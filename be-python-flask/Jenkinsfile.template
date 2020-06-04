@@ -9,19 +9,19 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
+  stageTestSuite(context)
   odsComponentStageScanWithSonar(context)
   stageBuild(context)
   odsComponentStageBuildOpenShiftImage(context, [
     buildArgs: [
       nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
-      nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]
+      nexusHostWithoutScheme: context.nexusHostWithoutScheme
     ]
   ])
   odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
-def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithoutScheme) {
+def stageTestSuite(def context) {
   String testLocation = 'build/test-results/test'
   String coverageLocation = 'build/test-results/coverage'
 
@@ -29,7 +29,7 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
     sh """
       virtualenv testsuite
       . ./testsuite/bin/activate
-      pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r tests/requirements.txt
+      pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme} -r tests/requirements.txt
       pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}

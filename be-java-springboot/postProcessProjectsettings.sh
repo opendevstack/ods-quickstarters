@@ -16,7 +16,7 @@ USE_LEGACY_NEXUS_UPLOAD_SCRIPT=0
 
 if [[ $version == "4.9" ]]; then
 	sed -i.bak '/springBootVersion =/a \
-	    nexus_url = "\${project.findProperty("nexus_url") ?: System.getenv("NEXUS_URL") ?: System.getenv("NEXUS_HOST")}"\
+	    nexus_url = "\${project.findProperty("nexus_url") ?: System.getenv("NEXUS_HOST")}"\
 	    nexus_folder = "candidates"\
 	    nexus_user = "\${project.findProperty("nexus_user") ?: System.getenv("NEXUS_USERNAME")}"\
 	    nexus_pw = "\${project.findProperty("nexus_pw") ?: System.getenv("NEXUS_PASSWORD")}"\
