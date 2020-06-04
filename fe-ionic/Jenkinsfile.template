@@ -19,7 +19,7 @@ odsComponentPipeline(
 
 def stageBuild(def context) {
   stage('Build') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_URL=${context.nexusUrl}"]) {
+    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
       sh "yarn global add ionic@3.19.0"
       sh "yarn install"
       if ('master'.equals(context.gitBranch)) {
