@@ -88,11 +88,14 @@ RUN buildDeps=' \
         rsync \
         nmap-ncat \
     && localedef -c -f UTF-8 -i en_US en_US.UTF-8 \
-    && if [[ -n ${nexusUrl} ]]; \
-        then pip install -U -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple pip setuptools wheel \
-        && pip install -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple $pipDeps \
-        && pip install -i https://${nexusAuth}@${nexusUrl:8}/repository/pypi-all/simple $airflowFixDeps; \
-        else pip install -U pip setuptools wheel \
+    && if [[ -n ${nexusUrl} ]]; then \
+        nexusName=$(echo -n ${nexusUrl} | sed -E "s|https?://||") && \
+        nexusUrl=$(echo -n ${nexusUrl} | sed -e "s|://|://${nexusAuth}@|") && \
+        echo "nexusName is ${nexusName}, nexusUrl is ${nexusUrl}" && \
+        python3 -m pip install -U --trusted-host ${nexusName} -i ${nexusUrl}/repository/pypi-all/simple pip setuptools wheel \
+        && python3 -m pip install --trusted-host ${nexusName} -i ${nexusUrl}/repository/pypi-all/simple $pipDeps \
+        && python3 -m pip install --trusted-host ${nexusName} -i ${nexusUrl}/repository/pypi-all/simple $airflowFixDeps; \
+    else pip install -U pip setuptools wheel \
         && pip install $pipDeps \
         && pip install $airflowFixDeps; \
     fi \
