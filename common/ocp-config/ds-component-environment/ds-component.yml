@@ -1,5 +1,8 @@
 apiVersion: v1
 kind: Template
+labels:
+  template: ds-component
+  app: '${PROJECT}-${COMPONENT}'
 parameters:
 - description: The name of the application project.
   displayName: Project
@@ -59,8 +62,6 @@ objects:
         deploymentconfig: ${COMPONENT}
       sessionAffinity: None
       type: ClusterIP
-    status:
-      loadBalancer: {}
 
   - apiVersion: v1
     kind: BuildConfig

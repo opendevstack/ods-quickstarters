@@ -22,5 +22,4 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageRenderJenkinsfile(context)
 
-  odsQuickstarterStageRenderSonarProperties(context)
 }
