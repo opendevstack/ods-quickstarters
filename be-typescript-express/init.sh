@@ -1,32 +1,30 @@
 #!/usr/bin/env bash
 set -eux
 
-# Get directory of this script
+COMPONENT=$1
+
+echo "Get dir"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-while [[ "$#" > 0 ]]; do case $1 in
-  -p=*|--project=*) PROJECT="${1#*=}";;
-  -p|--project) PROJECT="$2"; shift;;
-
-  -c=*|--component=*) COMPONENT="${1#*=}";;
-  -c|--component) COMPONENT="$2"; shift;;
-
-  -g=*|--group=*) GROUP="${1#*=}";;
-  -g|--group) GROUP="$2"; shift;;
-
-  *) echo "Unknown parameter passed: $1"; exit 1;;
-esac; shift; done
-
 cd $COMPONENT
+cd $SCRIPT_DIR/files
 
-echo "generate project"
-yo --no-insight node-express-typescript
-npm install typescript@3.2.1 --save-dev
-npm install jest -g
-npm install jest-junit --save-dev
+echo "Generate package json"
+npm init -y
 
-echo "copy fixes from quickstart to generated project"
-cp -r $SCRIPT_DIR/fix/. src/
+echo "Install dependencies"
 
-echo "adding directories 'lib' and 'docker' to nyc exlude list to fix coverage test issue"
-sed -i 's/--reporter=text/--exclude=\\"docker\\" --exclude=\\"lib\\" --reporter=text/g' package.json
+TYPESCRIPT_VERSION="3.9.5"
+NODE_TYPE_VERSION="14.0.13"
+EXPRESS_VERSION="4.17.1"
+JEST_VERSION="26.0.0"
+JEST_JUNIT_VERSION="10.0.0"
+
+npm i typescript@$TYPESCRIPT_VERSION express@$EXPRESS_VERSION @types/node@$NODE_TYPE_VERSION jest@$JEST_VERSION @types/jest@$JEST_VERSION
+npm i jest-junit@$JEST_JUNIT_VERSION --save-dev
+
+echo "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
+npx tsc --init --skipLibCheck --outDir "./dist"
+
+echo "Add npm start to standard package json"
+python $SCRIPT_DIR/add-to-package-json.py $SCRIPT_DIR/files/package.json
