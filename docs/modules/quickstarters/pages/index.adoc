@@ -35,7 +35,6 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 === Frontend Quickstarter
 * xref::fe-angular.adoc[Frontend - Angular]
 * xref::fe-ionic.adoc[Mobile - Ionic]
-* xref::fe-react.adoc[Frontend - React]
 
 === Data Science Quickstarter
 * xref::ds-ml-service.adoc[Data Science - Machine Learning]

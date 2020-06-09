@@ -8,7 +8,6 @@
 ** xref:quickstarters:be-scala-akka.adoc[BE Scala Akka]
 ** xref:quickstarters:fe-angular.adoc[FE Angular]
 ** xref:quickstarters:fe-ionic.adoc[FE Ionic]
-** xref:quickstarters:fe-react.adoc[FE React]
 ** xref:quickstarters:ds-ml-service.adoc[Data Science Machine Learning Service]
 ** xref:quickstarters:ds-jupyter-notebook.adoc[Data Science Jupyter Notebook]
 ** xref:quickstarters:ds-rshiny.adoc[Data Science RShiny app]
