@@ -12,9 +12,6 @@ sonar.tests=.
 sonar.test.inclusions=**/*_test.go
 sonar.test.exclusions=**/vendor/**
 
-# change to your programming language
-# sonar.language=
-
 # Encoding of the source files (optional but recommended as default is ASCII)
 sonar.sourceEncoding=UTF-8
 sonar.go.coverage.reportPaths=coverage.out
