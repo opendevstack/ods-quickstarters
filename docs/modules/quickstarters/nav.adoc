@@ -1,6 +1,7 @@
 * xref:quickstarters:index.adoc[Quickstarters]
 ** xref:quickstarters:docker-plain.adoc[BE Docker Plain]
-** xref:quickstarters:be-golang-plain.adoc[BE Golang]
+** xref:quickstarters:be-gateway-kong.adoc[BE Golang]
+** xref:quickstarters:be-golang-plain.adoc[BE Gateway Kong]
 ** xref:quickstarters:be-java-springboot.adoc[BE Java / Spring Boot]
 ** xref:quickstarters:be-typescript-express.adoc[BE Node Express]
 ** xref:quickstarters:be-python-flask.adoc[BE Python Flask]

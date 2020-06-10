@@ -24,6 +24,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 
 === Backend Quickstarter
 
+* xref::be-gateway-kong.adoc[Backend - Gateway/Nginx]
 * xref::be-gateway-nginx.adoc[Backend - Gateway/Nginx]
 * xref::be-golang-plain.adoc[Backend - Go]
 * xref::be-java-springboot.adoc[Backend - Java/SpringBoot]

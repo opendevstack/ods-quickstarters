@@ -1,31 +1,33 @@
 // build params
+
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
-def odsGitRef = env.ODS_GIT_REF ?: 'production'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
 def projectId = env.PROJECT_ID
 def componentId = env.COMPONENT_ID.toLowerCase()
 def packageName = env.PACKAGE_NAME
 def gitUrlHttp = env.GIT_URL_HTTP
 def group = env.GROUP_ID
 
-def credentialsId = "cd-user-prj-with-password"
-def quickstarterBasepath = "be-gateway-kong"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_PRJ_HOST.split(":")[0]
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-slave-base:${odsImageTag}",
+) { context ->
+
+ odsQuickstarterStageCopyFiles(context)
+
+ odsQuickstarterStageCreateOpenShiftResources(
+   context,
+   [directory: 'common/ocp-config/component-environment']
+ )
+
+  odsQuickstarterStageRenderJenkinsfile(context)
 }
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-base:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
 
 podTemplate(
       label: podLabel,

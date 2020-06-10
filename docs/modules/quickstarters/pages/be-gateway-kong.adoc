@@ -1,22 +1,56 @@
-= (quickstarter name)
+= Backend - Gateway Kong (be-gateway-kong)
 
 == Purpose of this quickstarter
 
-Use this when you want to ...
+[, https://github.com/Kong/kong]
+""
+Kong is a cloud-native, fast, scalable, and distributed Microservice Abstraction Layer (also known as an API Gateway or API Middleware).
+""
+
+Allows to build an docker image with Centos 7 + Kong 1.4 + Kong OIDC Plugin.
+
+The Quickstarter generates a git repository with the initial code of the image that is described by an inital docker file
+
+
 
 == What files / which architecture is generated?
 
-...
+Source generated in the git repository:
+----
+├── Jenkinsfile - Contains Jenkins build configuration
+├── docker - Contains Dockerfile for the build
+│   └── Dockerfile
+├── sonar-project.properties - SonarQube Configuration
+----
 
 == Frameworks used
 
-...
+Base Docker Image `kong:1.4-centos` with:
+
+- Centos 7
+- Kong 1.4
+- Kong OIDC Plugin: kong-oidc is a plugin for Kong implementing the OpenID Connect Relying Party (RP) functionality. See https://github.com/nokia/kong-oidc[kong-oidc] for details.
 
 == Usage
 
 How do you start after you provisioned this quickstarter?
 
 == Jenkins Slave image used
+
+== How this quickstarter is built through jenkins
+
+The build pipeline is defined in the `Jenkinsfile` in the project root. The mains stages of the pipeline are,
+
+. Build :  `stageBuild` command will be executed to build the application and then the build (including the node_modules) will be copied to the `docker/dist` folder.
+. Unit Testing : `+npm test -- --progress false+` & `npm run coverage` commands will be executed for running unit tests and to generate coverage report. The results can be seen form the Jenkins console output.
+
+
+The Jenkinsfile is provisioned with this quickstarter to ease CI/CD process.
+In Jenkinsfile, there is the following stage:
+
+* Prepare
+* Build Openshift Image -
+* Deploy to Openshift
 
 ...
 
