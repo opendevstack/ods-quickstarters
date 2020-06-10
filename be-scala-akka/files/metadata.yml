@@ -1,6 +1,0 @@
----
-name: Scala
-description: "Scala is a general-purpose programming language providing support for functional programming and a strong static type system. Technologies: Scala 2.12, AKKA HTTP 10.1, AKKA 2.5, OpenJDK 8"
-supplier: https://www.scala-lang.org
-version: 3.x
-type: ods

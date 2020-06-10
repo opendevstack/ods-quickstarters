@@ -29,14 +29,12 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 * xref::be-java-springboot.adoc[Backend - Java/SpringBoot]
 * xref::be-typescript-express.adoc[Backend - TypeScript/Express]
 * xref::be-python-flask.adoc[Backend - Python/Flask]
-* xref::be-scala-akka.adoc[Backend - Scala/Akka]
+* xref::be-scala-play.adoc[Backend - Scala/Play]
 * xref::airflow-cluster.adoc[Airflow]
 
 === Frontend Quickstarter
 * xref::fe-angular.adoc[Frontend - Angular]
 * xref::fe-ionic.adoc[Mobile - Ionic]
-* xref::fe-react.adoc[Frontend - React]
-* xref::fe-vue.adoc[Frontend - Vue]
 
 === Data Science Quickstarter
 * xref::ds-ml-service.adoc[Data Science - Machine Learning]
