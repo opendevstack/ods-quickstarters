@@ -20,7 +20,11 @@ def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
       sh "npm install"
-      sh "npm run build"
+      if ('master'.equals(context.gitBranch)) {
+        sh "npm run build --prod"
+      } else {
+        sh "npm run build"
+      }
     }
     sh "cp -r dist/${context.componentId} docker/dist"
   }
