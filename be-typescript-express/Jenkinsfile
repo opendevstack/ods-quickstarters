@@ -9,7 +9,26 @@ odsQuickstarterPipeline(
 ) { context ->
 
   stage("init Project") {
-      sh "sh ${context.sourceDir}/init.sh '${context.componentId}'"
+    dir("$context.targetDir") {
+      print "Generate package json"
+      sh "npm init -y"
+
+      print "Install dependencies"
+      def typescriptVersion = "3.9.5"
+      def nodeTypeVersion = "14.0.13"
+      def expressVersion = "4.17.1"
+      def jestVersion = "26.0.0"
+      def jestJunitVersion = "10.0.0"
+
+      sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestVersion"
+      sh "npm i jest-junit@$jestJunitVersion --save-dev"
+
+      print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
+      sh "npx tsc --init --skipLibCheck --outDir './dist'"
+
+      print "Modify script commands in package json file"
+      sh "python $env.WORKSPACE/$context.sourceDir/add-to-package-json.py ./package.json"
+    }
   }
 
   odsQuickstarterStageCopyFiles(context)
