@@ -24,7 +24,8 @@ odsQuickstarterPipeline(
       sh "npm i jest-junit@$jestJunitVersion --save-dev"
 
       print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
-      sh "npx tsc --init --skipLibCheck --outDir './dist'"
+      print "Target 10.0.0 and newer versions. Tell the compiler its okay to output JS syntax features from ES2018."
+      sh "npx tsc --init --lib 'es2018' --target 'es2018' --skipLibCheck --outDir './dist'"
 
       print "Modify script commands in package json file"
       sh "python $env.WORKSPACE/$context.sourceDir/add-to-package-json.py ./package.json"
