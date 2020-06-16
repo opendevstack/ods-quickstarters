@@ -43,7 +43,17 @@ On top of the mentioned frameworks above, we use libraries:
 . https://www.npmjs.com/package/@types/node[@types/node ({caret}14.0.13)]
 
 == Node version
-As our builder slave uses node v10, we strongly recommend you to use `v10.15.3`.
+When you push your code, your runtime and test code will be compiled using node v10. After deployment the compiled code also runs in node v10. If you developed your code and tests using a different node version locally, this might cause some problems.
+
+This is why we made the `tsconfig.json` file to be compatible with node v10. So bear in mind that any changes to compiler options might result in compilation and runtime errors. Here are our related changes to `tsconfig.json` file below:
+```
+  "compilerOptions": {
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "target": "es2018"
+  }
+```
+
 
 == Usage - how do you start after you provisioned this quickstarter
 
