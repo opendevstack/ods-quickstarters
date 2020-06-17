@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
 def odsGitRef = env.ODS_GIT_REF ?: 'master'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
@@ -28,7 +30,7 @@ odsQuickstarterPipeline(
       sh "npx tsc --init --lib 'es2018' --target 'es2018' --skipLibCheck --outDir './dist'"
 
       print "Modify script commands in package json file"
-      sh "python $env.WORKSPACE/$context.sourceDir/add-to-package-json.py ./package.json"
+      addScriptsToPackageJson()
     }
   }
 
@@ -41,4 +43,12 @@ odsQuickstarterPipeline(
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
+}
+
+def addScriptsToPackageJson() {
+  def data = readJSON file: './package.json'
+  data.scripts.test = "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' npx jest --reporters=default --reporters=jest-junit --coverage --coverageDirectory=coverage_output --forceExit ./dist"
+  data.scripts.put("build", "tsc --watch")
+  data.scripts.put("start", "node dist/src/index.js")
+  writeJSON file: './package.json', json: data, pretty: 4
 }
