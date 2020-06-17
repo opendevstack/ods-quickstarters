@@ -4,20 +4,32 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
 library("ods-jenkins-shared-library@${odsGitRef}")
 
-def yoVersion = "3.1.1"
-def generatorVersion = "4.2.2"
-
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-slave-nodejs10-angular:${odsImageTag}",
 ) { context ->
 
-  stage("init yo") {
-    sh "npm install -g yo@${yoVersion} && npm install -g generator-node-express-typescript@${generatorVersion}"
-    sh "yo --generators"
-  }
-
   stage("init Project") {
-      sh "sh ${context.sourceDir}/init.sh --project ${context.projectId} --component ${context.componentId} --group ${context.group}"
+    dir("$context.targetDir") {
+      print "Generate package json"
+      sh "npm init -y"
+
+      print "Install dependencies"
+      def typescriptVersion = "3.9.5"
+      def nodeTypeVersion = "14.0.13"
+      def expressVersion = "4.17.1"
+      def jestVersion = "26.0.0"
+      def jestJunitVersion = "10.0.0"
+
+      sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestVersion"
+      sh "npm i jest-junit@$jestJunitVersion --save-dev"
+
+      print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
+      print "Target 10.0.0 and newer versions. Tell the compiler its okay to output JS syntax features from ES2018."
+      sh "npx tsc --init --lib 'es2018' --target 'es2018' --skipLibCheck --outDir './dist'"
+
+      print "Modify script commands in package json file"
+      addScriptsToPackageJson()
+    }
   }
 
   odsQuickstarterStageCopyFiles(context)
@@ -27,6 +39,14 @@ odsQuickstarterPipeline(
     [directory: 'common/ocp-config/component-environment']
   )
   odsQuickstarterStageRenderJenkinsfile(context)
-  
+
   odsQuickstarterStageRenderSonarProperties(context)
+}
+
+def addScriptsToPackageJson() {
+  def data = readJSON file: './package.json'
+  data.scripts.test = "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' npx jest --reporters=default --reporters=jest-junit --coverage --coverageDirectory=coverage_output --forceExit ./dist"
+  data.scripts.put("build", "tsc --watch")
+  data.scripts.put("start", "node dist/src/index.js")
+  writeJSON file: './package.json', json: data, pretty: 4
 }
