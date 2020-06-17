@@ -1,5 +1,3 @@
-import groovy.json.JsonOutput
-
 def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
 def odsGitRef = env.ODS_GIT_REF ?: 'master'
 def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
