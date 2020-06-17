@@ -50,7 +50,7 @@ RUN apt-get update && \
 RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cran.rstudio.com/")'
 
 # Install RJDBC and other deps from CRAN
-RUN R -e 'install.packages(c("RJDBC", "shinythemes", "d3heatmap", "reshape2"), repos="http://cran.uni-muenster.de/")'
+RUN R -e 'install.packages(c("RJDBC", "shinythemes", "ggplot2", "reshape2"), repos="http://cran.uni-muenster.de/")'
 
 # Cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
