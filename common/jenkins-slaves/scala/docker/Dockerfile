@@ -9,9 +9,6 @@ ARG nexusPassword
 ENV SBT_VERSION=1.3.12
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 
-RUN yum -y install java-1.8.0-openjdk-devel \
-    && alternatives --set java $(alternatives --display java | awk '/family.*x86_64/ { print $1; }')
-
 RUN curl -O -L http://dl.bintray.com/sbt/rpm/sbt-$SBT_VERSION.rpm && \
     yum -y install sbt-$SBT_VERSION.rpm && \
     yum clean all && \
@@ -34,7 +31,7 @@ RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/
     cd /tmp && \
     /tmp/set_sbt_proxy.sh
 
-RUN sbt new scala/scala-seed.g8 --name="scala-test" && \
+RUN sbt new scala/scala-seed.g8 --name="scala-test" -v && \
     cd scala-test && \
     sbt test && \
     rm -rf /tmp/scala-test /tmp/target
