@@ -20,6 +20,8 @@ val testDependencies = Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 )
 
+coverageExcludedPackages := """<empty>;router\..*;views.html\..*;"""
+
 libraryDependencies ++= compileDependencies ++ testDependencies
 
 // Adds additional packages into Twirl
