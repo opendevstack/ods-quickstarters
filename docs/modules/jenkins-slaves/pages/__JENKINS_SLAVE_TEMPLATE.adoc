@@ -1,10 +1,10 @@
-= (jenkins slave name)
+= (jenkins agent name)
 
 == Overview
 
-The image is built in the global `cd` project and is named `jenkins-slave-&lt;NAME&gt;`.
+The image is built in the global `cd` project and is named `jenkins-agent-&lt;NAME&gt;`.
 
-It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-&lt;NAME&gt;`
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-&lt;NAME&gt;`
 
 == Features
 

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-golang
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-golang
+    labels:
+      app: jenkins-agent-golang
+  spec:
+    dockerImageRepository: jenkins-agent-golang
+    lookupPolicy:
+      local: false

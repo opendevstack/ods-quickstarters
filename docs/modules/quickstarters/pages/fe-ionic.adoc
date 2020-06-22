@@ -95,10 +95,10 @@ When the code in your git repository is updated the `Jenkinsfile` comes into act
 * *Unit Test* - Runs unit test cases by executing `yarn test` command, if any test fails, the build is marked as failed.
 * *Lint* - Profiler that ensures code best practices by running `npm run lint` command, if linting is not passing, the build is marked as failed also.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular[Nodejs10-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs10-angular[Nodejs10-Angular builder agent] Jenkins builder agent.
 
 == Known Limitation
 

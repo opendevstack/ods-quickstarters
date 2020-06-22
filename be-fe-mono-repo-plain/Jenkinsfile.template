@@ -2,9 +2,9 @@
 
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
-// depending on what techs are needed, a different slave image may be used below
+// depending on what techs are needed, a different agent image may be used below
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-slave-base:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-base:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'

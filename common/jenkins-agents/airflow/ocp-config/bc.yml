@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-airflow
+parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
+- name: NEXUS_URL
+  required: true
+- name: NEXUS_AUTH
+  required: true
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-agent-airflow
+    labels:
+      app: jenkins-agent-airflow
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-agent-airflow:${ODS_IMAGE_TAG}
+    postCommit: {}
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+      requests:
+        cpu: "200m"
+        memory: "1Gi"
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-agents/airflow/docker
+      git:
+        ref: ${ODS_GIT_REF}
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        buildArgs:
+          - name: nexusUrl
+            value: ${NEXUS_URL}
+          - name: nexusAuth
+            value: ${NEXUS_AUTH}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-agent-base:${ODS_IMAGE_TAG}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers: []

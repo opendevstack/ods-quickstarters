@@ -32,9 +32,9 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 . Start OpenShift build
 . Deploy image to OpenShift
 
-== Builder slave used
+== Builder agent used
 
-https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base[jenkins-slave-base]
+https://github.com/opendevstack/ods-core/tree/master/jenkins/agent-base[jenkins-agent-base]
 
 == Known limitions
 

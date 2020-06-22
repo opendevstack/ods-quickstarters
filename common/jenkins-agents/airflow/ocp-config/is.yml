@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-airflow
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-airflow
+    labels:
+      app: jenkins-agent-airflow
+  spec:
+    dockerImageRepository: jenkins-agent-airflow
+    lookupPolicy:
+      local: false

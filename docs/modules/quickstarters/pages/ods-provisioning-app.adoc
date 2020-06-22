@@ -23,7 +23,7 @@ see https://github.com/opendevstack/ods-provisioning-app
 
 see https://github.com/opendevstack/ods-provisioning-app
 
-== Builder Slave used
+== Builder agent used
 
 see https://github.com/opendevstack/ods-provisioning-app
 

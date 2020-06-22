@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-maven
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-maven
+    labels:
+      app: jenkins-agent-maven
+  spec:
+    dockerImageRepository: jenkins-agent-maven
+    lookupPolicy:
+      local: false

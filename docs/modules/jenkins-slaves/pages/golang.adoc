@@ -1,10 +1,10 @@
-= Go Jenkins Slave
+= Go Jenkins agent
 
 == Introduction
-This slave is used to build https://golang.org[Go] code.
+This agent is used to build https://golang.org[Go] code.
 
-The image is built in the global `cd` project and is named `jenkins-slave-golang`.
-It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-slave-golang:latest`.
+The image is built in the global `cd` project and is named `jenkins-agent-golang`.
+It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-golang:latest`.
 
 == Features
 1. Go 1.14.2

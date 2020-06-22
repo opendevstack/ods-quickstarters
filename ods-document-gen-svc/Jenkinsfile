@@ -5,7 +5,7 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 library("ods-jenkins-shared-library@${odsGitRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageForkODS(

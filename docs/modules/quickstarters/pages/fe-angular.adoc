@@ -78,10 +78,10 @@ In Jenkinsfile, there are various stages
 
 Please note: By default the applciation is always build as full production build including all sorts of optimizations. In addition source maps will be added except for builds that are triggered from `master`. This can be changed by configuring (additional) build configurations within `angular.json` and by using them via stageBuild or `package.json`.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular[Nodejs10-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs10-angular[Nodejs10-Angular builder agent] Jenkins builder agent.
 
 == Known limitations
 

@@ -23,7 +23,7 @@ see https://github.com/opendevstack/ods-document-generation-svc
 
 see https://github.com/opendevstack/ods-document-generation-svc
 
-== Builder Slave used
+== Builder agent used
 
 see https://github.com/opendevstack/ods-document-generation-svc
 

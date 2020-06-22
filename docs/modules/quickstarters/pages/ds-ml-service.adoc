@@ -21,7 +21,7 @@ linux system using ssh. The training process is wrapped into a flask server to b
  and possible restart the training process. Moreover, the training service offers an endpoint
  for downloading the created model afterwards. Additionally, unittests and
  integration tests are executed on the training pod, in order to not depend on operating
- dependencies in the jenkins slave.
+ dependencies in the jenkins agent.
 * The `prediction` service provides a simple flask service for getting new predictions out
  of your model by making json posts to the prediction REST endpoint.
  The prediction service is already built with the newly trained model from the training pod.
@@ -298,9 +298,9 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 . Build prediction image
 . Deploy prediction service
 
-== Builder slave used
+== Builder agent used
 
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/python[jenkins-slave-python]
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/python[jenkins-agent-python]
 
 == Frameworks used
 

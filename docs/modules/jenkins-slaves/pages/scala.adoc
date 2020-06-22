@@ -1,10 +1,10 @@
-= Scala Jenkins Slave
+= Scala Jenkins agent
 
 == Introduction
-This slave is used to build Scala code through SBT (Scala build tool).
+This agent is used to build Scala code through SBT (Scala build tool).
 
-The image is built in the global `cd` project and is named `jenkins-slave-scala`.
-It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-scala`.
+The image is built in the global `cd` project and is named `jenkins-agent-scala`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-scala`.
 
 == Features
 . SBT 1.1.6

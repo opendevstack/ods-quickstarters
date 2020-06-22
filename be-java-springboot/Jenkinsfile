@@ -7,7 +7,7 @@ library("ods-jenkins-shared-library@${odsGitRef}")
 def springCliVersion = '2.2.6.RELEASE'
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-slave-maven:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${odsImageTag}",
 ) { context ->
 
   stage('Build spring project') {

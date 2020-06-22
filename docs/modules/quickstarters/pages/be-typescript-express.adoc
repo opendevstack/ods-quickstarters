@@ -69,10 +69,10 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 . Build :  `npm run build` command is executed to build the application and then the build is copied to the `docker/dist` folder.
 . Unit Testing : `npm run test` command is executed for running unit tests and to generate coverage report. The results can be seen form the Jenkins console output.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/nodejs10-angular[Nodejs10-Angular builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs10-angular[Nodejs10-Angular builder agent] Jenkins builder agent.
 
 == Known limitations
 
