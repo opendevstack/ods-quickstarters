@@ -46,7 +46,7 @@ odsQuickstarterPipeline(
 def addScriptsToPackageJson() {
   def data = readJSON file: './package.json'
   data.scripts.test = "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' npx jest --reporters=default --reporters=jest-junit --coverage --coverageDirectory=coverage_output --forceExit ./dist"
-  data.scripts.put("build", "tsc --watch")
+  data.scripts.put("build", "tsc")
   data.scripts.put("start", "node dist/src/index.js")
   writeJSON file: './package.json', json: data, pretty: 4
 }
