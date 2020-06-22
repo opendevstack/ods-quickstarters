@@ -28,7 +28,7 @@ def stageBuild(def context) {
 
 def stageUnitTest(def context) {
   stage('Unit Test') {
-    sh "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' npx jest --reporters=default --reporters=jest-junit --coverage --coverageDirectory=coverage_output --forceExit"
+    sh "npm run test"
 
     if (false) {
       junit 'artifacts/xunit.xml'

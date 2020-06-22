@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-LABEL maintainer="Piotr Radkowski <piotr.radkowski@ardigen.com>"
-
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 
@@ -47,10 +45,12 @@ RUN apt-get update && \
         r-cran-rjava
 
 # Install Shiny
-RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cran.rstudio.com/")'
+RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cran.uni-muenster.de/")'
 
-# Install RJDBC and other deps from CRAN
-RUN R -e 'install.packages(c("RJDBC", "shinythemes", "d3heatmap", "reshape2"), repos="http://cran.uni-muenster.de/")'
+# Install app dependencies and fail if any missing
+RUN R -e 'packages = c("RJDBC", "shinythemes", "ggplot2", "reshape2"); \
+    install.packages(packages, repos="http://cran.uni-muenster.de/"); \
+    package.check <- lapply(packages, FUN = function(p) { if(!require(p, character.only = TRUE)) { stop("package not found!") } })'
 
 # Cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

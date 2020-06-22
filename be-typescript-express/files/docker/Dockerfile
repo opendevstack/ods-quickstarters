@@ -10,4 +10,4 @@ USER node
 
 WORKDIR /node
 
-CMD ["node", "lib/index.js"]
+CMD ["node", "dist/src/index.js"]

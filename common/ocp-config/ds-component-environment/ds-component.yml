@@ -59,7 +59,8 @@ objects:
         protocol: TCP
         targetPort: 8080
       selector:
-        deploymentconfig: ${COMPONENT}
+        app: '${PROJECT}-${COMPONENT}'
+        deploymentconfig: '${COMPONENT}'
       sessionAffinity: None
       type: ClusterIP
 
@@ -96,7 +97,8 @@ objects:
       replicas: 1
       revisionHistoryLimit: 10
       selector:
-        name: ${COMPONENT}
+        app: '${PROJECT}-${COMPONENT}'
+        deploymentconfig: '${COMPONENT}'
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
