@@ -9,3 +9,6 @@ sonar.sources=app
 
 # Encoding of the source files (optional but recommended as default is ASCII)
 sonar.sourceEncoding=UTF-8
+
+# Comma-separated list of paths to scoverage.xml report files generaged by Scoverage
+sonar.scala.coverage.reportPaths=target/scala-2.13/scoverage-report/scoverage.xml
