@@ -21,7 +21,7 @@ def stageBuild(def context) {
     sh "npm install"
     sh "npm run build"
     sh "mkdir -p docker/dist"
-    sh "cp -r lib docker/dist/lib"
+    sh "cp -r dist docker/dist"
     sh "cp -r node_modules docker/dist/node_modules"
   }
 }
