@@ -47,7 +47,7 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryM
 # looks for this variable and source the content of this file. This will enable
 # the SCL for all scripts without need to do 'scl enable'.
 ADD contrib/bin/scl_enable /usr/local/bin/scl_enable
-ADD contrib/bin/configure-agent /usr/local/bin/configure-agent
+ADD contrib/bin/configure-agent /usr/local/bin/configure-slave
 
 # set java proxy var
 COPY set_maven_proxy.sh /tmp/set_maven_proxy.sh
