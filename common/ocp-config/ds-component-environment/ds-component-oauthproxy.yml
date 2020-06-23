@@ -2,55 +2,54 @@ apiVersion: v1
 kind: Template
 labels:
   template: ds-component-oauthproxy
-  app: '${PROJECT}-${COMPONENT}'
+  app: "${PROJECT}-${COMPONENT}"
 parameters:
-- description: The name of the application project.
-  displayName: Project
-  name: PROJECT
-  required: true
-- description: The name of the component
-  displayName: Component
-  name: COMPONENT
-  required: true
-- description: The environment stage.
-  displayName: Environment
-  name: ENV
-  required: true
-- name: MEMORY_LIMIT
-  displayName: Memory Limit
-  description: Maximum amount of memory available for the container.
-  value: 256Mi
-  required: true
-- name: MEMORY_REQUEST
-  displayName: Memory Request
-  description: Minimum amount of memory requested for the container.
-  value: 128Mi
-  required: true
-- name: CPU_LIMIT
-  displayName: CPU Limit
-  description: Maximum amount of CPU available for the container.
-  value: 250m
-  required: true
-- name: CPU_REQUEST
-  displayName: CPU Request
-  description: Minimum amount of CPU requested for the container.
-  value: 50m
-  required: true
-- description: Session secret.
-  displayName: Session secret
-  from: '[a-zA-Z0-9]{16}'
-  generate: expression
-  name: SESSION_SECRET
-  required: true
-- name: NEXUS_PASSWORD
-  value: NEXUS_PASSWORD
-  required: true
+  - description: The name of the application project.
+    displayName: Project
+    name: PROJECT
+    required: true
+  - description: The name of the component
+    displayName: Component
+    name: COMPONENT
+    required: true
+  - description: The environment stage.
+    displayName: Environment
+    name: ENV
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 256Mi
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 128Mi
+    required: true
+  - name: CPU_LIMIT
+    displayName: CPU Limit
+    description: Maximum amount of CPU available for the container.
+    value: 250m
+    required: true
+  - name: CPU_REQUEST
+    displayName: CPU Request
+    description: Minimum amount of CPU requested for the container.
+    value: 50m
+    required: true
+  - description: Session secret.
+    displayName: Session secret
+    from: "[a-zA-Z0-9]{16}"
+    generate: expression
+    name: SESSION_SECRET
+    required: true
+  - name: NEXUS_PASSWORD
+    value: NEXUS_PASSWORD
+    required: true
 
 objects:
-
   - apiVersion: v1
     data:
-      password: '${NEXUS_PASSWORD}'
+      password: "${NEXUS_PASSWORD}"
     kind: Secret
     metadata:
       name: nexus
@@ -84,12 +83,12 @@ objects:
         service.alpha.openshift.io/serving-cert-secret-name: ${COMPONENT}-auth-proxy-tls
     spec:
       ports:
-      - name: ${COMPONENT}-auth-proxy
-        port: 443
-        protocol: TCP
-        targetPort: 8443
+        - name: ${COMPONENT}-auth-proxy
+          port: 443
+          protocol: TCP
+          targetPort: 8443
       selector:
-        app: '${PROJECT}-${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
         deploymentconfig: ${COMPONENT}-auth-proxy
       sessionAffinity: None
       type: ClusterIP
@@ -102,7 +101,7 @@ objects:
       replicas: 1
       revisionHistoryLimit: 10
       selector:
-        app: '${PROJECT}-${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
         deploymentconfig: ${COMPONENT}-auth-proxy
       strategy:
         activeDeadlineSeconds: 21600
@@ -117,40 +116,40 @@ objects:
       template:
         metadata:
           labels:
-            app: ${COMPONENT}-auth-proxy
+            app: "${PROJECT}-${COMPONENT}"
             deploymentconfig: ${COMPONENT}-auth-proxy
             env: ${ENV}
         spec:
           containers:
-          - name: oauth-proxy
-            image: openshift/oauth-proxy:latest
-            imagePullPolicy: IfNotPresent
-            resources:
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
-            ports:
-            - containerPort: 8443
-              protocol: TCP
-              name: public
-            args:
-            - --https-address=:8443
-            - --provider=openshift
-            - --openshift-service-account=${COMPONENT}-auth-proxy
-            - --upstream=http://${COMPONENT}.${PROJECT}-${ENV}.svc.cluster.local:8080
-            - --tls-cert=/etc/tls/private/tls.crt
-            - --tls-key=/etc/tls/private/tls.key
-            - --cookie-secret=${SESSION_SECRET}
-            - >-
-              --openshift-sar={"namespace":"${PROJECT}-${ENV}","resource":"services","name":"${COMPONENT}-auth-proxy","verb":"get"}
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-            volumeMounts:
-            - mountPath: /etc/tls/private
-              name: ${COMPONENT}-auth-proxy-tls
+            - name: oauth-proxy
+              image: openshift/oauth-proxy:latest
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
+                requests:
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
+              ports:
+                - containerPort: 8443
+                  protocol: TCP
+                  name: public
+              args:
+                - --https-address=:8443
+                - --provider=openshift
+                - --openshift-service-account=${COMPONENT}-auth-proxy
+                - --upstream=http://${COMPONENT}.${PROJECT}-${ENV}.svc.cluster.local:8080
+                - --tls-cert=/etc/tls/private/tls.crt
+                - --tls-key=/etc/tls/private/tls.key
+                - --cookie-secret=${SESSION_SECRET}
+                - >-
+                  --openshift-sar={"namespace":"${PROJECT}-${ENV}","resource":"services","name":"${COMPONENT}-auth-proxy","verb":"get"}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /etc/tls/private
+                  name: ${COMPONENT}-auth-proxy-tls
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -158,10 +157,10 @@ objects:
           serviceAccountName: ${COMPONENT}-auth-proxy
           terminationGracePeriodSeconds: 30
           volumes:
-          - name: ${COMPONENT}-auth-proxy-tls
-            secret:
-              defaultMode: 420
-              secretName: ${COMPONENT}-auth-proxy-tls
+            - name: ${COMPONENT}-auth-proxy-tls
+              secret:
+                defaultMode: 420
+                secretName: ${COMPONENT}-auth-proxy-tls
       test: false
       triggers:
-      - type: ConfigChange
+        - type: ConfigChange

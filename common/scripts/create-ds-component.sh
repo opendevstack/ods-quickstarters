@@ -97,10 +97,10 @@ for devenv in dev test ; do
 
     tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
-        --selector "app=${PROJECT}-${COMPONENT},template=ds-component"
+        --selector app="${PROJECT}-${COMPONENT}",template=ds-component
 
     tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
         "${TAILOR_BASE_ARGS[@]}" \
-        --selector "app=${PROJECT}-${COMPONENT},template=ds-component-oauthproxy"
+        --selector app="${PROJECT}-${COMPONENT}",template=ds-component-oauthproxy
 
 done
