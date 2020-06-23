@@ -127,6 +127,7 @@ objects:
                       key: password
                       name: nexus
               imagePullPolicy: IfNotPresent
+              image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
               name: ${COMPONENT}
               ports:
                 - containerPort: 8080
