@@ -23,7 +23,7 @@ func TestJenkinsFile(t *testing.T) {
 	err = utils.RunJenkinsFile(
 		"ods-quickstarters",
 		"opendevstack",
-		"cicdtests",
+		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
 		"docker-plain/Jenkinsfile",
 		"unitt-cd",
@@ -66,11 +66,6 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	utils.CheckResources(resourcesInTest, t)
-
-	stdout, stderr, err := coreUtils.RunCommand("docker", []string{"exec", "mockbucket", "sh", "-c", "cd /scm/unitt/docker-plain-test.git && git rev-parse HEAD"}, []string{})
-	if err != nil {
-		t.Fatalf("Docker exec failed:%s\nStdOut: %s\nStdErr: %s", err, stdout, stderr)
-	}
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	url := fmt.Sprintf("http://%s/rest/build-status/1.0/commits/%s", values["BITBUCKET_HOST"], strings.TrimSuffix(stdout, "\n"))

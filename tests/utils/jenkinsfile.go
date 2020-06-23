@@ -5,15 +5,16 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	v1 "github.com/openshift/api/build/v1"
-	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
 	"io/ioutil"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	coreUtils "github.com/opendevstack/ods-core/tests/utils"
+	v1 "github.com/openshift/api/build/v1"
+	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) error {
@@ -45,7 +46,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			},
 			{
 				Name:  "ODS_GIT_REF",
-				Value: "cicdtests",
+				Value: values["ODS_GIT_REF"],
 			},
 			{
 				Name:  "ODS_IMAGE_TAG",
@@ -67,8 +68,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Post(
-		fmt.Sprintf("https://webhook-proxy-%s.172.17.0.1.nip.io/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
+		fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
 			jenkinsNamespace,
+			values["OPENSHIFT_APPS_BASEDOMAIN"],
 			values["PIPELINE_TRIGGER_SECRET"],
 			jenkinsFile,
 			pipelineName),

@@ -6,7 +6,6 @@ test: docker-plain/jenkinsfile_test.go go.mod go.sum
 setup-tests: test-setup/main.go
 	 go build -o test-setup.bin test-setup/main.go
 	 ./test-setup.bin
-	 ./scripts/setup-mocked-ods-repo.sh --ods-ref cicdtests
 lint:
 	echo "Checking code ..."
 	golangci-lint run
