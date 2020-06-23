@@ -60,9 +60,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		return fmt.Errorf("Could not marchal json: %s", err)
 	}
 
-	pipelineNamePrefix := strings.ToLower(strings.Split(jenkinsFile, "/")[0])
-	pipelineName := fmt.Sprintf("ods-corejob-%s-%s", pipelineNamePrefix, projectName)
-	buildName := fmt.Sprintf("%s-%s-1", pipelineName, branch)
+	jenkinsFilePath := strings.Split(jenkinsFile, "/")
+	pipelineNamePrefix := strings.ToLower(jenkinsFilePath[0])
+	pipelineJobName := "prov"
+	if len(jenkinsFilePath) == 1 {
+		pipelineNamePrefix = repository
+		pipelineJobName = "run"
+	}
+
+	pipelineName := fmt.Sprintf("%s-%s-%s", pipelineJobName, pipelineNamePrefix, projectName)
+	buildName := fmt.Sprintf("%s-%s-1", pipelineName, strings.ReplaceAll(branch, "/", "-"))
 
 	println(buildName)
 
@@ -115,7 +122,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 		time.Sleep(2 * time.Second)
 		if err != nil {
-			fmt.Printf("Build is still not available\n")
+			fmt.Printf("Build is still not available, %s\n", err)
 		} else {
 			fmt.Printf("Waiting for build. Current status: %s\n", build.Status.Phase)
 		}
