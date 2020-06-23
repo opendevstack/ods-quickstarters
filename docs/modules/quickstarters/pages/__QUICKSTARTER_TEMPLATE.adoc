@@ -16,7 +16,7 @@ Use this when you want to ...
 
 How do you start after you provisioned this quickstarter?
 
-== Jenkins Slave image used
+== Jenkins agent image used
 
 ...
 

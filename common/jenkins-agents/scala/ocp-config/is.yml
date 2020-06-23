@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-scala
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-scala
+    labels:
+      app: jenkins-agent-scala
+  spec:
+    dockerImageRepository: jenkins-agent-scala
+    lookupPolicy:
+      local: false

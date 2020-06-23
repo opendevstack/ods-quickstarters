@@ -42,10 +42,10 @@ There are six steps:
 * Build the container image.
 * Deploy.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/golang[Golang builder slave].
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/golang[Golang builder agent].
 
 == Known limitations
 

@@ -66,10 +66,10 @@ In Jenkinsfile, there are various stages
 
 * stageBuild - checks source files formatting, runs the tests and builds and copies the artifacts for creating the docker image to the `docker` directory.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses the
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/scala[Scala Jenkins Slave].
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/scala[Scala Jenkins agent].
 
 == Known limitations
 

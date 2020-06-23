@@ -11,7 +11,7 @@ node {
 }
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-slave-airflow:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-airflow:${odsImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)

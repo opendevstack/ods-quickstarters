@@ -133,10 +133,10 @@ In Jenkinsfile.template, there is the following stage:
 
 All the results are stashed and published through Jenkins jUnit publisher.
 
-== Builder Slave used
+== Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/maven[Maven builder slave] Jenkins builder slave.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent] Jenkins builder agent.
 
 == Known limitations
 

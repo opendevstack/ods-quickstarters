@@ -1,8 +1,8 @@
 name: Continous Integration Tests
 on: [ push, pull_request ]
 jobs:
-  jenkins-slave-golang:
-    name: Jenkins Slave Go
+  jenkins-agent-golang:
+    name: Jenkins agent Go
     runs-on: ubuntu-18.04
     steps:
       -
@@ -10,12 +10,12 @@ jobs:
         uses: actions/checkout@v2.0.0
       -
         name: Build docker image
-        working-directory: common/jenkins-slaves/golang/docker
+        working-directory: common/jenkins-agents/golang/docker
         run: |
-          docker build --tag slave-go-test .
+          docker build --tag agent-go-test .
 
-# jenkins-slave-maven:
-#   name: Jenkins Slave Maven
+# jenkins-agent-maven:
+#   name: Jenkins agent Maven
 #   runs-on: ubuntu-18.04
 #   steps:
 #     -
@@ -23,16 +23,16 @@ jobs:
 #       uses: actions/checkout@v2.0.0
 #     -
 #       name: Build docker image
-#       working-directory: common/jenkins-slaves/maven/docker
+#       working-directory: common/jenkins-agents/maven/docker
 #       run: |
-#           docker build --tag slave-maven-test \
+#           docker build --tag agent-maven-test \
 #             --build-arg nexusUrl=https://nexus.example.com \
 #             --build-arg nexusUsername=developer \
 #             --build-arg nexusPassword=s3cr3t \
 #             .
 
-# jenkins-slave-nodejs10-angular:
-#   name: Jenkins Slave NodeJS 10 - Angular
+# jenkins-agent-nodejs10-angular:
+#   name: Jenkins agent NodeJS 10 - Angular
 #   runs-on: ubuntu-18.04
 #   steps:
 #     -
@@ -40,15 +40,15 @@ jobs:
 #       uses: actions/checkout@v2.0.0
 #     -
 #       name: Build docker image
-#       working-directory: common/jenkins-slaves/nodejs10-angular/docker
+#       working-directory: common/jenkins-agents/nodejs10-angular/docker
 #       run: |
-#           docker build --tag slave-nodejs10-angular-test \
+#           docker build --tag agent-nodejs10-angular-test \
 #             --build-arg nexusUrl=https://nexus.example.com \
 #             --build-arg nexusAuth=developer:s3cr3t \
 #             .
 
-  jenkins-slave-nodejs12:
-    name: Jenkins Slave NodeJS 12
+  jenkins-agent-nodejs12:
+    name: Jenkins agent NodeJS 12
     runs-on: ubuntu-18.04
     steps:
       -
@@ -56,15 +56,15 @@ jobs:
         uses: actions/checkout@v2.0.0
       -
         name: Build docker image
-        working-directory: common/jenkins-slaves/nodejs12/docker
+        working-directory: common/jenkins-agents/nodejs12/docker
         run: |
-            docker build --tag slave-nodejs12-test \
+            docker build --tag agent-nodejs12-test \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-slave-python:
-    name: Jenkins Slave Python
+  jenkins-agent-python:
+    name: Jenkins agent Python
     runs-on: ubuntu-18.04
     steps:
       -
@@ -72,16 +72,16 @@ jobs:
         uses: actions/checkout@v2.0.0
       -
         name: Build docker image
-        working-directory: common/jenkins-slaves/python/docker
+        working-directory: common/jenkins-agents/python/docker
         run: |
-            docker build --tag slave-python-test \
+            docker build --tag agent-python-test \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusUsername=developer \
               --build-arg nexusPassword=s3cr3t \
               .
 
-# jenkins-slave-scala:
-#   name: Jenkins Slave Scala
+# jenkins-agent-scala:
+#   name: Jenkins agent Scala
 #   runs-on: ubuntu-18.04
 #   steps:
 #     -
@@ -89,9 +89,9 @@ jobs:
 #       uses: actions/checkout@v2.0.0
 #     -
 #       name: Build docker image
-#       working-directory: common/jenkins-slaves/scala/docker
+#       working-directory: common/jenkins-agents/scala/docker
 #       run: |
-#           docker build --tag slave-scala-test \
+#           docker build --tag agent-scala-test \
 #             --build-arg nexusUrl=https://nexus.example.com \
 #             --build-arg nexusUsername=developer \
 #             --build-arg nexusPassword=s3cr3t \

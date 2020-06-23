@@ -16,22 +16,22 @@
 - Switch to OAuth proxy in jupyter-notebook and r-shiny quickstarters ([#46](https://github.com/opendevstack/ods-quickstarters/issues/46))
 - Airflow Quickstarter fully provisioned in user's ODS project ([#60](https://github.com/opendevstack/ods-quickstarters/issues/60))
 - Rename Airflow QuickStarter to `airflow-cluster` ([#76](https://github.com/opendevstack/ods-quickstarters/issues/76))
-- Golang slave misses readme ([#64](https://github.com/opendevstack/ods-quickstarters/issues/64))
+- Golang agent misses readme ([#64](https://github.com/opendevstack/ods-quickstarters/issues/64))
 - Pass image tag and Git ref as params when provisioning quickstarters ([#41](https://github.com/opendevstack/ods-quickstarters/issues/41))
-- fe-vue: Use nodejs10 slave for provisioning and building ([#32](https://github.com/opendevstack/ods-quickstarters/issues/32))
-- fe-react: Generated Jenkinsfile should use nodejs10 slave image ([#31](https://github.com/opendevstack/ods-quickstarters/issues/31))
+- fe-vue: Use nodejs10 agent for provisioning and building ([#32](https://github.com/opendevstack/ods-quickstarters/issues/32))
+- fe-react: Generated Jenkinsfile should use nodejs10 agent image ([#31](https://github.com/opendevstack/ods-quickstarters/issues/31))
 - fe-ionic: Use nodejs10 image for provisioning ([#30](https://github.com/opendevstack/ods-quickstarters/issues/30))
 - e2e-cypress: Update to nodejs10 image ([#31](https://github.com/opendevstack/ods-quickstarters/issues/31))
 - be-spring-boot: added springCliVersion, updated springframework to 2.2.1 ([#40](https://github.com/opendevstack/ods-quickstarters/pull/40))
 
 ### Fixed
-- Wrong file permission stops Snyk cli from running in Python slave ([#67](https://github.com/opendevstack/ods-quickstarters/issues/67))
+- Wrong file permission stops Snyk cli from running in Python agent ([#67](https://github.com/opendevstack/ods-quickstarters/issues/67))
 - Spring Boot quickstarter ignores property `no_nexus` ([#61](https://github.com/opendevstack/ods-quickstarters/issues/61))
 - be-typescript-express: node version in deployment image doesn't match build image ([#8](https://github.com/opendevstack/ods-quickstarters/issues/8))
 
 ### Removed
 - `NEXUS_HOST` param for component creation ([#70](https://github.com/opendevstack/ods-quickstarters/issues/70))
-- Remove nodejs8 slave image ([#54](https://github.com/opendevstack/ods-quickstarters/issues/54))
+- Remove nodejs8 agent image ([#54](https://github.com/opendevstack/ods-quickstarters/issues/54))
 
 ## [1.2.0 ods-project-quickstarters] - 2019-10-10
 
@@ -51,7 +51,7 @@
 
 - Quickstarter `be-docker-plain` now builds a running container based on alpine instead of RHEL ([#260](https://github.com/opendevstack/ods-project-quickstarters/issues/260)).
 - Quickstarter `ds-ml-service` with unified docker file ([#272](https://github.com/opendevstack/ods-project-quickstarters/issues/272)).
-- Update jenkins slave for 1.2.x release ([#356](https://github.com/opendevstack/ods-project-quickstarters/issues/356)).
+- Update jenkins agent for 1.2.x release ([#356](https://github.com/opendevstack/ods-project-quickstarters/issues/356)).
 - Airflow quickstarter needs rundeck and resource limits update ([#358](https://github.com/opendevstack/ods-project-quickstarters/issues/358)).
 - ds-ml-service - Train model pipeline step can fail after port forwarding of training service ([#269](https://github.com/opendevstack/ods-project-quickstarters/issues/269)).
 - R quickstarter: standard keyserver port 11371 often blocked ([#298](https://github.com/opendevstack/ods-project-quickstarters/issues/298)).
@@ -77,16 +77,16 @@
 ### Added
 - Rundeck `prepare-continous integration` job can now be used to upgrade an existing git repository ([#110](https://github.com/opendevstack/ods-project-quickstarters/pull/110))
 - New quickstarter `be-docker-plain`: useful for starting with a plain `Dockerfile` and no BE/FE framework on top ([#97](https://github.com/opendevstack/ods-project-quickstarters/issues/97))
-- Maven/Gradle Jenkins slave `jenkins-slave-maven` now gets Nexus credentials injected as server into `settings.xml` ([#127](https://github.com/opendevstack/ods-project-quickstarters/issues/127))
+- Maven/Gradle Jenkins agent `jenkins-agent-maven` now gets Nexus credentials injected as server into `settings.xml` ([#127](https://github.com/opendevstack/ods-project-quickstarters/issues/127))
 - New quickstarter `ds_ml_service` for machine learning from model training & testing to production ([#111](https://github.com/opendevstack/ods-project-quickstarters/issues/111))
 - Quickstarter `be-python-flask` now provides coverage analysis data to SonarQube
 - Quickstarter `fe-angular` now provides coverage analysis data to SonarQube and added SonarQube's linter rules for tslint
-- Documentation of all quickstarters and slaves added
+- Documentation of all quickstarters and agents added
 
 ### Changed
 - Python quickstarter should use nexus as artifact repo ([#27](https://github.com/opendevstack/ods-project-quickstarters/issues/27))
 - Jupyter & R-Shiny quickstarters are now based on new Openresty-based WAF image ([#103](https://github.com/opendevstack/ods-project-quickstarters/pull/103))
-- NodeJS 10 Angular Jenkins slave `nodejs10-angular` replaces `nodejs8-angular` and supports nodeJS 10, Angular CLI 8.0.1 and cypress 3.3.1
+- NodeJS 10 Angular Jenkins agent `nodejs10-angular` replaces `nodejs8-angular` and supports nodeJS 10, Angular CLI 8.0.1 and cypress 3.3.1
 
 ### Fixed
 - Rshiny quickstarter broken - due to refactoring and webhook proxy introduction ([#200](https://github.com/opendevstack/ods-project-quickstarters/issues/200)) & ([#184](https://github.com/opendevstack/ods-project-quickstarters/issues/184))
@@ -100,13 +100,13 @@
 - Angular quickstarter `fe-angular-frontend` compilation failed due to changed dependency ([#129](https://github.com/opendevstack/ods-project-quickstarters/issues/129))
 - Spring boot quickstarter `be-springboot` gradle build failed due to dependency update to gradle 4.10 ([#131](https://github.com/opendevstack/ods-project-quickstarters/issues/131))
 - Upgrade of repo, thru rundeck job `prepare-continous integration` fails with invalid device ([#124](https://github.com/opendevstack/ods-project-quickstarters/issues/124))
-- Jenkins `python slave` requires pip to have proper ssl validation configuration ([#176](https://github.com/opendevstack/ods-project-quickstarters/issues/176))
+- Jenkins `python agent` requires pip to have proper ssl validation configuration ([#176](https://github.com/opendevstack/ods-project-quickstarters/issues/176))
 
 ## [1.0.1 ods-project-quickstarters] - 2019-01-25
 
 ### Fixed
 - Exclude images in `openshift` and `rhscl` namespace on import ([#102](https://github.com/opendevstack/ods-project-quickstarters/pull/102))
-- Maven slave fails when proxy is configured due to invalid XML ([#108](https://github.com/opendevstack/ods-project-quickstarters/pull/108))
+- Maven agent fails when proxy is configured due to invalid XML ([#108](https://github.com/opendevstack/ods-project-quickstarters/pull/108))
 
 
 ## [1.0.0 ods-project-quickstarters] - 2018-12-03
@@ -116,14 +116,14 @@
 - Jenkins webhook proxy templates (#81, #82)
 
 ### Changed
-- Quickstarter build containers (located in the subdirs of https://github.com/opendevstack/ods-project-quickstarters/tree/master/boilerplates) inherit from corresponding Jenkins build slaves now rather than replicating the setup
-- Rundeck's OC container inherits from `jenkins-slave-base` now. The pull and tag is triggered thru *verify-rundeck-settings* rundeck job (#32)
+- Quickstarter build containers (located in the subdirs of https://github.com/opendevstack/ods-project-quickstarters/tree/master/boilerplates) inherit from corresponding Jenkins build agents now rather than replicating the setup
+- Rundeck's OC container inherits from `jenkins-agent-base` now. The pull and tag is triggered thru *verify-rundeck-settings* rundeck job (#32)
 - The build of a quickstarter component does not upload the tarball to Nexus anymore - instead it uses binary build configs (#9)
 - The containers used to connect to openshift now pull the root ca during build, to ensure SSL trust (#12, #54)
-- Slaves now support HTTP/S proxy - inject as ENV - with HTTP_PROXY, HTTPS_PROXY & NO_PROXY (#50)
-- Python slave upgraded to 3.6 latest (#24)
-- Maven slave now downloads Gradle 4.8.1 during build to increase build performance of components (#23)
-- Scala slave now downloads sbt 1.1.6 / scala 2.12 - given an SBT bug - when proxy set, no NEXUS usage
+- agents now support HTTP/S proxy - inject as ENV - with HTTP_PROXY, HTTPS_PROXY & NO_PROXY (#50)
+- Python agent upgraded to 3.6 latest (#24)
+- Maven agent now downloads Gradle 4.8.1 during build to increase build performance of components (#23)
+- Scala agent now downloads sbt 1.1.6 / scala 2.12 - given an SBT bug - when proxy set, no NEXUS usage
 - Update to newest cypress and TypeScript versions (#91)
 - Build Jupyter/Rshiny via Jenkins (#92)
 

@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-slave-python:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-python:@ods_image_tag@',
   testResults : 'tests-results',
   openshiftBuildTimeout: 25,
   openshiftRolloutTimeout: 10,

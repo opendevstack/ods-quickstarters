@@ -1,10 +1,10 @@
-= Python Jenkins Slave
+= Python Jenkins agent
 
 == Introduction
-This slave is used to build / execute Python code.
+This agent is used to build / execute Python code.
 
-The image is built in the global `cd` project and is named `jenkins-slave-python`.
-It can be referenced in a `Jenkinsfile` with `ods/jenkins-slave-python`
+The image is built in the global `cd` project and is named `jenkins-agent-python`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-python`
 
 == Features
 1. https://docs.python.org/3.6[Python 3.6]

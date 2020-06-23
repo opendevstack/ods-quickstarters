@@ -109,9 +109,9 @@ There are two steps:
 * Build the container image.
 * Deploy.
 
-== Builder Slave used
+== Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base[jenkins-slave-base]
+This quickstarter uses https://github.com/opendevstack/ods-core/tree/master/jenkins/agent-base[jenkins-agent-base]
 
 == Known limitations
 
