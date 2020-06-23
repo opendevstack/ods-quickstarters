@@ -2,65 +2,63 @@ apiVersion: v1
 kind: Template
 labels:
   template: ds-component
-  app: '${PROJECT}-${COMPONENT}'
+  app: "${PROJECT}-${COMPONENT}"
 parameters:
-- description: The name of the application project.
-  displayName: Project
-  name: PROJECT
-  required: true
-- description: The name of the component
-  displayName: Component
-  name: COMPONENT
-  required: true
-- description: The environment stage.
-  displayName: Environment
-  name: ENV
-  required: true
-- name: MEMORY_LIMIT
-  displayName: Memory Limit
-  description: Maximum amount of memory available for the container.
-  value: 1Gi
-  required: true
-- name: MEMORY_REQUEST
-  displayName: Memory Request
-  description: Minimum amount of memory requested for the container.
-  value: 512Mi
-  required: true
-- name: CPU_LIMIT
-  displayName: CPU Limit
-  description: Maximum amount of CPU available for the container.
-  value: 500m
-  required: true
-- name: CPU_REQUEST
-  displayName: CPU Request
-  description: Minimum amount of CPU requested for the container.
-  value: 50m
-  required: true
-- name: TAGVERSION
-  displayName: tag version
-  description: The version to be used.
-  value: latest
-  required: true
-- name: NEXUS_URL
-  required: true
-- name: NEXUS_USERNAME
-  required: true
+  - description: The name of the application project.
+    displayName: Project
+    name: PROJECT
+    required: true
+  - description: The name of the component
+    displayName: Component
+    name: COMPONENT
+    required: true
+  - description: The environment stage.
+    displayName: Environment
+    name: ENV
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 1Gi
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 512Mi
+    required: true
+  - name: CPU_LIMIT
+    displayName: CPU Limit
+    description: Maximum amount of CPU available for the container.
+    value: 500m
+    required: true
+  - name: CPU_REQUEST
+    displayName: CPU Request
+    description: Minimum amount of CPU requested for the container.
+    value: 50m
+    required: true
+  - name: TAGVERSION
+    displayName: tag version
+    description: The version to be used.
+    value: latest
+    required: true
+  - name: NEXUS_URL
+    required: true
+  - name: NEXUS_USERNAME
+    required: true
 objects:
-
   - apiVersion: v1
     kind: Service
     metadata:
-      creationTimestamp: null
       name: ${COMPONENT}
     spec:
       ports:
-      - name: 8080-tcp
-        port: 8080
-        protocol: TCP
-        targetPort: 8080
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
       selector:
-        app: '${PROJECT}-${COMPONENT}'
-        deploymentconfig: '${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
       sessionAffinity: None
       type: ClusterIP
 
@@ -97,8 +95,8 @@ objects:
       replicas: 1
       revisionHistoryLimit: 10
       selector:
-        app: '${PROJECT}-${COMPONENT}'
-        deploymentconfig: '${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -113,33 +111,36 @@ objects:
         metadata:
           creationTimestamp: null
           labels:
-            name: ${COMPONENT}
+            app: "${PROJECT}-${COMPONENT}"
+            deploymentconfig: "${COMPONENT}"
+            env: "${ENV}"
         spec:
           containers:
-          - env:
-            - name: NEXUS_URL
-              value: '${NEXUS_URL}'
-            - name: NEXUS_USERNAME
-              value: '${NEXUS_USERNAME}'
-            - name: NEXUS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: nexus
-            imagePullPolicy: IfNotPresent
-            name: ${COMPONENT}
-            ports:
-            - containerPort: 8080
-              protocol: TCP
-            resources:
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
+            - env:
+                - name: NEXUS_URL
+                  value: "${NEXUS_URL}"
+                - name: NEXUS_USERNAME
+                  value: "${NEXUS_USERNAME}"
+                - name: NEXUS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: nexus
+              imagePullPolicy: IfNotPresent
+              image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
+              name: ${COMPONENT}
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
+                requests:
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -147,22 +148,22 @@ objects:
           terminationGracePeriodSeconds: 30
       test: false
       triggers:
-      - type: ConfigChange
-      - imageChangeParams:
-          automatic: true
-          containerNames:
-          - ${COMPONENT}
-          from:
-            kind: ImageStreamTag
-            name: ${COMPONENT}:latest
-            namespace: ${PROJECT}-${ENV}
-        type: ImageChange
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${COMPONENT}
+            from:
+              kind: ImageStreamTag
+              name: ${COMPONENT}:latest
+              namespace: ${PROJECT}-${ENV}
+          type: ImageChange
     status: {}
   - apiVersion: v1
     kind: ImageStream
     metadata:
-      name: '${COMPONENT}'
+      name: "${COMPONENT}"
     spec:
-      dockerImageRepository: '${COMPONENT}'
+      dockerImageRepository: "${COMPONENT}"
       lookupPolicy:
         local: false
