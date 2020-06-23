@@ -1,62 +1,75 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	mockbucket "github.com/opendevstack/mockbucket/api"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	"github.com/opendevstack/ods-quickstarters/tests/utils"
-	"io/ioutil"
+	b64 "encoding/base64"
 	"log"
-	"net/http"
+	"path"
+	"strings"
+	"runtime"
+	"fmt"
+	// coreUtils "github.com/opendevstack/ods-core/tests/utils"
+	"github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func main() {
-	err := coreUtils.RemoveAllTestOCProjects()
-	err = utils.RunJenkinsFile("ods-core", "opendevstack", "cicdtests", coreUtils.PROJECT_NAME, "create-projects/Jenkinsfile", "prov-cd")
-	if err != nil {
-		log.Fatalf("Error running JenkinsFile : %s", err)
-	}
-
-	fmt.Printf("Project %s is create to support testing. Be sure not to delete the namespaces '%s', '%s' and '%s' during your tests ",
-		coreUtils.PROJECT_NAME,
-		coreUtils.PROJECT_NAME_CD,
-		coreUtils.PROJECT_NAME_TEST,
-		coreUtils.PROJECT_NAME_DEV)
 
 	values, err := utils.ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)
 	}
 
-	repository := mockbucket.Repository{
-		Name: "docker-plain-test",
-	}
-	repositoryJson, err := json.Marshal(repository)
-	if err != nil {
-		log.Fatal(err)
-	}
-	client := &http.Client{}
-	url := fmt.Sprintf("http://%s/rest/api/1.0/projects/%s/repos", values["BITBUCKET_HOST"], coreUtils.PROJECT_NAME)
-	request, err := http.NewRequest("POST", url, bytes.NewBuffer(repositoryJson))
-	if err != nil {
-		log.Fatal(err)
-	}
-	request.SetBasicAuth(values["CD_USER_ID"], values["CD_USER_PWD"])
-	response, err := client.Do(request)
-	if err != nil {
-		log.Fatal(err)
+	const projectName = "unitt"
+	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
+
+	quickstarters := map[string]string{
+		"docker-plain":"docker-plain-test",
+		"be-typescript-express":"nodejs",
 	}
 
-	bodyBytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal(err)
+	for quickstarter,name := range quickstarters {
+		stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
+			fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
+			fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+			fmt.Sprintf("--password=%s", password),
+			fmt.Sprintf("--project=%s", projectName),
+			fmt.Sprintf("--repository=%s", name)},
+			[]string{})
+		if err != nil {
+			fmt.Printf(
+				"Execution of `setup_bitbucket_test_project.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+				stdout,
+				stderr,
+				err)
+		}
+
+		_, filename, _, _ := runtime.Caller(0)
+		dir := path.Dir(filename)
+
+		// provision build config
+		buildConfigName := fmt.Sprintf("prov-%s-%s-%s", quickstarter, projectName, strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
+
+		stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
+			"delete",
+			"bc",
+			"-n", projectName + "-cd",
+			buildConfigName}, dir, []string{})
+		if err != nil {
+			fmt.Printf("Error when deleting provisioning bc %s: %s, %s\n", buildConfigName, err, stdout, stderr)
+		}
+
+		// quickstarter master branch build
+		buildConfigName = fmt.Sprintf("run-%s-%s-master", name, projectName) 
+
+		stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
+			"delete",
+			"bc",
+			"-n", projectName + "-cd",
+			buildConfigName}, dir, []string{})
+		if err != nil {
+			fmt.Printf("Error when deleting build bc %s: %s, %s\n", buildConfigName, err, stdout, stderr)
+		}
 	}
 
-	if response.StatusCode != http.StatusCreated {
-		log.Fatal(string(bodyBytes))
-	} else {
-		log.Print(string(bodyBytes))
-	}
+
+	fmt.Printf("Done\n")
 }

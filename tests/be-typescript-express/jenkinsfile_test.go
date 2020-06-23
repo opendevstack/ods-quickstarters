@@ -14,7 +14,7 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const componentId = "docker-plain-test"
+	const componentId = "nodejs"
 
 	// buildConfigName := fmt.Sprintf("ods-corejob-docker-plain-unitt-%s", strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
 	// run provision job for docker-plain quickstarter
@@ -23,7 +23,7 @@ func TestJenkinsFile(t *testing.T) {
 		"opendevstack",
 		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
-		"docker-plain/Jenkinsfile",
+		"be-typescript-express/Jenkinsfile",
 		"unitt-cd",
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
@@ -31,7 +31,7 @@ func TestJenkinsFile(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/unitt/docker-plain-test.git", values["REPO_BASE"]),
+			Value: fmt.Sprintf("%s/unitt/nodejs.git", values["REPO_BASE"]),
 		},
 	)
 	if err != nil {
@@ -64,5 +64,4 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	utils.CheckResources(resourcesInTest, t)
-
 }

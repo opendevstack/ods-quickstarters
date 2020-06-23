@@ -5,15 +5,16 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	v1 "github.com/openshift/api/build/v1"
-	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
 	"io/ioutil"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	coreUtils "github.com/opendevstack/ods-core/tests/utils"
+	v1 "github.com/openshift/api/build/v1"
+	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) error {
@@ -45,7 +46,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			},
 			{
 				Name:  "ODS_GIT_REF",
-				Value: "cicdtests",
+				Value: values["ODS_GIT_REF"],
 			},
 			{
 				Name:  "ODS_IMAGE_TAG",
@@ -59,16 +60,24 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		return fmt.Errorf("Could not marchal json: %s", err)
 	}
 
-	pipelineNamePrefix := strings.ToLower(strings.Split(jenkinsFile, "/")[0])
-	pipelineName := fmt.Sprintf("ods-corejob-%s-%s", pipelineNamePrefix, projectName)
-	buildName := fmt.Sprintf("%s-%s-1", pipelineName, branch)
+	jenkinsFilePath := strings.Split(jenkinsFile, "/")
+	pipelineNamePrefix := strings.ToLower(jenkinsFilePath[0])
+	pipelineJobName := "prov"
+	if len(jenkinsFilePath) == 1 {
+		pipelineNamePrefix = repository
+		pipelineJobName = "run"
+	}
+
+	pipelineName := fmt.Sprintf("%s-%s-%s", pipelineJobName, pipelineNamePrefix, projectName)
+	buildName := fmt.Sprintf("%s-%s-1", pipelineName, strings.ReplaceAll(branch, "/", "-"))
 
 	println(buildName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Post(
-		fmt.Sprintf("https://webhook-proxy-%s.172.17.0.1.nip.io/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
+		fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
 			jenkinsNamespace,
+			values["OPENSHIFT_APPS_BASEDOMAIN"],
 			values["PIPELINE_TRIGGER_SECRET"],
 			jenkinsFile,
 			pipelineName),
@@ -113,7 +122,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 		time.Sleep(2 * time.Second)
 		if err != nil {
-			fmt.Printf("Build is still not available\n")
+			fmt.Printf("Build is still not available, %s\n", err)
 		} else {
 			fmt.Printf("Waiting for build. Current status: %s\n", build.Status.Phase)
 		}
