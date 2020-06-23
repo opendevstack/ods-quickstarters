@@ -20,7 +20,6 @@ func main() {
 
 	const projectName = "unitt"
 	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
-	fmt.Printf("password: %s\n", password)
 
 	quickstarters := map[string]string{
 		"docker-plain":"docker-plain-test",
