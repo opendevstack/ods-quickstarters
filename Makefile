@@ -6,78 +6,115 @@ MAKEFLAGS += --no-builtin-rules
 
 NAMESPACE=ods
 
-# JENKINS
+# JENKINS AGENT
 ## Install or update Jenkins agent resources.
-jenkins: apply-jenkins-build start-jenkins-build
-.PHONY: jenkins
+install-jenkins-agent: install-jenkins-agent-airflow install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs10-angular install-jenkins-agent-python install-jenkins-agent-scala
+.PHONY: install-jenkins-agent
 
-## Update OpenShift resources related to Jenkins agent images.
-apply-jenkins-build: apply-jenkins-build-airflow apply-jenkins-build-golang apply-jenkins-build-maven apply-jenkins-build-nodejs10-angular apply-jenkins-build-python apply-jenkins-build-scala
-.PHONY: apply-jenkins-build
+## Update OpenShift resources related Jenkins agent resources.
+apply-jenkins-agent-build: apply-jenkins-agent-airflow-build apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs10-angular-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build
+.PHONY: apply-jenkins-agent-build
 
-## Update OpenShift resources related to Jenkins airflow agent image.
-apply-jenkins-build-airflow:
+## Start builds of Jenkins agents.
+start-jenkins-agent-build: start-jenkins-agent-airflow-build start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs10-angular-build start-jenkins-agent-python-build start-jenkins-agent-scala-build
+.PHONY: start-jenkins-agent-build
+
+
+# JENKINS AGENT AIRFLOW
+## Install or update Jenkins Airflow agent resources.
+install-jenkins-agent-airflow: start-jenkins-agent-airflow-build start-jenkins-agent-airflow-build
+.PHONY: install-jenkins-agent-airflow
+
+## Update OpenShift resources related to Jenkins Airflow agent image.
+apply-jenkins-agent-airflow-build:
 	cd common/jenkins-agents/airflow/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-airflow
-
-## Update OpenShift resources related to Jenkins golang agent image.
-apply-jenkins-build-golang:
-	cd common/jenkins-agents/golang/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-golang
-
-## Update OpenShift resources related to Jenkins maven agent image.
-apply-jenkins-build-maven:
-	cd common/jenkins-agents/maven/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-maven
-
-## Update OpenShift resources related to Jenkins nodejs agent image.
-apply-jenkins-build-nodejs10-angular:
-	cd common/jenkins-agents/nodejs10-angular/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-nodejs10-angular
-
-## Update OpenShift resources related to Jenkins python agent image.
-apply-jenkins-build-python:
-	cd common/jenkins-agents/python/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-python
-
-## Update OpenShift resources related to Jenkins scala agent image.
-apply-jenkins-build-scala:
-	cd common/jenkins-agents/scala/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-build-scala
-
-## Start build of all Jenkins BuildConfig resources.
-start-jenkins-build: start-jenkins-build-airflow start-jenkins-build-golang start-jenkins-build-maven start-jenkins-build-nodejs10-angular start-jenkins-build-python start-jenkins-build-scala
-.PHONY: start-jenkins-build
+.PHONY: apply-jenkins-agent-airflow-build
 
 ## Start build of BuildConfig "jenkins-agent-airflow".
-start-jenkins-build-airflow:
+start-jenkins-agent-airflow-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-airflow --follow
-.PHONY: start-jenkins-build-airflow
+.PHONY: start-jenkins-agent-airflow-build
+
+
+# JENKINS AGENT GO
+## Install or update Jenkins Go agent resources.
+install-jenkins-agent-golang: apply-jenkins-agent-golang-build start-jenkins-agent-golang-build
+.PHONY: install-jenkins-agent-golang
+
+## Update OpenShift resources related to Jenkins Go agent image.
+apply-jenkins-agent-golang-build:
+	cd common/jenkins-agents/golang/ocp-config && tailor apply --namespace ${NAMESPACE}
+.PHONY: apply-jenkins-agent-golang-build
 
 ## Start build of BuildConfig "jenkins-agent-golang".
-start-jenkins-build-golang:
+start-jenkins-agent-golang-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-golang --follow
-.PHONY: start-jenkins-build-golang
+.PHONY: start-jenkins-agent-golang-build
+
+
+# JENKINS AGENT MAVEN
+## Install or update Jenkins Maven agent resources.
+install-jenkins-agent-maven: apply-jenkins-agent-maven-build start-jenkins-agent-maven-build
+.PHONY: install-jenkins-agent-maven
+
+## Update OpenShift resources related to Jenkins Maven agent image.
+apply-jenkins-agent-maven-build:
+	cd common/jenkins-agents/maven/ocp-config && tailor apply --namespace ${NAMESPACE}
+.PHONY: apply-jenkins-agent-maven-build
 
 ## Start build of BuildConfig "jenkins-agent-maven".
-start-jenkins-build-maven:
+start-jenkins-agent-maven-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-maven --follow
-.PHONY: start-jenkins-build-maven
+.PHONY: start-jenkins-agent-maven-build
 
-## Start build of BuildConfig "jenkins-agent-nodejs".
-start-jenkins-build-nodejs10-angular:
+
+# JENKINS AGENT NODEJS
+## Install or update Jenkins Node agent resources.
+install-jenkins-agent-nodejs10-angular: apply-jenkins-agent-nodejs10-angular-build start-jenkins-agent-nodejs10-angular-build
+.PHONY: install-jenkins-agent-nodejs10-angular
+
+## Update OpenShift resources related to Jenkins Node agent image.
+apply-jenkins-agent-nodejs10-angular-build:
+	cd common/jenkins-agents/nodejs10-angular/ocp-config && tailor apply --namespace ${NAMESPACE}
+.PHONY: apply-jenkins-agent-nodejs10-angular-build
+
+## Start build of BuildConfig "jenkins-agent-nodejs10-angular".
+start-jenkins-agent-nodejs10-angular-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-nodejs10-angular --follow
-.PHONY: start-jenkins-build-nodejs10-angular
+.PHONY: start-jenkins-agent-nodejs10-angular-build
 
-## Start build of BuildConfig "jenkins-agent-golang".
-start-jenkins-build-python:
+
+# JENKINS AGENT PYTHON
+## Install or update Jenkins Python agent resources.
+install-jenkins-agent-python: apply-jenkins-agent-python-build start-jenkins-agent-python-build
+.PHONY: install-jenkins-agent-python
+
+## Update OpenShift resources related to Jenkins Python agent image.
+apply-jenkins-agent-python-build:
+	cd common/jenkins-agents/python/ocp-config && tailor apply --namespace ${NAMESPACE}
+.PHONY: apply-jenkins-agent-python-build
+
+## Start build of BuildConfig "jenkins-agent-python".
+start-jenkins-agent-python-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-python --follow
-.PHONY: start-jenkins-build-python
+.PHONY: start-jenkins-agent-python-build
+
+
+# JENKINS AGENT SCALA
+## Install or update Jenkins Scala agent resources.
+install-jenkins-agent-scala: apply-jenkins-agent-scala-build start-jenkins-agent-scala-build
+.PHONY: install-jenkins-agent-scala
+
+## Update OpenShift resources related to Jenkins Scala agent image.
+apply-jenkins-agent-scala-build:
+	cd common/jenkins-agents/scala/ocp-config && tailor apply --namespace ${NAMESPACE}
+.PHONY: apply-jenkins-agent-scala-build
 
 ## Start build of BuildConfig "jenkins-agent-scala".
-start-jenkins-build-scala:
+start-jenkins-agent-scala-build:
 	oc -n ${NAMESPACE} start-build jenkins-agent-scala --follow
-.PHONY: start-jenkins-build-scala
+.PHONY: start-jenkins-agent-scala-build
+
 
 # HELP
 # Based on https://gist.github.com/prwhite/8168133#gistcomment-2278355.
@@ -87,12 +124,14 @@ help:
 	@echo '  make <target>'
 	@echo ''
 	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
+	@awk '/^[a-zA-Z\-\_0-9]+:|^# .*/ { \
 		helpMessage = match(lastLine, /^## (.*)/); \
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
 			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
 			printf "  %-35s %s\n", helpCommand, helpMessage; \
+		} else { \
+			printf "\n"; \
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
