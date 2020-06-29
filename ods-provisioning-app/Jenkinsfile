@@ -15,5 +15,6 @@ odsQuickstarterPipeline(
 
   // OpenShift resources cannot be created here as we do not have access to
   // the configuration parameters. Users need to create the resources themselves
-  // from the local machine.
+  // from the local machine. A sample list can be found below:
+  // https://github.com/opendevstack/ods-provisioning-app/blob/master/ocp-config/ods-provisioning-app.env.sample
 }
