@@ -8,32 +8,16 @@ NAMESPACE=ods
 
 # JENKINS AGENT
 ## Install or update Jenkins agent resources.
-install-jenkins-agent: install-jenkins-agent-airflow install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs10-angular install-jenkins-agent-python install-jenkins-agent-scala
+install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs10-angular install-jenkins-agent-python install-jenkins-agent-scala
 .PHONY: install-jenkins-agent
 
 ## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-airflow-build apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs10-angular-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs10-angular-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-airflow-build start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs10-angular-build start-jenkins-agent-python-build start-jenkins-agent-scala-build
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs10-angular-build start-jenkins-agent-python-build start-jenkins-agent-scala-build
 .PHONY: start-jenkins-agent-build
-
-
-# JENKINS AGENT AIRFLOW
-## Install or update Jenkins Airflow agent resources.
-install-jenkins-agent-airflow: start-jenkins-agent-airflow-build start-jenkins-agent-airflow-build
-.PHONY: install-jenkins-agent-airflow
-
-## Update OpenShift resources related to Jenkins Airflow agent image.
-apply-jenkins-agent-airflow-build:
-	cd common/jenkins-agents/airflow/ocp-config && tailor apply --namespace ${NAMESPACE}
-.PHONY: apply-jenkins-agent-airflow-build
-
-## Start build of BuildConfig "jenkins-agent-airflow".
-start-jenkins-agent-airflow-build:
-	oc -n ${NAMESPACE} start-build jenkins-agent-airflow --follow
-.PHONY: start-jenkins-agent-airflow-build
 
 
 # JENKINS AGENT GO

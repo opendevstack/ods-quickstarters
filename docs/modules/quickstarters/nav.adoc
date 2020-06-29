@@ -11,13 +11,11 @@
 ** xref:quickstarters:ds-ml-service.adoc[Data Science Machine Learning Service]
 ** xref:quickstarters:ds-jupyter-notebook.adoc[Data Science Jupyter Notebook]
 ** xref:quickstarters:ds-rshiny.adoc[Data Science RShiny app]
-** xref:quickstarters:airflow-cluster.adoc[Airflow]
 ** xref:quickstarters:e2e-cypress.adoc[Cypress E2E testing]
 ** xref:quickstarters:e2e-spock-geb.adoc[Spock, Geb and Unirest E2E testing]
 ** xref:quickstarters:release-manager.adoc[Release Manager]
 ** Jenkins agent Images
 *** xref:jenkins:agent-base.adoc[Base Image]
-*** xref:jenkins-agents:airflow.adoc[Airflow]
 *** xref:jenkins-agents:golang.adoc[Go]
 *** xref:jenkins-agents:maven.adoc[Maven]
 *** xref:jenkins-agents:nodejs10-angular.adoc[Nodejs10 Angular]

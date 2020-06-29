@@ -1,6 +1,0 @@
----
-name: Apache Airflow
-description: "Airflow is a platform created by community to programmatically author, schedule and monitor workflows. Technologies: Airflow 1.10, Python 3.6"
-supplier: https://airflow.apache.org
-version: 3.x
-type: ods
