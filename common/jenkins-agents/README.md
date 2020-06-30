@@ -15,13 +15,12 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 
 ## Currently Available agents
 
-1. [Airflow](airflow)
-2. [GoLang](golang)
-3. [Maven / Gradle](maven)
-4. [Node.js 10 (Angular)](nodejs10-angular)
-5. [Node.js 12](nodejs12)
-6. [Python](python)
-7. [Scala & SBT](scala)
+1. [GoLang](golang)
+2. [Maven / Gradle](maven)
+3. [Node.js 10 (Angular)](nodejs10-angular)
+4. [Node.js 12](nodejs12)
+5. [Python](python)
+6. [Scala & SBT](scala)
 
 ## OCP Config / Installation
 

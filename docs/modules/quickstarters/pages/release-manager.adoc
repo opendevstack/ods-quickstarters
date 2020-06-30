@@ -64,7 +64,7 @@ This type designates ODS components designed for _code development_. Such reposi
 
 ==== Repository Type: ods-service
 
-This type designates ODS components designed for _running some service_. Examples include repositories based on the `airflow-cluster` quickstarter.
+This type designates ODS components designed for _running some service_. Examples include repositories based on the `be-gateway-nginx` quickstarter.
 
 ==== Repository Type: ods-test
 
