@@ -9,4 +9,4 @@ fi
 echo "service type:"
 echo $SERVICE_TYPE
 
-exec gunicorn -b :8080 services.$SERVICE_TYPE.app:gunicorn_app
+exec gunicorn -b :8080 mlservice.services.$SERVICE_TYPE.app:gunicorn_app

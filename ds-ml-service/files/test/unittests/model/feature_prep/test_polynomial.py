@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from model.feature_prep.polynomial import add_polynomial
+from mlservice.model.feature_prep.polynomial import add_polynomial
 
 
 class TestPolynomialFeature(unittest.TestCase):

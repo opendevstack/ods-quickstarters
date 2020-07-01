@@ -16,7 +16,6 @@ WORKDIR /app
 ENV HTTP_PROXY "${httpProxy}"
 ENV HTTPS_PROXY "${httpsProxy}"
 
-ENV DSI_MINICONDA_PACKAGE_VERSION="3.6.9"
 ENV DSI_MINICONDA_PACKAGE_PATH=/app/miniconda3.sh
 ENV PYTHONPATH=$PYTHONPATH:/app
 ENV DSI_PACKAGE=/app/app.tar.gz
@@ -29,10 +28,10 @@ COPY dist/requirements.txt /app
 USER root
 #  In the case of building the docker image from behind a proxy and encountering certificate issues, adding a -k to the curl command can mitigate that, consider however the implications of disabling certificate
 RUN if [[ ${serviceType} == "training" ]]; \
-        then curl -Lv --fail https://repo.anaconda.com/miniconda/Miniconda3-${DSI_MINICONDA_PACKAGE_VERSION}-Linux-x86_64.sh --output ${DSI_MINICONDA_PACKAGE_PATH}; \
+        then curl -Lv --fail https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ${DSI_MINICONDA_PACKAGE_PATH}; \
             if [[ ! -z ${nexusHostWithBasicAuth} ]]; \
-                then  pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} --upgrade pip && pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} coverage nose; \
-                else pip install --upgrade pip && pip install coverage nose; \
+                then  pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} --upgrade pip && pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} pytest pytest-cov; \
+                else pip install --upgrade pip && pip install pytest pytest-cov; \
             fi \
     fi
 
@@ -61,4 +60,4 @@ USER 1001
 
 EXPOSE 8080
 
-ENTRYPOINT [ "/app/run.sh" ]
+ENTRYPOINT [ "./run.sh" ]

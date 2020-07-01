@@ -20,7 +20,6 @@ odsComponentPipeline(
     "serviceType" : ""
   ]
 
-  odsComponentStageScanWithSonar(context)
   stageLint(context)
   stagePrepareBuilds(context)
 
@@ -31,6 +30,7 @@ odsComponentPipeline(
   stageTrainingUnitTests(context, trainingDeployInfo.podName)
   stageTraining(context, trainingDeployInfo.podName)
   stageTrainingIntegrationTests(context, trainingDeployInfo.podName)
+  odsComponentStageScanWithSonar(context)
 
   buildArgs["serviceType"] = "prediction"
   odsComponentStageBuildOpenShiftImage (context, [resourceName: predictionServiceName, buildArgs: buildArgs])
@@ -45,10 +45,10 @@ def stageLint(def context) {
     . ./lint/bin/activate
     pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme} pycodestyle
     pip check
-    pycodestyle --show-source --show-pep8 --max-line-length 100 src/model/*
-    pycodestyle --statistics -qq --max-line-length 100 src/model/*
-    pycodestyle --show-source --show-pep8 --max-line-length 100 src/services/*
-    pycodestyle --statistics -qq --max-line-length 100 src/services/*
+    pycodestyle --show-source --show-pep8 --max-line-length 100 src/mlservice/model/*
+    pycodestyle --statistics -qq --max-line-length 100 src/mlservice/model/*
+    pycodestyle --show-source --show-pep8 --max-line-length 100 src/mlservice/services/*
+    pycodestyle --statistics -qq --max-line-length 100 src/mlservice/services/*
     pycodestyle --show-source --show-pep8 --max-line-length 100 jenkinsfile_helper.py
     pycodestyle --statistics -qq --max-line-length 100 jenkinsfile_helper.py
     """
@@ -92,8 +92,10 @@ def stageTraining(def context, def trainingPod) {
 def stageTrainingIntegrationTests(def context, def trainingPod) {
   stage('Training Integration Tests') {
     print("Running Training Integration Tests in pod ${trainingPod}")
-    sh(returnStdout: true, script: "oc -n ${context.targetProject} exec ${trainingPod} bash ./run_integration_tests.sh")
-    sh(returnStdout: true, script: "oc -n ${context.targetProject} exec ${trainingPod} cat nosetests.xml > testresults.xml")
-    sh "mkdir -p tests-results && mv testresults.xml tests-results/"
+    sh(script: "oc -n ${context.targetProject} exec ${trainingPod} bash ./run_integration_tests.sh")
+    sh(script: "oc -n ${context.targetProject} exec ${trainingPod} cat tests.xml > testresults.xml")
+    sh(script: "oc -n ${context.targetProject} exec ${trainingPod} cat coverage.xml > coverage.xml")
+    sh(script: "sed -i -e 's|/app/|$WORKSPACE/src/|g' coverage.xml")
+    sh(script: "mkdir -p tests-results && mv testresults.xml tests-results/")
   }
 }

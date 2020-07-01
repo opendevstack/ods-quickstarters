@@ -5,7 +5,7 @@ from flask import Flask
 from flask_executor import Executor
 from flask_httpauth import HTTPBasicAuth
 
-from services.infrastructure.logging import read_log
+from mlservice.services.infrastructure.logging import read_log
 
 
 def init_flask():
