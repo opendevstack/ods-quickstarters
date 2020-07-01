@@ -8,15 +8,15 @@ import traceback
 from flask import jsonify, send_file
 from flask.templating import render_template
 
-from model.trainer import train
-from services.infrastructure.environment import debug_mode, execution_environment, \
+from mlservice.model.trainer import train
+from mlservice.services.infrastructure.environment import debug_mode, execution_environment, \
     DSI_EXECUTE_ON_LOCAL, DSI_EXECUTE_ON_SSH, ssh_host, \
     ssh_username, ssh_password, ssh_port, DSI_EXECUTE_ON, training_auth, dvc_remote
-from services.infrastructure.flask import init_flask, status
-from services.infrastructure.git_info import GIT_COMMIT, GIT_COMMIT_SHORT, GIT_BRANCH, \
+from mlservice.services.infrastructure.flask import init_flask, status
+from mlservice.services.infrastructure.git_info import GIT_COMMIT, GIT_COMMIT_SHORT, GIT_BRANCH, \
     GIT_LAST_CHANGE, GIT_REPO_NAME
-from services.infrastructure.logging import initialize_logging
-from services.infrastructure.remote.ssh.executors import SSHRemoteExecutor
+from mlservice.services.infrastructure.logging import initialize_logging
+from mlservice.services.infrastructure.remote.ssh.executors import SSHRemoteExecutor
 
 TRAINING_KEY = '_training-job-key_'
 """

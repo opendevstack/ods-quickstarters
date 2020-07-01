@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 cd test/unittests &&
-PYTHONPATH=. nosetests -v --with-xunit --with-coverage --cover-xml --cover-erase --cover-inclusive --cover-package=../..
+python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=. -o junit_family=xunit2

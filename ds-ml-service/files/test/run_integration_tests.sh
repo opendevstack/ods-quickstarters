@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-PYTHONPATH=. nosetests -v --with-xunit --with-coverage --cover-xml --cover-erase --cover-inclusive --cover-package=.
+python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=mlservice -o junit_family=xunit2 test

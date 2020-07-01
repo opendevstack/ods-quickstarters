@@ -5,14 +5,14 @@ from base64 import b64encode
 import pandas as pd
 from sklearn.metrics import accuracy_score
 
-from services.prediction.app import app
-from services.infrastructure.git_info import GIT_COMMIT
+from mlservice.services.prediction.app import app
+from mlservice.services.infrastructure.git_info import GIT_COMMIT
 
-from model.model_wrapper import ModelWrapper
+from mlservice.model.model_wrapper import ModelWrapper
 #import services.prediction.app as prediction_server
 
-from services.infrastructure.remote.dvc.data_sync import DataSync
-from services.infrastructure.environment import dvc_remote, ssh_username, ssh_password
+from mlservice.services.infrastructure.remote.dvc.data_sync import DataSync
+from mlservice.services.infrastructure.environment import dvc_remote, ssh_username, ssh_password
 
 
 class TestIntegrationPrediction(unittest.TestCase):

@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Optional
 
-from services.infrastructure.environment import debug_mode
+from mlservice.services.infrastructure.environment import debug_mode
 
 log_path = None
 

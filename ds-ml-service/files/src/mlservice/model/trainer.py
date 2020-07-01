@@ -2,13 +2,11 @@ import argparse
 import logging
 
 import pandas as pd
-
-from model.model_wrapper import ModelWrapper
-from services.infrastructure.git_info import GIT_COMMIT
-
 from sklearn.metrics import accuracy_score
 
-from services.infrastructure.remote.dvc.data_sync import DataSync
+from mlservice.model.model_wrapper import ModelWrapper
+from mlservice.services.infrastructure.git_info import GIT_COMMIT
+from mlservice.services.infrastructure.remote.dvc.data_sync import DataSync
 
 
 def train(model_name=GIT_COMMIT, train_data='resources/train.csv', dvc_data_repo=None,

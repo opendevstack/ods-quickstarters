@@ -6,10 +6,11 @@ import invoke
 import os
 from fabric import Connection
 
-from services.infrastructure import git_info
-from services.infrastructure.environment import dsi_package, http_proxy, https_proxy, nexus_env
-from services.infrastructure.git_info import GIT_COMMIT
-from services.infrastructure.remote.ssh.exceptions import RemoteExecutionException
+from mlservice.services.infrastructure import git_info
+from mlservice.services.infrastructure.environment import dsi_package, http_proxy, https_proxy, \
+    nexus_env
+from mlservice.services.infrastructure.git_info import GIT_COMMIT
+from mlservice.services.infrastructure.remote.ssh.exceptions import RemoteExecutionException
 
 
 class SSHRemoteExecutor(object):

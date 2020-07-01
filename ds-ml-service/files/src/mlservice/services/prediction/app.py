@@ -3,14 +3,14 @@ import os
 
 from flask import jsonify, request
 
-from services.infrastructure.environment import training_host_url, debug_mode
-from services.infrastructure.flask import init_flask
-from services.infrastructure.git_info import GIT_COMMIT
+from mlservice.services.infrastructure.environment import training_host_url, debug_mode
+from mlservice.services.infrastructure.flask import init_flask
+from mlservice.services.infrastructure.git_info import GIT_COMMIT
 
-from services.infrastructure.logging import initialize_logging
-from services.infrastructure.environment import prediction_auth
+from mlservice.services.infrastructure.logging import initialize_logging
+from mlservice.services.infrastructure.environment import prediction_auth
 
-from model.model_wrapper import ModelWrapper
+from mlservice.model.model_wrapper import ModelWrapper
 
 # initialize flask application
 TRAINING_POD_URL = training_host_url()

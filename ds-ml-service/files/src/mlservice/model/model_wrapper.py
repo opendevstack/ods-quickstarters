@@ -2,8 +2,8 @@ from sklearn.externals import joblib
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 
-from model.data_cleaning.replace import replace_strings, replace_missing
-from model.feature_prep.polynomial import add_polynomial
+from mlservice.model.data_cleaning.replace import replace_strings, replace_missing
+from mlservice.model.feature_prep.polynomial import add_polynomial
 
 
 class ModelWrapper(object):
