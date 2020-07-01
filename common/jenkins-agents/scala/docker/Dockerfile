@@ -6,7 +6,7 @@ ARG nexusUrl
 ARG nexusUsername
 ARG nexusPassword
 
-ENV SBT_VERSION=1.3.12
+ENV SBT_VERSION=1.3.13
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 
 RUN curl -O -L http://dl.bintray.com/sbt/rpm/sbt-$SBT_VERSION.rpm && \
