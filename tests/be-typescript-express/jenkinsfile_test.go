@@ -57,9 +57,9 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	expectedAsString := string(expected)
-	if stdout != expectedAsString {
+	if stages != expectedAsString {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stdout)
+			componentId, expectedAsString, stages)
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
@@ -87,9 +87,9 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	expectedAsString = string(expected)
-	if stdout != expectedAsString {
+	if stages != expectedAsString {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stdout)
+			componentId, expectedAsString, stages)
 	}
 
 	resourcesInTest := coreUtils.Resources{
