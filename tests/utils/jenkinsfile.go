@@ -148,7 +148,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		}, []string{})
 
 	if err != nil {
-		fmt.Printf("Could not find retriever script: %s\n - err:", script, err)
+		fmt.Printf("Could not find retriever script: %s\n - err:%s", script, err)
 	}
 
 	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
