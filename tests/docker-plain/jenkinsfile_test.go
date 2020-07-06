@@ -17,7 +17,9 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	_, filename, _, _ := runtime.Caller(0)
-	quickstarterName := path.Dir(filename)
+	quickstarterName := path.Base(path.Dir(filename))
+	fmt.Printf("path:%s", quickstarterName)
+	
 	componentId := fmt.Sprintf("%s-test", quickstarterName)
 
 	// cleanup and create bb resources for this test
