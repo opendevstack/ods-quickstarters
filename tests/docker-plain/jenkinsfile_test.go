@@ -5,6 +5,7 @@ import (
 	"testing"
 	"path"
 	"runtime"
+	"path/filepath"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
@@ -17,7 +18,8 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	_, filename, _, _ := runtime.Caller(0)
-	quickstarterName := path.Base(path.Dir(filename))
+	quickstarterPath := filepath.Dir(filename))
+	quickstarterName := filepath.Base(quickstarterPath))
 	fmt.Printf("path:%s", quickstarterName)
 	
 	componentId := fmt.Sprintf("%s-test", quickstarterName)
