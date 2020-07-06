@@ -57,7 +57,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return "", fmt.Errorf("Could not marchal json: %s", err)
+		return "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -89,7 +89,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
     bodyBytes, err := ioutil.ReadAll(response.Body)
     bodyString := string(bodyBytes)
 
-	fmt.Printf("build: %s\n, response: %s\n", buildName, bodyString)
+	fmt.Printf("Build: %s\n, response: %s\n", buildName, bodyString)
 	
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -112,10 +112,10 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	time.Sleep(10 * time.Second)
 	build, err := buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 	count := 0
-	max := 240
+	max := 20
 	for (err != nil || build.Status.Phase == v1.BuildPhaseNew || build.Status.Phase == v1.BuildPhasePending || build.Status.Phase == v1.BuildPhaseRunning) && count < max {
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
-		time.Sleep(2 * time.Second)
+		time.Sleep(20 * time.Second)
 		if err != nil {
 			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
 		} else {
@@ -124,6 +124,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		count++
 	}
 
+	// switch into project's cd openshift namespace - to find the build
 	stdout, stderr, err := coreUtils.RunCommand(
 		"oc",
 		[]string{
@@ -135,10 +136,11 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if ok {
 		script = fmt.Sprintf("%s/ods-core/tests/scripts/utils/print-jenkins-log.sh", workspace)
 	} else {
-		println("Warning GITHUB_WORKSPACE is not set (should be set to home dir of ODS")
+		println("Warning: GITHUB_WORKSPACE is not set (should be set to home dir of ODS)")
 		script = "../../../ods-core/tests/scripts/utils/print-jenkins-log.sh"
 	}
 
+	// execute jenkins log retriever
 	stdout, stderr, err = coreUtils.RunCommand(
 		script,
 		[]string{
@@ -150,20 +152,22 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 
 	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
-
 		if count >= max {
 			return "", fmt.Errorf(
-				"Timeout during build: \nStdOut: %s\nStdErr: %s",
+				"Timeout during build: %s\nStdOut: %s\nStdErr: %s",
+				buildName,
 				stdout,
 				stderr)
 		} else {
 			return "", fmt.Errorf(
-				"Error during build: \nStdOut: %s\nStdErr: %s",
+				"Error during build: %s\nStdOut: %s\nStdErr: %s",
+				buildName,
 				stdout,
 				stderr)
 		}
 	}
 
+	// get (executed) jenkins stages from run 
 	stdout, _, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-json-status.sh",
 		[]string{
