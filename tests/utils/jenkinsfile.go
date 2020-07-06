@@ -17,10 +17,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) error {
+func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -57,7 +57,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return fmt.Errorf("Could not marchal json: %s", err)
+		return nil, fmt.Errorf("Could not marchal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -94,17 +94,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return fmt.Errorf("Could not post request: %s", string(bodyBytes))
-	}
-
-	if response.StatusCode >= http.StatusAccepted {
-		bodyBytes, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-		return fmt.Errorf("Could not post request: %s", string(bodyBytes))
+		return nil, fmt.Errorf("Could not post request: %s", string(bodyBytes))
 	}
 
 	config, err := coreUtils.GetOCClient()
@@ -114,7 +106,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	buildClient, err := buildClientV1.NewForConfig(config)
 	if err != nil {
-		return fmt.Errorf("Error creating Build client: %s", err)
+		return nil, fmt.Errorf("Error creating Build client: %s", err)
 	}
 
 	time.Sleep(10 * time.Second)
@@ -125,9 +117,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 		time.Sleep(2 * time.Second)
 		if err != nil {
-			fmt.Printf("Build is still not available, %s\n", err)
+			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
 		} else {
-			fmt.Printf("Waiting for build. Current status: %s\n", build.Status.Phase)
+			fmt.Printf("Waiting for build: %s. Current status: %s\n", buildName, build.Status.Phase)
 		}
 		count++
 	}
@@ -159,17 +151,28 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
 
 		if count >= max {
-			return fmt.Errorf(
+			return nil, fmt.Errorf(
 				"Timeout during build: \nStdOut: %s\nStdErr: %s",
 				stdout,
 				stderr)
 		} else {
-			return fmt.Errorf(
+			return nil, fmt.Errorf(
 				"Error during build: \nStdOut: %s\nStdErr: %s",
 				stdout,
 				stderr)
 		}
 	}
 
-	return nil
+	stdout, stderr, err := utils.RunScriptFromBaseDir(
+		"tests/scripts/print-jenkins-json-status.sh",
+		[]string{
+			buildName,
+			jenkinsNamespace,
+		}, []string{})
+
+	if err != nil {
+		return nil, fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
+	}
+	
+	return stdout, nil
 }

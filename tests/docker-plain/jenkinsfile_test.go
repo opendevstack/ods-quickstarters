@@ -28,7 +28,7 @@ func TestJenkinsFile(t *testing.T) {
 		quickstarterName, componentId)
 
 	// run provision job for quickstarter
-	err = utils.RunJenkinsFile(
+	stages, err = utils.RunJenkinsFile(
 		"ods-quickstarters",
 		values["ODS_BITBUCKET_PROJECT"],
 		values["ODS_GIT_REF"],
@@ -48,8 +48,21 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	fmt.Printf("Provision Build for %s returned:\n%s", componentId, stages)
+	
+	expected, err := ioutil.ReadFile("golden/jenkins-provision-stages.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	
+	expectedAsString := string(expected)
+	if stdout != expectedAsString {
+		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, expectedAsString, stdout)
+	}
+
 	// run master build of provisioned quickstarter in project's cd jenkins
-	err = utils.RunJenkinsFile(
+	stages, err = utils.RunJenkinsFile(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -63,6 +76,19 @@ func TestJenkinsFile(t *testing.T) {
 	)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stages)
+
+	expected, err = ioutil.ReadFile("golden/jenkins-build-stages.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	
+	expectedAsString = string(expected)
+	if stdout != expectedAsString {
+		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, expectedAsString, stdout)
 	}
 
 	resourcesInTest := coreUtils.Resources{
