@@ -7,7 +7,7 @@ require (
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/opendevstack/mockbucket v0.0.0-20191220083823-53b37b3fa3fd // indirect
-	github.com/opendevstack/ods-core/tests v0.0.0-20200110113746-2e6aa267ea88
+	github.com/opendevstack/ods-core/tests v0.0.0
 	github.com/openshift/api v3.9.0+incompatible
 	github.com/openshift/client-go v3.9.0+incompatible
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
