@@ -21,11 +21,8 @@ func TestJenkinsFile(t *testing.T) {
 	componentId := fmt.Sprintf("%s-test", quickstarterName)
 
 	// cleanup and create bb resources for this test
-	err = utils.CleanupAndCreateBitbucketProjectAndRepo(
+	utils.CleanupAndCreateBitbucketProjectAndRepo(
 		quickstarterName, componentId)
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	// run provision job for quickstarter
 	err = utils.RunJenkinsFile(

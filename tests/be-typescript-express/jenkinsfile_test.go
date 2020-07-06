@@ -20,12 +20,9 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterName := path.Dir(filename)
 	const componentId = "nodejs"
 
-	// run provision job for docker-plain quickstarter
-	err = utils.CleanupAndCreateBitbucketProjectAndRepo(
+	// cleanup and create bb resources for this test
+	utils.CleanupAndCreateBitbucketProjectAndRepo(
 		quickstarterName, componentId)
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	// run provision job for quickstarter	
 	err = utils.RunJenkinsFile(
