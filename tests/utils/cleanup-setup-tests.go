@@ -64,5 +64,5 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 		fmt.Printf("Error when deleting build bc %s: %s, %s\n", buildConfigName, err, stdout)
 	}
 
-	fmt.Printf("Done\n - created repo:%s", repoName)
+	fmt.Printf("Done\n - created repo:%s\n", repoName)
 }
