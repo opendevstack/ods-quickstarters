@@ -7,24 +7,24 @@ import (
 	"strings"
 	"runtime"
 	"fmt"
+	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	"github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
-func cleanupAndCreateBitbucketProjectAndRepo(projectName string, quickstarter string, repoName string) error {
+func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) error {
 
 	values, err := utils.ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)
 	}
 
-	const projectName = "unitt"
 	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
 
 	stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
 		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
 		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
-		fmt.Sprintf("--project=%s", projectName),
+		fmt.Sprintf("--project=%s", coreUtils.PROJECT_NAME),
 		fmt.Sprintf("--repository=%s", repoName)},
 		[]string{})
 	if err != nil {
@@ -40,12 +40,12 @@ func cleanupAndCreateBitbucketProjectAndRepo(projectName string, quickstarter st
 
 	// provision build config
 	buildConfigName := fmt.Sprintf("prov-%s-%s-%s", 
-		quickstarter, projectName, strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
+		quickstarter, coreUtils.PROJECT_NAME, strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
 
 	stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
 		"delete",
 		"bc",
-		"-n", projectName + "-cd",
+		"-n", coreUtils.PROJECT_NAME_CD,
 		buildConfigName}, dir, []string{})
 	if err != nil {
 		fmt.Printf("Error when deleting provisioning bc %s: %s, %s\n", 
@@ -53,12 +53,12 @@ func cleanupAndCreateBitbucketProjectAndRepo(projectName string, quickstarter st
 	}
 
 	// quickstarter master branch build
-	buildConfigName = fmt.Sprintf("run-%s-%s-master", repoName, projectName) 
+	buildConfigName = fmt.Sprintf("run-%s-%s-master", repoName, coreUtils.PROJECT_NAME) 
 
 	stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
 		"delete",
 		"bc",
-		"-n", projectName + "-cd",
+		"-n", coreUtils.PROJECT_NAME_CD,
 		buildConfigName}, dir, []string{})
 	if err != nil {
 		fmt.Printf("Error when deleting build bc %s: %s, %s\n", buildConfigName, err, stdout, stderr)

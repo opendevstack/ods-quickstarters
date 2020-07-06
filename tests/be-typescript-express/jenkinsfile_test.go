@@ -21,7 +21,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// run provision job for docker-plain quickstarter
 	utils.cleanupAndCreateBitbucketProjectAndRepo(
-		coreUtils.PROJECT_NAME, quickstarterName, componentId)
+		quickstarterName, componentId)
 
 	// run provision job for quickstarter	
 	err = utils.RunJenkinsFile(
