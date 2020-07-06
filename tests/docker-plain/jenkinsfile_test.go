@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 	"path"
+	"runtime"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	"github.com/opendevstack/ods-quickstarters/tests/utils"
+	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -29,8 +30,8 @@ func TestJenkinsFile(t *testing.T) {
 		values["ODS_BITBUCKET_PROJECT"],
 		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
-		fmt.sprintf("%s/Jenkinsfile", quickstarterName),
-		coreUtls.PROJECT_NAME_CD,
+		fmt.Sprintf("%s/Jenkinsfile", quickstarterName),
+		coreUtils.PROJECT_NAME_CD,
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
