@@ -163,7 +163,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		}
 	}
 
-	stdout, stderr, err := utils.RunScriptFromBaseDir(
+	stdout, _, err := utils.RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-json-status.sh",
 		[]string{
 			buildName,
@@ -174,5 +174,5 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
 	}
 	
-	return stdout, nil
+	return stdout, ""
 }
