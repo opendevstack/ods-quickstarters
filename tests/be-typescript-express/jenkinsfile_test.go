@@ -3,6 +3,7 @@ package docker_plain
 import (
 	"fmt"
 	"testing"
+	"path"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	"github.com/opendevstack/ods-quickstarters/tests/utils"
 )
@@ -14,37 +15,43 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	_, filename, _, _ := runtime.Caller(0)
+	quickstarterName := path.Dir(filename)
 	const componentId = "nodejs"
 
-	// buildConfigName := fmt.Sprintf("ods-corejob-docker-plain-unitt-%s", strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
 	// run provision job for docker-plain quickstarter
+	utils.cleanupAndCreateBitbucketProjectAndRepo(
+		coreUtils.PROJECT_NAME, quickstarterName, componentId)
+
+	// run provision job for quickstarter	
 	err = utils.RunJenkinsFile(
 		"ods-quickstarters",
-		"opendevstack",
+		values["ODS_BITBUCKET_PROJECT"],
 		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
-		"be-typescript-express/Jenkinsfile",
-		"unitt-cd",
+		fmt.sprintf("%s/Jenkinsfile", quickstarterName),
+		coreUtls.PROJECT_NAME_CD,
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/unitt/nodejs.git", values["REPO_BASE"]),
+			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, componentId),
 		},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
 
+	// run master build of provisioned quickstarter in project's cd jenkins
 	err = utils.RunJenkinsFile(
 		componentId,
-		"unitt",
+		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,
 		"Jenkinsfile",
-		"unitt-cd",
+		coreUtils.PROJECT_NAME_CD,
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
@@ -64,4 +71,5 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	utils.CheckResources(resourcesInTest, t)
+
 }

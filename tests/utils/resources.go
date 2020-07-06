@@ -25,7 +25,7 @@ func CheckImageTags(namespace string, imageTags []ImageTag, config *rest.Config,
 	images, err := imageClient.ImageStreams(namespace).List(metav1.ListOptions{})
 
 	for _, imageTag := range imageTags {
-		if err = FindImageTag(images, imageTag); err != nil {
+		if err = coreUtils.FindImageTag(images, imageTag); err != nil {
 			t.Error(err)
 		}
 	}
@@ -45,7 +45,7 @@ func CheckImageStreams(namespace string, imageStreams []string, config *rest.Con
 	images, err := imageClient.ImageStreams(namespace).List(metav1.ListOptions{})
 
 	for _, imageStream := range imageStreams {
-		if err = FindImageStream(images, imageStream); err != nil {
+		if err = coreUtils.FindImageStream(images, imageStream); err != nil {
 			t.Error(err)
 		}
 	}
@@ -68,7 +68,7 @@ func CheckBuildConfigs(namespace string, buildConfigs []string, config *rest.Con
 	}
 
 	for _, buildConfig := range buildConfigs {
-		if err = FindBuildConfig(buildConfigList, buildConfig); err != nil {
+		if err = coreUtils.FindBuildConfig(buildConfigList, buildConfig); err != nil {
 			t.Error(err)
 		}
 	}
@@ -91,7 +91,7 @@ func CheckDeploymentConfigs(namespace string, deploymentConfigs []string, config
 	}
 
 	for _, deploymentsConfig := range deploymentConfigs {
-		if err = FindDeploymentConfig(deploymentsConfigs, deploymentsConfig); err != nil {
+		if err = coreUtils.FindDeploymentConfig(deploymentsConfigs, deploymentsConfig); err != nil {
 			t.Error(err)
 		}
 	}
@@ -113,7 +113,7 @@ func CheckServices(namespace string, services []string, config *rest.Config, t *
 	serviceList, err := serviceClient.List(metav1.ListOptions{})
 
 	for _, service := range services {
-		if err = FindService(serviceList, service); err != nil {
+		if err = coreUtils.FindService(serviceList, service); err != nil {
 			t.Error(err)
 		}
 	}
