@@ -10,7 +10,7 @@ import (
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 )
 
-func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) {
+func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) {
 
 	values, err := ReadConfiguration()
 	if err != nil {
