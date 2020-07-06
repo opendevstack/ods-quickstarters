@@ -34,7 +34,7 @@ RUN yum install -y wget && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     yum clean all -y && \
     mkdir -p $HOME/.m2 && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep java-11-openjdk-11 | awk '{print $NF}' | head -1) && \
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
     alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
     java -version && \
