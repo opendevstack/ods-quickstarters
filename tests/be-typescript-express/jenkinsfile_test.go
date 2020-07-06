@@ -3,7 +3,6 @@ package docker_plain
 import (
 	"fmt"
 	"testing"
-	"path"
 	"path/filepath"
 	"runtime"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
