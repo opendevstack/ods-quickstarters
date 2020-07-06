@@ -28,7 +28,7 @@ func TestJenkinsFile(t *testing.T) {
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
 		quickstarterName, componentId)
 
-	// run provision job for quickstarter
+	// run provision job for quickstarter in project's cd jenkins
 	stages, err := utils.RunJenkinsFile(
 		"ods-quickstarters",
 		values["ODS_BITBUCKET_PROJECT"],
@@ -51,6 +51,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	fmt.Printf("Provision Build for %s returned:\n%s", componentId, stages)
 	
+	// verify provision jenkins stages - against golden record
 	expected, err := ioutil.ReadFile("golden/jenkins-provision-stages.json")
 	if err != nil {
 		t.Fatal(err)
@@ -81,6 +82,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stages)
 
+	// verify run and build jenkins stages - against golden record
 	expected, err = ioutil.ReadFile("golden/jenkins-build-stages.json")
 	if err != nil {
 		t.Fatal(err)

@@ -135,7 +135,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if ok {
 		script = fmt.Sprintf("%s/ods-core/tests/scripts/utils/print-jenkins-log.sh", workspace)
 	} else {
-		script = "../../ods-core/tests/scripts/utils/print-jenkins-log.sh"
+		println("Warning GITHUB_WORKSPACE is not set (should be set to home dir of ODS")
+		script = "../../../ods-core/tests/scripts/utils/print-jenkins-log.sh"
 	}
 
 	stdout, stderr, err = coreUtils.RunCommand(
