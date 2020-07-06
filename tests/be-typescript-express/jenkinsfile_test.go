@@ -18,8 +18,8 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	_, filename, _, _ := runtime.Caller(0)
-	quickstarterPath := filepath.Dir(filename))
-	quickstarterName := filepath.Base(quickstarterPath))
+	quickstarterPath := filepath.Dir(filename)
+	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("path:%s", quickstarterName)
 	const componentId = "nodejs"
 
