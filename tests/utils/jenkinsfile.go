@@ -71,7 +71,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	pipelineName := fmt.Sprintf("%s-%s-%s", pipelineJobName, pipelineNamePrefix, projectName)
 	buildName := fmt.Sprintf("%s-%s-1", pipelineName, strings.ReplaceAll(branch, "/", "-"))
 
-	println(buildName)
+	fmt.Printf("Created buildName: %s\nStarting build:%s\n", buildName, pipelineName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Post(
@@ -84,10 +84,13 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		"application/json",
 		bytes.NewBuffer(body))
 
-	if err != nil {
-		return err
-	}
+	defer response.Body.Close()
 
+    bodyBytes, err := ioutil.ReadAll(response.Body)
+    bodyString := string(bodyBytes)
+
+	fmt.Printf("build: %s\n, response: %s\n", buildName, bodyString)
+	
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
@@ -166,7 +169,6 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 				stdout,
 				stderr)
 		}
-
 	}
 
 	return nil
