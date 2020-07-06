@@ -61,14 +61,15 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resourcesInTest := utils.Resources{
+	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
-		ImageTags:         []utils.ImageTag{{Name: componentId, Tag: "latest"}},
+		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
 		DeploymentConfigs: []string{componentId},
 		Services:          []string{componentId},
 		ImageStreams:      []string{componentId},
 	}
 
-	utils.CheckResources(resourcesInTest, t)
+	coreUtils.CheckResources(resourcesInTest, t)
+
 }

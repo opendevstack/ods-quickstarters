@@ -64,4 +64,6 @@ func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 	}
 
 	fmt.Printf("Done\n - created repo:%s", repoName)
+	
+	return nil
 }
