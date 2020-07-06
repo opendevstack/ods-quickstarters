@@ -20,7 +20,7 @@ import (
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -57,7 +57,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return nil, fmt.Errorf("Could not marchal json: %s", err)
+		return "", fmt.Errorf("Could not marchal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -94,9 +94,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return nil, fmt.Errorf("Could not post request: %s", string(bodyBytes))
+		return "", fmt.Errorf("Could not post request: %s", string(bodyBytes))
 	}
 
 	config, err := coreUtils.GetOCClient()
@@ -106,7 +106,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	buildClient, err := buildClientV1.NewForConfig(config)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating Build client: %s", err)
+		return "", fmt.Errorf("Error creating Build client: %s", err)
 	}
 
 	time.Sleep(10 * time.Second)
@@ -151,12 +151,12 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
 
 		if count >= max {
-			return nil, fmt.Errorf(
+			return "", fmt.Errorf(
 				"Timeout during build: \nStdOut: %s\nStdErr: %s",
 				stdout,
 				stderr)
 		} else {
-			return nil, fmt.Errorf(
+			return "", fmt.Errorf(
 				"Error during build: \nStdOut: %s\nStdErr: %s",
 				stdout,
 				stderr)
@@ -171,7 +171,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		}, []string{})
 
 	if err != nil {
-		return nil, fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
+		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
 	}
 	
 	return stdout, nil
