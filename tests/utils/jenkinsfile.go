@@ -131,20 +131,12 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			"project", jenkinsNamespace,
 		}, []string{})
 
-	workspace, ok := os.LookupEnv("GITHUB_WORKSPACE")
-	var script string
-	if ok {
-		script = fmt.Sprintf("%s/ods-core/tests/scripts/utils/print-jenkins-log.sh", workspace)
-	} else {
-		println("Warning: GITHUB_WORKSPACE is not set (should be set to home dir of ODS)")
-		script = "../../../ods-core/tests/scripts/utils/print-jenkins-log.sh"
-	}
-
-	// execute jenkins log retriever
-	stdout, stderr, err = coreUtils.RunCommand(
-		script,
+	// get (executed) jenkins stages from run 
+	stdout, stderr, err = RunScriptFromBaseDir(
+		"tests/scripts/print-jenkins-log.sh",
 		[]string{
 			buildName,
+			jenkinsNamespace,
 		}, []string{})
 
 	if err != nil {
