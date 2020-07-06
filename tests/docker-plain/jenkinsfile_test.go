@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
+	"io/ioutil"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -28,7 +29,7 @@ func TestJenkinsFile(t *testing.T) {
 		quickstarterName, componentId)
 
 	// run provision job for quickstarter
-	stages, err = utils.RunJenkinsFile(
+	stages, err := utils.RunJenkinsFile(
 		"ods-quickstarters",
 		values["ODS_BITBUCKET_PROJECT"],
 		values["ODS_GIT_REF"],
