@@ -8,7 +8,6 @@ import (
 	"runtime"
 	"fmt"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	"github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) error {
