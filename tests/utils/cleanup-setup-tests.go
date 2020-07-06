@@ -10,7 +10,7 @@ import (
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 )
 
-func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) error {
+func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) {
 
 	values, err := ReadConfiguration()
 	if err != nil {
@@ -46,6 +46,7 @@ func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 		"bc",
 		"-n", coreUtils.PROJECT_NAME_CD,
 		buildConfigName}, dir, []string{})
+	
 	if err != nil {
 		fmt.Printf("Error when deleting provisioning bc %s: %s, %s\n", 
 			buildConfigName, err, stdout)
@@ -64,6 +65,4 @@ func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 	}
 
 	fmt.Printf("Done\n - created repo:%s", repoName)
-	
-	return nil
 }
