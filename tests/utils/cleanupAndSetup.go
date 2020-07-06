@@ -12,14 +12,14 @@ import (
 
 func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) error {
 
-	values, err := utils.ReadConfiguration()
+	values, err := ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)
 	}
 
 	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
 
-	stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
+	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
 		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
 		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
@@ -41,7 +41,7 @@ func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 	buildConfigName := fmt.Sprintf("prov-%s-%s-%s", 
 		quickstarter, coreUtils.PROJECT_NAME, strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
 
-	stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
+	stdout, stderr, err = RunCommandWithWorkDir("oc", []string{
 		"delete",
 		"bc",
 		"-n", coreUtils.PROJECT_NAME_CD,
@@ -54,7 +54,7 @@ func cleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 	// quickstarter master branch build
 	buildConfigName = fmt.Sprintf("run-%s-%s-master", repoName, coreUtils.PROJECT_NAME) 
 
-	stdout, stderr, err = utils.RunCommandWithWorkDir("oc", []string{
+	stdout, stderr, err = RunCommandWithWorkDir("oc", []string{
 		"delete",
 		"bc",
 		"-n", coreUtils.PROJECT_NAME_CD,
