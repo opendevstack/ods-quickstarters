@@ -28,6 +28,8 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 			stderr,
 			err)
 		return "", err
+	} else {
+		fmt.Printf("Sonar scan result: \n%s\n", stages)
 	}
 	
 	return stdout, nil
