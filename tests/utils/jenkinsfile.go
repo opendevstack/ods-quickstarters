@@ -168,5 +168,5 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
 	}
 	
-	return strings.TrimSuffix(stdout, "\n"), nil
+	return stdout, nil
 }

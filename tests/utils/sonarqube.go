@@ -4,7 +4,6 @@ import (
 	b64 "encoding/base64"
 	"log"
 	"fmt"
-	"strings"
 )
 
 func RetrieveSonarScan (projectKey string) (string, error) {
@@ -33,5 +32,5 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 		fmt.Printf("Sonar scan result: \n%s\n", stdout)
 	}
 	
-	return strings.TrimSuffix(stdout, "\n"), nil
+	return stdout, nil
 }
