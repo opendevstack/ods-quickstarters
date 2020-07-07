@@ -19,7 +19,7 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 		fmt.Sprintf("%s", sonartoken),
 		fmt.Sprintf("%s", values["SONARQUBE_URL"]),
 		fmt.Sprintf("%s", projectKey),
-		[]string{})
+		}, []string{})
 	
 	if err != nil {
 		fmt.Printf(

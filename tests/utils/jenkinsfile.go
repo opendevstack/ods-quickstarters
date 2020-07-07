@@ -85,17 +85,17 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	defer response.Body.Close()
 
-    bodyBytes, err := ioutil.ReadAll(response.Body)
-    bodyString := string(bodyBytes)
+	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	fmt.Printf("Build: %s\n, response: %s\n", buildName, bodyString)
+	fmt.Printf("Build: %s\n, response: %s\n", buildName, string(bodyBytes))
 	
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
 			return "", err
 		}
-		return "", fmt.Errorf("Could not post request: %s", string(bodyBytes))
+		return "", fmt.Errorf("Could not post pipeline %s request: %s",
+			pipelineName, string(bodyBytes))
 	}
 
 	config, err := coreUtils.GetOCClient()
@@ -111,14 +111,15 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	time.Sleep(10 * time.Second)
 	build, err := buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 	count := 0
-	max := 20
+	// especially provision builds with CLIs take longer ... 
+	max := 40
 	for (err != nil || build.Status.Phase == v1.BuildPhaseNew || build.Status.Phase == v1.BuildPhasePending || build.Status.Phase == v1.BuildPhaseRunning) && count < max {
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 		time.Sleep(20 * time.Second)
 		if err != nil {
 			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
 		} else {
-			fmt.Printf("Waiting for build: %s. Current status: %s\n", buildName, build.Status.Phase)
+			fmt.Printf("Waiting for build to complete: %s. Current status: %s\n", buildName, build.Status.Phase)
 		}
 		count++
 	}
@@ -130,7 +131,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			"project", jenkinsNamespace,
 		}, []string{})
 
-	// get (executed) jenkins stages from run 
+	// get the jenkins run build log 
 	stdout, stderr, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-log.sh",
 		[]string{
@@ -141,23 +142,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		return "", fmt.Errorf("Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s", err)
 	}
 
-	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
-		if count >= max {
-			return "", fmt.Errorf(
-				"Timeout during build: %s\nStdOut: %s\nStdErr: %s",
-				buildName,
-				stdout,
-				stderr)
-		} else {
-			return "", fmt.Errorf(
-				"Error during build: %s\nStdOut: %s\nStdErr: %s",
-				buildName,
-				stdout,
-				stderr)
-		}
+	// still running, or we could not find it ... 
+	if count >= max {
+		return "", fmt.Errorf(
+			"Timeout during build: %s\nStdOut: %s\nStdErr: %s",
+			buildName,
+			stdout,
+			stderr)
 	}
 
-	// get (executed) jenkins stages from run 
+	// get (executed) jenkins stages from run - the caller can compare against the golden record 
 	stdout, _, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-json-status.sh",
 		[]string{
