@@ -59,9 +59,9 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 
 	stdout, stderr, err = RunCommandWithWorkDir("oc", []string{
 		"delete",
-		"bc",
+		"bc", buildConfigName,
 		"-n", coreUtils.PROJECT_NAME_CD,
-		buildConfigName}, dir, []string{})
+		}, dir, []string{})
 	if err != nil {
 		fmt.Printf("Error when deleting build bc %s: %s, %s\n", buildConfigName, err, stdout)
 	} else {
