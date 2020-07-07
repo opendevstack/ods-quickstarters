@@ -1,0 +1,27 @@
+{
+  "key": "unitt-nodejs",
+  "organization": "default-organization",
+  "name": "unitt-nodejs",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "ts",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-nodejs",
+      "name": "unitt-nodejs",
+      "qualifier": "TRK"
+    }
+  ]
+}
