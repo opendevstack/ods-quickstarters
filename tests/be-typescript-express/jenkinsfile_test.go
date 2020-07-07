@@ -95,7 +95,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// sonar scan check
-	sonarscan, err = utils.RetrieveSonarScan(
+	sonarscan, err := utils.RetrieveSonarScan(
 		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
 		
 	if err != nil {
