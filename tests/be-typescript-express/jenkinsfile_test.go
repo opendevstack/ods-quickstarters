@@ -94,13 +94,13 @@ func TestJenkinsFile(t *testing.T) {
 			componentId, expectedAsString, stages)
 	}
 
-	stages, err = RetrieveSonarScan(
+	stages, err = utils.RetrieveSonarScan(
 		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
 		
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printfn("Sonar scan result: %s\n", stages)
+	fmt.Printf("Sonar scan result: %s\n", stages)
 	
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
