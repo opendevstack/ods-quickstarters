@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -17,10 +16,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) error {
+func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -57,7 +56,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return fmt.Errorf("Could not marchal json: %s", err)
+		return "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -71,7 +70,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	pipelineName := fmt.Sprintf("%s-%s-%s", pipelineJobName, pipelineNamePrefix, projectName)
 	buildName := fmt.Sprintf("%s-%s-1", pipelineName, strings.ReplaceAll(branch, "/", "-"))
 
-	println(buildName)
+	fmt.Printf("Created buildName: %s\nStarting build:%s\n", buildName, pipelineName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Post(
@@ -84,90 +83,91 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		"application/json",
 		bytes.NewBuffer(body))
 
-	if err != nil {
-		return err
-	}
+	defer response.Body.Close()
 
+    bodyBytes, err := ioutil.ReadAll(response.Body)
+    bodyString := string(bodyBytes)
+
+	fmt.Printf("Build: %s\n, response: %s\n", buildName, bodyString)
+	
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return err
+			return "", err
 		}
-		return fmt.Errorf("Could not post request: %s", string(bodyBytes))
-	}
-
-	if response.StatusCode >= http.StatusAccepted {
-		bodyBytes, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-		return fmt.Errorf("Could not post request: %s", string(bodyBytes))
+		return "", fmt.Errorf("Could not post request: %s", string(bodyBytes))
 	}
 
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
-		return fmt.Errorf("Error creating OC config: %s", err)
+		return "", fmt.Errorf("Error creating OC config: %s", err)
 	}
 
 	buildClient, err := buildClientV1.NewForConfig(config)
 	if err != nil {
-		return fmt.Errorf("Error creating Build client: %s", err)
+		return "", fmt.Errorf("Error creating Build client: %s", err)
 	}
 
 	time.Sleep(10 * time.Second)
 	build, err := buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 	count := 0
-	max := 240
+	max := 20
 	for (err != nil || build.Status.Phase == v1.BuildPhaseNew || build.Status.Phase == v1.BuildPhasePending || build.Status.Phase == v1.BuildPhaseRunning) && count < max {
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
-		time.Sleep(2 * time.Second)
+		time.Sleep(20 * time.Second)
 		if err != nil {
-			fmt.Printf("Build is still not available, %s\n", err)
+			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
 		} else {
-			fmt.Printf("Waiting for build. Current status: %s\n", build.Status.Phase)
+			fmt.Printf("Waiting for build: %s. Current status: %s\n", buildName, build.Status.Phase)
 		}
 		count++
 	}
 
+	// switch into project's cd openshift namespace - to find the build
 	stdout, stderr, err := coreUtils.RunCommand(
 		"oc",
 		[]string{
 			"project", jenkinsNamespace,
 		}, []string{})
 
-	workspace, ok := os.LookupEnv("GITHUB_WORKSPACE")
-	var script string
-	if ok {
-		script = fmt.Sprintf("%s/ods-core/tests/scripts/utils/print-jenkins-log.sh", workspace)
-	} else {
-		script = "../../ods-core/tests/scripts/utils/print-jenkins-log.sh"
-	}
-
-	stdout, stderr, err = coreUtils.RunCommand(
-		script,
+	// get (executed) jenkins stages from run 
+	stdout, stderr, err = RunScriptFromBaseDir(
+		"tests/scripts/print-jenkins-log.sh",
 		[]string{
 			buildName,
 		}, []string{})
 
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s", err)
 	}
 
 	if count >= max || build.Status.Phase != v1.BuildPhaseComplete {
-
 		if count >= max {
-			return fmt.Errorf(
-				"Timeout during build: \nStdOut: %s\nStdErr: %s",
+			return "", fmt.Errorf(
+				"Timeout during build: %s\nStdOut: %s\nStdErr: %s",
+				buildName,
 				stdout,
 				stderr)
 		} else {
-			return fmt.Errorf(
-				"Error during build: \nStdOut: %s\nStdErr: %s",
+			return "", fmt.Errorf(
+				"Error during build: %s\nStdOut: %s\nStdErr: %s",
+				buildName,
 				stdout,
 				stderr)
 		}
-
 	}
 
-	return nil
+	// get (executed) jenkins stages from run 
+	stdout, _, err = RunScriptFromBaseDir(
+		"tests/scripts/print-jenkins-json-status.sh",
+		[]string{
+			buildName,
+			jenkinsNamespace,
+		}, []string{})
+
+	if err != nil {
+		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
+	}
+	
+	return stdout, nil
 }

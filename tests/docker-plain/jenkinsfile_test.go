@@ -3,8 +3,11 @@ package docker_plain
 import (
 	"fmt"
 	"testing"
+	"runtime"
+	"path/filepath"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	"github.com/opendevstack/ods-quickstarters/tests/utils"
+	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
+	"io/ioutil"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -14,37 +17,60 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const componentId = "docker-plain-test"
+	_, filename, _, _ := runtime.Caller(0)
+	quickstarterPath := filepath.Dir(filename)
+	quickstarterName := filepath.Base(quickstarterPath)
+	fmt.Printf("path:%s", quickstarterName)
+	
+	componentId := fmt.Sprintf("%s-test", quickstarterName)
 
-	// buildConfigName := fmt.Sprintf("ods-corejob-docker-plain-unitt-%s", strings.ReplaceAll(values["ODS_GIT_REF"], "/", "-")) 
-	// run provision job for docker-plain quickstarter
-	err = utils.RunJenkinsFile(
+	// cleanup and create bb resources for this test
+	utils.CleanupAndCreateBitbucketProjectAndRepo(
+		quickstarterName, componentId)
+
+	// run provision job for quickstarter in project's cd jenkins
+	stages, err := utils.RunJenkinsFile(
 		"ods-quickstarters",
-		"opendevstack",
+		values["ODS_BITBUCKET_PROJECT"],
 		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
-		"docker-plain/Jenkinsfile",
-		"unitt-cd",
+		fmt.Sprintf("%s/Jenkinsfile", quickstarterName),
+		coreUtils.PROJECT_NAME_CD,
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/unitt/docker-plain-test.git", values["REPO_BASE"]),
+			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, componentId),
 		},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = utils.RunJenkinsFile(
+	fmt.Printf("Provision Build for %s returned:\n%s", componentId, stages)
+	
+	// verify provision jenkins stages - against golden record
+	expected, err := ioutil.ReadFile("golden/jenkins-provision-stages.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	
+	expectedAsString := string(expected)
+	if stages != expectedAsString {
+		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, expectedAsString, stages)
+	}
+
+	// run master build of provisioned quickstarter in project's cd jenkins
+	stages, err = utils.RunJenkinsFile(
 		componentId,
-		"unitt",
+		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,
 		"Jenkinsfile",
-		"unitt-cd",
+		coreUtils.PROJECT_NAME_CD,
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
@@ -54,15 +80,29 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resourcesInTest := utils.Resources{
+	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stages)
+
+	// verify run and build jenkins stages - against golden record
+	expected, err = ioutil.ReadFile("golden/jenkins-build-stages.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	
+	expectedAsString = string(expected)
+	if stages != expectedAsString {
+		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, expectedAsString, stages)
+	}
+
+	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
-		ImageTags:         []utils.ImageTag{{Name: componentId, Tag: "latest"}},
+		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
 		DeploymentConfigs: []string{componentId},
 		Services:          []string{componentId},
 		ImageStreams:      []string{componentId},
 	}
 
-	utils.CheckResources(resourcesInTest, t)
+	coreUtils.CheckResources(resourcesInTest, t)
 
 }
