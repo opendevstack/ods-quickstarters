@@ -50,6 +50,8 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 	if err != nil {
 		fmt.Printf("Error when deleting provisioning bc %s: %s, %s\n", 
 			buildConfigName, err, stdout)
+	} else {
+		fmt.Printf("removed prov build config: %s", buildConfigName)
 	}
 
 	// quickstarter master branch build
@@ -62,6 +64,8 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 		buildConfigName}, dir, []string{})
 	if err != nil {
 		fmt.Printf("Error when deleting build bc %s: %s, %s\n", buildConfigName, err, stdout)
+	} else {
+		fmt.Printf("removed (build) build config: %s", buildConfigName)
 	}
 
 	fmt.Printf("Done\n - created repo:%s\n", repoName)
