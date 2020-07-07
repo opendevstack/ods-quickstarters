@@ -9,15 +9,17 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  stageTestSuite(context)
-  odsComponentStageScanWithSonar(context)
-  stageBuild(context)
-  odsComponentStageBuildOpenShiftImage(context, [
-    buildArgs: [
-      nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
-      nexusHostWithoutScheme: context.nexusHostWithoutScheme
-    ]
-  ])
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    stageTestSuite(context)
+    odsComponentStageScanWithSonar(context)
+    stageBuild(context)
+    odsComponentStageBuildOpenShiftImage(context, [
+      buildArgs: [
+        nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
+        nexusHostWithoutScheme: context.nexusHostWithoutScheme
+      ]
+    ])
+  }
   odsComponentStageRolloutOpenShiftDeployment(context)
 }
 

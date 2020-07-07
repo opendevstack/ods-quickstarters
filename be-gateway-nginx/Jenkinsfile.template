@@ -10,7 +10,9 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentStageBuildOpenShiftImage(context)
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    odsComponentStageBuildOpenShiftImage(context)
+  }
 
   odsComponentStageRolloutOpenShiftDeployment(context)
 }
