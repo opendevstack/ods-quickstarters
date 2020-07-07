@@ -15,7 +15,7 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 
 	sonartoken, _ := b64.StdEncoding.DecodeString(values["SONAR_AUTH_TOKEN_B64"])
 
-	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/print-sonar-scan.sh", []string{
+	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/print-sonar-scan-run.sh", []string{
 		fmt.Sprintf("%s", sonartoken),
 		fmt.Sprintf("%s", values["SONARQUBE_URL"]),
 		fmt.Sprintf("%s", projectKey),
@@ -23,7 +23,7 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 	
 	if err != nil {
 		fmt.Printf(
-			"Execution of `tests/scripts/print-sonar-scan.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+			"Execution of `tests/scripts/print-sonar-scan-run.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
 			stdout,
 			stderr,
 			err)
