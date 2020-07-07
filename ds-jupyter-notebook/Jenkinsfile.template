@@ -10,12 +10,14 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentStageBuildOpenShiftImage(context, [
-    buildArgs: [
-      nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
-      nexusHostWithoutScheme: context.nexusHostWithoutScheme
-    ]
-  ])
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    odsComponentStageBuildOpenShiftImage(context, [
+      buildArgs: [
+        nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
+        nexusHostWithoutScheme: context.nexusHostWithoutScheme
+      ]
+    ])
+  }
 
   // rollout auth proxy - this registers the dc for later promotion
   odsComponentStageRolloutOpenShiftDeployment(context, [resourceName: "${context.componentId}-auth-proxy"])
