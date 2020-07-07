@@ -95,7 +95,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	stages, err = RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId)
+		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
 		
 	if err != nil {
 		t.Fatal(err)
