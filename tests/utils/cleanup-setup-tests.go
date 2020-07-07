@@ -68,5 +68,5 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 		fmt.Printf("removed (build) build config: %s\n", buildConfigName)
 	}
 
-	fmt.Printf("Done\n - created repo:%s\n", repoName)
+	fmt.Printf("Done\n - cleaned up and created repo: %s\n", repoName)
 }
