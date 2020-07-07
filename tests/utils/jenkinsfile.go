@@ -149,6 +149,11 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			buildName,
 			stdout,
 			stderr)
+	} else {
+		fmt.Printf(
+			"buildlog: %s\n%s",
+			buildName,
+			stdout)
 	}
 
 	// get (executed) jenkins stages from run - the caller can compare against the golden record 

@@ -20,7 +20,7 @@ func TestJenkinsFile(t *testing.T) {
 	_, filename, _, _ := runtime.Caller(0)
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
-	fmt.Printf("path:%s", quickstarterName)
+	fmt.Printf("quickstarter: %s\n", quickstarterName)
 	
 	componentId := fmt.Sprintf("%s-test", quickstarterName)
 
