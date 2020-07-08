@@ -4,11 +4,7 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build",
-    "status": "SUCCESS"
-  },
-  {
-    "stage": "Unit Test",
+    "stage": "Build and Unit Test",
     "status": "SUCCESS"
   },
   {

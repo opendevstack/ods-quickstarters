@@ -1,14 +1,14 @@
 {
-  "key": "unitt-nodejs",
+  "key": "unitt-springboot",
   "organization": "default-organization",
-  "name": "unitt-nodejs",
+  "name": "unitt-springboot",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
       "name": "Sonar way",
-      "language": "ts",
+      "language": "java",
       "deleted": false
     }
   ],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-nodejs",
-      "name": "unitt-nodejs",
+      "key": "unitt-springboot",
+      "name": "unitt-springboot",
       "qualifier": "TRK"
     }
   ]
