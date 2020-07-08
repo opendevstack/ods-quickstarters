@@ -11,7 +11,7 @@ sonar.sources=src
 sonar.sourceEncoding=UTF-8
 
 # Exclude test files from coverage analysis
-sonar.coverage.exclusions=**/*.spec.ts
+sonar.coverage.exclusions=**/*.spec.ts,**/*.module.ts,src/environments/**
 
 # Exclude non type script files from coverage analysis
 sonar.exclusions=**/*.html,**/*.scss,**/*.json,**/*.ico,**/*.svg
