@@ -105,7 +105,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	
 	responseAsObject := responseI.(map[string]interface{})
 	buildName := responseAsObject["metadata"]["name"]
-	fmt.Printf("Buildname from response: %s\n", buildName)
+	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+		pipelineName, buildName)
 	
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
