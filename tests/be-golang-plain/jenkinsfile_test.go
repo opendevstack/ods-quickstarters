@@ -1,4 +1,4 @@
-package be_springboot
+package be_golang
 
 import (
 	"fmt"
