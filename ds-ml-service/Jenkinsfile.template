@@ -23,8 +23,10 @@ odsComponentPipeline(
   stageLint(context)
   stagePrepareBuilds(context)
 
-  buildArgs["serviceType"] = "training"
-  odsComponentStageBuildOpenShiftImage(context, [resourceName: trainingServiceName, buildArgs: buildArgs])
+  odsComponentStageImportOpenShiftImageOrElse(context, [resourceName: trainingServiceName]) {
+    buildArgs["serviceType"] = "training"
+    odsComponentStageBuildOpenShiftImage(context, [resourceName: trainingServiceName, buildArgs: buildArgs])
+  }
   def trainingDeployInfo = odsComponentStageRolloutOpenShiftDeployment(context, [resourceName: trainingServiceName])
 
   stageTrainingUnitTests(context, trainingDeployInfo.podName)
@@ -32,9 +34,11 @@ odsComponentPipeline(
   stageTrainingIntegrationTests(context, trainingDeployInfo.podName)
   odsComponentStageScanWithSonar(context)
 
-  buildArgs["serviceType"] = "prediction"
-  odsComponentStageBuildOpenShiftImage (context, [resourceName: predictionServiceName, buildArgs: buildArgs])
-  odsComponentStageRolloutOpenShiftDeployment (context, [resourceName: predictionServiceName ])
+  odsComponentStageImportOpenShiftImageOrElse(context, [resourceName: predictionServiceName]) {
+    buildArgs["serviceType"] = "prediction"
+    odsComponentStageBuildOpenShiftImage(context, [resourceName: predictionServiceName, buildArgs: buildArgs])
+  }
+  odsComponentStageRolloutOpenShiftDeployment(context, [resourceName: predictionServiceName ])
 }
 
 def stageLint(def context) {
