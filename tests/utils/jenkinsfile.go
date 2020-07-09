@@ -104,7 +104,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 	
 	responseAsObject := responseI.(map[string]interface{})
-	buildName := responseAsObject["metadata"]["name"]
+	metadataAsMap := responseAsObject["metadata"].(map[string]interface{})
+	buildName := metadataAsMap["name"].(string)
 	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
 		pipelineName, buildName)
 	
