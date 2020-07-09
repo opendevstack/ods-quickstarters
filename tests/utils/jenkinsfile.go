@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	v1 "github.com/openshift/api/build/v1"
 	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
@@ -68,9 +67,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 
 	pipelineName := fmt.Sprintf("%s-%s-%s", pipelineJobName, pipelineNamePrefix, projectName)
-	buildName := fmt.Sprintf("%s-%s-1", pipelineName, strings.ReplaceAll(branch, "/", "-"))
 
-	fmt.Printf("Created buildName: %s\nStarting build:%s\n", buildName, pipelineName)
+	fmt.Printf("Starting pipeline %s\n", pipelineName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Post(
@@ -87,17 +85,29 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	fmt.Printf("Build: %s\n, response: %s\n", buildName, string(bodyBytes))
+	fmt.Printf("Pipeline: %s\n, response: %s\n", pipelineName, string(bodyBytes))
 	
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
 			return "", err
 		}
-		return "", fmt.Errorf("Could not post pipeline %s request: %s",
+		return "", fmt.Errorf("Could not post to pipeline: %s - response: %",
 			pipelineName, string(bodyBytes))
 	}
 
+	var responseI map[string]interface{}
+	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
+	if err != nil {
+		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+			string(bodyBytes), err)
+	}
+	
+	metadataAsMap := responseI["metadata"].(map[string]interface{})
+	buildName := metadataAsMap["name"].(string)
+	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+		pipelineName, buildName)
+	
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
 		return "", fmt.Errorf("Error creating OC config: %s", err)
