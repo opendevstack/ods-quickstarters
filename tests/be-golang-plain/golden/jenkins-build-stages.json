@@ -4,7 +4,19 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build and Unit Test",
+    "stage": "Check Format",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Lint",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Unit Test",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build",
     "status": "SUCCESS"
   },
   {
