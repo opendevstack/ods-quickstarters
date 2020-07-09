@@ -8,10 +8,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build spring project",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "Copy files from quickstarter",
     "status": "SUCCESS"
   },
@@ -21,10 +17,6 @@
   },
   {
     "stage": "Create Jenkinsfile",
-    "status": "SUCCESS"
-  },
-  {
-    "stage": "Create sonar-project.properties",
     "status": "SUCCESS"
   },
   {
