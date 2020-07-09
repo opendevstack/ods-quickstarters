@@ -97,7 +97,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 
 	var responseI map[string]interface{}
-	err = json.Unmarshal(bodyBytes, &responseI)
+	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
 		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
