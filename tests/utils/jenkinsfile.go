@@ -96,15 +96,14 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			pipelineName, string(bodyBytes))
 	}
 
-	var responseI interface {}
-	err := json.Unmarshal(bodyBytes, &responseI)
+	var responseI map[string]interface{}
+	err = json.Unmarshal(bodyBytes, &responseI)
 	if err != nil {
 		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 	
-	responseAsObject := responseI.(map[string]interface{})
-	metadataAsMap := responseAsObject["metadata"].(map[string]interface{})
+	metadataAsMap := responseI["metadata"].(map[string]interface{})
 	buildName := metadataAsMap["name"].(string)
 	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
 		pipelineName, buildName)
