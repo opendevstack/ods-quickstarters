@@ -4,11 +4,23 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build and Unit Test",
+    "stage": "Prepare Test Suite",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Lint",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Unit Test",
     "status": "SUCCESS"
   },
   {
     "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build",
     "status": "SUCCESS"
   },
   {
