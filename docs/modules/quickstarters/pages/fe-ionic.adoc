@@ -89,11 +89,12 @@ For *android* support configure your environment like this https://ionicframewor
 
 The `Jenkinsfile` contains the configuration that customizes the core pipeline implemented by https://github.com/opendevstack/ods-jenkins-shared-library[jenkins shared library].
 
-When the code in your git repository is updated the `Jenkinsfile` comes into action with the following stages for this quickstarter:
+When the code in your git repository is updated the `Jenkinsfile` comes into action with the following main stages for this quickstarter:
 
 * *Build* - Installs the dependencies of your project with `yarn install`, generates the build by running `npm run ionic:build`, if the merged git branch is master it creates the production build with `npm run ionic:build --prod`. Finally, it copies the output folder `www` into `docker/dist`.
-* *Unit Test* - Runs unit test cases by executing `yarn test` command, if any test fails, the build is marked as failed.
+* *Unit Test* - Runs unit test cases by executing `yarn test` command. If any test fails, the build is marked as failed. This will also create test coverage analysis data which will then be transfered to SonarQube.
 * *Lint* - Profiler that ensures code best practices by running `npm run lint` command, if linting is not passing, the build is marked as failed also.
+* *SonarQube Analysis* - Triggers a code quality analysis by transfering code and test coverage analysis data to SonarQube. By default files like `*.spec.ts`, `*.modules.ts` and `src/environments/**` are excluded from the analysis, since they usually don't contain logic. Please revisit `sonar-project.properties` to configure analysis inclusions and exclusions according to your project's needs.
 
 == Builder agent used
 
