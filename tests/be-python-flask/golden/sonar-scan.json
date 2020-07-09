@@ -1,14 +1,14 @@
 {
-  "key": "unitt-springboot",
+  "key": "unitt-python-flask-iq-test",
   "organization": "default-organization",
-  "name": "unitt-springboot",
+  "name": "unitt-python-flask-iq-test",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
       "name": "Sonar way",
-      "language": "java",
+      "language": "py",
       "deleted": false
     }
   ],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-springboot",
-      "name": "unitt-springboot",
+      "key": "unitt-python-flask-iq-test",
+      "name": "unitt-python-flask-iq-test",
       "qualifier": "TRK"
     }
   ]
