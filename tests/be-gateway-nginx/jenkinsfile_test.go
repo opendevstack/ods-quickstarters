@@ -22,7 +22,7 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	const componentId = "nginx"
+	const componentId = "nginx-iq-test"
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
