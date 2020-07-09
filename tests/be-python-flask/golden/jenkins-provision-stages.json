@@ -8,10 +8,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build spring project",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "Copy files from quickstarter",
     "status": "SUCCESS"
   },
