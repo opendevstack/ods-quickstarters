@@ -4,14 +4,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build and Unit Test",
-    "status": "SUCCESS"
-  },
-  {
-    "stage": "SonarQube Analysis",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "Build OpenShift Image",
     "status": "SUCCESS"
   },
