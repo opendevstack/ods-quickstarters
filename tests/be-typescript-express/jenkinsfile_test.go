@@ -2,12 +2,13 @@ package docker_plain
 
 import (
 	"fmt"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
-	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
 	"testing"
+
+	coreUtils "github.com/opendevstack/ods-core/tests/utils"
+	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -21,7 +22,7 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	const componentId = "nodejs"
+	componentId := fmt.Sprintf("%s-test", quickstarterName)
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
@@ -97,11 +98,11 @@ func TestJenkinsFile(t *testing.T) {
 	// sonar scan check
 	sonarscan, err := utils.RetrieveSonarScan(
 		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
-		
+
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	// verify sonar scan - against golden record
 	expected, err = ioutil.ReadFile("golden/sonar-scan.json")
 	if err != nil {
@@ -113,7 +114,7 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
 			componentId, expectedAsString, sonarscan)
 	}
-	
+
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
