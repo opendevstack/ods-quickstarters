@@ -117,7 +117,6 @@ objects:
     metadata:
       name: '${COMPONENT}-prediction-service'
     spec:
-      dockerImageRepository: '${COMPONENT}-prediction-service'
       lookupPolicy:
         local: false
   - apiVersion: v1
@@ -125,7 +124,6 @@ objects:
     metadata:
       name: '${COMPONENT}-training-service'
     spec:
-      dockerImageRepository: '${COMPONENT}-training-service'
       lookupPolicy:
         local: false
   - apiVersion: v1
