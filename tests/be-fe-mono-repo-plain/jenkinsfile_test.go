@@ -1,4 +1,4 @@
-package be_springboot
+package be_fe_mono_repo_plain
 
 import (
 	"fmt"
