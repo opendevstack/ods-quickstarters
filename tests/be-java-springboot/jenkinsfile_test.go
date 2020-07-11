@@ -1,4 +1,4 @@
-package be_springboot
+package be_javascript_springboot
 
 import (
 	"fmt"

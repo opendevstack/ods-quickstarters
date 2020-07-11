@@ -1,4 +1,4 @@
-package be_springboot
+package be_python_flask
 
 import (
 	"fmt"
