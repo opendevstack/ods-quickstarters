@@ -1,4 +1,4 @@
-package be_golang
+package be_golang_plain
 
 import (
 	"fmt"
