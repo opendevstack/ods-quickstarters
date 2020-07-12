@@ -7,7 +7,7 @@ if [ -f test-quickstarter-results.txt ]; then
     rm test-quickstarter-results.txt
 fi
 go test -v -p 1 github.com/opendevstack/ods-quickstarters/tests/... | tee test-quickstarter-results.txt 2>&1
-exitcode=$?
+exitcode="${PIPESTATUS[0]}"
 if [ -f test-quickstarter-results.txt ]; then
     set -e
     go-junit-report < test-quickstarter-results.txt > test-quickstarter-report.xml
