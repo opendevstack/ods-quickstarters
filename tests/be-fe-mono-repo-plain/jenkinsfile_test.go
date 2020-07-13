@@ -22,7 +22,9 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	componentId := fmt.Sprintf("%s-test", quickstarterName)
+	// cannot use this because results in label longer than 63 characters, causing jenkins build to fail:
+	// componentId := fmt.Sprintf("%s-test", quickstarterName)
+	componentId = "monorepo-iq-test"
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
