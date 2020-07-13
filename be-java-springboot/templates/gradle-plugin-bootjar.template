@@ -1,0 +1,5 @@
+
+bootJar {
+    archiveFileName = "app.jar"
+    destinationDirectory = file("$buildDir/../docker")
+}
