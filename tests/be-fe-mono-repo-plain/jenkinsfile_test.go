@@ -97,26 +97,6 @@ func TestJenkinsFile(t *testing.T) {
 			componentId, expectedAsString, stages)
 	}
 
-	// sonar scan check
-	sonarscan, err := utils.RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// verify sonar scan - against golden record
-	expected, err = ioutil.ReadFile("golden/sonar-scan.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expectedAsString = string(expected)
-	if sonarscan != expectedAsString {
-		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			componentId, expectedAsString, sonarscan)
-	}
-
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
