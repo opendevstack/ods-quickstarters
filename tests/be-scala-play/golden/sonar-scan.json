@@ -1,14 +1,14 @@
 {
-  "key": "unitt-springboot",
+  "key": "unitt-be-scala-play-test",
   "organization": "default-organization",
-  "name": "unitt-springboot",
+  "name": "unitt-be-scala-play-test",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
       "name": "Sonar way",
-      "language": "java",
+      "language": "scala",
       "deleted": false
     }
   ],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-springboot",
-      "name": "unitt-springboot",
+      "key": "unitt-be-scala-play-test",
+      "name": "unitt-be-scala-play-test",
       "qualifier": "TRK"
     }
   ]
