@@ -35,6 +35,9 @@ odsQuickstarterPipeline(
 
     echo "--- customise build.gradle ---"
 
+    // add nexus credential settings
+    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
+
     // insert required plugins
     sh "sed -i -e '/plugins {/{r ${context.sourceDir}/templates/gradle-plugins.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
@@ -49,9 +52,6 @@ odsQuickstarterPipeline(
 
     // append jacoco settings
     sh "cat ${context.sourceDir}/templates/gradle-plugin-jacoco.template >> ${context.targetDir}/build.gradle"
-
-    // append nexus credential settings
-    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template >> ${context.targetDir}/build.gradle"
 
     // append maven-publish settings
     sh "cat ${context.sourceDir}/templates/gradle-maven-publish.template >> ${context.targetDir}/build.gradle"
