@@ -45,16 +45,16 @@ odsQuickstarterPipeline(
     sh "sed -i -e '/test {/{r ${context.sourceDir}/templates/gradle-plugin-test.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
     // append bootJar settings
-    sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-plugin-bootjar.template >out && mv out ${context.targetDir}/build.gradle"
+    sh "cat ${context.sourceDir}/templates/gradle-plugin-bootjar.template >> ${context.targetDir}/build.gradle"
 
     // append jacoco settings
-    sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-plugin-jacoco.template >out && mv out ${context.targetDir}/build.gradle"
+    sh "cat ${context.sourceDir}/templates/gradle-plugin-jacoco.template >> ${context.targetDir}/build.gradle"
 
-    // add nexus credential settings
-    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
+    // append nexus credential settings
+    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template >> ${context.targetDir}/build.gradle"
 
     // append maven-publish settings
-    sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-maven-publish.template >out && mv out ${context.targetDir}/build.gradle"
+    sh "cat ${context.sourceDir}/templates/gradle-maven-publish.template >> ${context.targetDir}/build.gradle"
   }
 
   odsQuickstarterStageCopyFiles(context)
