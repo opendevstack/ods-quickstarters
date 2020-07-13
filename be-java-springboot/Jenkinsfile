@@ -29,8 +29,8 @@ odsQuickstarterPipeline(
 
       echo "--- configure application.properties ---"
 
-      echo "'spring.profiles.active: dev' > src/main/resources/application.properties"
-      echo "'spring.jpa.database: HSQL' > src/main/resources/application-dev.properties"
+      sh "echo 'spring.profiles.active: dev' > src/main/resources/application.properties"
+      sh "echo 'spring.jpa.database: HSQL' > src/main/resources/application-dev.properties"
     }
 
     echo "--- customise build.gradle ---"
