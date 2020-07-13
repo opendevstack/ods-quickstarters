@@ -4,14 +4,15 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
 library("ods-jenkins-shared-library@${odsGitRef}")
 
-def springBootVersion = '2.3.1.RELEASE'
-
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${odsImageTag}",
 ) { context ->
 
   stage('Build spring project') {
     dir(context.targetDir) {
+      def springBootVersion = '2.3.1.RELEASE'
+      echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
+
       sh "curl https://start.spring.io/starter.tgz \
             -d type=gradle-project \
             -d language=java \
@@ -26,32 +27,33 @@ odsQuickstarterPipeline(
             -d packageName='${context.packageName}' \
             | tar -zxvf - "
 
-      //withEnv(["COMPONENT=${context.componentId}", "GROUP=${context.group}"]) {
+      echo "--- configure application.properties ---"
 
-
-        //sh "sh ${env.WORKSPACE}/${context.sourceDir}/postProcessProjectsettings.sh"
-      //}
+      echo "spring.profiles.active: dev" > "src/main/resources/application.properties"
+      echo "spring.jpa.database: HSQL" > "src/main/resources/application-dev.properties"
     }
 
-    // add nexus credential settings to build.gradle
-    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
+    echo "--- customise build.gradle ---"
 
-    // insert required plugins to build.gradle
+    // insert required plugins
     sh "sed -i -e '/plugins {/{r ${context.sourceDir}/templates/gradle-plugins.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
-    // insert nexus repos to build.gradle
+    // insert nexus repos
     sh "sed -i -e '/mavenCentral()/{r ${context.sourceDir}/templates/gradle-repositories.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
-    // insert test settings to build.gradle
+    // insert test settings
     sh "sed -i -e '/test {/{r ${context.sourceDir}/templates/gradle-plugin-test.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
-    // append bootJar settings to build.gradle
+    // append bootJar settings
     sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-plugin-bootjar.template >out && mv out ${context.targetDir}/build.gradle"
 
-    // append jacoco settings to build.gradle
+    // append jacoco settings
     sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-plugin-jacoco.template >out && mv out ${context.targetDir}/build.gradle"
 
-    // append maven-publish settings to build.gradle
+    // add nexus credential settings
+    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
+
+    // append maven-publish settings
     sh "cat ${context.targetDir}/build.gradle ${context.sourceDir}/templates/gradle-maven-publish.template >out && mv out ${context.targetDir}/build.gradle"
   }
 
