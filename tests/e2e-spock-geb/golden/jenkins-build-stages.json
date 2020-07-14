@@ -1,0 +1,38 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Check Format",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Lint",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Unit Test",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy to OpenShift",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]
