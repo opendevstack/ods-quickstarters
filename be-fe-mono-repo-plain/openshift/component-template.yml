@@ -77,7 +77,6 @@ objects:
     metadata:
       name: '${COMPONENT}-backend'
     spec:
-      dockerImageRepository: '${COMPONENT}-backend'
       lookupPolicy:
         local: false
   - apiVersion: v1
@@ -85,7 +84,6 @@ objects:
     metadata:
       name: '${COMPONENT}-frontend'
     spec:
-      dockerImageRepository: '${COMPONENT}-frontend'
       lookupPolicy:
         local: false
   - apiVersion: v1

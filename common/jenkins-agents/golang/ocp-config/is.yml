@@ -10,6 +10,5 @@ objects:
     labels:
       app: jenkins-agent-golang
   spec:
-    dockerImageRepository: jenkins-agent-golang
     lookupPolicy:
       local: false

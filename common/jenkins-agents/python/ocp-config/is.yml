@@ -10,6 +10,5 @@ objects:
     labels:
       app: jenkins-agent-python
   spec:
-    dockerImageRepository: jenkins-agent-python
     lookupPolicy:
       local: false

@@ -10,6 +10,5 @@ objects:
     labels:
       app: jenkins-agent-maven
   spec:
-    dockerImageRepository: jenkins-agent-maven
     lookupPolicy:
       local: false
