@@ -1,4 +1,4 @@
-package be_java_springboot
+package be_scala_play
 
 import (
 	"fmt"
