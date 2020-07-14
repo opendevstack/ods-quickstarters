@@ -92,7 +92,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		if err != nil {
 			return "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s - response: %",
+		return "", fmt.Errorf("Could not post to pipeline: %s - response: %s",
 			pipelineName, string(bodyBytes))
 	}
 
