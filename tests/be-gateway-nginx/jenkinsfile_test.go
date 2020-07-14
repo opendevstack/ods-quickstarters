@@ -1,4 +1,4 @@
-package be_typescript_express
+package be_gateway_nginx
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	componentId := fmt.Sprintf("%s-test", quickstarterName)
+	const componentId = "nginx-iq-test"
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
@@ -93,26 +93,6 @@ func TestJenkinsFile(t *testing.T) {
 	if stages != expectedAsString {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
 			componentId, expectedAsString, stages)
-	}
-
-	// sonar scan check
-	sonarscan, err := utils.RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// verify sonar scan - against golden record
-	expected, err = ioutil.ReadFile("golden/sonar-scan.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expectedAsString = string(expected)
-	if sonarscan != expectedAsString {
-		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			componentId, expectedAsString, sonarscan)
 	}
 
 	resourcesInTest := coreUtils.Resources{

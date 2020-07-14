@@ -1,4 +1,4 @@
-package be_typescript_express
+package be_python_flask
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	componentId := fmt.Sprintf("%s-test", quickstarterName)
+	const componentId = "python-flask-iq-test"
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
