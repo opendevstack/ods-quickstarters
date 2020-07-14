@@ -1,0 +1,27 @@
+{
+  "key": "unitt-fe-angular",
+  "organization": "default-organization",
+  "name": "unitt-fe-angular",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "ts",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-fe-angular",
+      "name": "unitt-fe-angular",
+      "qualifier": "TRK"
+    }
+  ]
+}
