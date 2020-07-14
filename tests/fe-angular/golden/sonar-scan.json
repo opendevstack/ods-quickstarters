@@ -1,7 +1,7 @@
 {
-  "key": "unitt-fe-angular",
+  "key": "unitt-fe-angular-test",
   "organization": "default-organization",
-  "name": "unitt-fe-angular",
+  "name": "unitt-fe-angular-test",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-fe-angular",
-      "name": "unitt-fe-angular",
+      "key": "unitt-fe-angular-test",
+      "name": "unitt-fe-angular-test",
       "qualifier": "TRK"
     }
   ]
