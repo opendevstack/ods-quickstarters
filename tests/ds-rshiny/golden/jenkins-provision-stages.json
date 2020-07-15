@@ -12,7 +12,7 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Initialize new Go module",
+    "stage": "Setup OpenShift resources",
     "status": "SUCCESS"
   },
   {

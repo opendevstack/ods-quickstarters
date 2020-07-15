@@ -4,11 +4,11 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Unit Test",
+    "stage": "Build OpenShift Image",
     "status": "SUCCESS"
   },
   {
-    "stage": "Build OpenShift Image",
+    "stage": "Deploy to OpenShift (rshiny-auth-proxy)",
     "status": "SUCCESS"
   },
   {
