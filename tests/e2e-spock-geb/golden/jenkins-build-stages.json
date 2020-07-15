@@ -8,10 +8,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Build",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "SonarQube Analysis",
     "status": "SUCCESS"
   },
