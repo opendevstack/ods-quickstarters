@@ -1,4 +1,4 @@
-package be_java_springboot
+package ds_jupyter_notebook
 
 import (
 	"fmt"
