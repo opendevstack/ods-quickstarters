@@ -72,13 +72,14 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	fmt.Printf("Starting pipeline %s\n", pipelineName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	url := fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
+		jenkinsNamespace,
+		values["OPENSHIFT_APPS_BASEDOMAIN"],
+		values["PIPELINE_TRIGGER_SECRET"],
+		jenkinsFile,
+		pipelineName)
 	response, err := http.Post(
-		fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
-			jenkinsNamespace,
-			values["OPENSHIFT_APPS_BASEDOMAIN"],
-			values["PIPELINE_TRIGGER_SECRET"],
-			jenkinsFile,
-			pipelineName),
+		url,
 		"application/json",
 		bytes.NewBuffer(body))
 
@@ -93,8 +94,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		if err != nil {
 			return "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s - response: %s",
-			pipelineName, string(bodyBytes))
+		return "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+			pipelineName, url, response.StatusCode, string(bodyBytes))
 	}
 
 	var responseI map[string]interface{}
