@@ -1,9 +1,13 @@
 package utils
 
 import (
+	"bytes"
 	b64 "encoding/base64"
-	"log"
 	"fmt"
+	"log"
+	"os/exec"
+	"strings"
+
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 )
 
@@ -31,5 +35,45 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 			err)
 	}
 
+	// Delete any built image tags
+	imageStreamName := repoName
+	stdout, stderr, err = runOcCmd([]string{
+		"-n", coreUtils.PROJECT_NAME_DEV,
+		"get", "is", imageStreamName,
+		"-ojsonpath={.status.tags[*].tag}",
+	})
+	if err != nil {
+		fmt.Printf("Error when retrieving tags of %s: %s, %s\n", imageStreamName, err, stderr)
+	} else {
+		fmt.Printf("Found image tags: %s\n", stdout)
+		tags := strings.Split(stdout, " ")
+		for _, tag := range tags {
+			if tag != "latest" { // latest is in use by DeploymentConfig
+				stdout, stderr, err = runOcCmd([]string{
+					"-n", coreUtils.PROJECT_NAME_DEV,
+					"delete",
+					fmt.Sprintf("istag/%s:%s", imageStreamName, tag),
+				})
+				if err != nil {
+					fmt.Printf("Error when deleting image %s:%s: %s, %s\n", imageStreamName, tag, err, stderr)
+				} else {
+					fmt.Printf("Deleted tag: %s:%s\n", imageStreamName, tag)
+				}
+			}
+		}
+	}
+
+	// TODO: Further cleanup (e.g. scaling down deployments?
+	// Tricky as we cannot scale to 0, and deleting RC/pod will be "fixed" by Kubernetes
+
 	fmt.Printf("Done\n - cleaned up and created repo: %s\n", repoName)
+}
+
+func runOcCmd(args []string) (string, string, error) {
+	cmd := exec.Command("oc", args...)
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	return string(stdout.Bytes()), string(stderr.Bytes()), err
 }
