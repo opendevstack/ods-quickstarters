@@ -1,14 +1,19 @@
 {
-  "key": "unitt-golang-iq-test",
+  "key": "unitt-spock",
   "organization": "default-organization",
-  "name": "unitt-golang-iq-test",
+  "name": "unitt-spock",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
       "name": "Sonar way",
-      "language": "go",
+      "language": "grvy",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "java",
       "deleted": false
     }
   ],
@@ -19,8 +24,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-golang-iq-test",
-      "name": "unitt-golang-iq-test",
+      "key": "unitt-spock",
+      "name": "unitt-spock",
       "qualifier": "TRK"
     }
   ]

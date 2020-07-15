@@ -18,9 +18,11 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 echo "generate project"
+mkdir start_$COMPONENT
+cd start_$COMPONENT
 ionic start $COMPONENT blank --type=angular --no-deps --no-git
-
-cd $COMPONENT
+mv $COMPONENT/ ..
+cd ../$COMPONENT
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
