@@ -115,15 +115,4 @@ func TestJenkinsFile(t *testing.T) {
 			componentId, expectedAsString, sonarscan)
 	}
 
-	resourcesInTest := coreUtils.Resources{
-		Namespace:         coreUtils.PROJECT_NAME_DEV,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
-		BuildConfigs:      []string{componentId},
-		DeploymentConfigs: []string{componentId},
-		Services:          []string{componentId},
-		ImageStreams:      []string{componentId},
-	}
-
-	coreUtils.CheckResources(resourcesInTest, t)
-
 }

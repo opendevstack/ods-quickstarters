@@ -12,14 +12,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Initialize new Go module",
-    "status": "SUCCESS"
-  },
-  {
-    "stage": "Create OpenShift resources",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "Create Jenkinsfile",
     "status": "SUCCESS"
   },
