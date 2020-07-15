@@ -1,4 +1,4 @@
-package be_java_springboot
+package ds_rshiny
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func TestJenkinsFile(t *testing.T) {
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
 	fmt.Printf("quickstarter: %s\n", quickstarterName)
-	const componentId = "springboot"
+	const componentId = "rshiny"
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
