@@ -10,11 +10,6 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  odsQuickstarterStageCreateOpenShiftResources(
-    context,
-    [directory: 'common/ocp-config/component-environment']
-  )
-
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
