@@ -71,13 +71,16 @@ read -r -d "" UNIT_XML_CONFIG << EOM || true
 EOM
 sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.conf.js
 
+echo "Adjust package.json to have the full test"
+sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
+
+
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
 sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/Dockerfile
 rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
-rm ./package.json
 rm ./tslint.json
 cp -rv $SCRIPT_DIR/files/. .
 sed -i "s/\$COMPONENT/${COMPONENT}/" ./package.json
