@@ -119,6 +119,74 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 }
 
+func RunArbitraryJenkinsPipeline(repositoryProject string, respository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, error) {
+	values, err := ReadConfiguration()
+	if err != nil {
+		return "", err
+	}
+
+	request := coreUtils.RequestBuild{
+		Repository: repository,
+		Branch:     "master",
+		Project:    repositoryProject,
+		Env: append([]coreUtils.EnvPair{}, envVars...),
+	}
+
+	body, err := json.Marshal(request)
+	if err != nil {
+		return "", fmt.Errorf("Could not marshal json: %s", err)
+	}
+
+	fmt.Printf("Starting pipeline %s\n", pipelineName)
+
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	url := fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&component=%s",
+		jenkinsNamespace,
+		values["OPENSHIFT_APPS_BASEDOMAIN"],
+		triggerSecret,
+		pipelineName)
+	response, err := http.Post(
+		url,
+		"application/json",
+		bytes.NewBuffer(body))
+
+	defer response.Body.Close()
+
+	bodyBytes, err := ioutil.ReadAll(response.Body)
+
+	fmt.Printf("Pipeline: %s\n, response: %s\n", pipelineName, string(bodyBytes))
+
+	if response.StatusCode >= http.StatusAccepted {
+		bodyBytes, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return "", err
+		}
+		return "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+			pipelineName, url, response.StatusCode, string(bodyBytes))
+	}
+
+	var responseI map[string]interface{}
+	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
+	if err != nil {
+		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+			string(bodyBytes), err)
+	}
+
+	metadataAsMap := responseI["metadata"].(map[string]interface{})
+	buildName := metadataAsMap["name"].(string)
+	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+		pipelineName, buildName)
+
+	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
+	
+	if err != nil {
+		return stdout, err
+	} else {
+		return stdout, nil
+	}
+}
+
+
 func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
 	config, err := coreUtils.GetOCClient()
 	if err != nil {

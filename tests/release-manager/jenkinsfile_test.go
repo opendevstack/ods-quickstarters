@@ -27,6 +27,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	// cleanup
 	projectName := "ODSVERIFY"
 	projectCdNamespace := strings.ToLower(projectName) + "-cd"
+	componentId := "releasemanager"
 
 	// use the api sample script to cleanup
 	stdout, stderr, err := utils.RunScriptFromBaseDir(
@@ -91,7 +92,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	responseExecutionJobs := responseExecutionJobsArray[len(responseExecutionJobsArray) - 1].
 		(map[string]interface{})
 	responseBuildName := responseExecutionJobs["name"].(string)
-	
+	webhookProxySecret := responseI["webhookProxySecret"].(string)
+
 	fmt.Printf("build name from jenkins: %s\n", responseBuildName)
 	responseJenkinsBuildUrl := responseExecutionJobs["url"].(string)
 	responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName + "/")[1]
@@ -121,5 +123,18 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	if stdout != string(expected) {
 		t.Fatalf("prov run - records don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
 			string(expected), stdout)
+	}
+	
+	pipelineName := "mro-pipeline"
+	stdout, err := utils.RunArbitraryJenkinsPipeline(
+		projectName,
+		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
+		projectCdNamespace,
+		pipelineName,
+		webhookProxySecret)
+	
+	if err != nil {
+		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
+			pipelineName, stdout, err)
 	}
 }
