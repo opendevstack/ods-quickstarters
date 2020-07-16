@@ -43,7 +43,7 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 		"-ojsonpath={.status.tags[*].tag}",
 	})
 	if err != nil {
-		fmt.Printf("Error when retrieving tags of %s: %s, %s\n", imageStreamName, err, stderr)
+		fmt.Printf("(Cleanup) Error when retrieving tags of %s: %s, %s\n", imageStreamName, err, stderr)
 	} else {
 		fmt.Printf("Found image tags: %s\n", stdout)
 		tags := strings.Split(stdout, " ")
@@ -55,7 +55,7 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName strin
 					fmt.Sprintf("istag/%s:%s", imageStreamName, tag),
 				})
 				if err != nil {
-					fmt.Printf("Error when deleting image %s:%s: %s, %s\n", imageStreamName, tag, err, stderr)
+					fmt.Printf("(Cleanup) Error when deleting image %s:%s: %s, %s\n", imageStreamName, tag, err, stderr)
 				} else {
 					fmt.Printf("Deleted tag: %s:%s\n", imageStreamName, tag)
 				}

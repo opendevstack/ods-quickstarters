@@ -1,7 +1,7 @@
 {
-  "key": "unitt-be-java-springboot-test",
+  "key": "unitt-springboot",
   "organization": "default-organization",
-  "name": "unitt-be-java-springboot-test",
+  "name": "unitt-springboot",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-be-java-springboot-test",
-      "name": "unitt-be-java-springboot-test",
+      "key": "unitt-springboot",
+      "name": "unitt-springboot",
       "qualifier": "TRK"
     }
   ]
