@@ -6,7 +6,7 @@ set -o pipefail
 if [ -f test-quickstarter-results.txt ]; then
     rm test-quickstarter-results.txt
 fi
-go test -v github.com/opendevstack/ods-quickstarters/tests/... | tee test-quickstarter-results.txt 2>&1
+go test -v -timeout 1h github.com/opendevstack/ods-quickstarters/tests/... | tee test-quickstarter-results.txt 2>&1
 exitcode="${PIPESTATUS[0]}"
 if [ -f test-quickstarter-results.txt ]; then
     set -e
