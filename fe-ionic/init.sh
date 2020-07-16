@@ -18,17 +18,19 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 echo "generate project"
-<<<<<<< HEAD
-ionic start $COMPONENT blank --type=angular --no-deps --no-git --no-interactive
-
-cd $COMPONENT
-=======
+# create temp-dir since non-interactive ionic-cli can not generate into existing directories
 mkdir start_$COMPONENT
 cd start_$COMPONENT
-ionic start $COMPONENT blank --type=angular --no-deps --no-git
+
+# creating project
+ionic start $COMPONENT blank --type=angular --no-deps --no-git --no-interactive
+
+# move generated project to the intended directory
 mv $COMPONENT/ ..
+# switch to component directory
 cd ../$COMPONENT
->>>>>>> master
+# remove empty temp-dir
+rm ../start_$COMPONENT
 
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js 
