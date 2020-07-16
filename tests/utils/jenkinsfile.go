@@ -110,6 +110,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
 		pipelineName, buildName)
 
+	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
+	
+	if err != nil {
+		return stdout, err
+	} else {
+		return stdout, nil
+	}
+}
+
+func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
 		return "", fmt.Errorf("Error creating OC config: %s", err)

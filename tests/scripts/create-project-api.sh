@@ -18,8 +18,8 @@ fi
 
 PROVISION_API_HOST="${PROVISION_API_HOST:=http://localhost:8080}"
 BASIC_AUTH_CREDENTIAL="${BASIC_AUTH_CREDENTIAL:=openshift:openshift}"
-PROVISION_FILE="${PROVISION_FILE:=golden/create-project-request.json}"
-# not set - use post as operation, create new project
+PROVISION_FILE="${PROVISION_FILE:=golden/create-quickstarter-request.json}"
+# not set - use post as operation, creates new project
 COMMAND="${1:-POST}"
 
 echo
@@ -36,9 +36,9 @@ if [ -f $RESPONSE_FILE ]; then
 	rm -f $RESPONSE_FILE
 fi
 
-if [ ${COMMAND^^} == "POST" ] || [ ${COMMAND^^} == "PUT" ]; then
+if [ ${COMMAND^^} == "POST" ] || [ ${COMMAND^^} == "PUT" || [ ${COMMAND^^} == "DELETE_COMPONENT" ]; then
 echo
-	echo "create or update project - ${COMMAND^^}"
+	echo "create or update project, or delete component - ${COMMAND^^}"
 	if [ ! -f $PROVISION_FILE ]; then
 		echo "Input for provision api (${PROVISION_FILE}) does not EXIST, aborting\ncurrent: $(pwd)"
 		exit 1
@@ -48,6 +48,10 @@ echo
 	echo "... displaying payload file content:"
 	cat $PROVISION_FILE
 	echo
+	
+	if [ ${COMMAND^^} == "DELETE_COMPONENT" ]; then
+		COMMAND=DELETE
+	fi
 
 	http_resp_code=$(curl --insecure --request ${COMMAND} "${PROVISION_API_HOST}/api/v2/project" \
 	--header "Authorization: Basic ${BASE64_CREDENTIALS}" \
@@ -68,7 +72,7 @@ elif [ ${COMMAND^^} == "DELETE" ] || [ ${COMMAND^^} == "GET" ]; then
 	--header 'Content-Type: application/json' \
 	--dump-header headers.txt -o ${RESPONSE_FILE} -w "%{http_code}" )
 else
-	echo "ERROR: Command ${COMMAND} not supported, only GET, POST, PUT or DELETE"
+	echo "ERROR: Command ${COMMAND} not supported, only GET, POST, PUT, DELETE or DELETE_COMPONENT"
 	exit 1
 fi
 

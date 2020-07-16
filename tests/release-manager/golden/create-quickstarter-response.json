@@ -1,0 +1,30 @@
+[
+  {
+    "stage": "Checkout quickstarter",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Initialize target folder releasemanager",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Copy files from quickstart to generated project",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "configure metadata.yml",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Create Jenkinsfile",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Setup OpenShift resources",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Push to remote",
+    "status": "SUCCESS"
+  }
+]
