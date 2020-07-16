@@ -22,12 +22,12 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh "yarn global add ionic@3.19.0"
-      sh "yarn install"
+      sh "npm i -g @ionic/cli@6.3.0"
+      sh "npm install"
       if ('master'.equals(context.gitBranch)) {
-        sh "npm run ionic:build --prod"
+        sh "ionic build --prod"
       } else {
-        sh "npm run ionic:build"
+        sh "ionic build"
       }
     }
     sh "cp -r www docker/dist"
@@ -36,7 +36,7 @@ def stageBuild(def context) {
 
 def stageUnitTest(def context) {
   stage('Unit Test') {
-    sh "yarn test -- --single-run --progress false"
+    sh "npm run test"
   }
 }
 
