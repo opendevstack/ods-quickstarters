@@ -97,11 +97,12 @@ func TestJenkinsFile(t *testing.T) {
 
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
-		BuildConfigs:      []string{componentId},
-		DeploymentConfigs: []string{componentId, componentId + "-auth-proxy"},
-		Services:          []string{componentId, componentId + "-auth-proxy"},
-		ImageStreams:      []string{componentId},
+		ImageTags:         []coreUtils.ImageTag{{Name: componentId + "-training-service", Tag: "latest"},
+								{Name: componentId + "-prediction-service", Tag: "latest"}},
+		BuildConfigs:      []string{componentId + "-training-service", componentId + "-prediction-service"},
+		DeploymentConfigs: []string{componentId + "-training-service", componentId + "-prediction-service"},
+		Services:          []string{componentId + "-training-service", componentId + "-prediction-service"},
+		ImageStreams:      []string{componentId + "-training-service", componentId + "-prediction-service"},
 	}
 
 	coreUtils.CheckResources(resourcesInTest, t)
