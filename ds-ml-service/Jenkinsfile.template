@@ -87,9 +87,9 @@ def stageTraining(def context, def trainingPod) {
     // wait for port-forward to map the ports or for 10s
     sh "timeout 10s bash -c 'until ! curl -v --silent http://localhost:8080 2>&1 | grep -m 1 \"Connection refused\"; do sleep 1 ; done'; echo -e \\\\a"
     // trigger model training
-    sh "python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username \"${trainingUsername}\" --password \"${trainingPassword}\""
+    sh "python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username ${trainingUsername} --password ${trainingPassword}"
     // get the model for the prediction build
-    sh "curl -Lv --user \"${trainingUsername}\":\"${trainingPassword}\" \"${trainingRoute}\"/getmodel -o docker/dist/\"${context.getGitCommit()}\""
+    sh "curl -Lv --user ${trainingUsername}:${trainingPassword} ${trainingRoute}/getmodel -o docker/dist/${context.getGitCommit()}"
   }
 }
 
