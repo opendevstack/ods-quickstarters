@@ -73,7 +73,7 @@ sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.con
 
 echo "Adjust package.json to have the full test"
 sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
-
+sed -i "s|\s*\"devDependencies\": {|\"devDependencies\": { \"karma-junit-reporter\": \"^2.0.1\",|" ./package.json
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
