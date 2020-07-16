@@ -130,6 +130,15 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		time.Sleep(20 * time.Second)
 		if err != nil {
 			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
+			config, err = coreUtils.GetOCClient()
+			if err != nil {
+				fmt.Printf("Error creating OC config: %s", err)
+			} else {
+				buildClient, err = buildClientV1.NewForConfig(config)
+				if err != nil {
+					fmt.Printf("Error creating Build client: %s", err)
+				}
+			}
 		} else {
 			fmt.Printf("Waiting for build to complete: %s. Current status: %s\n", buildName, build.Status.Phase)
 		}
