@@ -30,7 +30,7 @@ mv $COMPONENT/ ..
 # switch to component directory
 cd ../$COMPONENT
 # remove empty temp-dir
-rm ../start_$COMPONENT
+rm -r ../start_$COMPONENT
 
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js 
