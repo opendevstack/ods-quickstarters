@@ -179,7 +179,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 
 	// get (executed) jenkins stages from run - the caller can compare against the golden record
-	stdout, _, err = RunScriptFromBaseDir(
+	stdout, stderr, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-json-status.sh",
 		[]string{
 			buildName,
@@ -187,7 +187,8 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		}, []string{})
 
 	if err != nil {
-		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
+		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s, %s, %s", 
+			buildName, err, stdout, stderr)
 	}
 
 	return stdout, nil
