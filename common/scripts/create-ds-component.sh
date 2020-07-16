@@ -86,7 +86,7 @@ for devenv in dev test ; do
         "--param=ENV=${devenv}" \
         "--param=NEXUS_URL=${NEXUS_URL}" \
         "--param=NEXUS_USERNAME=${NEXUS_USERNAME}" \
-        "--param=NEXUS_PASSWORD=${NEXUS_PASSWORD}"
+        "--param=NEXUS_PASSWORD=$(echo ${NEXUS_PASSWORD} | base64)"
         )
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
