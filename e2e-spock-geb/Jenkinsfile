@@ -10,8 +10,6 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  odsQuickstarterStageCreateOpenShiftResources(context)
-
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)

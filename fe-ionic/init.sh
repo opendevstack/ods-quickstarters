@@ -18,9 +18,17 @@ while [[ "$#" > 0 ]]; do case $1 in
 esac; shift; done
 
 echo "generate project"
+<<<<<<< HEAD
 ionic start $COMPONENT blank --type=angular --no-deps --no-git --no-interactive
 
 cd $COMPONENT
+=======
+mkdir start_$COMPONENT
+cd start_$COMPONENT
+ionic start $COMPONENT blank --type=angular --no-deps --no-git
+mv $COMPONENT/ ..
+cd ../$COMPONENT
+>>>>>>> master
 
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js 

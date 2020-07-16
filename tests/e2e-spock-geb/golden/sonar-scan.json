@@ -1,0 +1,32 @@
+{
+  "key": "unitt-spock",
+  "organization": "default-organization",
+  "name": "unitt-spock",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "grvy",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "java",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-spock",
+      "name": "unitt-spock",
+      "qualifier": "TRK"
+    }
+  ]
+}
