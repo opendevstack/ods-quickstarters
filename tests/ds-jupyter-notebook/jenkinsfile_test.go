@@ -99,8 +99,8 @@ func TestJenkinsFile(t *testing.T) {
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
-		DeploymentConfigs: []string{componentId, componentId + "auth-proxy"},
-		Services:          []string{componentId, componentId + "auth-proxy"},
+		DeploymentConfigs: []string{componentId, componentId + "-auth-proxy"},
+		Services:          []string{componentId, componentId + "-auth-proxy"},
 		ImageStreams:      []string{componentId},
 	}
 
