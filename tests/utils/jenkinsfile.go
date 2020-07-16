@@ -130,6 +130,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		time.Sleep(20 * time.Second)
 		if err != nil {
 			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
+			// try to refresh the client - sometimes the token does expire...
 			config, err = coreUtils.GetOCClient()
 			if err != nil {
 				fmt.Printf("Error creating OC config: %s", err)
