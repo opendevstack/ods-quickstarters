@@ -1,0 +1,7 @@
+{
+  "projectKey" : "ODSVERIFY",
+  "quickstarters" : [ {
+    "component_type" : "release-manager",
+    "component_id" : "releasemanager"
+  } ]
+}
