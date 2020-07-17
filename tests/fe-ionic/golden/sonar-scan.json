@@ -1,0 +1,27 @@
+{
+  "key": "unitt-fe-ionic-test",
+  "organization": "default-organization",
+  "name": "unitt-fe-ionic-test",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "ts",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-fe-ionic-test",
+      "name": "unitt-fe-ionic-test",
+      "qualifier": "TRK"
+    }
+  ]
+}
