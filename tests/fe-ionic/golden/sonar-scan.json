@@ -1,14 +1,14 @@
 {
-  "key": "unitt-springboot",
+  "key": "unitt-fe-ionic-test",
   "organization": "default-organization",
-  "name": "unitt-springboot",
+  "name": "unitt-fe-ionic-test",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
       "name": "Sonar way",
-      "language": "java",
+      "language": "ts",
       "deleted": false
     }
   ],
@@ -19,8 +19,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-springboot",
-      "name": "unitt-springboot",
+      "key": "unitt-fe-ionic-test",
+      "name": "unitt-fe-ionic-test",
       "qualifier": "TRK"
     }
   ]
