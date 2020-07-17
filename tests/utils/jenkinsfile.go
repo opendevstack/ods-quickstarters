@@ -119,7 +119,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 }
 
-func RunArbitraryJenkinsPipeline(repositoryProject string, respository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, error) {
+func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", err

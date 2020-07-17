@@ -1,4 +1,4 @@
-package release-manager
+package release_manager
 
 import (
 	"testing"
@@ -6,24 +6,11 @@ import (
 	"fmt"
 	"strings"
 	"encoding/json"
-	"encoding/base64"
-	"runtime"
-	"path"
 	"time"
-	projectClientV1 "github.com/openshift/client-go/project/clientset/versioned/typed/project/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	v1 "github.com/openshift/api/build/v1"
-	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
-	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
-	values, err := utils.ReadConfiguration()
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	// cleanup
 	projectName := "ODSVERIFY"
 	projectCdNamespace := strings.ToLower(projectName) + "-cd"
@@ -108,7 +95,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	fullBuildName := fmt.Sprintf("%s-%s", responseBuildClean, responseBuildRun)
 	fmt.Printf("full buildName: %s\n", fullBuildName)
 
-	stdout, err := utils.GetJenkinsBuildStagesForBuild (projectCdNamespace, fullBuildName)
+	stdout, err = utils.GetJenkinsBuildStagesForBuild (projectCdNamespace, fullBuildName)
 	if err != nil {
 		t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
 			fullBuildName, stdout, err)
@@ -126,7 +113,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 	
 	pipelineName := "mro-pipeline"
-	stdout, err := utils.RunArbitraryJenkinsPipeline(
+	stdout, err = utils.RunArbitraryJenkinsPipeline(
 		projectName,
 		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
 		projectCdNamespace,
