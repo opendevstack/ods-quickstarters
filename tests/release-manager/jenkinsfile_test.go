@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"time"
 	b64 "encoding/base64"
+	"log"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
@@ -40,7 +41,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 
 	// cleanup repository
-	values, err := ReadConfiguration()
+	values, err := utils.ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)
 	}
@@ -54,6 +55,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("--project=%s", projectName),
 		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
 	},[]string{})
+	
 	if err != nil {
 		fmt.Printf(
 			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
