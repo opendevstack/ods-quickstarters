@@ -165,5 +165,6 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
 			componentId, string(expected), stdout)
 	}
-	
+
+	// TODO - modify the metadata.yml - add a a repo, and build again .. but that's for someone else :)	
 }
