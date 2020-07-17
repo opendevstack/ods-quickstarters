@@ -36,7 +36,7 @@ if [ -f $RESPONSE_FILE ]; then
 	rm -f $RESPONSE_FILE
 fi
 
-if [ ${COMMAND^^} == "POST" ] || [ ${COMMAND^^} == "PUT" || [ ${COMMAND^^} == "DELETE_COMPONENT" ]; then
+if [ ${COMMAND^^} == "POST" ] || [ ${COMMAND^^} == "PUT" ] || [ ${COMMAND^^} == "DELETE_COMPONENT" ]; then
 echo
 	echo "create or update project, or delete component - ${COMMAND^^}"
 	if [ ! -f $PROVISION_FILE ]; then
