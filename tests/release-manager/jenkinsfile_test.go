@@ -43,7 +43,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	stdout, stderr, err = utils.RunScriptFromBaseDir(
 		"tests/scripts/create-project-api.sh",
 		[]string{
-			"PUT"
+			"PUT",
 		}, []string{})
 
 	if err != nil {
