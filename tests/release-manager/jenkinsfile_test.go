@@ -7,6 +7,7 @@ import (
 	"strings"
 	"encoding/json"
 	"time"
+	b64 "encoding/base64"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
@@ -36,6 +37,29 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			projectName,
 			stdout)
 		time.Sleep(20 * time.Second)
+	}
+
+	// cleanup repository
+	values, err := ReadConfiguration()
+	if err != nil {
+		log.Fatalf("Error reading ods-core.env: %s", err)
+	}
+
+	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
+
+	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+		fmt.Sprintf("--password=%s", password),
+		fmt.Sprintf("--project=%s", projectName),
+		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
+	},[]string{})
+	if err != nil {
+		fmt.Printf(
+			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+			stdout,
+			stderr,
+			err)
 	}
 	
 	// api sample script - create quickstarter in project
@@ -125,5 +149,20 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
 			pipelineName, stdout, err)
+	} 
+	
+	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stages)
+
+	// verify run and build jenkins stages - against golden record
+	expected, err = ioutil.ReadFile("golden/jenkins-build-stages-after-provisioning.json")
+	if err != nil {
+		t.Fatal(err)
 	}
+
+	expectedAsString = string(expected)
+	if stages != expectedAsString {
+		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, expectedAsString, stages)
+	}
+	
 }
