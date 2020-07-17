@@ -48,7 +48,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 
 	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
 
-	stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
+	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
 		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
 		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
@@ -163,7 +163,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 
 	if stdout != string(expected) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stdout)
+			componentId, string(expected), stdout)
 	}
 	
 }
