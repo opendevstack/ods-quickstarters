@@ -30,10 +30,10 @@ mv $COMPONENT/ ..
 # switch to component directory
 cd ../$COMPONENT
 # remove empty temp-dir
-rm ../start_$COMPONENT
+rm -r ../start_$COMPONENT
 
 echo "Change test setup to single run in karma.conf.js"
-sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js 
+sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js
 
 echo "Configure headless chrome in karma.conf.js"
 read -r -d "" CHROME_CONFIG << EOM || true
@@ -71,9 +71,15 @@ read -r -d "" UNIT_XML_CONFIG << EOM || true
 EOM
 sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.conf.js
 
+echo "Fix path for coverage analysis output"
+sed -i "s|\s*__dirname, '\.\./coverage'|__dirname, 'coverage'|" ./karma.conf.js
+
 echo "Adjust package.json to have the full test"
 sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
+sed -i "s|\s*\"devDependencies\": {|\"devDependencies\": { \"karma-junit-reporter\": \"^2.0.1\",|" ./package.json
 
+echo "Fix linting rules to run with generated tests"
+sed -i "s|\s*\"rules\": {|\"rules\": { \"one-variable-per-declaration\": false,|" ./tslint.json
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
@@ -81,6 +87,4 @@ sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/
 rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
-rm ./tslint.json
 cp -rv $SCRIPT_DIR/files/. .
-sed -i "s/\$COMPONENT/${COMPONENT}/" ./package.json
