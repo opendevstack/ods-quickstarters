@@ -42,7 +42,9 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	// the file for this is in golden/create-quickstarter-request.json
 	stdout, stderr, err = utils.RunScriptFromBaseDir(
 		"tests/scripts/create-project-api.sh",
-		[]string{}, []string{})
+		[]string{
+			"PUT"
+		}, []string{})
 
 	if err != nil {
 		t.Fatalf(

@@ -76,7 +76,7 @@ else
 	exit 1
 fi
 
-echo "curl request successful..."
+echo "curl ${COMMAND^^} request successful..."
 echo
 echo "... displaying HTTP response body (content from './response.txt'):"
 if [ -f ${RESPONSE_FILE} ]; then
