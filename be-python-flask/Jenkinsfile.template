@@ -31,7 +31,7 @@ def stageTestSuite(def context) {
     sh """
       virtualenv testsuite
       . ./testsuite/bin/activate
-      pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme} -r tests/requirements.txt
+      pip install -r tests/requirements.txt
       pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}
