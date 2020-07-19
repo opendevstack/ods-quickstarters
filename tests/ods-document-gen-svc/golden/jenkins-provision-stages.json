@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "Checkout quickstarter",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Initialize output directory",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Fork from ODS Github",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Create OpenShift resources",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Push to remote",
+    "status": "SUCCESS"
+  }
+]

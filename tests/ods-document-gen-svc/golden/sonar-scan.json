@@ -1,0 +1,27 @@
+{
+  "key": "unitt-docgen",
+  "organization": "default-organization",
+  "name": "unitt-docgen",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "grvy",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-docgen",
+      "name": "unitt-docgen",
+      "qualifier": "TRK"
+    }
+  ]
+}
