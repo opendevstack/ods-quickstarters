@@ -66,7 +66,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// run master build of provisioned quickstarter in project's cd jenkins
 	stages, err = utils.RunJenkinsFile(
-		componentId,
+		"unitt-" + componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,
