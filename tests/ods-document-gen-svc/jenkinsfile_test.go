@@ -117,7 +117,6 @@ func TestJenkinsFile(t *testing.T) {
 
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_TEST,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
 		ImageStreams:      []string{componentId},
 	}
