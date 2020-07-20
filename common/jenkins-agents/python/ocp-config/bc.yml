@@ -13,6 +13,12 @@ parameters:
   value: latest
 - name: ODS_GIT_REF
   required: true
+- name: NEXUS_HOST
+  description: "Your Nexus Instance Host"
+  required: true
+- name: NEXUS_AUTH
+  description: "Your Nexus Authentication credentials: username:password"
+  required: true
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -46,6 +52,11 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
+        buildArgs:
+          - name: nexusHost
+            value: ${NEXUS_HOST}
+          - name: nexusAuth
+            value: ${NEXUS_AUTH}
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
