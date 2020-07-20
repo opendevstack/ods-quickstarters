@@ -47,7 +47,7 @@ def stageLint(def context) {
     sh """
     virtualenv lint
     . ./lint/bin/activate
-    pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme} pycodestyle
+    pip install pycodestyle
     pip check
     pycodestyle --show-source --show-pep8 --max-line-length 100 src/mlservice/model/*
     pycodestyle --statistics -qq --max-line-length 100 src/mlservice/model/*
@@ -74,11 +74,11 @@ def stageTrainingUnitTests(def context, def trainingPod) {
 
 def stageTraining(def context, def trainingPod) {
   stage('Train Model') {
-    sh(returnStdout: true, script:"pip install -i ${context.nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${context.nexusHostWithoutScheme}  requests --user")
+    sh(returnStdout: true, script:"pip install requests --user")
 
     def trainingRoute = "http://localhost:8080"
-    def trainingPassword = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -o yaml -n ${context.targetProject} | grep password: | cut -d':' -f2 ").trim()
-    def trainingUsername = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -o yaml -n ${context.targetProject} | grep username: | cut -d':' -f2 ").trim()
+    def trainingPassword = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -n ${context.targetProject} -o jsonpath='{.data.password}'").trim()
+    def trainingUsername = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -n ${context.targetProject} -o jsonpath='{.data.username}'").trim()
 
     trainingPassword = sh(returnStdout: true, script:"echo \"${trainingPassword}\" | base64 --decode").trim()
     trainingUsername = sh(returnStdout: true, script:"echo \"${trainingUsername}\" | base64 --decode").trim()
