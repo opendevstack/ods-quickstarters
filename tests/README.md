@@ -1,10 +1,12 @@
-# Opendevstack Quickstarter tests
+# ODS Quickstarters - tests
 
-All tests for quickstarters follow the same schema:
+All tests of quickstarters follow the same scheme:
 
 1. a single test file, named `jenkinsfile_test.go`, inside a folder named exactly as the quickstarter type - which provisions, and runs a generated quickstarter
 1. a directory `golden` housing golden records for the jenkins stages of the two runs, as well as from sonarqube to verify the actual jenkins responses against
 1. a quickstarter test always provisions the component into an ODS created namespace called `unitt` - which is created by the tests in [ods-core](https://github.com/opendevstack/ods-core/tree/master/tests). So those must be run first, thru `make test` in `ods-core/tests`
+
+**ATTENTION**: For the tests to work the `cd_user` configured in `ods-configuration/ods-core.env` **MUST** have rights to create and manage a bitbucket project
 
 Lets look at a single test in detail - in this case the one for [spring boot](be-java-springboot/jenkinsfile_test.go)
 
@@ -14,7 +16,6 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
 		quickstarterName, componentId)
 ```
-**ATTENTION**: The `cd_user` configured in `ods-configuration/ods-core.env` **MUST** have rights to create and manage a bitbucket project
 
 2. Start the provisioning of a quickstarter thru the webhook proxy
 
@@ -60,7 +61,7 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 
 5. Verify expected stages from the `golden` [run / build record](be-java-springboot/golden/jenkins-build-stages.json) against the response `stages`
 
-5. Verify the created OCP artifacts, and if pods / deployments are available
+5. Verify the created OCP artifacts, and if pods / deployments are available - thru tailor diff
 
 ```
 	resourcesInTest := coreUtils.Resources{
