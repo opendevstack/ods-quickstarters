@@ -115,6 +115,20 @@ func TestJenkinsFile(t *testing.T) {
 			componentId, expectedAsString, sonarscan)
 	}
 
+	// get the scrr artifact - this will fail if not found
+	stdout, stderr, err = utils.RunScriptFromBaseDir(
+		"tests/scripts/get-artifact-from-jenkins-run.sh",
+		[]string{
+			buildName,
+			coreUtils.PROJECT_NAME_CD,
+			fmt.Sprintf("SCRR-%s-%s.md", coreUtils.PROJECT_NAME, componentId),
+		}, []string{})
+
+	if err != nil {
+		t.Fatalf("Could not execute tests/scripts/get-artifact-from-jenkins-run\n - err:%s\nout:%s\nstderr:%s",
+			err, stdout, stderr)
+	}
+
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
