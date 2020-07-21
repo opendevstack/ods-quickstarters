@@ -78,4 +78,4 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 All necessary utils, except for [scripts](scripts) are housed in [ods-core/tests](https://github.com/opendevstack/ods-core/tree/master/tests/utils)
 
 # Running the tests
-just run `make test` in the (tests)[Makefile] directory
+just run `make test` in the [tests](Makefile) directory
