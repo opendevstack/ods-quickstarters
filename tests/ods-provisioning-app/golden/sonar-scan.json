@@ -1,0 +1,27 @@
+{
+  "key": "unitt-provapp",
+  "organization": "default-organization",
+  "name": "unitt-provapp",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "java",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-provapp",
+      "name": "unitt-provapp",
+      "qualifier": "TRK"
+    }
+  ]
+}
