@@ -16,6 +16,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Tag created image",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "odsPipeline finished",
     "status": "SUCCESS"
   }
