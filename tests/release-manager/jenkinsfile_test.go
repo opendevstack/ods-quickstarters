@@ -17,6 +17,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	projectName := "ODSVERIFY"
 	projectCdNamespace := strings.ToLower(projectName) + "-cd"
 	componentId := "releasemanager"
+	golangComponentId := "golang"
 
 	// use the api sample script to cleanup
 	stdout, stderr, err := utils.RunScriptFromBaseDir(
@@ -63,7 +64,23 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			stderr,
 			err)
 	}
+
+	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+		fmt.Sprintf("--password=%s", password),
+		fmt.Sprintf("--project=%s", projectName),
+		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId)),
+	},[]string{})
 	
+	if err != nil {
+		fmt.Printf(
+			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+			stdout,
+			stderr,
+			err)
+	}
+
 	// api sample script - create quickstarter in project
 	// the file for this is in golden/create-quickstarter-request.json
 	stdout, stderr, err = utils.RunScriptFromBaseDir(
@@ -246,9 +263,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 	
 	// sonar scan check
-	scanComponentId := "golang"
 	sonarscan, err := utils.RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", projectCdNamespace, scanComponentId))
+		fmt.Sprintf("%s-%s", projectCdNamespace, golangComponentId))
 
 	if err != nil {
 		t.Fatal(err)
@@ -262,7 +278,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 
 	if sonarscan != string(expected) {
 		t.Fatalf("Actual sonar scan for golang mro run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			scanComponentId, string(expected), sonarscan)
+			golangComponentId, string(expected), sonarscan)
 	}
 
 }
