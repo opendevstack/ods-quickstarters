@@ -124,7 +124,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	
 	lookupGoldenRecords := []string{
 		"golden/create-quickstarter-response.json",
-		"../be-golang-plain/golden/jenkins-provision-stages",
+		"../be-golang-plain/golden/jenkins-provision-stages.json",
 	}
 	
 	jenkinsBuildId := "1"
