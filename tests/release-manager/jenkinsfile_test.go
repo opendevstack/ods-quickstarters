@@ -104,44 +104,55 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 	
 	responseExecutionJobsArray := responseI["lastExecutionJobs"].([]interface{})
-	responseExecutionJobs := responseExecutionJobsArray[len(responseExecutionJobsArray) - 1].
-		(map[string]interface{})
-	responseBuildName := responseExecutionJobs["name"].(string)
-	webhookProxySecret := responseI["webhookProxySecret"].(string)
-
-	fmt.Printf("build name from jenkins: %s\n", responseBuildName)
-	responseJenkinsBuildUrl := responseExecutionJobs["url"].(string)
-	responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName + "/")[1]
 	
-	fmt.Printf("build run#: %s\n", responseBuildRun)
-	
-	// "name" : "odsverify-cd-ods-qs-dockerplain-master",
-	
-	responseBuildClean := strings.Replace(responseBuildName,
-		projectCdNamespace + "-", "", 1)
-
-	fullBuildName := fmt.Sprintf("%s-%s", responseBuildClean, responseBuildRun)
-	fmt.Printf("full buildName: %s\n", fullBuildName)
-
-	stdout, err = utils.GetJenkinsBuildStagesForBuild (projectCdNamespace, fullBuildName)
-	if err != nil {
-		t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
-			fullBuildName, stdout, err)
+	lookupGoldenRecords := []string{
+		"golden/create-quickstarter-response.json",
+		"../be-golang-plain/golden/jenkins-provision-stages",
 	}
+	
+	jenkinsBuildId := "1"
+	
+	for index, job := range responseExecutionJobsArray {
+		responseExecutionJobs := job.(map[string]interface{})
+
+		responseBuildName := responseExecutionJobs["name"].(string)
+	
+		fmt.Printf("build name from jenkins: %s\n", responseBuildName)
+		responseJenkinsBuildUrl := responseExecutionJobs["url"].(string)
+		responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName + "/")[1]
 		
-	// verify provision jenkins stages - against golden record
-	expected, err := ioutil.ReadFile("golden/create-quickstarter-response.json")
-	if err != nil {
-		t.Fatal(err)
+		fmt.Printf("build run#: %s\n", responseBuildRun)
+		jenkinsBuildId = responseBuildRun
+		
+		// "name" : "odsverify-cd-ods-qs-dockerplain-master",		
+		responseBuildClean := strings.Replace(responseBuildName,
+			projectCdNamespace + "-", "", 1)
+	
+		fullBuildName := fmt.Sprintf("%s-%s", responseBuildClean, responseBuildRun)
+		fmt.Printf("full buildName: %s\n", fullBuildName)
+	
+		stdout, err = utils.GetJenkinsBuildStagesForBuild (projectCdNamespace, fullBuildName)
+		if err != nil {
+			t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
+				fullBuildName, stdout, err)
+		}
+			
+		// verify provision jenkins stages - against golden record
+		expected, err := ioutil.ReadFile(lookupGoldenRecords[index])
+		if err != nil {
+			t.Fatal(err)
+		}
+		
+		if stdout != string(expected) {
+			t.Fatalf("prov run : %s - records don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+				fullBuildName, string(expected), stdout)
+		}	
 	}
 	
-	if stdout != string(expected) {
-		t.Fatalf("prov run - records don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			string(expected), stdout)
-	}
-	
-	pipelineName := "mro-pipeline"
-	stdout, err = utils.RunArbitraryJenkinsPipeline(
+	pipelineName := fmt.Sprintf("%s-mro-pipeline", strings.ToLower(projectName))
+	webhookProxySecret := responseI["webhookProxySecret"].(string)
+	// start the mro pipeline
+	stdout, _, err = utils.RunArbitraryJenkinsPipeline(
 		projectName,
 		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
 		projectCdNamespace,
@@ -166,5 +177,71 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			componentId, string(expected), stdout)
 	}
 
-	// TODO - modify the metadata.yml - add a a repo, and build again .. but that's for someone else :)	
+	// update metadata.yml with the new repo provisioned in step 1 (be-golang)
+	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/upload-file-to-bitbucket.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+		fmt.Sprintf("--password=%s", password),
+		fmt.Sprintf("--project=%s", projectName),
+		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
+		fmt.Sprintf("--file=%s", "../release-manager/files/metadata.yml"),
+		fmt.Sprintf("--filename=%s", "metadata.yml"),
+	},[]string{})
+	
+	if err != nil {
+		fmt.Fatalf(
+			"Execution of `upload-file-to-bitbucket.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+			stdout,
+			stderr,
+			err)
+	}
+
+	// run build again ... this time we should get the component built! :D
+	stdout, buildName, err = utils.RunArbitraryJenkinsPipeline(
+		projectName,
+		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
+		projectCdNamespace,
+		pipelineName,
+		webhookProxySecret)
+	
+	if err != nil {
+		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
+			pipelineName, stdout, err)
+	} 
+	
+	fmt.Printf("Master (code) 2nd build with golang for %s returned:\n%s", componentId, stdout)
+
+	// verify run and build jenkins stages - against golden record
+	expected, err = ioutil.ReadFile("golden/jenkins-build-stages-with-added-repo.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if stdout != string(expected) {
+		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
+			componentId, string(expected), stdout)
+	}
+
+	artifactsToVerify := []string{
+		fmt.Sprintf("DTP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
+		fmt.Sprintf("DTR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
+		fmt.Sprintf("TIP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
+		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
+	}
+	
+	// verify that we can retrieve artifacts from the RM jenkins run
+	for _, document := range artifactsToVerify {
+		stdout, stderr, err = utils.RunScriptFromBaseDir(
+			"tests/scripts/get-artifact-from-jenkins-run.sh",
+			[]string{
+				buildName,
+				coreUtils.PROJECT_NAME_CD,
+				document,
+			}, []string{})
+	
+		if err != nil {
+			t.Fatalf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
+				err, stdout, stderr)
+		}
+	}
 }

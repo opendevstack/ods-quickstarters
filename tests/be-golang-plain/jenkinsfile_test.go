@@ -125,7 +125,7 @@ func TestJenkinsFile(t *testing.T) {
 		}, []string{})
 
 	if err != nil {
-		t.Fatalf("Could not execute tests/scripts/get-artifact-from-jenkins-run\n - err:%s\nout:%s\nstderr:%s",
+		t.Fatalf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
 			err, stdout, stderr)
 	}
 

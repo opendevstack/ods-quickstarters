@@ -1,0 +1,28 @@
+id: odsverify
+name: Project odsverify
+description: Description of odsverify.
+
+services:
+bitbucket:
+   credentials:
+      id: odsverify-cd-cd-user-with-password
+
+# Uncomment (below) to connect to jira
+#  jira:
+#    credentials:
+#      id: odsverify-cd-cd-user-with-password
+nexus:
+  repository:
+    name: leva-documentation
+
+repositories:
+  - id: golang
+    type: ods
+
+# Uncomment (below) to generate documents  
+capabilities:
+  - LeVADocs:
+      GAMPCategory: 5
+
+# Uncomment (below) to allow partial rebuilding during development
+# allowPartialRebuild: true
