@@ -136,7 +136,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
 				fullBuildName, stdout, err)
 		}
-			
+		
 		// verify provision jenkins stages - against golden record
 		expected, err := ioutil.ReadFile(lookupGoldenRecords[index])
 		if err != nil {
@@ -235,7 +235,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			"tests/scripts/get-artifact-from-jenkins-run.sh",
 			[]string{
 				buildName,
-				coreUtils.PROJECT_NAME_CD,
+				projectCdNamespace,
 				document,
 			}, []string{})
 	
@@ -244,4 +244,25 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 				err, stdout, stderr)
 		}
 	}
+	
+	// sonar scan check
+	scanComponentId := "golang"
+	sonarscan, err := utils.RetrieveSonarScan(
+		fmt.Sprintf("%s-%s", projectCdNamespace, scanComponentId))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// verify sonar scan - against golden be golang record
+	expected, err = ioutil.ReadFile("../be-golang-plain/golden/sonar-scan.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if sonarscan != string(expected) {
+		t.Fatalf("Actual sonar scan for golang mro run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
+			scanComponentId, string(expected), sonarscan)
+	}
+
 }
