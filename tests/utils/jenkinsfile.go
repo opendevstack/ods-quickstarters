@@ -168,7 +168,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 	var responseI map[string]interface{}
 	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
-		return "", buildName, fmt.Errorf("Could not parse json response: %s, err: %s",
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 
