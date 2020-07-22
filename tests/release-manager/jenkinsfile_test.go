@@ -184,7 +184,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stdout)
 
 	// verify run and build jenkins stages - against golden record
-	expected, err = ioutil.ReadFile("golden/jenkins-build-stages-after-provisioning.json")
+	expected, err := ioutil.ReadFile("golden/jenkins-build-stages-after-provisioning.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -206,7 +206,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	},[]string{})
 	
 	if err != nil {
-		fmt.Fatalf(
+		t.Fatalf(
 			"Execution of `upload-file-to-bitbucket.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
 			stdout,
 			stderr,
@@ -214,7 +214,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 
 	// run build again ... this time we should get the component built! :D
-	stdout, buildName, err = utils.RunArbitraryJenkinsPipeline(
+	stdout, buildName, err := utils.RunArbitraryJenkinsPipeline(
 		projectName,
 		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
 		projectCdNamespace,
