@@ -17,9 +17,14 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
+	stages, _, err := RunJenkinsFile (respository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
+	return stages, err
+}
+
+func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -56,7 +61,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return "", fmt.Errorf("Could not marshal json: %s", err)
+		return "", "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -92,16 +97,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+		return "", "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
 			pipelineName, url, response.StatusCode, string(bodyBytes))
 	}
 
 	var responseI map[string]interface{}
 	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
-		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 
@@ -113,9 +118,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
 	
 	if err != nil {
-		return stdout, err
+		return stdout, buildName, err
 	} else {
-		return stdout, nil
+		return stdout, buildName, nil
 	}
 }
 
@@ -270,4 +275,27 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 	}
 
 	return stdout, nil
+}
+
+func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (err) {
+	if len (artifactsToVerify) {
+		return nil
+	}
+	
+	// verify that we can retrieve artifacts from the RM jenkins run
+	for _, document := range artifactsToVerify {
+		stdout, stderr, err = utils.RunScriptFromBaseDir(
+			"tests/scripts/get-artifact-from-jenkins-run.sh",
+			[]string{
+				buildName,
+				projectName,
+				document,
+			}, []string{})
+	
+		if err != nil {
+			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
+				err, stdout, stderr)
+		}
+	}
+	return nil
 }
