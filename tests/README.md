@@ -1,14 +1,14 @@
-## ODS Quickstarters - tests
+# ODS Quickstarters - tests
 
 All tests of quickstarters follow the same scheme:
 
-1. a single test file, named `jenkinsfile_test.go`, inside a folder named exactly as the quickstarter type - which provisions, and runs a generated quickstarter
-1. a directory `golden` housing golden records for the jenkins stages of the two runs, as well as from sonarqube to verify the actual jenkins responses against
-1. a quickstarter test always provisions the component into an ODS created namespace called `unitt` - which is created by the tests in [ods-core](https://github.com/opendevstack/ods-core/tree/master/tests). So those must be run first, thru `make test` in `ods-core/tests`
+1. a single test file, named `jenkinsfile_test.go`, inside a folder named exactly as the `quickstarter type` (e.g. be-golang-plain) - which provisions a quickstarter, and then runs the `jenkinsfile` of the newly created component to build and deploy it
+1. a directory `golden` housing golden records for the jenkins stages of the two runs (provision and build), as well as from sonarqube to verify the actual responses against
+1. a quickstarter test always provisions the component into an ODS created namespace called `unitt` - which is created by the tests in [ods-core](https://github.com/opendevstack/ods-core/tree/master/tests). So those tests must be run first, thru `make test` in `ods-core/tests`
 
 **ATTENTION**: For the tests to work the `cd_user` configured in `ods-configuration/ods-core.env` **MUST** have rights to create and manage a bitbucket project
 
-# Anatomy of a quickstarter test
+## Anatomy of a quickstarter test
 Lets look at a single test in detail - in this case the one for [spring boot](be-java-springboot/jenkinsfile_test.go)
 
 1. Create the bitbucket repository for the quickstarter (and bitbucket project if needed)
@@ -77,5 +77,5 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 
 All necessary utils, except for [scripts](scripts) are housed in [ods-core/tests](https://github.com/opendevstack/ods-core/tree/master/tests/utils)
 
-# Running the tests
-just run `make test` in the [tests](Makefile) directory
+## Running the tests
+just run `make test` in the [this](Makefile) directory
