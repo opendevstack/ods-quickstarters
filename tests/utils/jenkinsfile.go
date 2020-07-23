@@ -22,6 +22,9 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 }
 
 func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
+	
+	fmt.Printf("-- starting build for: %s in project: %s\n", jenkinsFile, projectName)
+	
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
@@ -125,6 +128,9 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 }
 
 func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
+	
+	fmt.Printf("-- starting build for: %s in project: %s\n", pipelineName, jenkinsNamespace)
+	
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
