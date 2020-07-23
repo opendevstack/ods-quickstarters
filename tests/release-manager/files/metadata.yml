@@ -1,0 +1,20 @@
+id: odsverify
+name: Project odsverify
+description: Description of odsverify.
+
+services:
+  bitbucket:
+    credentials:
+      id: odsverify-cd-cd-user-with-password
+
+  nexus:
+    repository:
+      name: leva-documentation
+
+repositories:
+  - id: golang
+    type: ods
+
+capabilities:
+  - LeVADocs:
+      GAMPCategory: 5

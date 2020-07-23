@@ -1,0 +1,27 @@
+{
+  "key": "odsverify-golang",
+  "organization": "default-organization",
+  "name": "odsverify-golang",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "go",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "key": 1,
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "odsverify-golang",
+      "name": "odsverify-golang",
+      "qualifier": "TRK"
+    }
+  ]
+}

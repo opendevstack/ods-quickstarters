@@ -119,10 +119,10 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	}
 }
 
-func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, error) {
+func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -134,7 +134,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return "", fmt.Errorf("Could not marshal json: %s", err)
+		return "", "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	fmt.Printf("Starting pipeline %s\n", pipelineName)
@@ -159,16 +159,16 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+		return "", "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
 			pipelineName, url, response.StatusCode, string(bodyBytes))
 	}
 
 	var responseI map[string]interface{}
 	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
-		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 
@@ -180,9 +180,9 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
 	
 	if err != nil {
-		return stdout, err
+		return stdout, buildName, err
 	} else {
-		return stdout, nil
+		return stdout, buildName, nil
 	}
 }
 
