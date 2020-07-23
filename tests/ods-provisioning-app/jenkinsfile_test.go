@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -65,7 +66,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, buildName, err = utils.RunJenkinsFile(
+	stages, buildName, err = utils.RunJenkinsFileAndReturnBuildName(
 		"unitt-"+componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -121,7 +122,7 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
 	}
 
-	err := utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
 	if err != nil {
 		t.Fatal(err)
 	}
