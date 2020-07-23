@@ -262,9 +262,9 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		}
 	}
 	
-	// sonar scan check
+	// sonar scan check for golang component 
 	sonarscan, err := utils.RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", projectCdNamespace, golangComponentId))
+		fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId))
 
 	if err != nil {
 		t.Fatal(err)
