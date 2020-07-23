@@ -199,6 +199,10 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 
 func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
+	
+	fmt.Printf("Getting stages for build: %s in project: %s\n", 
+		buildName, jenkinsNamespace)
+
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
 		return "", fmt.Errorf("Error creating OC config: %s", err)
@@ -290,6 +294,9 @@ func VerifyJenkinsRunAttachments (projectName string, buildName string, artifact
 	
 	// verify that we can retrieve artifacts from the RM jenkins run
 	for _, document := range artifactsToVerify {
+		
+		fmt.Printf("Getting artifact: %s from project: %s for build %s\n", 
+			document, projectName, buildName)
 		stdout, stderr, err := RunScriptFromBaseDir(
 			"tests/scripts/get-artifact-from-jenkins-run.sh",
 			[]string{
@@ -301,6 +308,9 @@ func VerifyJenkinsRunAttachments (projectName string, buildName string, artifact
 		if err != nil {
 			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
 				err, stdout, stderr)
+		} else {
+			fmt.Printf("found artifact: %s from project: %s for build %s\n", 
+				document, projectName, buildName)
 		}
 	}
 	return nil

@@ -246,7 +246,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
 	}
 
-	err := utils.VerifyJenkinsRunAttachments (projectCdNamespace, buildName, artifactsToVerify)
+	err = utils.VerifyJenkinsRunAttachments (projectCdNamespace, buildName, artifactsToVerify)
 	if err != nil {
 		t.Fatal(err)
 	}
