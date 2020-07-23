@@ -127,8 +127,6 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		"../be-golang-plain/golden/jenkins-provision-stages.json",
 	}
 	
-	jenkinsBuildId := "1"
-	
 	for index, job := range responseExecutionJobsArray {
 		responseExecutionJobs := job.(map[string]interface{})
 
@@ -139,7 +137,6 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName + "/")[1]
 		
 		fmt.Printf("build run#: %s\n", responseBuildRun)
-		jenkinsBuildId = responseBuildRun
 		
 		// "name" : "odsverify-cd-ods-qs-dockerplain-master",		
 		responseBuildClean := strings.Replace(responseBuildName,
