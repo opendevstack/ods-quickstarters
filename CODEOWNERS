@@ -34,3 +34,5 @@
 /tests/ods-provisioning-app/ @clemensutschig @michaelsauter
 /release-manager/ @metmajer @michaelsauter
 /tests/release-manager/ @metmajer @michaelsauter
+/tests/utils/ @clemensutschig
+/tests/scripts/ @clemensutschig
