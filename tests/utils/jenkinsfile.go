@@ -17,7 +17,7 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
-	stages, _, err := RunJenkinsFile (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
+	stages, _, err := RunJenkinsFileAndReturnBuildName (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
 	return stages, err
 }
 
@@ -277,7 +277,7 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 	return stdout, nil
 }
 
-func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (err) {
+func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (error) {
 	if len (artifactsToVerify) == 0 {
 		return nil
 	}
