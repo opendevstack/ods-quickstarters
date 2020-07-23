@@ -166,7 +166,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		}	
 	}
 	
-	pipelineName := fmt.Sprintf("%s-mro-pipeline", strings.ToLower(projectName))
+	pipelineName := "mro-pipeline"
 	webhookProxySecret := responseI["webhookProxySecret"].(string)
 	// start the mro pipeline
 	stdout, _, err = utils.RunArbitraryJenkinsPipeline(
