@@ -65,7 +65,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, buildName, err := utils.RunJenkinsFile(
+	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",

@@ -17,11 +17,11 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
-	stages, _, err := RunJenkinsFile (respository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
+	stages, _, err := RunJenkinsFile (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
 	return stages, err
 }
 
-func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
+func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
@@ -278,13 +278,13 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 }
 
 func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (err) {
-	if len (artifactsToVerify) {
+	if len (artifactsToVerify) == 0 {
 		return nil
 	}
 	
 	// verify that we can retrieve artifacts from the RM jenkins run
 	for _, document := range artifactsToVerify {
-		stdout, stderr, err = utils.RunScriptFromBaseDir(
+		stdout, stderr, err := RunScriptFromBaseDir(
 			"tests/scripts/get-artifact-from-jenkins-run.sh",
 			[]string{
 				buildName,
