@@ -239,11 +239,14 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			componentId, string(expected), stdout)
 	}
 
+	jenkinsRunIdSplitted := strings.Split(buildName, "-")
+	jenkinsRunId := jenkinsRunIdSplitted[len(jenkinsRunIdSplitted)-1]
+
 	artifactsToVerify := []string{
-		fmt.Sprintf("DTP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
-		fmt.Sprintf("DTR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
-		fmt.Sprintf("TIP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
-		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsBuildId),
+		fmt.Sprintf("DTP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
+		fmt.Sprintf("DTR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
+		fmt.Sprintf("TIP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
+		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
 	}
 	
 	// verify that we can retrieve artifacts from the RM jenkins run
