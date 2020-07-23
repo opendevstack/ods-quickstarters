@@ -17,9 +17,17 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
+	stages, _, err := RunJenkinsFileAndReturnBuildName (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars...)
+	return stages, err
+}
+
+func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
+	
+	fmt.Printf("-- starting build for: %s in project: %s\n", jenkinsFile, projectName)
+	
 	values, err := ReadConfiguration()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -56,7 +64,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return "", fmt.Errorf("Could not marshal json: %s", err)
+		return "", "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -92,16 +100,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+		return "", "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
 			pipelineName, url, response.StatusCode, string(bodyBytes))
 	}
 
 	var responseI map[string]interface{}
 	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
-		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 
@@ -113,13 +121,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
 	
 	if err != nil {
-		return stdout, err
+		return stdout, buildName, err
 	} else {
-		return stdout, nil
+		return stdout, buildName, nil
 	}
 }
 
 func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
+	
+	fmt.Printf("-- starting build for: %s in project: %s\n", pipelineName, jenkinsNamespace)
+	
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
@@ -188,6 +199,10 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 
 func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
+	
+	fmt.Printf("Getting stages for build: %s in project: %s\n", 
+		buildName, jenkinsNamespace)
+
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
 		return "", fmt.Errorf("Error creating OC config: %s", err)
@@ -270,4 +285,33 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 	}
 
 	return stdout, nil
+}
+
+func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (error) {
+	if len (artifactsToVerify) == 0 {
+		return nil
+	}
+	
+	// verify that we can retrieve artifacts from the RM jenkins run
+	for _, document := range artifactsToVerify {
+		
+		fmt.Printf("Getting artifact: %s from project: %s for build %s\n", 
+			document, projectName, buildName)
+		stdout, stderr, err := RunScriptFromBaseDir(
+			"tests/scripts/get-artifact-from-jenkins-run.sh",
+			[]string{
+				buildName,
+				projectName,
+				document,
+			}, []string{})
+	
+		if err != nil {
+			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
+				err, stdout, stderr)
+		} else {
+			fmt.Printf("found artifact: %s from project: %s for build %s\n", 
+				document, projectName, buildName)
+		}
+	}
+	return nil
 }

@@ -7,6 +7,9 @@ import (
 )
 
 func RetrieveSonarScan (projectKey string) (string, error) {
+	
+	fmt.Printf("Getting sonar scan for: %s\n", projectKey)
+	
 	values, err := ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)

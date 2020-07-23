@@ -13,6 +13,8 @@ import (
 
 func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) {
 
+	fmt.Printf("-- starting cleanup for repo: %s\n", repoName)
+
 	values, err := ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)

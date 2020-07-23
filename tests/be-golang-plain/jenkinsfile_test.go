@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -65,7 +66,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, err = utils.RunJenkinsFile(
+	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -113,6 +114,17 @@ func TestJenkinsFile(t *testing.T) {
 	if sonarscan != expectedAsString {
 		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
 			componentId, expectedAsString, sonarscan)
+	}
+	
+	// SCRR should have been generated ... and attached to this build
+	artifactsToVerify := []string{
+		fmt.Sprintf("SCRR-%s-%s.docx", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+	}
+
+	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
 	}
 
 	resourcesInTest := coreUtils.Resources{

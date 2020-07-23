@@ -245,21 +245,10 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("TIP-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
 		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
 	}
-	
-	// verify that we can retrieve artifacts from the RM jenkins run
-	for _, document := range artifactsToVerify {
-		stdout, stderr, err = utils.RunScriptFromBaseDir(
-			"tests/scripts/get-artifact-from-jenkins-run.sh",
-			[]string{
-				buildName,
-				projectCdNamespace,
-				document,
-			}, []string{})
-	
-		if err != nil {
-			t.Fatalf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
-				err, stdout, stderr)
-		}
+
+	err = utils.VerifyJenkinsRunAttachments (projectCdNamespace, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
 	}
 	
 	// sonar scan check for golang component 
