@@ -17,7 +17,7 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
-	stages, _, err := RunJenkinsFileAndReturnBuildName (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars)
+	stages, _, err := RunJenkinsFileAndReturnBuildName (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars...)
 	return stages, err
 }
 
