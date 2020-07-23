@@ -271,7 +271,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 
 	// verify sonar scan - against golden be golang record
-	expected, err = ioutil.ReadFile("../be-golang-plain/golden/sonar-scan.json")
+	expected, err = ioutil.ReadFile("golden/golang-sonar-scan.json")
 	if err != nil {
 		t.Fatal(err)
 	}
