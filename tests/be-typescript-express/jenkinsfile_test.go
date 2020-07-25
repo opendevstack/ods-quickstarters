@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -60,14 +61,13 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString := string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, err = utils.RunJenkinsFile(
+	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -91,10 +91,9 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
 	}
 
 	// sonar scan check
@@ -111,12 +110,34 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if sonarscan != expectedAsString {
+	if sonarscan != string(expected) {
 		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			componentId, expectedAsString, sonarscan)
+			componentId, string(expected), sonarscan)
 	}
 
+	// SCRR should have been generated ... and attached to this build
+	artifactsToVerify := []string{
+		fmt.Sprintf("SCRR-%s-%s.docx", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+	}
+
+	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// verify unit tests exist on this run
+	stdout, _, err := RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+		fmt.Sprintf("%s", buildName),
+		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
+		fmt.Sprintf("%s", "1"), // number of tests expected
+		}, []string{})
+	
+	if err != nil {
+		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
+			buildName, stdout, err)
+	}
+	
 	resourcesInTest := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},

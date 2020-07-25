@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -58,14 +59,13 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString := string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, err = utils.RunJenkinsFile(
+	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -89,10 +89,21 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
+	}
+
+	// verify unit tests exist on this run
+	stdout, _, err := RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+		fmt.Sprintf("%s", buildName),
+		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
+		fmt.Sprintf("%s", "4"), // number of tests expected
+		}, []string{})
+	
+	if err != nil {
+		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
+			buildName, stdout, err)
 	}
 
 }
