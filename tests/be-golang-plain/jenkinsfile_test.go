@@ -109,10 +109,9 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if sonarscan != expectedAsString {
+	if sonarscan != string(expected) {
 		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			componentId, expectedAsString, sonarscan)
+			componentId, string(expected), sonarscan)
 	}
 	
 	// SCRR should have been generated ... and attached to this build
@@ -127,7 +126,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// verify unit tests exist on this run
-	stdout, _, err := RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "1"), // number of tests expected

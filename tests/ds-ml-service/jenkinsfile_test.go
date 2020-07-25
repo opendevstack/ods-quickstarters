@@ -106,7 +106,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// verify unit tests exist on this run
-	stdout, _, err := RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "2"), // number of tests expected

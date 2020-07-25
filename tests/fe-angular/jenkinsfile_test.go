@@ -61,7 +61,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
@@ -125,7 +125,7 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	// verify unit tests exist on this run
-	stdout, _, err := RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "3"), // number of tests expected
