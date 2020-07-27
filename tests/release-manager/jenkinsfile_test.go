@@ -1,15 +1,15 @@
 package release_manager
 
 import (
-	"testing"
-	"io/ioutil"
-	"fmt"
-	"strings"
-	"encoding/json"
-	"time"
 	b64 "encoding/base64"
-	"log"
+	"encoding/json"
+	"fmt"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
+	"io/ioutil"
+	"log"
+	"strings"
+	"testing"
+	"time"
 )
 
 func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
@@ -55,8 +55,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
 		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
-	},[]string{})
-	
+	}, []string{})
+
 	if err != nil {
 		fmt.Printf(
 			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
@@ -71,8 +71,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
 		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId)),
-	},[]string{})
-	
+	}, []string{})
+
 	if err != nil {
 		fmt.Printf(
 			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
@@ -106,63 +106,63 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	} else {
 		fmt.Printf("Provision results: %s\n", string(log))
 	}
-	
+
 	var responseI map[string]interface{}
 	err = json.Unmarshal(log, &responseI)
 	if err != nil {
 		t.Fatalf("Could not parse json response: %s, err: %s",
 			string(log), err)
 	}
-	
+
 	responseProjectName := responseI["projectName"].(string)
 	if projectName != responseProjectName {
 		t.Fatalf("Project names don't match - expected: %s real: %s",
-			projectName, responseProjectName) 
+			projectName, responseProjectName)
 	}
-	
+
 	responseExecutionJobsArray := responseI["lastExecutionJobs"].([]interface{})
-	
+
 	lookupGoldenRecords := []string{
 		"golden/create-quickstarter-response.json",
 		"../be-golang-plain/golden/jenkins-provision-stages.json",
 	}
-	
+
 	for index, job := range responseExecutionJobsArray {
 		responseExecutionJobs := job.(map[string]interface{})
 
 		responseBuildName := responseExecutionJobs["name"].(string)
-	
+
 		fmt.Printf("build name from jenkins: %s\n", responseBuildName)
 		responseJenkinsBuildUrl := responseExecutionJobs["url"].(string)
-		responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName + "/")[1]
-		
+		responseBuildRun := strings.SplitAfter(responseJenkinsBuildUrl, responseBuildName+"/")[1]
+
 		fmt.Printf("build run#: %s\n", responseBuildRun)
-		
-		// "name" : "odsverify-cd-ods-qs-dockerplain-master",		
+
+		// "name" : "odsverify-cd-ods-qs-dockerplain-master",
 		responseBuildClean := strings.Replace(responseBuildName,
-			projectCdNamespace + "-", "", 1)
-	
+			projectCdNamespace+"-", "", 1)
+
 		fullBuildName := fmt.Sprintf("%s-%s", responseBuildClean, responseBuildRun)
 		fmt.Printf("full buildName: %s\n", fullBuildName)
-	
-		stdout, err = utils.GetJenkinsBuildStagesForBuild (projectCdNamespace, fullBuildName)
+
+		stdout, err = utils.GetJenkinsBuildStagesForBuild(projectCdNamespace, fullBuildName)
 		if err != nil {
 			t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
 				fullBuildName, stdout, err)
 		}
-		
+
 		// verify provision jenkins stages - against golden record
 		expected, err := ioutil.ReadFile(lookupGoldenRecords[index])
 		if err != nil {
 			t.Fatal(err)
 		}
-		
+
 		if stdout != string(expected) {
 			t.Fatalf("prov run : %s - records don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
 				fullBuildName, string(expected), stdout)
-		}	
+		}
 	}
-	
+
 	pipelineName := "mro-pipeline"
 	webhookProxySecret := responseI["webhookProxySecret"].(string)
 	// start the mro pipeline
@@ -172,12 +172,12 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		projectCdNamespace,
 		pipelineName,
 		webhookProxySecret)
-	
+
 	if err != nil {
 		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
 			pipelineName, stdout, err)
-	} 
-	
+	}
+
 	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stdout)
 
 	// verify run and build jenkins stages - against golden record
@@ -200,8 +200,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
 		fmt.Sprintf("--file=%s", "../release-manager/files/metadata.yml"),
 		fmt.Sprintf("--filename=%s", "metadata.yml"),
-	},[]string{})
-	
+	}, []string{})
+
 	if err != nil {
 		t.Fatalf(
 			"Execution of `upload-file-to-bitbucket.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
@@ -217,12 +217,12 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		projectCdNamespace,
 		pipelineName,
 		webhookProxySecret)
-	
+
 	if err != nil {
 		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
 			pipelineName, stdout, err)
-	} 
-	
+	}
+
 	fmt.Printf("Master (code) 2nd build with golang for %s returned:\n%s", componentId, stdout)
 
 	// verify run and build jenkins stages - against golden record
@@ -246,12 +246,12 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fmt.Sprintf("TIR-%s-WIP-%s.zip", strings.ToLower(projectName), jenkinsRunId),
 	}
 
-	err = utils.VerifyJenkinsRunAttachments (projectCdNamespace, buildName, artifactsToVerify)
+	err = utils.VerifyJenkinsRunAttachments(projectCdNamespace, buildName, artifactsToVerify)
 	if err != nil {
 		t.Fatal(err)
 	}
-	
-	// sonar scan check for golang component 
+
+	// sonar scan check for golang component
 	sonarscan, err := utils.RetrieveSonarScan(
 		fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId))
 

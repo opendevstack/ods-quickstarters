@@ -2,14 +2,14 @@ package utils
 
 import (
 	b64 "encoding/base64"
-	"log"
 	"fmt"
+	"log"
 )
 
-func RetrieveSonarScan (projectKey string) (string, error) {
-	
+func RetrieveSonarScan(projectKey string) (string, error) {
+
 	fmt.Printf("Getting sonar scan for: %s\n", projectKey)
-	
+
 	values, err := ReadConfiguration()
 	if err != nil {
 		log.Fatalf("Error reading ods-core.env: %s", err)
@@ -22,8 +22,8 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 		fmt.Sprintf("%s", sonartoken),
 		fmt.Sprintf("%s", values["SONARQUBE_URL"]),
 		fmt.Sprintf("%s", projectKey),
-		}, []string{})
-	
+	}, []string{})
+
 	if err != nil {
 		fmt.Printf(
 			"Execution of `tests/scripts/print-sonar-scan-run.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
@@ -34,6 +34,6 @@ func RetrieveSonarScan (projectKey string) (string, error) {
 	} else {
 		fmt.Printf("Sonar scan result: \n%s\n", stdout)
 	}
-	
+
 	return stdout, nil
 }

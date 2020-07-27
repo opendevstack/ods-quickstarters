@@ -96,9 +96,9 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	resourcesInTest := coreUtils.Resources{
-		Namespace:         coreUtils.PROJECT_NAME_DEV,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId + "-training-service", Tag: "latest"},
-								{Name: componentId + "-prediction-service", Tag: "latest"}},
+		Namespace: coreUtils.PROJECT_NAME_DEV,
+		ImageTags: []coreUtils.ImageTag{{Name: componentId + "-training-service", Tag: "latest"},
+			{Name: componentId + "-prediction-service", Tag: "latest"}},
 		BuildConfigs:      []string{componentId + "-training-service", componentId + "-prediction-service"},
 		DeploymentConfigs: []string{componentId + "-training-service", componentId + "-prediction-service"},
 		Services:          []string{componentId + "-training-service", componentId + "-prediction-service"},
