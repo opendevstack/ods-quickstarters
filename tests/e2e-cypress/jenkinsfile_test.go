@@ -98,8 +98,8 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "4"), // number of tests expected
-		}, []string{})
-	
+	}, []string{})
+
 	if err != nil {
 		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
 			buildName, stdout, err)
