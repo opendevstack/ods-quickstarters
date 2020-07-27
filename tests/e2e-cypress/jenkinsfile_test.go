@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
-	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"

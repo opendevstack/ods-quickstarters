@@ -113,6 +113,17 @@ func TestJenkinsFile(t *testing.T) {
 			componentId, string(expected), sonarscan)
 	}
 
+	// SCRR should have been generated ... and attached to this build
+	artifactsToVerify := []string{
+		fmt.Sprintf("SCRR-%s-%s.docx", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+	}
+
+	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	// verify unit tests exist on this run
 	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
