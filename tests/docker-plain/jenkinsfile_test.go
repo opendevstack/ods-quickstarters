@@ -2,12 +2,12 @@ package docker_plain
 
 import (
 	"fmt"
-	"testing"
-	"runtime"
-	"path/filepath"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 	"io/ioutil"
+	"path/filepath"
+	"runtime"
+	"testing"
 )
 
 func TestJenkinsFile(t *testing.T) {
@@ -49,13 +49,13 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	fmt.Printf("Provision Build for %s returned:\n%s", componentId, stages)
-	
+
 	// verify provision jenkins stages - against golden record
 	expected, err := ioutil.ReadFile("golden/jenkins-provision-stages.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	expectedAsString := string(expected)
 	if stages != expectedAsString {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
@@ -86,7 +86,7 @@ func TestJenkinsFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	expectedAsString = string(expected)
 	if stages != expectedAsString {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",

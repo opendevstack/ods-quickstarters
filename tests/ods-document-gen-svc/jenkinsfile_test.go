@@ -26,7 +26,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
-		quickstarterName, "unitt-" + componentId)
+		quickstarterName, "unitt-"+componentId)
 
 	// run provision job for quickstarter in project's cd jenkins
 	stages, err := utils.RunJenkinsFile(
@@ -42,7 +42,7 @@ func TestJenkinsFile(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, "unitt-" + componentId),
+			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, "unitt-"+componentId),
 		},
 	)
 
@@ -66,7 +66,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// run master build of provisioned quickstarter in project's cd jenkins
 	stages, err = utils.RunJenkinsFile(
-		"unitt-" + componentId,
+		"unitt-"+componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,
@@ -116,10 +116,10 @@ func TestJenkinsFile(t *testing.T) {
 	}
 
 	resourcesInTest := coreUtils.Resources{
-		Namespace:         coreUtils.PROJECT_NAME_TEST,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "master"}},
-		BuildConfigs:      []string{componentId},
-		ImageStreams:      []string{componentId},
+		Namespace:    coreUtils.PROJECT_NAME_TEST,
+		ImageTags:    []coreUtils.ImageTag{{Name: componentId, Tag: "master"}},
+		BuildConfigs: []string{componentId},
+		ImageStreams: []string{componentId},
 	}
 
 	coreUtils.CheckResources(resourcesInTest, t)
