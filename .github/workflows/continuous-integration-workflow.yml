@@ -97,6 +97,47 @@ jobs:
 #             --build-arg nexusPassword=s3cr3t \
 #             .
 
+  compile-go-tests:
+    name: Verify Go tests are formatted and can be compiled
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Verify all Go files are formatted with gofmt
+        working-directory: tests
+        run: |
+          unformatted=$(gofmt -l .)
+          [ -z "$unformatted" ] && exit 0
+          echo >&2 "Go files must be formatted with gofmt. Please run:"
+          for fn in $unformatted; do
+              echo >&2 "  gofmt -w $fn"
+          done
+          exit 1
+      -
+        name: Verify all Go tests can be compiled
+        working-directory: tests
+        run: |
+          go test -c ./be-fe-mono-repo-plain
+          go test -c ./be-gateway-nginx
+          go test -c ./be-golang-plain
+          go test -c ./be-java-springboot
+          go test -c ./be-python-flask
+          go test -c ./be-scala-play
+          go test -c ./be-typescript-express
+          go test -c ./docker-plain
+          go test -c ./ds-jupyter-notebook
+          go test -c ./ds-ml-service
+          go test -c ./ds-rshiny
+          go test -c ./e2e-cypress
+          go test -c ./e2e-spock-geb
+          go test -c ./fe-angular
+          go test -c ./fe-ionic
+          go test -c ./ods-document-gen-svc
+          go test -c ./ods-provisioning-app
+          go test -c ./release-manager
+
 
 #   test:
 #     name: Docker plain provisioning

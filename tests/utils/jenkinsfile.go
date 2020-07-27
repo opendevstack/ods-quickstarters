@@ -17,14 +17,14 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
-	stages, _, err := RunJenkinsFileAndReturnBuildName (repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars...)
+	stages, _, err := RunJenkinsFileAndReturnBuildName(repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars...)
 	return stages, err
 }
 
 func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
-	
+
 	fmt.Printf("-- starting build for: %s in project: %s\n", jenkinsFile, projectName)
-	
+
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
@@ -119,7 +119,7 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 		pipelineName, buildName)
 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
-	
+
 	if err != nil {
 		return stdout, buildName, err
 	} else {
@@ -128,9 +128,9 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 }
 
 func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
-	
+
 	fmt.Printf("-- starting build for: %s in project: %s\n", pipelineName, jenkinsNamespace)
-	
+
 	values, err := ReadConfiguration()
 	if err != nil {
 		return "", "", err
@@ -140,7 +140,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 		Repository: repository,
 		Branch:     "master",
 		Project:    repositoryProject,
-		Env: append([]coreUtils.EnvPair{}, envVars...),
+		Env:        append([]coreUtils.EnvPair{}, envVars...),
 	}
 
 	body, err := json.Marshal(request)
@@ -189,7 +189,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 		pipelineName, buildName)
 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
-	
+
 	if err != nil {
 		return stdout, buildName, err
 	} else {
@@ -197,10 +197,9 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 	}
 }
 
-
 func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
-	
-	fmt.Printf("Getting stages for build: %s in project: %s\n", 
+
+	fmt.Printf("Getting stages for build: %s in project: %s\n",
 		buildName, jenkinsNamespace)
 
 	config, err := coreUtils.GetOCClient()
@@ -280,22 +279,22 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 		}, []string{})
 
 	if err != nil {
-		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s, %s, %s", 
+		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s, %s, %s",
 			buildName, err, stdout, stderr)
 	}
 
 	return stdout, nil
 }
 
-func VerifyJenkinsRunAttachments (projectName string, buildName string, artifactsToVerify []string) (error) {
-	if len (artifactsToVerify) == 0 {
+func VerifyJenkinsRunAttachments(projectName string, buildName string, artifactsToVerify []string) error {
+	if len(artifactsToVerify) == 0 {
 		return nil
 	}
-	
+
 	// verify that we can retrieve artifacts from the RM jenkins run
 	for _, document := range artifactsToVerify {
-		
-		fmt.Printf("Getting artifact: %s from project: %s for build %s\n", 
+
+		fmt.Printf("Getting artifact: %s from project: %s for build %s\n",
 			document, projectName, buildName)
 		stdout, stderr, err := RunScriptFromBaseDir(
 			"tests/scripts/get-artifact-from-jenkins-run.sh",
@@ -304,12 +303,12 @@ func VerifyJenkinsRunAttachments (projectName string, buildName string, artifact
 				projectName,
 				document,
 			}, []string{})
-	
+
 		if err != nil {
 			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
 				err, stdout, stderr)
 		} else {
-			fmt.Printf("found artifact: %s from project: %s for build %s\n", 
+			fmt.Printf("found artifact: %s from project: %s for build %s\n",
 				document, projectName, buildName)
 		}
 	}

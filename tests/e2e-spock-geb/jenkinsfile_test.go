@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
-	"testing"
 	"strings"
+	"testing"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -119,7 +119,7 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
 	}
 
-	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	err = utils.VerifyJenkinsRunAttachments(coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,8 +129,8 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "6"), // number of tests expected
-		}, []string{})
-	
+	}, []string{})
+
 	if err != nil {
 		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
 			buildName, stdout, err)

@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
-	"testing"
 	"strings"
+	"testing"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
@@ -27,7 +27,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// cleanup and create bb resources for this test
 	utils.CleanupAndCreateBitbucketProjectAndRepo(
-		quickstarterName, "unitt-" + componentId)
+		quickstarterName, "unitt-"+componentId)
 
 	// run provision job for quickstarter in project's cd jenkins
 	stages, err := utils.RunJenkinsFile(
@@ -43,7 +43,7 @@ func TestJenkinsFile(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, "unitt-" + componentId),
+			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, "unitt-"+componentId),
 		},
 	)
 
@@ -66,7 +66,7 @@ func TestJenkinsFile(t *testing.T) {
 
 	// run master build of provisioned quickstarter in project's cd jenkins
 	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
-		"unitt-" + componentId,
+		"unitt-"+componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,
@@ -119,7 +119,7 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
 	}
 
-	err = utils.VerifyJenkinsRunAttachments (coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	err = utils.VerifyJenkinsRunAttachments(coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,18 +129,18 @@ func TestJenkinsFile(t *testing.T) {
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "14"), // number of tests expected
-		}, []string{})
-	
+	}, []string{})
+
 	if err != nil {
 		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
 			buildName, stdout, err)
 	}
 
 	resourcesInTest := coreUtils.Resources{
-		Namespace:         coreUtils.PROJECT_NAME_TEST,
-		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "master"}},
-		BuildConfigs:      []string{componentId},
-		ImageStreams:      []string{componentId},
+		Namespace:    coreUtils.PROJECT_NAME_TEST,
+		ImageTags:    []coreUtils.ImageTag{{Name: componentId, Tag: "master"}},
+		BuildConfigs: []string{componentId},
+		ImageStreams: []string{componentId},
 	}
 
 	coreUtils.CheckResources(resourcesInTest, t)
