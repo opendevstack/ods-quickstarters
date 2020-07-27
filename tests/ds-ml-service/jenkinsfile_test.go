@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
@@ -58,14 +59,13 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString := string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
 	}
 
 	// run master build of provisioned quickstarter in project's cd jenkins
-	stages, err = utils.RunJenkinsFile(
+	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		componentId,
 		coreUtils.PROJECT_NAME,
 		"master",
@@ -89,10 +89,32 @@ func TestJenkinsFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if stages != expectedAsString {
+	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
+			componentId, string(expected), stages)
+	}
+
+	// SCRR should have been generated ... and attached to this build
+	artifactsToVerify := []string{
+		fmt.Sprintf("SCRR-%s-%s.docx", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+	}
+
+	err = utils.VerifyJenkinsRunAttachments(coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// verify unit tests exist on this run
+	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+		fmt.Sprintf("%s", buildName),
+		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
+		fmt.Sprintf("%s", "2"), // number of tests expected
+	}, []string{})
+
+	if err != nil {
+		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
+			buildName, stdout, err)
 	}
 
 	resourcesInTest := coreUtils.Resources{
