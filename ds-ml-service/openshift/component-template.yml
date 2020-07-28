@@ -162,7 +162,13 @@ objects:
           kind: ImageStreamTag
           name: ${COMPONENT}-training-service:${TAGVERSION}
       postCommit: {}
-      resources: {}
+      resources:
+        limits:
+          cpu: '1'
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
       runPolicy: Serial
       source:
         type: Binary

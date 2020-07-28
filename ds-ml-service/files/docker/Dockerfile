@@ -1,8 +1,8 @@
-FROM centos/python-36-centos7:latest
+FROM centos/python-38-centos7:latest
 # If you want to enable the redhat supported version, uncomment the following line
 # and remove the line above
 #
-#FROM registry.access.redhat.com/rhscl/python-36-rhel7
+#FROM registry.access.redhat.com/rhscl/python-38-rhel7
 
 ARG nexusHostWithBasicAuth
 ARG nexusHostWithoutScheme

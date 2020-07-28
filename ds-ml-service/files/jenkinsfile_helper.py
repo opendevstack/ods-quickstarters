@@ -54,7 +54,7 @@ def wait_for_training(host_url, http_auth):
     finished = False
     while not finished:
         try:
-            print("Waiting for the training to finished...")
+            print("Waiting for the training to be finished...")
             response = requests.get(
                 '{0}/finished'.format(host_url), auth=http_auth, stream=True)
             res_json = response.json()
