@@ -21,7 +21,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN INSTALL_PKGS="rh-python${PYTHON_VERSION} rh-python${PYTHON_VERSION}-python-devel \
         rh-python${PYTHON_VERSION}-python-setuptools rh-python${PYTHON_VERSION}-python-pip \
-        atlas-devel openssl-devel zlib-devel sqlite-devel postgresql-devel" && \
+        openssl-devel zlib-devel sqlite-devel postgresql-devel" && \
     yum install -y yum-utils && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --disable rhel-7-server-htb-rpms && \

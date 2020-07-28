@@ -1,3 +1,12 @@
 == Changes to Jenkins agent images
 
 Some agent images (`jenkins-agent-maven`, `jenkins-agent-nodejs10-angular`, `jenkins-agent-scala`) exposed the environment variables `NEXUS_HOST` and `NEXUS_USERNAME`/`NEXUS_PASSWORD`/`NEXUS_AUTH`. This was not done intentionally, but as a side effect of using those variables during image build time. In 3.x, that has been cleaned up. Now those variables are passed as build arguments to the image build, which means they are no longer accessible as environment variables in the running container. Nexus credentials can and should be accessed from the pipeline context (`context.nexusUrl`, `context.nexusUsername` and `context.nexusPassword`). As a consequence, if a `Jenkinsfile` relies on the presence of those environment variables without setting them explicitly using `withEnv`, it will fail to run in 3.x. That said, the `Jenkinsfile` templates which shipped by default with the quickstarters did not rely on the environment variables - with the exception of `fe-ionic` which did not set `NEXUS_HOST` explicitly in the `Build` stage.
+
+
+== General upgrade to Python 3.8
+
+Jenkins agent `jenkins-agent-python` as well as all python related quickstarters (`be-python-flask`, `ds-jupyter-notebook` and `ds-ml-service`) have been upgraded to python 3.8. This is not affecting default provisioned `Jenkinsfile` for `ds-jupyter-notebook` nor `be-python-flask` quickstarters that exist before ODS 3.x. But, `ds-ml-service` provisoned quickstarters before ODS 3.x need to slightly modify its `Jenkinsfile` before upgrading to ODS 3.x by just avoiding running any `pip install <..dependencies..> --user` (see new `Jenkinsfile.template` to get a https://github.com/opendevstack/ods-quickstarters/blob/master/ds-ml-service/Jenkinsfile.template[suggested fix], basically using `virutalenv`; which is the recommended way of working when requiring building python packages).
+
+== Airflow Cluster Jenkins agent no longer supported
+
+If you provisioned `airflow-cluster` quickstarter, please note that it has been moved out from the officially supported quickstarters (`ods-quickstarters`) repository and moved to `extra-quickstarters`. Therefore, the `jenkins-slave-airflow:2.x` can be shifted to `jenkins-agent-python:3.x` when upgrading to ODS 3.x.

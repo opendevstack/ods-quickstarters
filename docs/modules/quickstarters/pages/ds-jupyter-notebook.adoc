@@ -20,7 +20,7 @@ Provision a shared Jupyter Notebook within OpenShift for rapid prototyping of da
 
 == Frameworks used
 
-* https://docs.python.org/3.6/tutorial/[Python 3.6]
+* https://docs.python.org/3.8[Python 3.8]
 * https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/[Jupyter]
 
 == Usage - how do you start after you provisioned this quickstarter
