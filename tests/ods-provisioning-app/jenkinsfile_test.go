@@ -136,7 +136,7 @@ func TestJenkinsFile(t *testing.T) {
 			buildName, stdout, err)
 	}
 
-	imageTag := strings.Replace(values["ODS_GIT_REF"],"/", "_", -1)
+	imageTag := strings.Replace(values["ODS_GIT_REF"], "/", "_", -1)
 	imageTag = strings.Replace(imageTag, "-", "_", -1)
 
 	resourcesInTest := coreUtils.Resources{
