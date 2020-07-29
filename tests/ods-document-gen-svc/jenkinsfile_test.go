@@ -68,7 +68,7 @@ func TestJenkinsFile(t *testing.T) {
 	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		"unitt-"+componentId,
 		coreUtils.PROJECT_NAME,
-		"master",
+		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
 		"Jenkinsfile",
 		coreUtils.PROJECT_NAME_CD,
