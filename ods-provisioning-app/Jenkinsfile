@@ -10,7 +10,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageForkODS(
     context,
-    [odsComponent: 'ods-provisioning-app']
+    [odsComponent: 'ods-provisioning-app', branch: "${odsGitRef}"]
   )
 
   /*
