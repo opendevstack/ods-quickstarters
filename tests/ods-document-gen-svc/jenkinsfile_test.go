@@ -68,7 +68,7 @@ func TestJenkinsFile(t *testing.T) {
 	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
 		"unitt-"+componentId,
 		coreUtils.PROJECT_NAME,
-		"master",
+		values["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
 		"Jenkinsfile",
 		coreUtils.PROJECT_NAME_CD,
@@ -136,9 +136,12 @@ func TestJenkinsFile(t *testing.T) {
 			buildName, stdout, err)
 	}
 
+	imageTag := strings.Replace(values["ODS_GIT_REF"], "/", "_", -1)
+	imageTag = strings.Replace(imageTag, "-", "_", -1)
+
 	resourcesInTest := coreUtils.Resources{
 		Namespace:    coreUtils.PROJECT_NAME_TEST,
-		ImageTags:    []coreUtils.ImageTag{{Name: componentId, Tag: "master"}},
+		ImageTags:    []coreUtils.ImageTag{{Name: componentId, Tag: imageTag}},
 		BuildConfigs: []string{componentId},
 		ImageStreams: []string{componentId},
 	}
