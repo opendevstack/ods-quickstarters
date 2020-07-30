@@ -87,10 +87,10 @@ def stageTraining(def context, def trainingPod) {
     // trigger model training
     sh """
       . ./localenv/bin/activate
-      python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username \"${trainingUsername}\" --password \"${trainingPassword}\"
+      python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username ${trainingUsername} --password ${trainingPassword}
     """
     // get the model for the prediction build
-    sh "curl -Lv --user \"${trainingUsername}\":\"${trainingPassword}\" \"${trainingRoute}\"/getmodel -o docker/dist/\"${context.getGitCommit()}\""
+    sh "curl -Lv --user ${trainingUsername}:${trainingPassword} ${trainingRoute}/getmodel -o docker/dist/${context.getGitCommit()}"
   }
 }
 
