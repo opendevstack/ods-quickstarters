@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
@@ -91,6 +92,36 @@ func TestJenkinsFile(t *testing.T) {
 	if stages != string(expected) {
 		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
 			componentId, string(expected), stages)
+	}
+
+	// sonar scan check
+	sonarscan, err := utils.RetrieveSonarScan(
+		fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// verify sonar scan - against golden record
+	expected, err = ioutil.ReadFile("golden/sonar-scan.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if sonarscan != string(expected) {
+		t.Fatalf("Actual sonar scan for run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
+			componentId, string(expected), sonarscan)
+	}
+
+	// SCRR should have been generated ... and attached to this build
+	artifactsToVerify := []string{
+		fmt.Sprintf("SCRR-%s-%s.docx", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+		fmt.Sprintf("SCRR-%s-%s.md", strings.ToLower(coreUtils.PROJECT_NAME), componentId),
+	}
+
+	err = utils.VerifyJenkinsRunAttachments(coreUtils.PROJECT_NAME_CD, buildName, artifactsToVerify)
+	if err != nil {
+		t.Fatal(err)
 	}
 
 	// verify unit tests exist on this run
