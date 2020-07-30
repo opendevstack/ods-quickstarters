@@ -3,7 +3,7 @@
 == Introduction
 This agent is used to build https://golang.org[Go] code.
 
-The image is built in the global `cd` project and is named `jenkins-agent-golang`.
+The image is built in the global `ods` project and is named `jenkins-agent-golang`.
 It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-golang:latest`.
 
 == Features

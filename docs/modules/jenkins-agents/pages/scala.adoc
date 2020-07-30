@@ -3,7 +3,7 @@
 == Introduction
 This agent is used to build Scala code through SBT (Scala build tool).
 
-The image is built in the global `cd` project and is named `jenkins-agent-scala`.
+The image is built in the global `ods` project and is named `jenkins-agent-scala`.
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-scala`.
 
 == Features
