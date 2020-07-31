@@ -1,11 +1,16 @@
 {
-  "key": "unitt-e2e-cypress",
+  "key": "unitt-cypress",
   "organization": "default-organization",
-  "name": "unitt-e2e-cypress",
+  "name": "unitt-cypress",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "js",
+      "deleted": false
+    },
     {
       "name": "Sonar way",
       "language": "ts",
@@ -19,8 +24,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-e2e-cypress",
-      "name": "unitt-e2e-cypress",
+      "key": "unitt-cypress",
+      "name": "unitt-cypress",
       "qualifier": "TRK"
     }
   ]
