@@ -130,7 +130,7 @@ func TestJenkinsFile(t *testing.T) {
 	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
-		fmt.Sprintf("%s", "1"), // number of tests expected
+		fmt.Sprintf("%s", "2"), // number of tests expected
 	}, []string{})
 
 	if err != nil {
