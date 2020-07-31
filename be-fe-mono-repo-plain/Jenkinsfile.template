@@ -5,6 +5,7 @@
 // depending on what techs are needed, a different agent image may be used below
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-base:@ods_image_tag@',
+  openshiftBuildTimeout: 30,
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
