@@ -45,9 +45,9 @@ def stageLint(def context) {
   stage('Lint') {
     // PEP8
     sh """
-    virtualenv lint
-    . ./lint/bin/activate
-    pip install pycodestyle
+    virtualenv localenv
+    . ./localenv/bin/activate
+    pip install pycodestyle requests
     pip check
     pycodestyle --show-source --show-pep8 --max-line-length 100 src/mlservice/model/*
     pycodestyle --statistics -qq --max-line-length 100 src/mlservice/model/*
@@ -74,8 +74,6 @@ def stageTrainingUnitTests(def context, def trainingPod) {
 
 def stageTraining(def context, def trainingPod) {
   stage('Train Model') {
-    sh(returnStdout: true, script:"pip install requests --user")
-
     def trainingRoute = "http://localhost:8080"
     def trainingPassword = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -n ${context.targetProject} -o jsonpath='{.data.password}'").trim()
     def trainingUsername = sh(returnStdout: true, script:"oc get secret ${context.componentId}-training-secret -n ${context.targetProject} -o jsonpath='{.data.username}'").trim()
@@ -87,7 +85,10 @@ def stageTraining(def context, def trainingPod) {
     // wait for port-forward to map the ports or for 10s
     sh "timeout 10s bash -c 'until ! curl -v --silent http://localhost:8080 2>&1 | grep -m 1 \"Connection refused\"; do sleep 1 ; done'; echo -e \\\\a"
     // trigger model training
-    sh "python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username ${trainingUsername} --password ${trainingPassword}"
+    sh """
+      . ./localenv/bin/activate
+      python3 jenkinsfile_helper.py --training-service ${trainingRoute} --username ${trainingUsername} --password ${trainingPassword}
+    """
     // get the model for the prediction build
     sh "curl -Lv --user ${trainingUsername}:${trainingPassword} ${trainingRoute}/getmodel -o docker/dist/${context.getGitCommit()}"
   }
