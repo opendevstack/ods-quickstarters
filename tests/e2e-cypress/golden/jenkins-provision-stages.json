@@ -16,6 +16,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Create sonar-project.properties",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Push to remote",
     "status": "SUCCESS"
   }

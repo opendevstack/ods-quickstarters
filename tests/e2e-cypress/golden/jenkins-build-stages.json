@@ -8,6 +8,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "odsPipeline finished",
     "status": "SUCCESS"
   }
