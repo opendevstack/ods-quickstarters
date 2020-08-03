@@ -105,7 +105,7 @@ if [ "${httpCode}" == "404" ]; then
         -H "Content-Type: application/json" \
         -d "{\"key\":\"${BITBUCKET_PROJECT}\", \"name\": \"${BITBUCKET_PROJECT}\", \"description\": \"testproject\"}" \
         "${BITBUCKET_URL}/rest/api/1.0/projects")
-    if [[ "${httpCodeCreate}" != "409" && "${httpCodeCreate}" != "200" ]]; then
+    if [[ "${httpCodeCreate}" != "409" && "${httpCodeCreate}" != "201" ]]; then
     	echo_error "Could not create bitbucket project ${BITBUCKET_PROJECT}, error: ${httpCodeCreate}"
     	exit 1
     fi
