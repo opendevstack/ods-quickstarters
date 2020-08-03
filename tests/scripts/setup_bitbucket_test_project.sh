@@ -29,7 +29,7 @@ INSECURE=""
 REPOSITORY=
 
 function usage {
-    printf "Initialise OpenDevStack Bitbucket project.\n\n"
+    printf "Initialise a Bitbucket project including passed repositories.\n\n"
     printf "This script will ask interactively for parameters by default.\n"
     printf "However, you can also pass them directly. Usage:\n\n"
     printf "\t-h|--help\t\tPrint usage\n"
@@ -39,7 +39,7 @@ function usage {
     printf "\t-b|--bitbucket\t\tBitbucket URL, e.g. 'https://bitbucket.example.com'\n"
     printf "\t-u|--user\t\tBitbucket user\n"
     printf "\t-p|--password\t\tBitbucket password\n"
-    printf "\t-t|--project\tName of OpenDevStack project (defaults to '%s')\n" "${BITBUCKET_PROJECT}"
+    printf "\t-t|--project\tName of bitbucket project (defaults to '%s')\n" "${BITBUCKET_PROJECT}"
 }
 
 while [[ "$#" -gt 0 ]]; do
@@ -94,17 +94,21 @@ if [ -z "${BITBUCKET_PWD}" ]; then
     BITBUCKET_PWD="${input}"
 fi
 
-# Create project OPENDEVSTACK if it does not exist yet
+# Create bitbucket project if it does not exist yet
 httpCode=$(curl ${INSECURE} -sS -o /dev/null -w "%{http_code}" \
     --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
     "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}")
 if [ "${httpCode}" == "404" ]; then
     echo_info "Creating project ${BITBUCKET_PROJECT} in Bitbucket"
-    curl ${INSECURE} -sSf -X POST \
+    httpCodeCreate=$(curl ${INSECURE} -sS -o /dev/null -w "%{http_code}" -X POST \
         --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
         -H "Content-Type: application/json" \
         -d "{\"key\":\"${BITBUCKET_PROJECT}\", \"name\": \"${BITBUCKET_PROJECT}\", \"description\": \"testproject\"}" \
-        "${BITBUCKET_URL}/rest/api/1.0/projects"
+        "${BITBUCKET_URL}/rest/api/1.0/projects")
+    if [[ "${httpCodeCreate}" != "409" && "${httpCodeCreate}" != "200" ]]; then
+    	echo_error "Could not create bitbucket project ${BITBUCKET_PROJECT}, error: ${httpCodeCreate}"
+    	exit 1
+    fi
 elif [ "${httpCode}" == "200" ]; then
     echo_info "Found project ${BITBUCKET_PROJECT} in Bitbucket."
 else
