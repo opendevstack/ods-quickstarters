@@ -13,7 +13,6 @@
     }
   ],
   "qualityGate": {
-    "key": 1,
     "name": "Sonar way",
     "isDefault": true
   },
