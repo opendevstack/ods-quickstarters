@@ -43,7 +43,7 @@ echo
 		echo "Input for provision api (${PROVISION_FILE}) does not EXIST, aborting\ncurrent: $(pwd)"
 		exit 1
 	fi
-	echo "... ${COMMAND} project request payload loaded from '"$PROVISION_FILE"'"�
+	echo "... ${COMMAND} project request payload loaded from '"$PROVISION_FILE"'"
 	echo
 	echo "... displaying payload file content:"
 	cat $PROVISION_FILE
