@@ -43,6 +43,10 @@ func TestJenkinsFile(t *testing.T) {
 			Name:  "GIT_URL_HTTP",
 			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, componentId),
 		},
+		coreUtils.EnvPair{
+			Name:  "ODS_NAMESPACE",
+			Value: values["ODS_NAMESPACE"],
+		},
 	)
 	if err != nil {
 		t.Fatal(err)
@@ -73,6 +77,10 @@ func TestJenkinsFile(t *testing.T) {
 		coreUtils.EnvPair{
 			Name:  "COMPONENT_ID",
 			Value: componentId,
+		},
+		coreUtils.EnvPair{
+			Name:  "ODS_NAMESPACE",
+			Value: values["ODS_NAMESPACE"],
 		},
 	)
 	if err != nil {
