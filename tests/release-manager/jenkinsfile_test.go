@@ -187,13 +187,14 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	}
 
 	// update metadata.yml with the new repo provisioned in step 1 (be-golang)
+	fileToUpload := "../release-manager/files/metadata.yml"
 	stages, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/upload-file-to-bitbucket.sh", []string{
 		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
 		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
 		fmt.Sprintf("--repository=%s", repoName),
-		fmt.Sprintf("--file=%s", "../release-manager/files/metadata.yml"),
+		fmt.Sprintf("--file=%s", fileToUpload),
 		fmt.Sprintf("--filename=%s", "metadata.yml"),
 	}, []string{})
 
@@ -203,6 +204,8 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 			stages,
 			stderr,
 			err)
+	} else {
+		fmt.Printf("Uploaded file %s to %s", fileToUpload, config["BITBUCKET_URL"])
 	}
 
 	// run build again ... this time we should get the component built! :D
