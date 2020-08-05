@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	v1 "github.com/openshift/api/build/v1"
 	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
@@ -95,7 +96,7 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	fmt.Printf("Pipeline: %s\n, response: %s\n", pipelineName, string(bodyBytes))
+	fmt.Printf("Pipeline: %s, response: %s\n", pipelineName, string(bodyBytes))
 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -115,7 +116,7 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 
 	metadataAsMap := responseI["metadata"].(map[string]interface{})
 	buildName := metadataAsMap["name"].(string)
-	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+	fmt.Printf("Pipeline: %s, build name from response: %s\n",
 		pipelineName, buildName)
 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
@@ -165,7 +166,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	fmt.Printf("Pipeline: %s\n, response: %s\n", pipelineName, string(bodyBytes))
+	fmt.Printf("Pipeline: %s, response: %s\n", pipelineName, string(bodyBytes))
 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -185,7 +186,7 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 	metadataAsMap := responseI["metadata"].(map[string]interface{})
 	buildName := metadataAsMap["name"].(string)
-	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+	fmt.Printf("Pipeline: %s, build name from response: %s\n",
 		pipelineName, buildName)
 
 	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
@@ -312,5 +313,33 @@ func VerifyJenkinsRunAttachments(projectName string, buildName string, artifacts
 				document, projectName, buildName)
 		}
 	}
+	return nil
+}
+
+// VerifyJenkinsStages checks if actually executed Jenkins stages match those defined in goldenFile.
+func VerifyJenkinsStages(componentID string, runType string, goldenFile string, gotStages string) error {
+	wantStages, err := ioutil.ReadFile(fmt.Sprintf("golden/%s", goldenFile))
+	if err != nil {
+		return fmt.Errorf("Failed to load golden file to verify Jenkins stages: %w", err)
+	}
+
+	if diff := cmp.Diff(string(wantStages), gotStages); diff != "" {
+		return fmt.Errorf("Jenkins stages mismatch for %s of %s (-want +got):\n%s", runType, componentID, diff)
+	}
+
+	return nil
+}
+
+// VerifySonarScan checks if actually executed SonarQube scan matches the scan defined in the golden file.
+func VerifySonarScan(componentID string, gotScan string) error {
+	wantScan, err := ioutil.ReadFile("golden/sonar-scan.json")
+	if err != nil {
+		return fmt.Errorf("Failed to load golden file to verify Sonar scan: %w", err)
+	}
+
+	if diff := cmp.Diff(string(wantScan), gotScan); diff != "" {
+		return fmt.Errorf("Sonar scan mismatch for %s (-want +got):\n%s", componentID, diff)
+	}
+
 	return nil
 }

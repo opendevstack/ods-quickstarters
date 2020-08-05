@@ -4,71 +4,62 @@ import (
 	"bytes"
 	b64 "encoding/base64"
 	"fmt"
-	"log"
 	"os/exec"
-	"strings"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 )
 
-func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, repoName string) {
+func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, componentId string) error {
 
-	fmt.Printf("-- starting cleanup for repo: %s\n", repoName)
+	repoName := fmt.Sprintf("%s-%s", coreUtils.PROJECT_NAME, componentId)
 
-	values, err := ReadConfiguration()
+	fmt.Printf("-- starting cleanup for component: %s\n", componentId)
+
+	config, err := ReadConfiguration()
 	if err != nil {
-		log.Fatalf("Error reading ods-core.env: %s", err)
+		return fmt.Errorf("Error reading ods-core.env: %w", err)
 	}
 
-	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
+	password, err := b64.StdEncoding.DecodeString(config["CD_USER_PWD_B64"])
+	if err != nil {
+		return fmt.Errorf("Could not decode cd_user password: %w", err)
+	}
 
+	fmt.Printf("-- (re)creating repo: %s\n", repoName)
 	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
-		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
-		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", coreUtils.PROJECT_NAME),
 		fmt.Sprintf("--repository=%s", repoName)},
 		[]string{})
 	if err != nil {
-		fmt.Printf(
-			"Execution of `setup_bitbucket_test_project.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
+		return fmt.Errorf(
+			"Execution of `setup_bitbucket_test_project.sh` failed: \nStdOut: %s\nStdErr: %s\n\nErr: %s",
 			stdout,
 			stderr,
-			err)
+			err,
+		)
 	}
 
-	// Delete any built image tags
-	imageStreamName := repoName
+	label := fmt.Sprintf("app=%s-%s", coreUtils.PROJECT_NAME, componentId)
+	fmt.Printf("-- delete resources labelled with: %s\n", label)
 	stdout, stderr, err = runOcCmd([]string{
 		"-n", coreUtils.PROJECT_NAME_DEV,
-		"get", "is", imageStreamName,
-		"-ojsonpath={.status.tags[*].tag}",
+		"delete", "all", "-l", label,
 	})
 	if err != nil {
-		fmt.Printf("(Cleanup) Error when retrieving tags of %s: %s, %s\n", imageStreamName, err, stderr)
-	} else {
-		fmt.Printf("Found image tags: %s\n", stdout)
-		tags := strings.Split(stdout, " ")
-		for _, tag := range tags {
-			if tag != "latest" { // latest is in use by DeploymentConfig
-				stdout, stderr, err = runOcCmd([]string{
-					"-n", coreUtils.PROJECT_NAME_DEV,
-					"delete",
-					fmt.Sprintf("istag/%s:%s", imageStreamName, tag),
-				})
-				if err != nil {
-					fmt.Printf("(Cleanup) Error when deleting image %s:%s: %s, %s\n", imageStreamName, tag, err, stderr)
-				} else {
-					fmt.Printf("Deleted tag: %s:%s\n", imageStreamName, tag)
-				}
-			}
-		}
+		return fmt.Errorf(
+			"Could not delete all resources labelled with %s: \nStdOut: %s\nStdErr: %s\n\nErr: %w",
+			label,
+			stdout,
+			stderr,
+			err,
+		)
 	}
 
-	// TODO: Further cleanup (e.g. scaling down deployments?
-	// Tricky as we cannot scale to 0, and deleting RC/pod will be "fixed" by Kubernetes
-
-	fmt.Printf("Done\n - cleaned up and created repo: %s\n", repoName)
+	fmt.Printf("-- cleaned up and created repo: %s\n", repoName)
+	return nil
 }
 
 func runOcCmd(args []string) (string, string, error) {

@@ -108,6 +108,7 @@ github.com/opendevstack/ods-core/tests v0.0.0-20200110160616-c89cc4c33ac4 h1:h13
 github.com/opendevstack/ods-core/tests v0.0.0-20200110160616-c89cc4c33ac4/go.mod h1:pn5pfqL7ujGCZxRAlgbOLETCC0MoRcygYczae9GGwfU=
 github.com/opendevstack/ods-core/tests v0.0.0-20200803145724-cd99b23680f0 h1:hqbUlR0B5FlJ15JOurSchd03YifUNLikLC86+vUWnXg=
 github.com/opendevstack/ods-core/tests v0.0.0-20200803145724-cd99b23680f0/go.mod h1:F6DZ2cWIv1JI/cgQRb6T9JkuJEBARXUkzEQ+I0jDJVY=
+github.com/opendevstack/ods-quickstarters v0.0.0-20200804143005-a0dee8c0c5e4 h1:CJGPzBF2HFHNnLYF7bDoVdOgqUdfC3m1iLpwOdDSbs8=
 github.com/openshift/api v3.9.0+incompatible h1:fJ/KsefYuZAjmrr3+5U9yZIZbTOpVkDDLDLFresAeYs=
 github.com/openshift/api v3.9.0+incompatible/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=
 github.com/openshift/client-go v3.9.0+incompatible h1:13k3Ok0B7TA2hA3bQW2aFqn6y04JaJWdk7ITTyg+Ek0=

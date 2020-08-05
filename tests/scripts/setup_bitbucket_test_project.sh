@@ -70,6 +70,11 @@ while [[ "$#" -gt 0 ]]; do
   *) echo_error "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
+if [ -z "${REPOSITORY}" ]; then
+    echo_error "--repository is required"
+    exit 1
+fi
+
 if [ -z "${BITBUCKET_URL}" ]; then
     configuredUrl="https://bitbucket.example.com"
     if [ -f "${ODS_CONFIGURATION_DIR}/ods-core.env" ]; then
@@ -119,19 +124,18 @@ fi
 # For each of the listed names, a repository will be created in the local bitbucket
 # instance under the OPENDEVSTACK project. The list should be synced with the repo
 # list in ods-core/ods-setup/repos.sh.
-repository=${REPOSITORY:-"docker-plain-test"}
 httpCode=$(curl ${INSECURE} -sS -o /dev/null -w "%{http_code}" \
     --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
-    "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${repository}")
+    "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${REPOSITORY}")
 if [ "${httpCode}" == "200" ]; then
     echo "Found repository, will delete it"
-    curl ${INSECURE} -X DELETE --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${repository}"
+    curl ${INSECURE} -X DELETE --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${REPOSITORY}"
 fi
-echo_info "Creating repository ${BITBUCKET_PROJECT}/${repository} on Bitbucket."
+echo_info "Creating repository ${BITBUCKET_PROJECT}/${REPOSITORY} on Bitbucket."
 curl ${INSECURE} -sSf -X POST \
     --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
     -H "Content-Type: application/json" \
-    -d "{\"name\":\"${repository}\", \"scmId\": \"git\", \"forkable\": true}" \
+    -d "{\"name\":\"${REPOSITORY}\", \"scmId\": \"git\", \"forkable\": true}" \
     "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos"
 
 echo_done "Bitbucket project ${BITBUCKET_PROJECT} configured"
