@@ -91,7 +91,9 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 		url,
 		"application/json",
 		bytes.NewBuffer(body))
-
+	if err != nil {
+		return "", "", err
+	}
 	defer response.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -123,9 +125,8 @@ func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject strin
 
 	if err != nil {
 		return stdout, buildName, err
-	} else {
-		return stdout, buildName, nil
 	}
+	return stdout, buildName, nil
 }
 
 func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
@@ -161,7 +162,9 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 		url,
 		"application/json",
 		bytes.NewBuffer(body))
-
+	if err != nil {
+		return "", "", err
+	}
 	defer response.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -193,9 +196,8 @@ func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, je
 
 	if err != nil {
 		return stdout, buildName, err
-	} else {
-		return stdout, buildName, nil
 	}
+	return stdout, buildName, nil
 }
 
 func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
@@ -264,12 +266,8 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 			buildName,
 			stdout,
 			stderr)
-	} else {
-		fmt.Printf(
-			"buildlog: %s\n%s",
-			buildName,
-			stdout)
 	}
+	fmt.Printf("buildlog: %s\n%s", buildName, stdout)
 
 	// get (executed) jenkins stages from run - the caller can compare against the golden record
 	stdout, stderr, err = RunScriptFromBaseDir(
@@ -308,10 +306,9 @@ func VerifyJenkinsRunAttachments(projectName string, buildName string, artifacts
 		if err != nil {
 			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
 				err, stdout, stderr)
-		} else {
-			fmt.Printf("found artifact: %s from project: %s for build %s\n",
-				document, projectName, buildName)
 		}
+		fmt.Printf("found artifact: %s from project: %s for build %s\n",
+			document, projectName, buildName)
 	}
 	return nil
 }

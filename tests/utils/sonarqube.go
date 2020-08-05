@@ -31,9 +31,8 @@ func RetrieveSonarScan(projectKey string) (string, error) {
 			stderr,
 			err)
 		return "", err
-	} else {
-		fmt.Printf("Sonar scan result: \n%s\n", stdout)
 	}
+	fmt.Printf("Sonar scan result: \n%s\n", stdout)
 
 	return stdout, nil
 }
