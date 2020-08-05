@@ -2,18 +2,18 @@ package ds_rshiny
 
 import (
 	"fmt"
-	"io/ioutil"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
-func TestJenkinsFile(t *testing.T) {
+func TestDsRshiny(t *testing.T) {
 
-	values, err := utils.ReadConfiguration()
+	config, err := utils.ReadConfiguration()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -21,18 +21,20 @@ func TestJenkinsFile(t *testing.T) {
 	_, filename, _, _ := runtime.Caller(0)
 	quickstarterPath := filepath.Dir(filename)
 	quickstarterName := filepath.Base(quickstarterPath)
-	fmt.Printf("quickstarter: %s\n", quickstarterName)
 	const componentId = "rshiny"
+	repoName := fmt.Sprintf("%s-%s", strings.ToLower(coreUtils.PROJECT_NAME), componentId)
 
 	// cleanup and create bb resources for this test
-	utils.CleanupAndCreateBitbucketProjectAndRepo(
-		quickstarterName, componentId)
+	err = utils.CleanupAndCreateBitbucketProjectAndRepo(quickstarterName, componentId)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// run provision job for quickstarter in project's cd jenkins
+	fmt.Printf("Run provision pipeline of %s ...\n", componentId)
 	stages, err := utils.RunJenkinsFile(
 		"ods-quickstarters",
-		values["ODS_BITBUCKET_PROJECT"],
-		values["ODS_GIT_REF"],
+		config["ODS_BITBUCKET_PROJECT"],
+		config["ODS_GIT_REF"],
 		coreUtils.PROJECT_NAME,
 		fmt.Sprintf("%s/Jenkinsfile", quickstarterName),
 		coreUtils.PROJECT_NAME_CD,
@@ -42,33 +44,23 @@ func TestJenkinsFile(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/%s/%s.git", values["REPO_BASE"], coreUtils.PROJECT_NAME, componentId),
+			Value: fmt.Sprintf("%s/%s/%s.git", config["REPO_BASE"], coreUtils.PROJECT_NAME, repoName),
 		},
 		coreUtils.EnvPair{
 			Name:  "ODS_NAMESPACE",
-			Value: values["ODS_NAMESPACE"],
+			Value: config["ODS_NAMESPACE"],
 		},
 	)
-
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Provision pipeline run for %s returned:\n%s", componentId, stages)
+	err = utils.VerifyJenkinsStages(componentId, "provisioning", "jenkins-provision-stages.json", stages)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("Provision Build for %s returned:\n%s", componentId, stages)
-
-	// verify provision jenkins stages - against golden record
-	expected, err := ioutil.ReadFile("golden/jenkins-provision-stages.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expectedAsString := string(expected)
-	if stages != expectedAsString {
-		t.Fatalf("Actual jenkins stages from prov run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
-	}
-
-	// run master build of provisioned quickstarter in project's cd jenkins
+	fmt.Printf("Run build pipeline of %s ...\n", componentId)
 	stages, err = utils.RunJenkinsFile(
 		componentId,
 		coreUtils.PROJECT_NAME,
@@ -82,28 +74,19 @@ func TestJenkinsFile(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "ODS_NAMESPACE",
-			Value: values["ODS_NAMESPACE"],
+			Value: config["ODS_NAMESPACE"],
 		},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stages)
-
-	// verify run and build jenkins stages - against golden record
-	expected, err = ioutil.ReadFile("golden/jenkins-build-stages.json")
+	fmt.Printf("Build pipeline run for %s returned:\n%s", componentId, stages)
+	err = utils.VerifyJenkinsStages(componentId, "build", "jenkins-build-stages.json", stages)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	expectedAsString = string(expected)
-	if stages != expectedAsString {
-		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, expectedAsString, stages)
-	}
-
-	resourcesInTest := coreUtils.Resources{
+	resources := coreUtils.Resources{
 		Namespace:         coreUtils.PROJECT_NAME_DEV,
 		ImageTags:         []coreUtils.ImageTag{{Name: componentId, Tag: "latest"}},
 		BuildConfigs:      []string{componentId},
@@ -112,6 +95,6 @@ func TestJenkinsFile(t *testing.T) {
 		ImageStreams:      []string{componentId},
 	}
 
-	coreUtils.CheckResources(resourcesInTest, t)
+	coreUtils.CheckResources(resources, t)
 
 }
