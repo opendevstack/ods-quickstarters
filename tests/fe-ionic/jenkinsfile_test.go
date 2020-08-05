@@ -62,7 +62,7 @@ func TestFeIonic(t *testing.T) {
 
 	fmt.Printf("Run build pipeline of %s ...\n", componentId)
 	stages, buildName, err := utils.RunJenkinsFileAndReturnBuildName(
-		componentId,
+		repoName,
 		coreUtils.PROJECT_NAME,
 		"master",
 		coreUtils.PROJECT_NAME,

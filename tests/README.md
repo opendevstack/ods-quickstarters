@@ -47,7 +47,7 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 ```
 	// run master build of provisioned quickstarter in project's cd jenkins
 	stages, err = utils.RunJenkinsFile(
-		componentId,
+		repoName,
 		coreUtils.PROJECT_NAME,
 		"master", // branch
 		coreUtils.PROJECT_NAME,

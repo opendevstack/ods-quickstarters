@@ -169,7 +169,7 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	// start the mro pipeline
 	stages, _, err = utils.RunArbitraryJenkinsPipeline(
 		projectName,
-		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
+		repoName,
 		projectCdNamespace,
 		pipelineName,
 		webhookProxySecret)
