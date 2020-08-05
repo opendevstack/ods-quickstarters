@@ -315,7 +315,7 @@ func VerifyJenkinsRunAttachments(projectName string, buildName string, artifacts
 
 // VerifyJenkinsStages checks if actually executed Jenkins stages match those defined in goldenFile.
 func VerifyJenkinsStages(componentID string, runType string, goldenFile string, gotStages string) error {
-	wantStages, err := ioutil.ReadFile(fmt.Sprintf("golden/%s", goldenFile))
+	wantStages, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
 		return fmt.Errorf("Failed to load golden file to verify Jenkins stages: %w", err)
 	}

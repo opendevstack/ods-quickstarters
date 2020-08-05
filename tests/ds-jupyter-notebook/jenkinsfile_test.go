@@ -56,7 +56,7 @@ func TestDsJupyterNotebook(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Printf("Provision pipeline run for %s returned:\n%s", componentId, stages)
-	err = utils.VerifyJenkinsStages(componentId, "provisioning", "jenkins-provision-stages.json", stages)
+	err = utils.VerifyJenkinsStages(componentId, "provisioning", "golden/jenkins-provision-stages.json", stages)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func TestDsJupyterNotebook(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Printf("Build pipeline run for %s returned:\n%s", componentId, stages)
-	err = utils.VerifyJenkinsStages(componentId, "build", "jenkins-build-stages.json", stages)
+	err = utils.VerifyJenkinsStages(componentId, "build", "golden/jenkins-build-stages.json", stages)
 	if err != nil {
 		t.Fatal(err)
 	}
