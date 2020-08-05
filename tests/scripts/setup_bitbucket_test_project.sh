@@ -129,7 +129,9 @@ httpCode=$(curl ${INSECURE} -sS -o /dev/null -w "%{http_code}" \
     "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${REPOSITORY}")
 if [ "${httpCode}" == "200" ]; then
     echo "Found repository, will delete it"
-    curl ${INSECURE} -X DELETE --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${REPOSITORY}"
+    curl ${INSECURE} -sS -X DELETE \
+        --user "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
+        "${BITBUCKET_URL}/rest/api/1.0/projects/${BITBUCKET_PROJECT}/repos/${REPOSITORY}"
 fi
 echo_info "Creating repository ${BITBUCKET_PROJECT}/${REPOSITORY} on Bitbucket."
 curl ${INSECURE} -sSf -X POST \
