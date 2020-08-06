@@ -106,15 +106,15 @@ func TestBePythonFlask(t *testing.T) {
 	}
 
 	fmt.Printf("Verify unit tests of %s ...\n", buildName)
-	stdout, _, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
+	stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
 		fmt.Sprintf("%s", "1"), // number of tests expected
 	}, []string{})
 
 	if err != nil {
-		t.Fatalf("Could not find unit tests for build:%s\n %s, err: %s\n",
-			buildName, stdout, err)
+		t.Fatalf("Could not find unit tests for build:%s\nstdout: %s\nstderr:%s\nerr: %s\n",
+			buildName, stdout, stderr, err)
 	}
 
 	fmt.Printf("Verify OpenShift resources of %s in %s ...\n", componentId, coreUtils.PROJECT_NAME_DEV)
