@@ -44,7 +44,7 @@ func TestBeJavaSpringboot(t *testing.T) {
 		},
 		coreUtils.EnvPair{
 			Name:  "GIT_URL_HTTP",
-			Value: fmt.Sprintf("%s/%s/%s.git", config["REPO_BASE"], coreUtils.PROJECT_NAME, componentId),
+			Value: fmt.Sprintf("%s/%s/%s.git", config["REPO_BASE"], coreUtils.PROJECT_NAME, repoName),
 		},
 		coreUtils.EnvPair{
 			Name:  "ODS_NAMESPACE",
