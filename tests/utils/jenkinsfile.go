@@ -252,11 +252,16 @@ func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (s
 	stdout, stderr, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-log.sh",
 		[]string{
+			jenkinsNamespace,
 			buildName,
 		}, []string{})
 
 	if err != nil {
-		return "", fmt.Errorf("Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s", err)
+		return "", fmt.Errorf(
+			"Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s\n - stderr:%s",
+			err,
+			stderr,
+		)
 	}
 
 	// still running, or we could not find it ...
