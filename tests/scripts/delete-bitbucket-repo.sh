@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -ue
+set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "SCRIPT_DIR is $SCRIPT_DIR"
 ODS_CONFIGURATION_DIR=../../../../ods-configuration
 
 echo_done(){

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eu
+set -o pipefail
 
 PROJECT=$1
 BUILD_NAME=$2

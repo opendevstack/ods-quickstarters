@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -eu
+set -o pipefail
 
 # Setup these variables
 # PROVISION_API_HOST=<protocol>://<hostname>:<port>
