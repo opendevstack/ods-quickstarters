@@ -23,6 +23,17 @@ if [ -f test-quickstarter-results.txt ]; then
     rm test-quickstarter-results.txt
 fi
 
+BITBUCKET_TEST_PROJECT="unitt"
+echo "Setup Bitbucket test project ${BITBUCKET_TEST_PROJECT} ..."
+BITBUCKET_URL=$(${ODS_QUICKSTARTERS_DIR}/scripts/get-config-param.sh BITBUCKET_URL)
+CD_USER_ID=$(${ODS_QUICKSTARTERS_DIR}/scripts/get-config-param.sh CD_USER_ID)
+CD_USER_PWD_B64=$(${ODS_QUICKSTARTERS_DIR}/scripts/get-config-param.sh CD_USER_PWD_B64)
+./scripts/setup-bitbucket-test-project.sh \
+    --bitbucket=${BITBUCKET_URL} \
+    --user=${CD_USER_ID} \
+    --password=$(base64 -d - <<< ${CD_USER_PWD_B64}) \
+    --project=${BITBUCKET_TEST_PROJECT}
+
 echo "Running tests (${QUICKSTARTER}). Output will take a while to arrive ..."
 
 go test -v -count=1 -timeout 1h -p 4 github.com/opendevstack/ods-quickstarters/tests/${QUICKSTARTER} | tee test-quickstarter-results.txt 2>&1

@@ -26,7 +26,7 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, componentId st
 	}
 
 	fmt.Printf("-- (re)creating repo: %s\n", repoName)
-	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/setup_bitbucket_test_project.sh", []string{
+	stdout, stderr, err := RunScriptFromBaseDir("tests/scripts/setup-bitbucket-test-project.sh", []string{
 		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
 		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
@@ -35,7 +35,7 @@ func CleanupAndCreateBitbucketProjectAndRepo(quickstarter string, componentId st
 		[]string{})
 	if err != nil {
 		return fmt.Errorf(
-			"Execution of `setup_bitbucket_test_project.sh` failed: \nStdOut: %s\nStdErr: %s\n\nErr: %s",
+			"Execution of `setup-bitbucket-test-project.sh` failed: \nStdOut: %s\nStdErr: %s\n\nErr: %s",
 			stdout,
 			stderr,
 			err,
