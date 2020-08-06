@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-set -ue
+set -eu
+set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "SCRIPT_DIR is $SCRIPT_DIR"
 ODS_CONFIGURATION_DIR=../../../../ods-configuration
 
 echo_done(){
@@ -102,12 +102,12 @@ fi
 
 repository=${REPOSITORY:-"releasemanager"}
 
-lastCommit=$(curl --insecure --fail -u "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
+lastCommit=$(curl --insecure -sS -u "${BITBUCKET_USER}:${BITBUCKET_PWD}" \
 	"${BITBUCKET_URL}/rest/api/latest/projects/${BITBUCKET_PROJECT}/repos/${repository}/commits" | jq .values[0].id | sed 's|\"||g')
 
 echo "last: ${lastCommit}"
 
-httpCode=$(curl --insecure -o /dev/null -u "${BITBUCKET_USER}:${BITBUCKET_PWD}" -X PUT -F branch=$BRANCH -F sourceCommitId=$lastCommit -F "comment=ods test" -F "content=@${FILE}" -F filename=blob "${BITBUCKET_URL}/rest/api/latest/projects/${BITBUCKET_PROJECT}/repos/${repository}/browse/${REPO_FILE}" -w "%{http_code}")
+httpCode=$(curl --insecure -sS -o /dev/null -u "${BITBUCKET_USER}:${BITBUCKET_PWD}" -X PUT -F branch=$BRANCH -F sourceCommitId=$lastCommit -F "comment=ods test" -F "content=@${FILE}" -F filename=blob "${BITBUCKET_URL}/rest/api/latest/projects/${BITBUCKET_PROJECT}/repos/${repository}/browse/${REPO_FILE}" -w "%{http_code}")
 
 if [[ ! $httpCode == "200" ]]; then
 	echo "An error occured during update of ${BITBUCKET_URL}/rest/api/latest/projects/${BITBUCKET_PROJECT}/repos/${repository}/browse/${REPO_FILE} - error:$httpCode"

@@ -4,12 +4,12 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
-	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 	"io/ioutil"
-	"log"
 	"strings"
 	"testing"
 	"time"
+
+	utils "github.com/opendevstack/ods-quickstarters/tests/utils"
 )
 
 func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
@@ -17,73 +17,79 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	projectName := "ODSVERIFY"
 	projectCdNamespace := strings.ToLower(projectName) + "-cd"
 	componentId := "releasemanager"
+	repoName := fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)
+
 	golangComponentId := "golang"
+	golangRepoName := fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId)
 
 	// use the api sample script to cleanup
-	stdout, stderr, err := utils.RunScriptFromBaseDir(
+	stages, stderr, err := utils.RunScriptFromBaseDir(
 		"tests/scripts/create-project-api.sh",
 		[]string{
 			"DELETE_COMPONENT",
 		}, []string{})
 
 	if err != nil {
-		fmt.Printf(
+		t.Fatalf(
 			"Execution of `create-project-api.sh/delete component` for '%s' failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
 			projectName,
-			stdout,
+			stages,
 			stderr,
 			err)
 	} else {
 		fmt.Printf(
 			"Execution of `create-project-api.sh/delete component` for '%s' worked: \nStdOut: %s\n",
 			projectName,
-			stdout)
+			stages)
 		time.Sleep(20 * time.Second)
 	}
 
 	// cleanup repository
-	values, err := utils.ReadConfiguration()
+	config, err := utils.ReadConfiguration()
 	if err != nil {
-		log.Fatalf("Error reading ods-core.env: %s", err)
+		t.Fatalf("Error reading ods-core.env: %s", err)
 	}
 
-	password, _ := b64.StdEncoding.DecodeString(values["CD_USER_PWD_B64"])
+	password, err := b64.StdEncoding.DecodeString(config["CD_USER_PWD_B64"])
+	if err != nil {
+		t.Fatalf("Error decoding cd_user password: %s", err)
+	}
 
-	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
-		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
-		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+	stages, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
-		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
+		fmt.Sprintf("--repository=%s", repoName),
 	}, []string{})
 
 	if err != nil {
-		fmt.Printf(
+		t.Fatalf(
 			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
-			stdout,
+			stages,
 			stderr,
 			err)
 	}
 
-	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
-		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
-		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+	stages, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/delete-bitbucket-repo.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
-		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId)),
+		fmt.Sprintf("--repository=%s", golangRepoName),
 	}, []string{})
 
 	if err != nil {
-		fmt.Printf(
+		t.Fatalf(
 			"Execution of `delete-bitbucket-repo.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
-			stdout,
+			stages,
 			stderr,
 			err)
 	}
 
 	// api sample script - create quickstarter in project
 	// the file for this is in golden/create-quickstarter-request.json
-	stdout, stderr, err = utils.RunScriptFromBaseDir(
+	stages, stderr, err = utils.RunScriptFromBaseDir(
 		"tests/scripts/create-project-api.sh",
 		[]string{
 			"PUT",
@@ -92,11 +98,11 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 	if err != nil {
 		t.Fatalf(
 			"Execution of `create-project-api.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
-			stdout,
+			stages,
 			stderr,
 			err)
 	} else {
-		fmt.Printf("Provision app raw logs:%s\n", stdout)
+		fmt.Printf("Provision app raw logs:%s\n", stages)
 	}
 
 	// get the (json) response from the script created file
@@ -145,95 +151,81 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		fullBuildName := fmt.Sprintf("%s-%s", responseBuildClean, responseBuildRun)
 		fmt.Printf("full buildName: %s\n", fullBuildName)
 
-		stdout, err = utils.GetJenkinsBuildStagesForBuild(projectCdNamespace, fullBuildName)
+		stages, err = utils.GetJenkinsBuildStagesForBuild(projectCdNamespace, fullBuildName)
 		if err != nil {
 			t.Fatalf("Could not get stages for run: '%s', stdout: '%s', err: %s",
-				fullBuildName, stdout, err)
+				fullBuildName, stages, err)
 		}
 
-		// verify provision jenkins stages - against golden record
-		expected, err := ioutil.ReadFile(lookupGoldenRecords[index])
+		fmt.Printf("Provision pipeline run for %s returned:\n%s", fullBuildName, stages)
+		err = utils.VerifyJenkinsStages(fullBuildName, "provisioning", lookupGoldenRecords[index], stages)
 		if err != nil {
 			t.Fatal(err)
-		}
-
-		if stdout != string(expected) {
-			t.Fatalf("prov run : %s - records don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-				fullBuildName, string(expected), stdout)
 		}
 	}
 
 	pipelineName := "mro-pipeline"
 	webhookProxySecret := responseI["webhookProxySecret"].(string)
 	// start the mro pipeline
-	stdout, _, err = utils.RunArbitraryJenkinsPipeline(
+	stages, _, err = utils.RunArbitraryJenkinsPipeline(
 		projectName,
-		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
+		repoName,
 		projectCdNamespace,
 		pipelineName,
 		webhookProxySecret)
 
 	if err != nil {
 		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
-			pipelineName, stdout, err)
+			pipelineName, stages, err)
 	}
 
-	fmt.Printf("Master (code) build for %s returned:\n%s", componentId, stdout)
-
-	// verify run and build jenkins stages - against golden record
-	expected, err := ioutil.ReadFile("golden/jenkins-build-stages-after-provisioning.json")
+	fmt.Printf("Build pipeline run for %s returned:\n%s", componentId, stages)
+	err = utils.VerifyJenkinsStages(
+		componentId, "build", "golden/jenkins-build-stages-after-provisioning.json", stages)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if stdout != string(expected) {
-		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, string(expected), stdout)
-	}
-
 	// update metadata.yml with the new repo provisioned in step 1 (be-golang)
-	stdout, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/upload-file-to-bitbucket.sh", []string{
-		fmt.Sprintf("--bitbucket=%s", values["BITBUCKET_URL"]),
-		fmt.Sprintf("--user=%s", values["CD_USER_ID"]),
+	fileToUpload := "../release-manager/files/metadata.yml"
+	stages, stderr, err = utils.RunScriptFromBaseDir("tests/scripts/upload-file-to-bitbucket.sh", []string{
+		fmt.Sprintf("--bitbucket=%s", config["BITBUCKET_URL"]),
+		fmt.Sprintf("--user=%s", config["CD_USER_ID"]),
 		fmt.Sprintf("--password=%s", password),
 		fmt.Sprintf("--project=%s", projectName),
-		fmt.Sprintf("--repository=%s", fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId)),
-		fmt.Sprintf("--file=%s", "../release-manager/files/metadata.yml"),
+		fmt.Sprintf("--repository=%s", repoName),
+		fmt.Sprintf("--file=%s", fileToUpload),
 		fmt.Sprintf("--filename=%s", "metadata.yml"),
 	}, []string{})
 
 	if err != nil {
 		t.Fatalf(
 			"Execution of `upload-file-to-bitbucket.sh` failed: \nStdOut: %s\nStdErr: %s\nErr: %s\n",
-			stdout,
+			stages,
 			stderr,
 			err)
+	} else {
+		fmt.Printf("Uploaded file %s to %s", fileToUpload, config["BITBUCKET_URL"])
 	}
 
 	// run build again ... this time we should get the component built! :D
-	stdout, buildName, err := utils.RunArbitraryJenkinsPipeline(
+	stages, buildName, err := utils.RunArbitraryJenkinsPipeline(
 		projectName,
-		fmt.Sprintf("%s-%s", strings.ToLower(projectName), componentId),
+		repoName,
 		projectCdNamespace,
 		pipelineName,
 		webhookProxySecret)
 
 	if err != nil {
 		t.Fatalf("Could not execute pipeline: '%s', stdout: '%s', err: %s",
-			pipelineName, stdout, err)
+			pipelineName, stages, err)
 	}
 
-	fmt.Printf("Master (code) 2nd build with golang for %s returned:\n%s", componentId, stdout)
-
-	// verify run and build jenkins stages - against golden record
-	expected, err = ioutil.ReadFile("golden/jenkins-build-stages-with-added-repo.json")
+	fmt.Printf("Master (code) 2nd build with golang for %s returned:\n%s", componentId, stages)
+	err = utils.VerifyJenkinsStages(
+		componentId, "build", "golden/jenkins-build-stages-with-added-repo.json", stages)
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if stdout != string(expected) {
-		t.Fatalf("Actual jenkins stages from build run: %s don't match -golden:\n'%s'\n-jenkins response:\n'%s'",
-			componentId, string(expected), stdout)
 	}
 
 	jenkinsRunIdSplitted := strings.Split(buildName, "-")
@@ -251,23 +243,13 @@ func TestVerifyOdsQuickstarterProvisionThruProvisionApi(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// sonar scan check for golang component
-	sonarscan, err := utils.RetrieveSonarScan(
-		fmt.Sprintf("%s-%s", strings.ToLower(projectName), golangComponentId))
-
+	fmt.Printf("Verify Sonar scan of %s ...\n", golangRepoName)
+	sonarscan, err := utils.RetrieveSonarScan(golangRepoName)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	// verify sonar scan - against golden be golang record
-	expected, err = ioutil.ReadFile("golden/golang-sonar-scan.json")
+	err = utils.VerifySonarScan(golangComponentId, sonarscan)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	if sonarscan != string(expected) {
-		t.Fatalf("Actual sonar scan for golang mro run: %s doesn't match -golden:\n'%s'\n-sonar response:\n'%s'",
-			golangComponentId, string(expected), sonarscan)
-	}
-
 }
