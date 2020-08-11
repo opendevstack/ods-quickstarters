@@ -2,5 +2,5 @@
 name: nginx
 description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty 1.15.8.2"
 supplier: https://openresty.org
-version: 3.x
+version: 4.x
 type: ods-service
