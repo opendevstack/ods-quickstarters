@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [3.0] - 2020-08-11
 
 ### Added
 - Feature/add complex RM test features, and use doc downloading tests ([#404](https://github.com/opendevstack/ods-quickstarters/pull/404))
