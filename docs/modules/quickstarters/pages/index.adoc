@@ -1,7 +1,6 @@
 :toc: macro
 
 = OpenDevStack Quickstarters
-:page-aliases: latest@ods-quickstarters:ROOT:index.adoc
 
 toc::[]
 
