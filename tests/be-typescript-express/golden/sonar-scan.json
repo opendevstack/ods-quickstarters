@@ -1,7 +1,7 @@
 {
-  "key": "unitt-nodejs",
+  "key": "unitt-typescript-iq-test",
   "organization": "default-organization",
-  "name": "unitt-nodejs",
+  "name": "unitt-typescript-iq-test",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
@@ -13,14 +13,13 @@
     }
   ],
   "qualityGate": {
-    "key": 1,
     "name": "Sonar way",
     "isDefault": true
   },
   "breadcrumbs": [
     {
-      "key": "unitt-nodejs",
-      "name": "unitt-nodejs",
+      "key": "unitt-typescript-iq-test",
+      "name": "unitt-typescript-iq-test",
       "qualifier": "TRK"
     }
   ]

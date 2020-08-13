@@ -10,7 +10,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageForkODS(
     context,
-    [odsComponent: 'ods-document-generation-svc']
+    [odsComponent: 'ods-document-generation-svc', branch: "${odsGitRef}"]
   )
 
   /*

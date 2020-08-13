@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image (monorepo-iq-test-frontend)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image (monorepo-iq-test-backend)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy to OpenShift",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Test Deployed Component",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]

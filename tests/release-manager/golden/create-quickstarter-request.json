@@ -1,0 +1,13 @@
+{
+  "projectKey" : "ODSVERIFY",
+  "quickstarters" : [
+	  {
+	    "component_type" : "release-manager",
+	    "component_id" : "releasemanager"
+	  },
+	  {
+	    "component_type" : "be-golang-plain",
+	    "component_id" : "golang"
+	  }
+  ]
+}

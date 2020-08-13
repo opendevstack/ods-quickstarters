@@ -62,7 +62,6 @@ objects:
     metadata:
       name: "${COMPONENT}"
     spec:
-      dockerImageRepository: "${COMPONENT}"
       lookupPolicy:
         local: false
   - apiVersion: v1

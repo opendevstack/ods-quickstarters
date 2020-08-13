@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
 	coreUtils "github.com/opendevstack/ods-core/tests/utils"
 	v1 "github.com/openshift/api/build/v1"
 	buildClientV1 "github.com/openshift/client-go/build/clientset/versioned/typed/build/v1"
@@ -17,9 +18,17 @@ import (
 )
 
 func RunJenkinsFile(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, error) {
+	stages, _, err := RunJenkinsFileAndReturnBuildName(repository, repositoryProject, branch, projectName, jenkinsFile, jenkinsNamespace, envVars...)
+	return stages, err
+}
+
+func RunJenkinsFileAndReturnBuildName(repository string, repositoryProject string, branch string, projectName string, jenkinsFile string, jenkinsNamespace string, envVars ...coreUtils.EnvPair) (string, string, error) {
+
+	fmt.Printf("-- starting build for: %s in project: %s\n", jenkinsFile, projectName)
+
 	values, err := ReadConfiguration()
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	request := coreUtils.RequestBuild{
@@ -56,7 +65,7 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 
 	body, err := json.Marshal(request)
 	if err != nil {
-		return "", fmt.Errorf("Could not marshal json: %s", err)
+		return "", "", fmt.Errorf("Could not marshal json: %s", err)
 	}
 
 	jenkinsFilePath := strings.Split(jenkinsFile, "/")
@@ -72,42 +81,129 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	fmt.Printf("Starting pipeline %s\n", pipelineName)
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	url := fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
+		jenkinsNamespace,
+		values["OPENSHIFT_APPS_BASEDOMAIN"],
+		values["PIPELINE_TRIGGER_SECRET"],
+		jenkinsFile,
+		pipelineName)
 	response, err := http.Post(
-		fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&jenkinsfile_path=%s&component=%s",
-			jenkinsNamespace,
-			values["OPENSHIFT_APPS_BASEDOMAIN"],
-			values["PIPELINE_TRIGGER_SECRET"],
-			jenkinsFile,
-			pipelineName),
+		url,
 		"application/json",
 		bytes.NewBuffer(body))
-
+	if err != nil {
+		return "", "", err
+	}
 	defer response.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
 
-	fmt.Printf("Pipeline: %s\n, response: %s\n", pipelineName, string(bodyBytes))
+	fmt.Printf("Pipeline: %s, response: %s\n", pipelineName, string(bodyBytes))
 
 	if response.StatusCode >= http.StatusAccepted {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
-		return "", fmt.Errorf("Could not post to pipeline: %s - response: %s",
-			pipelineName, string(bodyBytes))
+		return "", "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+			pipelineName, url, response.StatusCode, string(bodyBytes))
 	}
 
 	var responseI map[string]interface{}
 	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
 	if err != nil {
-		return "", fmt.Errorf("Could not parse json response: %s, err: %s",
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
 			string(bodyBytes), err)
 	}
 
 	metadataAsMap := responseI["metadata"].(map[string]interface{})
 	buildName := metadataAsMap["name"].(string)
-	fmt.Printf("Pipeline: %s, Buildname from response: %s\n",
+	fmt.Printf("Pipeline: %s, build name from response: %s\n",
 		pipelineName, buildName)
+
+	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
+
+	if err != nil {
+		return stdout, buildName, err
+	}
+	return stdout, buildName, nil
+}
+
+func RunArbitraryJenkinsPipeline(repositoryProject string, repository string, jenkinsNamespace string, pipelineName string, triggerSecret string, envVars ...coreUtils.EnvPair) (string, string, error) {
+
+	fmt.Printf("-- starting build for: %s in project: %s\n", pipelineName, jenkinsNamespace)
+
+	values, err := ReadConfiguration()
+	if err != nil {
+		return "", "", err
+	}
+
+	request := coreUtils.RequestBuild{
+		Repository: repository,
+		Branch:     "master",
+		Project:    repositoryProject,
+		Env:        append([]coreUtils.EnvPair{}, envVars...),
+	}
+
+	body, err := json.Marshal(request)
+	if err != nil {
+		return "", "", fmt.Errorf("Could not marshal json: %s", err)
+	}
+
+	fmt.Printf("Starting pipeline %s\n", pipelineName)
+
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	url := fmt.Sprintf("https://webhook-proxy-%s%s/build?trigger_secret=%s&component=%s",
+		jenkinsNamespace,
+		values["OPENSHIFT_APPS_BASEDOMAIN"],
+		triggerSecret,
+		pipelineName)
+	response, err := http.Post(
+		url,
+		"application/json",
+		bytes.NewBuffer(body))
+	if err != nil {
+		return "", "", err
+	}
+	defer response.Body.Close()
+
+	bodyBytes, err := ioutil.ReadAll(response.Body)
+
+	fmt.Printf("Pipeline: %s, response: %s\n", pipelineName, string(bodyBytes))
+
+	if response.StatusCode >= http.StatusAccepted {
+		bodyBytes, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return "", "", err
+		}
+		return "", "", fmt.Errorf("Could not post to pipeline: %s (%s) - response: %d, body: %s",
+			pipelineName, url, response.StatusCode, string(bodyBytes))
+	}
+
+	var responseI map[string]interface{}
+	err = json.Unmarshal(bytes.Split(bodyBytes, []byte("\n"))[0], &responseI)
+	if err != nil {
+		return "", "", fmt.Errorf("Could not parse json response: %s, err: %s",
+			string(bodyBytes), err)
+	}
+
+	metadataAsMap := responseI["metadata"].(map[string]interface{})
+	buildName := metadataAsMap["name"].(string)
+	fmt.Printf("Pipeline: %s, build name from response: %s\n",
+		pipelineName, buildName)
+
+	stdout, err := GetJenkinsBuildStagesForBuild(jenkinsNamespace, buildName)
+
+	if err != nil {
+		return stdout, buildName, err
+	}
+	return stdout, buildName, nil
+}
+
+func GetJenkinsBuildStagesForBuild(jenkinsNamespace string, buildName string) (string, error) {
+
+	fmt.Printf("Getting stages for build: %s in project: %s\n",
+		buildName, jenkinsNamespace)
 
 	config, err := coreUtils.GetOCClient()
 	if err != nil {
@@ -123,12 +219,22 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	build, err := buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
 	count := 0
 	// especially provision builds with CLIs take longer ...
-	max := 40
+	max := 60
 	for (err != nil || build.Status.Phase == v1.BuildPhaseNew || build.Status.Phase == v1.BuildPhasePending || build.Status.Phase == v1.BuildPhaseRunning) && count < max {
 		build, err = buildClient.Builds(jenkinsNamespace).Get(buildName, metav1.GetOptions{})
-		time.Sleep(20 * time.Second)
+		time.Sleep(35 * time.Second)
 		if err != nil {
 			fmt.Printf("Err Build: %s is still not available, %s\n", buildName, err)
+			// try to refresh the client - sometimes the token does expire...
+			config, err = coreUtils.GetOCClient()
+			if err != nil {
+				fmt.Printf("Error creating OC config: %s", err)
+			} else {
+				buildClient, err = buildClientV1.NewForConfig(config)
+				if err != nil {
+					fmt.Printf("Error creating Build client: %s", err)
+				}
+			}
 		} else {
 			fmt.Printf("Waiting for build to complete: %s. Current status: %s\n", buildName, build.Status.Phase)
 		}
@@ -146,11 +252,16 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 	stdout, stderr, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-log.sh",
 		[]string{
+			jenkinsNamespace,
 			buildName,
 		}, []string{})
 
 	if err != nil {
-		return "", fmt.Errorf("Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s", err)
+		return "", fmt.Errorf(
+			"Could not execute tests/scripts/print-jenkins-log.sh\n - err:%s\n - stderr:%s",
+			err,
+			stderr,
+		)
 	}
 
 	// still running, or we could not find it ...
@@ -160,15 +271,11 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 			buildName,
 			stdout,
 			stderr)
-	} else {
-		fmt.Printf(
-			"buildlog: %s\n%s",
-			buildName,
-			stdout)
 	}
+	fmt.Printf("buildlog: %s\n%s", buildName, stdout)
 
 	// get (executed) jenkins stages from run - the caller can compare against the golden record
-	stdout, _, err = RunScriptFromBaseDir(
+	stdout, stderr, err = RunScriptFromBaseDir(
 		"tests/scripts/print-jenkins-json-status.sh",
 		[]string{
 			buildName,
@@ -176,8 +283,65 @@ func RunJenkinsFile(repository string, repositoryProject string, branch string, 
 		}, []string{})
 
 	if err != nil {
-		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s", buildName, err)
+		return "", fmt.Errorf("Error getting jenkins stages for: %s\rError: %s, %s, %s",
+			buildName, err, stdout, stderr)
 	}
 
 	return stdout, nil
+}
+
+func VerifyJenkinsRunAttachments(projectName string, buildName string, artifactsToVerify []string) error {
+	if len(artifactsToVerify) == 0 {
+		return nil
+	}
+
+	// verify that we can retrieve artifacts from the RM jenkins run
+	for _, document := range artifactsToVerify {
+
+		fmt.Printf("Getting artifact: %s from project: %s for build %s\n",
+			document, projectName, buildName)
+		stdout, stderr, err := RunScriptFromBaseDir(
+			"tests/scripts/get-artifact-from-jenkins-run.sh",
+			[]string{
+				buildName,
+				projectName,
+				document,
+			}, []string{})
+
+		if err != nil {
+			return fmt.Errorf("Could not execute tests/scripts/get-artifact-from-jenkins-run.sh\n - err:%s\nout:%s\nstderr:%s",
+				err, stdout, stderr)
+		}
+		fmt.Printf("found artifact: %s from project: %s for build %s\n",
+			document, projectName, buildName)
+	}
+	return nil
+}
+
+// VerifyJenkinsStages checks if actually executed Jenkins stages match those defined in goldenFile.
+func VerifyJenkinsStages(componentID string, runType string, goldenFile string, gotStages string) error {
+	wantStages, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		return fmt.Errorf("Failed to load golden file to verify Jenkins stages: %w", err)
+	}
+
+	if diff := cmp.Diff(string(wantStages), gotStages); diff != "" {
+		return fmt.Errorf("Jenkins stages mismatch for %s of %s (-want +got):\n%s", runType, componentID, diff)
+	}
+
+	return nil
+}
+
+// VerifySonarScan checks if actually executed SonarQube scan matches the scan defined in the golden file.
+func VerifySonarScan(componentID string, gotScan string) error {
+	wantScan, err := ioutil.ReadFile("golden/sonar-scan.json")
+	if err != nil {
+		return fmt.Errorf("Failed to load golden file to verify Sonar scan: %w", err)
+	}
+
+	if diff := cmp.Diff(string(wantScan), gotScan); diff != "" {
+		return fmt.Errorf("Sonar scan mismatch for %s (-want +got):\n%s", componentID, diff)
+	}
+
+	return nil
 }

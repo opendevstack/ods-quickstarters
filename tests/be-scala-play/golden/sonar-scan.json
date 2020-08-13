@@ -1,0 +1,26 @@
+{
+  "key": "unitt-be-scala-play-test",
+  "organization": "default-organization",
+  "name": "unitt-be-scala-play-test",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "scala",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-be-scala-play-test",
+      "name": "unitt-be-scala-play-test",
+      "qualifier": "TRK"
+    }
+  ]
+}

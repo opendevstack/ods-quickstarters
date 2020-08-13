@@ -1,0 +1,50 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Lint",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Prepare Builds",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image (ml-training-service)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy to OpenShift (ml-training-service)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Training Unit Tests",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Train Model",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Training Integration Tests",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image (ml-prediction-service)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy to OpenShift (ml-prediction-service)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]

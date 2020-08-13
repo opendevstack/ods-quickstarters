@@ -9,8 +9,8 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  odsComponentStageScanWithSonar(context)
   stageTest(context)
+  odsComponentStageScanWithSonar(context)
 }
 
 def stageTest(def context) {

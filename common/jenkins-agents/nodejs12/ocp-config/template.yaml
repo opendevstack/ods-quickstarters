@@ -26,7 +26,6 @@ objects:
     labels:
       app: jenkins-agent-nodejs12
   spec:
-    dockerImageRepository: jenkins-agent-nodejs12
     lookupPolicy:
       local: false
 - apiVersion: v1

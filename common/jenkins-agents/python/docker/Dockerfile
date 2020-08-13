@@ -2,41 +2,45 @@ FROM opendevstackorg/ods-jenkins-agent-base-centos7:latest
 
 LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
-ENV PYTHON_VERSION=3.6.10
-ENV VENV_VERSION=20.0.9
-ENV INSTALL_PKGS="yum-utils gcc make openssl-devel zlib-devel sqlite-devel"
+ARG nexusHost
+ARG nexusAuth
 
-RUN set -x \
-    && yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
-    && yum clean all \
-    && rm -rf /var/cache/yum/*
+# Python 3.8
+ARG PYTHON_VERSION=38
 
-RUN cd /tmp \
-    && curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
-    && tar xzf Python-${PYTHON_VERSION}.tgz -C / \
-    && rm -rf Python-${Python_VERSION}.tgz
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    PIP_NO_CACHE_DIR=off \
+    PATH=/opt/rh/rh-python${PYTHON_VERSION}/root/usr/local/bin:/opt/rh/rh-python${PYTHON_VERSION}/root/usr/bin:/home/jenkins/.local/bin/:$PATH \
+    LD_LIBRARY_PATH=/opt/rh/rh-python${PYTHON_VERSION}/root/usr/lib64 \
+    MANPATH=/opt/rh/rh-python${PYTHON_VERSION}/root/usr/share/man: \
+    PKG_CONFIG_PATH=/opt/rh/rh-python${PYTHON_VERSION}/root/usr/lib64/pkgconfig \
+    XDG_DATA_DIRS=/opt/rh/rh-python${PYTHON_VERSION}/root/usr/share:/usr/local/share:/usr/share
 
-RUN cd /Python-${PYTHON_VERSION} \
-    && ./configure \
-    && make altinstall \
-    && ln -s /Python-${PYTHON_VERSION}/python /usr/local/sbin/python3 \
-    && python3 -V \
-    && chmod a+rx /Python-${PYTHON_VERSION} \
-    && chmod a+rx /Python-${PYTHON_VERSION}/python \
-    && yum remove -y $INSTALL_PKGS
+RUN INSTALL_PKGS="rh-python${PYTHON_VERSION} rh-python${PYTHON_VERSION}-python-devel \
+        rh-python${PYTHON_VERSION}-python-setuptools rh-python${PYTHON_VERSION}-python-pip \
+        openssl-devel zlib-devel sqlite-devel postgresql-devel" && \
+    yum install -y yum-utils && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum-config-manager --disable rhel-7-server-htb-rpms && \
+    yum makecache && \
+    yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS @development && \
+    rpm -V $INSTALL_PKGS && \
+    yum -y clean all --enablerepo='*'
 
-RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
-    && python3 get-pip.py
-
-# Upgrade PIP
-RUN pip3 install --upgrade pip \
-    && pip3 -V \
-    && pip3 install virtualenv==${VENV_VERSION}
-
-# Configure PIP SSL validation
-RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
-    && pip config list
+RUN if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
+    then pip config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+        && pip config set global.trusted-host ${nexusHost} \
+        && pip config set global.extra-index-url https://pypi.org/simple; \
+    fi; \
+    pip config set global.cert /etc/ssl/certs/ca-bundle.crt && \
+    pip install --upgrade pip --user && \
+    pip install virtualenv==20.0.28 setuptools==49.2.0 Cython==0.29.21 pypandoc==1.5
 
 # Enables default user to access $HOME folder
-RUN chgrp -R 0 $HOME && \
-    chmod -R g+rw $HOME
+RUN chown -R 1001:0 $HOME && \
+    chmod -R a+rw $HOME
+
+USER 1001
