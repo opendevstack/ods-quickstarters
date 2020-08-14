@@ -4,21 +4,22 @@ def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
 
 library("ods-jenkins-shared-library@${odsGitRef}")
 
-def springCliVersion = '2.2.6.RELEASE'
-
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${odsImageTag}",
 ) { context ->
 
   stage('Build spring project') {
     dir(context.targetDir) {
+      def springBootVersion = '2.3.1.RELEASE'
+      echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
+
       sh "curl https://start.spring.io/starter.tgz \
             -d type=gradle-project \
             -d language=java \
-            -d dependencies='web,jersey,data-jpa,h2,lombok,data-rest,restdocs,security' \
-            -d platformVersion=${springCliVersion} \
+            -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
+            -d bootVersion=${springBootVersion} \
             -d packaging=jar \
-            -d jvmVersion=1.11 \
+            -d javaVersion=11 \
             -d groupId=${context.projectId} \
             -d artifactId=${context.componentId} \
             -d name=${context.componentId} \
@@ -26,10 +27,34 @@ odsQuickstarterPipeline(
             -d packageName='${context.packageName}' \
             | tar -zxvf - "
 
-      withEnv(["COMPONENT=${context.componentId}", "GROUP=${context.group}"]) {
-        sh "sh ${env.WORKSPACE}/${context.sourceDir}/postProcessProjectsettings.sh"
-      }
+      echo "--- configure application.properties ---"
+
+      sh "echo 'spring.profiles.active: dev' > src/main/resources/application.properties"
+      sh "echo 'spring.jpa.database: HSQL' > src/main/resources/application-dev.properties"
     }
+
+    echo "--- customise build.gradle ---"
+
+    // add nexus credential settings
+    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
+
+    // insert required plugins
+    sh "sed -i -e '/plugins {/{r ${context.sourceDir}/templates/gradle-plugins.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
+
+    // insert nexus repos
+    sh "sed -i -e '/mavenCentral()/{r ${context.sourceDir}/templates/gradle-repositories.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
+
+    // insert test settings
+    sh "sed -i -e '/test {/{r ${context.sourceDir}/templates/gradle-plugin-test.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
+
+    // append bootJar settings
+    sh "cat ${context.sourceDir}/templates/gradle-plugin-bootjar.template >> ${context.targetDir}/build.gradle"
+
+    // append jacoco settings
+    sh "cat ${context.sourceDir}/templates/gradle-plugin-jacoco.template >> ${context.targetDir}/build.gradle"
+
+    // append maven-publish settings
+    sh "cat ${context.sourceDir}/templates/gradle-maven-publish.template >> ${context.targetDir}/build.gradle"
   }
 
   odsQuickstarterStageCopyFiles(context)

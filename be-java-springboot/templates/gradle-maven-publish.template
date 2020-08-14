@@ -1,0 +1,22 @@
+
+publishing {
+    repositories {
+        maven {
+            url = "${nexus_url}/repository/" + (version.endsWith('SNAPSHOT') ? nexusFolderSnapshots : nexusFolderReleases)
+
+            credentials {
+                username = "${nexus_user}"
+                password = "${nexus_pw}"
+            }
+
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            artifactId = rootProject.name
+            groupId = group
+            version = "${version}"
+            from components.java
+        }
+    }
+}
