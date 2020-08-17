@@ -1,0 +1,27 @@
+componentID: monorepo-iq-test
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: build
+  buildParams:
+    verify:
+      jenkinsStages: golden/jenkins-build-stages.json
+      openShiftResources:
+        imageTags:
+        - name: "{{.ComponentID}}-backend"
+          tag: latest
+        - name: "{{.ComponentID}}-frontend"
+          tag: latest
+        buildConfigs:
+        - "{{.ComponentID}}-backend"
+        - "{{.ComponentID}}-frontend"
+        imageStreams:
+        - "{{.ComponentID}}-backend"
+        - "{{.ComponentID}}-frontend"
+        deploymentConfigs:
+        - "{{.ComponentID}}"
+        services:
+        - "{{.ComponentID}}-backend"
+        - "{{.ComponentID}}-frontend"
