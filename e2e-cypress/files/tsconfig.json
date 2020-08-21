@@ -20,6 +20,11 @@
       "es2017",
       "dom"
     ],
-    "types": ["cypress"]
+    "types": ["cypress"],
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
   }
 }
