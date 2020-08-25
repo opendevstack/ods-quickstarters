@@ -1,0 +1,32 @@
+componentID: releasemanager
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: provision
+  componentID: golang
+  provisionParams:
+    quickstarter: be-golang-plain
+    verify:
+      jenkinsStages: "../../be-golang-plain/testdata/golden/jenkins-provision-stages.json"
+- type: build
+  buildParams:
+    pipeline: mro-pipeline
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-after-provisioning.json
+- type: upload
+  uploadParams:
+    file: fixtures/metadata.yml
+- type: build
+  buildParams:
+    pipeline: mro-pipeline
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-with-added-repo.json
+      sonarScan: golden/sonar-scan.json
+      runAttachments:
+      - DTP-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
+      - DTR-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
+      - TIP-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
+      - TIR-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
+

@@ -1,38 +1,18 @@
 /be-fe-mono-repo-plain/ @clemensutschig
-/tests/be-fe-mono-repo-plain/ @clemensutschig
 /be-gateway-nginx/ @gerardcl
-/tests/be-gateway-nginx/ @gerardcl
 /be-golang-plain/ @michaelsauter @henrjk
-/tests/be-golang-plain/ @michaelsauter @henrjk
 /be-java-springboot/ @stitakis @rdupont
-/tests/be-java-springboot/ @stitakis @rdupont
 /be-python-flask/ @buegelbeatz @henrjk
-/tests/be-python-flask/ @buegelbeatz @henrjk
 /be-scala-play/ @oalyman
-/tests/be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
-/tests/be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter
-/tests/docker-plain/ @michaelsauter
 /ds-jupyter-notebook/ @gerardcl @hugowschneider
-/tests/ds-jupyter-notebook/ @gerardcl @hugowschneider
 /ds-ml-service/ @gerardcl @hugowschneider @sklingel
-/tests/ds-ml-service/ @gerardcl @hugowschneider @sklingel
 /ds-rshiny/ @gerardcl
-/tests/ds-rshiny/ @gerardcl
 /e2e-cypress/ @herrkoch
-/tests/e2e-cypress/ @herrkoch
 /e2e-spock-geb/ @metmajer
-/tests/e2e-spock-geb/ @metmajer
 /fe-angular/ @cschweikert
-/tests/fe-angular/ @cschweikert
 /fe-ionic/ @rianet @bljubisic
-/tests/fe-ionic/ @rianet @bljubisic
 /ods-document-gen-svc/ @metmajer
-/tests/ods-document-gen-svc/ @metmajer
 /ods-provisioning-app/ @clemensutschig @michaelsauter
-/tests/ods-provisioning-app/ @clemensutschig @michaelsauter
 /release-manager/ @metmajer @michaelsauter
-/tests/release-manager/ @metmajer @michaelsauter
-/tests/utils/ @clemensutschig
-/tests/scripts/ @clemensutschig

@@ -1,0 +1,32 @@
+componentID: ml
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: build
+  buildParams:
+    verify:
+      jenkinsStages: golden/jenkins-build-stages.json
+      runAttachments:
+      - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
+      - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
+      testResults: 2
+      openShiftResources:
+        imageTags:
+        - name: "{{.ComponentID}}-training-service"
+          tag: latest
+        - name: "{{.ComponentID}}-prediction-service"
+          tag: latest
+        buildConfigs:
+        - "{{.ComponentID}}-training-service"
+        - "{{.ComponentID}}-prediction-service"
+        imageStreams:
+        - "{{.ComponentID}}-training-service"
+        - "{{.ComponentID}}-prediction-service"
+        deploymentConfigs:
+        - "{{.ComponentID}}-training-service"
+        - "{{.ComponentID}}-prediction-service"
+        services:
+        - "{{.ComponentID}}-training-service"
+        - "{{.ComponentID}}-prediction-service"
