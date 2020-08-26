@@ -1,0 +1,3 @@
+svc,dc,is,bc
+
+preserve bc:/spec/output/to/name,bc:/spec/output/imageLabels

@@ -21,7 +21,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCreateOpenShiftResources(
     context,
-    [directory: 'common/ocp-config/component-environment']
+    [directory: 'common/ocp-config/component']
   )
 
   odsQuickstarterStageRenderJenkinsfile(context)
