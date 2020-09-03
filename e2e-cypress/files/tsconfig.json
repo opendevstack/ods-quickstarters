@@ -2,8 +2,7 @@
   "include": [
     "tests/**/*.spec.ts",
     "support/*.ts",
-    "plugins/*.ts",
-    "node_modules/cypress"
+    "plugins/*.ts"
   ],
   "compilerOptions": {
     "baseUrl": "./",
