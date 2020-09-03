@@ -18,12 +18,12 @@
     "rxjs": "^6.6.2"
   },
   "devDependencies": {
-    "@types/node": "^14.6.0",
-    "cypress": "^5.0.0",
+    "@types/node": "^14.6.3",
+    "cypress": "^5.1.0",
     "npm-run-all": "^4.1.5",
-    "ts-node": "^8.10.2",
-    "tslint": "~6.1.3",
-    "typescript": "^3.9.7",
+    "ts-node": "^9.0.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.0.2",
     "typescript-tslint-plugin": "^0.5.5"
   }
 }
