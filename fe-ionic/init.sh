@@ -65,8 +65,7 @@ read -r -d "" UNIT_XML_CONFIG << EOM || true
     junitReporter: {\\
       outputDir: './build/test-results/test',\\
       outputFile: 'test-results.xml',\\
-      useBrowserName: false,\\
-      xmlVersion: 1\\
+      useBrowserName: false\\
     },
 EOM
 sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.conf.js
