@@ -12,6 +12,7 @@ steps:
       runAttachments:
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
+      testResults: 3
       openShiftResources:
         imageTags:
         - name: "{{.ComponentID}}"
