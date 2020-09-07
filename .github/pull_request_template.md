@@ -5,4 +5,4 @@ Fixes #...
 
 Tasks: 
 - [ ] Updated documentation in `docs/modules/...` directory
-- [ ] Adjusted and verified tests in `tests/...` directory
+- [ ] Ran tests in `<quickstarter>/testdata` directory
