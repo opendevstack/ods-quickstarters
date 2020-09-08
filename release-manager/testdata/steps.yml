@@ -23,10 +23,9 @@ steps:
     pipeline: mro-pipeline
     verify:
       jenkinsStages: golden/jenkins-build-stages-with-added-repo.json
-      sonarScan: golden/sonar-scan.json
       runAttachments:
-      - DTP-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
-      - DTR-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
-      - TIP-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
-      - TIR-{{.ProjectID}}-WIP-{{.ComponentID}}.zip
+      - DTP-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - DTR-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - TIP-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - TIR-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
 

@@ -1,11 +1,11 @@
-id: odsverify
-name: Project odsverify
-description: Description of odsverify.
+id: unitt
+name: Project unitt
+description: Description of unitt.
 
 services:
   bitbucket:
     credentials:
-      id: odsverify-cd-cd-user-with-password
+      id: unitt-cd-cd-user-with-password
 
   nexus:
     repository:
