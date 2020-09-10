@@ -37,7 +37,7 @@ RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
-    npm config set _auth=$(echo -n $NEXUS_AUTH | base64) && \
+    npm config set _auth=$(echo -n $nexusAuth | base64) && \
     npm config set email=no-reply@opendevstack.org && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
