@@ -20,4 +20,6 @@ RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/i
 
 RUN go get -u github.com/jstemmer/go-junit-report
 
+RUN mkdir -p /home/jenkins/go && chmod g+w /home/jenkins/go
+
 WORKDIR /go
