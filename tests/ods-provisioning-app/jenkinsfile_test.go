@@ -110,7 +110,7 @@ func TestOdsProvisioningApp(t *testing.T) {
 	stdout, stderr, err := utils.RunScriptFromBaseDir("tests/scripts/verify-jenkins-unittest-results.sh", []string{
 		fmt.Sprintf("%s", buildName),
 		fmt.Sprintf("%s", coreUtils.PROJECT_NAME_CD),
-		fmt.Sprintf("%s", "192"), // number of tests expected
+		fmt.Sprintf("%s", "204"), // number of tests expected
 	}, []string{})
 
 	if err != nil {
