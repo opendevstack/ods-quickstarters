@@ -2,7 +2,7 @@
 
 ![](https://github.com/opendevstack/ods-quickstarters/workflows/Continous%20Integration%20Tests/badge.svg?branch=master)
 ![](https://4e53c33a6387.ngrok.io/images/quickstartertestsoutcome_master.svg)
-
+![](https://4e53c33a6387.ngrok.io/images/quickstartertestsoutcome_feature_ods-devenv.svg)
 
 ## Introduction
 
