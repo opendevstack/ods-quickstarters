@@ -1,10 +1,10 @@
 /* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-scala:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-scala:@agent_image_tag@',
   testResults: 'target/test-reports',
   branchToEnvironmentMapping: [
     'master': 'dev',

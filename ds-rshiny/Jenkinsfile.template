@@ -1,9 +1,9 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-base:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-base:@agent_image_tag@',
   openshiftBuildTimeout: 30,  
   branchToEnvironmentMapping: [
     'master': 'dev',
