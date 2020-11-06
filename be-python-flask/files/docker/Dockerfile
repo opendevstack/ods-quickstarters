@@ -1,9 +1,9 @@
 FROM python:3.8-buster
 
-LABEL maintainer="Andras Gyacsok <andras.gyacsok@boehringer-ingelheim.com>"
-
 ARG nexusHostWithBasicAuth
 ARG nexusHostWithoutScheme
+
+RUN mkdir -p /app
 
 WORKDIR /app
 
