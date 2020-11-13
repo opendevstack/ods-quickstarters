@@ -76,7 +76,7 @@ In Jenkinsfile, there is the following stage:
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs10-angular[Nodejs10-Angular builder agent] Jenkins builder agent.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs12-angular[Nodejs12-Angular builder agent] Jenkins builder agent.
 
 == Known limitations
 

@@ -17,8 +17,7 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 
 1. [GoLang](golang)
 2. [Maven / Gradle](maven)
-3. [Node.js 10 (Angular)](nodejs10-angular)
-4. [Node.js 12](nodejs12)
+3. [Node.js 12 (Angular)](nodejs12-angular)
 5. [Python](python)
 6. [Scala & SBT](scala)
 

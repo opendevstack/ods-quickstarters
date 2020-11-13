@@ -18,7 +18,7 @@
 *** xref:jenkins:agent-base.adoc[Base Image]
 *** xref:jenkins-agents:golang.adoc[Go]
 *** xref:jenkins-agents:maven.adoc[Maven]
-*** xref:jenkins-agents:nodejs10-angular.adoc[Nodejs10 Angular]
+*** xref:jenkins-agents:nodejs12-angular.adoc[Nodejs12 Angular]
 *** xref:jenkins-agents:python.adoc[Python]
 *** xref:jenkins-agents:scala.adoc[Scala]
 ** xref:quickstarters:authoring-quickstarters.adoc[Authoring Quickstarters]

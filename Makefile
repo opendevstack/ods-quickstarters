@@ -8,15 +8,15 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 
 # JENKINS AGENT
 ## Install or update Jenkins agent resources.
-install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs10-angular install-jenkins-agent-python install-jenkins-agent-scala
+install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs12-angular install-jenkins-agent-python install-jenkins-agent-scala
 .PHONY: install-jenkins-agent
 
 ## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs10-angular-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs12-angular-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs10-angular-build start-jenkins-agent-python-build start-jenkins-agent-scala-build
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs12-angular-build start-jenkins-agent-python-build start-jenkins-agent-scala-build
 .PHONY: start-jenkins-agent-build
 
 
@@ -54,18 +54,18 @@ start-jenkins-agent-maven-build:
 
 # JENKINS AGENT NODEJS
 ## Install or update Jenkins Node agent resources.
-install-jenkins-agent-nodejs10-angular: apply-jenkins-agent-nodejs10-angular-build start-jenkins-agent-nodejs10-angular-build
-.PHONY: install-jenkins-agent-nodejs10-angular
+install-jenkins-agent-nodejs12-angular: apply-jenkins-agent-nodejs12-angular-build start-jenkins-agent-nodejs12-angular-build
+.PHONY: install-jenkins-agent-nodejs12-angular
 
 ## Update OpenShift resources related to Jenkins Node agent image.
-apply-jenkins-agent-nodejs10-angular-build:
-	cd common/jenkins-agents/nodejs10-angular/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
-.PHONY: apply-jenkins-agent-nodejs10-angular-build
+apply-jenkins-agent-nodejs12-angular-build:
+	cd common/jenkins-agents/nodejs12-angular/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-nodejs12-angular-build
 
-## Start build of BuildConfig "jenkins-agent-nodejs10-angular".
-start-jenkins-agent-nodejs10-angular-build:
-	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs10-angular --follow
-.PHONY: start-jenkins-agent-nodejs10-angular-build
+## Start build of BuildConfig "jenkins-agent-nodejs12-angular".
+start-jenkins-agent-nodejs12-angular-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs12-angular --follow
+.PHONY: start-jenkins-agent-nodejs12-angular-build
 
 
 # JENKINS AGENT PYTHON

@@ -3,10 +3,10 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs10-angular:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12-angular:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/': 'test'
+  // 'release/': 'test'
   ]
 ) { context ->
   odsComponentStageImportOpenShiftImageOrElse(context) {
@@ -22,26 +22,26 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh "npm i -g @ionic/cli@6.3.0"
-      sh "npm install"
+      sh 'npm i -g @ionic/cli@6.3.0'
+      sh 'npm install'
       if ('master'.equals(context.gitBranch)) {
-        sh "ionic build --prod"
+        sh 'ionic build --prod'
       } else {
-        sh "ionic build"
+        sh 'ionic build'
       }
     }
-    sh "cp -r www docker/dist"
+    sh 'cp -r www docker/dist'
   }
 }
 
 def stageUnitTest(def context) {
   stage('Unit Test') {
-    sh "npm run test"
+    sh 'npm run test'
   }
 }
 
 def stageLint(def context) {
   stage('Lint') {
-    sh "npm run lint"
+    sh 'npm run lint'
   }
 }

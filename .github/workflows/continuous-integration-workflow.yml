@@ -31,37 +31,21 @@ jobs:
 #             --build-arg nexusPassword=s3cr3t \
 #             .
 
-# jenkins-agent-nodejs10-angular:
-#   name: Jenkins agent NodeJS 10 - Angular
-#   runs-on: ubuntu-18.04
-#   steps:
-#     -
-#       name: Checkout repository
-#       uses: actions/checkout@v2.0.0
-#     -
-#       name: Build docker image
-#       working-directory: common/jenkins-agents/nodejs10-angular/docker
-#       run: |
-#           docker build --tag agent-nodejs10-angular-test \
-#             --build-arg nexusUrl=https://nexus.example.com \
-#             --build-arg nexusAuth=developer:s3cr3t \
-#             .
-
-  jenkins-agent-nodejs12:
-    name: Jenkins agent NodeJS 12
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs12/docker
-        run: |
-            docker build --tag agent-nodejs12-test \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
+jenkins-agent-nodejs12-angular:
+  name: Jenkins agent NodeJS 12 - Angular
+  runs-on: ubuntu-18.04
+  steps:
+    -
+      name: Checkout repository
+      uses: actions/checkout@v2.0.0
+    -
+      name: Build docker image
+      working-directory: common/jenkins-agents/nodejs12-angular/docker
+      run: |
+          docker build --tag agent-nodejs12-angular-test \
+            --build-arg nexusUrl=https://nexus.example.com \
+            --build-arg nexusAuth=developer:s3cr3t \
+            .
 
   jenkins-agent-python:
     name: Jenkins agent Python
