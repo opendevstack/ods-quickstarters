@@ -7,7 +7,7 @@ library("ods-jenkins-shared-library@${odsGitRef}")
 def ionicVersion = "5.4.16"
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12-angular:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${odsImageTag}",
 ) { context ->
 
   stage("update ionic cli") {
