@@ -1,3 +1,4 @@
+import geb.Page
 import geb.navigator.Navigator
 import geb.spock.GebReportingSpec
 
@@ -29,14 +30,15 @@ class SpecHelper {
         return properties
     }
 
-    public static void printEvidenceForPageElement(GebReportingSpec spec, int testStepNumber, Navigator fragment, String description = '', int desiredLevel = -1) {
-        printEvidenceForPageElements(spec, testStepNumber, [ [ 'fragment' : fragment, 'description' :  description] ], desiredLevel)
+    public static void printEvidenceForPageElement(GebReportingSpec spec, int testStepNumber, Class page, Navigator fragment, String description = '', int desiredLevel = -1) {
+        printEvidenceForPageElements(spec, testStepNumber, page, [ [ 'fragment' : fragment, 'description' :  description] ], desiredLevel)
     }
 
-    public static void printEvidenceForPageElements(GebReportingSpec spec, int testStepNumber, List<Map> fragmentsAndDiscriptions, int desiredLevel = -1) {
+    public static void printEvidenceForPageElements(GebReportingSpec spec, int testStepNumber, Class page, List<Map> fragmentsAndDiscriptions, int desiredLevel = -1) {
         println '====================================='
         println "Test Case: ${spec.specificationContext.currentIteration.name}"
         println "Test Step: ${testStepNumber}"
+        println "Page URL: ${page.newInstance().pageUrl}"
 
         if (!fragmentsAndDiscriptions || fragmentsAndDiscriptions.isEmpty()) {
             throw new IllegalArgumentException("Error: evidence fragment is empty!")
