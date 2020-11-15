@@ -30,17 +30,15 @@ class SpecHelper {
         return properties
     }
 
-    // prints contents of a page fragment and its children with additional metadata to stdout
-    public static void printEvidenceForPageElement(GebReportingSpec spec, int testStepNumber, Class page, Navigator fragment, String description = '', int desiredLevel = -1) {
-        printEvidenceForPageElements(spec, testStepNumber, page, [ [ 'fragment' : fragment, 'description' :  description] ], desiredLevel)
+    public static void printEvidenceForPageElement(GebReportingSpec spec, int testStepNumber, Navigator fragment, String description = '', int desiredLevel = -1) {
+        printEvidenceForPageElements(spec, testStepNumber, [ [ 'fragment' : fragment, 'description' :  description] ], desiredLevel)
     }
 
-    // prints contents of a multiple page fragments and their children with additional metadata to stdout
-    public static void printEvidenceForPageElements(GebReportingSpec spec, int testStepNumber, Class page, List<Map> fragmentsAndDiscriptions, int desiredLevel = -1) {
+    public static void printEvidenceForPageElements(GebReportingSpec spec, int testStepNumber, List<Map> fragmentsAndDiscriptions, int desiredLevel = -1) {
         println '====================================='
         println "Test Case: ${spec.specificationContext.currentIteration.name}"
         println "Test Step: ${testStepNumber}"
-        println "Page URL: ${page.newInstance().pageUrl}"
+        println "Page URL: ${spec.getBrowser().getPage().getDriver().getCurrentUrl()}"
 
         if (!fragmentsAndDiscriptions || fragmentsAndDiscriptions.isEmpty()) {
             throw new IllegalArgumentException("Error: evidence fragment is empty!")
