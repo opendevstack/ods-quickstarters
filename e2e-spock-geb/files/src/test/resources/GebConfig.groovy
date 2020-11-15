@@ -7,7 +7,15 @@ def properties = new SpecHelper().getApplicationProperties()
 
 // Selenium driver (True in constructor to use JavaScript)
 driver = {
-    HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.CHROME, true)
+    HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.CHROME, true) {
+      @Override
+      protected WebClient newWebClient(BrowserVersion version) {
+          WebClient webClient = super.newWebClient(version);
+          // don't throw on script errors
+          webClient.getOptions().setThrowExceptionOnScriptError(false);
+          return webClient;
+      }
+    };
 
     def env = System.getenv()
     if(env.HTTP_PROXY) {
