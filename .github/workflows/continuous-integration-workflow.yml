@@ -60,8 +60,8 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-python:
-    name: Jenkins agent Python
+  jenkins-agent-python-rhel7:
+    name: Jenkins agent Python (RHEL7)
     runs-on: ubuntu-18.04
     steps:
       -
@@ -71,11 +71,20 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
         run: |
-            docker build --tag agent-python-test \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusUsername=developer \
-              --build-arg nexusPassword=s3cr3t \
-              .
+          docker build --tag agent-python-test-rhel7 --file Dockerfile.rhel7 .
+
+  jenkins-agent-python-ubi8:
+    name: Jenkins agent Python (UBI8)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/python/docker
+        run: |
+          docker build --tag agent-python-test-ubi8 --file Dockerfile.ubi8 .
 
 # jenkins-agent-scala:
 #   name: Jenkins agent Scala
