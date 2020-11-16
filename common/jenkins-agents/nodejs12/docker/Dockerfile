@@ -75,8 +75,6 @@ RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
     yarn config set registry $nexusUrl/repository/npmjs/ -g && \
-    npm install -g @angular/cli@8.0.1 --unsafe-perm=true --allow-root && \
-    npm install -g cypress@3.3.1 --unsafe-perm=true --allow-root > /dev/null && \
     npm --version && \
     ng version && \
     cypress verify
