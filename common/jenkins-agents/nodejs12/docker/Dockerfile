@@ -2,12 +2,12 @@ FROM opendevstackorg/ods-jenkins-agent-base-centos7:latest
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-agent-nodejs-rhel7-docker" \
-      name="openshift3/jenkins-agent-nodejs-rhel7" \
-      version="3.6" \
-      architecture="x86_64" \
-      io.k8s.display-name="Jenkins agent Nodejs" \
-      io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins agent base image." \
-      io.openshift.tags="openshift,jenkins,agent,nodejs"
+    name="openshift3/jenkins-agent-nodejs-rhel7" \
+    version="3.6" \
+    architecture="x86_64" \
+    io.k8s.display-name="Jenkins agent Nodejs" \
+    io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins agent base image." \
+    io.openshift.tags="openshift,jenkins,agent,nodejs"
 
 ARG nexusUrl
 ARG nexusAuth
@@ -21,6 +21,39 @@ ENV NODEJS_VERSION=12 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+# install google-chrome (for angular)
+RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
+    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    yum makecache
+
+ADD https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm /root/google-chrome-stable_current_x86_64.rpm
+RUN yum -y install redhat-lsb libXScrnSaver
+RUN yum -y install /root/google-chrome-stable_current_x86_64.rpm && \
+    ln -s /usr/lib64/libOSMesa.so.8 /opt/google/chrome/libosmesa.so && \
+    yum clean all && \
+    dbus-uuidgen > /etc/machine-id
+
+
+# Install cypress dependencies
+# Please note: xorg-x11-server-Xvfb is not available on RHEL via yum anymore, so "RUN yum install -y xorg-x11-server-Xvfb" won't work.
+#   Therefore this Dockerfile uses the version from CentOS instead.
+ADD http://mirror.centos.org/centos/7/os/x86_64/Packages/xorg-x11-server-Xvfb-1.20.4-10.el7.x86_64.rpm /root/xorg-x11-server-Xvfb.x86_64.rpm
+RUN yum install -y /root/xorg-x11-server-Xvfb.x86_64.rpm && \
+    yum install -y gtk2-2.24* && \
+    yum install -y libXtst* && \
+    yum install -y libXScrnSaver* && \
+    yum install -y GConf2* && \
+    yum install -y alsa-lib* && \
+    yum install -y nss-devel libnotify-devel gnu-free-sans-fonts && \
+    yum clean all -y
+# libXScrnSaver* provides libXss
+# GConf2* provides libgconf-2
+# alsa-lib* provides libasound
+
+
+# Install NodeJS + Yarn + Angular CLI
+# installation details see: https://www.softwarecollections.org/en/
+# and the base image relies on scl_enable
 COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 
 # Install NodeJS
@@ -42,10 +75,7 @@ RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
     yarn config set registry $nexusUrl/repository/npmjs/ -g && \
-    echo node version: $(node --version) && \
-    echo npm version: $(npm --version) && \
-    echo npx version: $(npx --version) && \
-    echo yarn version: $(yarn --version)
+    npm --version
 
 RUN chgrp -R 0 $HOME && \
     chmod -R g=u $HOME

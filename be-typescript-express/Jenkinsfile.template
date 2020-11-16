@@ -3,10 +3,10 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs10-angular:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/': 'test'
+  // 'release/': 'test'
   ]
 ) { context ->
   odsComponentStageImportOpenShiftImageOrElse(context) {
@@ -20,17 +20,17 @@ odsComponentPipeline(
 
 def stageBuild(def context) {
   stage('Build') {
-    sh "npm install"
-    sh "npm run build"
-    sh "mkdir -p docker/dist"
-    sh "cp -r dist docker/dist"
-    sh "cp -r node_modules docker/dist/node_modules"
+    sh 'npm install'
+    sh 'npm run build'
+    sh 'mkdir -p docker/dist'
+    sh 'cp -r dist docker/dist'
+    sh 'cp -r node_modules docker/dist/node_modules'
   }
 }
 
 def stageUnitTest(def context) {
   stage('Unit Test') {
-    sh "npm run test"
+    sh 'npm run test'
 
     if (false) {
       junit 'artifacts/xunit.xml'

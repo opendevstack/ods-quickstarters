@@ -72,7 +72,7 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs10-angular[Nodejs10-Angular builder agent] Jenkins builder agent.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs12[Nodejs12 builder agent] Jenkins builder agent.
 
 == Known limitations
 
