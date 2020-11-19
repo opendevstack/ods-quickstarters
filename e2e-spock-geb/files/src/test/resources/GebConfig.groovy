@@ -1,4 +1,5 @@
 import com.gargoylesoftware.htmlunit.BrowserVersion
+import com.gargoylesoftware.htmlunit.WebClient
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.Proxy
 
