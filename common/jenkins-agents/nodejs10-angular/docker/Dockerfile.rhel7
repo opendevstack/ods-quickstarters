@@ -15,7 +15,7 @@ LABEL com.redhat.component="jenkins-agent-nodejs-rhel7-docker" \
 ARG nexusUrl
 ARG nexusAuth
 
-ENV NODEJS_VERSION=8.11 \
+ENV NODEJS_VERSION=10 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     BASH_ENV=/usr/local/bin/scl_enable \
