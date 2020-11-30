@@ -27,22 +27,22 @@ jobs:
         run: |
           docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 .
 
-# jenkins-agent-maven:
-#   name: Jenkins agent Maven
-#   runs-on: ubuntu-18.04
-#   steps:
-#     -
-#       name: Checkout repository
-#       uses: actions/checkout@v2.0.0
-#     -
-#       name: Build docker image
-#       working-directory: common/jenkins-agents/maven/docker
-#       run: |
-#           docker build --tag agent-maven-test \
-#             --build-arg nexusUrl=https://nexus.example.com \
-#             --build-arg nexusUsername=developer \
-#             --build-arg nexusPassword=s3cr3t \
-#             .
+  jenkins-agent-maven:
+    name: Jenkins agent Maven (UBI8)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/maven/docker
+        run: |
+            docker build --tag agent-maven-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusUsername=developer \
+              --build-arg nexusPassword=s3cr3t \
+              .
 
 # jenkins-agent-nodejs10-angular:
 #   name: Jenkins agent NodeJS 10 - Angular
