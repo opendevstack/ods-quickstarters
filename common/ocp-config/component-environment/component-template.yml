@@ -86,7 +86,6 @@ objects:
         type: Docker
         dockerStrategy: {}
       successfulBuildsHistoryLimit: 5
-      triggers: []
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
