@@ -28,8 +28,8 @@ RUN dbus-uuidgen > /etc/machine-id
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
 COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
 RUN yum repolist \
-    && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
-    && yum install -y google-chrome-stable \
+    && yum install -y --enablerepo centos-baseos,centos-appstream xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
+    && yum install -y --enablerepo centos-baseos,centos-appstream,google-chrome google-chrome-stable \
     && yum clean all -y
 
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
