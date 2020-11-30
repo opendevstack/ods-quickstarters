@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://www.example.com",
+  "baseUrl": "https://www.w3schools.com",
   "fixturesFolder": "fixtures",
   "integrationFolder": "build/tests/acceptance",
   "pluginsFile": "plugins/index.js",
