@@ -26,3 +26,4 @@
 .vscode
 
 test-setup.bin
+/tests/
