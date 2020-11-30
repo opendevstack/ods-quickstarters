@@ -16,29 +16,34 @@ ARG nexusUrl
 ARG nexusUsername
 ARG nexusPassword
 
-ENV MAVEN_VERSION=3.3 \
-    BASH_ENV=/usr/local/bin/scl_enable \
+ENV BASH_ENV=/usr/local/bin/scl_enable \
     ENV=/usr/local/bin/scl_enable \
     PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
     HOME=/home/jenkins \
     GRADLE_USER_HOME=/home/jenkins/.gradle
 
-#set JAVA_HOME
+# Install Java
+RUN yum install -y java-11-openjdk-devel && \
+    yum clean all -y && \
+        exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
+        alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
+        alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
+        java -version && \
+        javac -version
 ENV JAVA_HOME=/usr/lib/jvm/jre
 
 # Install Maven
-RUN yum install -y wget && \
-    wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo && \
-    sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo && \
-    INSTALL_PKGS="java-11-openjdk-devel apache-maven*" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    yum clean all -y && \
+ENV MAVEN_VERSION=3.5.4
+ENV BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
+RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
+    curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
+    tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 && \
+    rm -f /tmp/apache-maven.tar.gz && \
+    ln -s /usr/share/maven/bin/mvn /usr/bin/mvn && \
     mkdir -p $HOME/.m2 && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
-    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
-    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
-    java -version && \
-    javac -version
+    mvn --version
+ENV MAVEN_HOME=/usr/share/maven
+ENV MAVEN_CONFIG=$HOME/.m2
 
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
