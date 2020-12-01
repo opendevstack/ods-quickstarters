@@ -44,6 +44,23 @@ jobs:
               --build-arg nexusPassword=s3cr3t \
               .
 
+  jenkins-agent-maven-rhel7:
+    name: Jenkins agent Maven (RHEL7)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/maven/docker
+        run: |
+          docker build --tag agent-maven-test-rhel7 --file Dockerfile.rhel7 \
+            --build-arg nexusUrl=https://nexus.example.com \
+            --build-arg nexusUsername=developer \
+            --build-arg nexusPassword=s3cr3t \
+            .
+
   jenkins-agent-nodejs12-rhel7:
     name: Jenkins agent NodeJS 12 (RHEL7)
     runs-on: ubuntu-18.04

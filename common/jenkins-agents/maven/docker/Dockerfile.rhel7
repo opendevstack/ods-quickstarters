@@ -25,11 +25,11 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
 # Install Java
 RUN yum install -y java-11-openjdk-devel && \
     yum clean all -y && \
-        exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
-        alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
-        alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
-        java -version && \
-        javac -version
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
+    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
+    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
+    java -version && \
+    javac -version
 ENV JAVA_HOME=/usr/lib/jvm/jre
 
 # Install Maven
