@@ -68,4 +68,3 @@ objects:
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
       type: Docker
     successfulBuildsHistoryLimit: 5
-    triggers: []
