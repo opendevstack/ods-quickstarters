@@ -28,6 +28,8 @@ plugins {
 }
 
 ext['spring-restdocs.version'] = '2.0.2.RELEASE'
+// When a test fail we can continue or fail the stage
+ext['CONTINUE_WHEN_TEST_FAIL'] = true
 
 apply plugin: 'io.spring.dependency-management'
 
@@ -76,6 +78,7 @@ test {
     outputs.dir snippetsDir
     useJUnitPlatform()
     finalizedBy jacocoTestReport
+    ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
 }
 
 asciidoctor {
