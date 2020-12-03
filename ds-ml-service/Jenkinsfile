@@ -1,11 +1,21 @@
-def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
-def odsGitRef = env.ODS_GIT_REF ?: 'master'
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
 
-library("ods-jenkins-shared-library@${odsGitRef}")
+node {
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+}
+
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-python:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-python:${agentImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
