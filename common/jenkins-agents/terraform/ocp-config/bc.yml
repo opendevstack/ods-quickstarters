@@ -45,7 +45,7 @@ objects:
     source:
       contextDir: common/jenkins-agents/terraform
       git:
-        ref: ${ODS_GIT_REF}
+        ref: feature/add-aws-terraform-qs
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
