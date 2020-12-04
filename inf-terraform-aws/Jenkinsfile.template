@@ -1,0 +1,322 @@
+/* generated jenkins file used for building and deploying AWS-infrastructure in projects */
+
+def final projectId = '@project_id@'
+def final componentId = '@component_id@'
+def final credentialsId = "${projectId}-cd-cd-user-with-password"
+
+def sharedLibraryRepository
+def dockerRegistry
+
+// QS Variables
+def preFix
+def stackConfig
+def stackdestroy = false
+def stackdeploy  = false
+
+def awsAccessKeyId
+def awsSecretAccessKey
+def awsRegion
+
+def consulHttpAddr  
+def consulHttpToken 
+
+def awsAccessKeyIdTesting     
+def awsSecretAccessKeyTesting 
+def awsRegionTesting          
+
+def git_login_url
+def git_login_port
+def tfvarsjsonfile
+def tfvarsjson
+def tfconsulpath
+
+@Library('ods-jenkins-shared-library@master') _
+
+odsComponentPipeline(
+  imageStreamTag: 'ods/jenkins-agent-terraform:latest',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    // 'release/': 'test'
+  ],
+  podVolumes: [
+    persistentVolumeClaim(mountPath: "/tmp/.terraform-state", claimName: "terraform-state", readOnly: false)
+  ]
+) { context ->
+
+    stageGetConfig(context)
+    stageInit(context)
+    stageDestroy(context)
+    stageTest(context)
+    stagePlan(context)
+    stageDeploy(context)
+    stageSmoke(context)
+    stageReport(context)
+
+  // odsComponentStageImportOpenShiftImageOrElse(context) {
+    /*
+    * if you want to introduce scanning, uncomment the below line
+    * and change the type in metadata.yml to 'ods'
+    *
+    * odsComponentStageScanWithSonar(context)
+    */
+  // odsComponentStageBuildOpenShiftImage(context)
+  //}
+  // odsComponentStageRolloutOpenShiftDeployment(context)
+}
+
+def getEnvSettings(def consulPath, def consulHttpAddr, def workspace, def region ) {
+  def config = [
+    "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
+    "GIT_LOGIN_URL=git@bitbucket.biscrum.com",
+    "GIT_LOGIN_PORT=7999"
+  ]
+
+  if (consulPath) {
+    config << "CONSUL_PATH=${consulPath}"
+  }
+  if (consulHttpAddr) {
+    config << "CONSUL_HTTP_ADDR=${consulHttpAddr}"
+  }
+  if (workspace) {
+    config << "TF_WORKSPACE=${workspace}"
+  }
+  if (region) {
+    config << "AWS_DEFAULT_REGION=${region}"
+  }
+  // for (i = 0; i < config.size(); i++) {println "|"+ config.get(i)}
+  return config
+}
+
+//read and decide stage-environment
+def stageGetConfig(def context) {
+  stage('GetConfig') {
+
+    if (context.environment) {
+      environmentFile         = readYaml file: "./environments/${context.environment}.yml"   
+      environmentFileTesting  = readYaml file: "./environments/testing.yml"
+    
+      stackdestroy = false
+      stackdeploy  = true
+    
+      awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
+      awsSecretAccessKey  = environmentFile.credentials.secret.toLowerCase()
+      awsRegion           = environmentFile.region.toLowerCase() 
+    
+      awsAccessKeyIdTesting     = environmentFileTesting.credentials.key.toLowerCase()
+      awsSecretAccessKeyTesting = environmentFileTesting.credentials.secret.toLowerCase()
+      awsRegionTesting          = environmentFileTesting.region.toLowerCase()
+
+      consulHttpAddr  = environmentFile.consul.httpaddr.toLowerCase()
+      consulHttpToken = environmentFile.consul.httptoken.toLowerCase()
+
+      echo "Stack Environment ${context.environment} "
+      echo "AWS Access Key ID ${awsAccessKeyId}"  
+      echo "AWS Secret Access ${awsSecretAccessKey}"  
+      echo "AWS Region        ${awsRegion}"
+
+      // handle environment specific variables
+      // copy json from /environments/${context.environment}.auto.tfvars.json to /"
+      if (fileExists("./environments/${context.environment}.json")) {
+        withEnv(["VARIABLESFILE=./environments/${context.environment}.json"])
+        {
+          def statusVarEnv = sh(script: '''
+            cp $VARIABLESFILE env.auto.tfvars.json && echo "Variables file $VARIABLESFILE" ''', 
+          returnStatus: true)
+          if (statusVarEnv != 0) {
+            error "Can not copy json file!"
+          }
+        }
+      }
+    } else { error "No environment specified!"}
+  }
+}
+
+//initialize pre-requisites
+def stageInit(def context) {
+  if (stackdestroy || stackdeploy) 
+  {
+    stage('Init') {
+      withCredentials([
+        sshUserPrivateKey(credentialsId: '@project_id@-cd-gitlab-coe', keyFileVariable: 'GITLAB_COE')
+      ])
+      {
+        def workspace = env.WORKSPACE
+        def statusTF = sh(script: '''
+              make create-tfvars''', 
+              returnStatus: true)
+        if (statusTF != 0) {
+          error "Creation of tfvars failed!"
+        }
+        tfvarsjson = readJSON file: './terraform.tfvars.json'
+        tfconsulpath="stacks/v1/"+tfvarsjson['meta_computer_system_name']+"/"+tfvarsjson['name']+"/"+tfvarsjson['meta_environment_type']+"/terraform-state"
+        git_login_url  = "git@bitbucket.biscrum.com"
+        git_login_port = 7999
+        println tfconsulpath
+
+        def status = sh(script: '''
+          mkdir $HOME/.ssh && \
+          mv -f -v $GITLAB_COE $HOME/.ssh/id_rsa && \
+          chmod 700 ~/.ssh && \
+          chmod 400 ~/.ssh/id_rsa*''',
+          returnStatus: true) 
+        if (status != 0) {
+          error "Init failed!"
+        }
+      }
+    }
+  } else { print "Stage Init has been skipped."}
+}
+
+//will be removed
+def stageDestroy(def context) {
+  if (stackdestroy == true) {
+    stage('Destroy')
+    {
+      withCredentials([
+        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
+        string(credentialsId: awsRegion, variable: 'AWS_DEFAULT_REGION'),
+        string(credentialsId: consulHttpAddr, variable: 'CONSUL_HTTP_ADDR'),
+        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+       ])
+      {
+        withEnv(["CONSUL_PATH=${tfconsulpath}",
+          "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
+          "TF_WORKSPACE=${tfvarsjson['meta_environment_type']}",
+          "GIT_LOGIN_URL=${git_login_url}",
+          "GIT_LOGIN_PORT=${git_login_port}"
+        ])
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
+            make destroy''', 
+            returnStatus: true)
+          if (status != 0) {
+            error "Test failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Destroy has been skipped."}
+}
+
+def stageReport(def context) {
+  if (stackdeploy == true) {
+    stage('Report')
+    {      
+      def status = sh(script: '''
+          make install-report ''', 
+          returnStatus: true)
+      if (status != 0) {
+        error "Report failed!"
+      }  
+      dir("reports/install") {
+        sh "ls"
+      }   
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'reports/install/*.log, reports/install/data/inspec/post-install/*.xml' , allowEmpty: true)  
+    }
+  } else { print "Stage Report has been skipped."}
+}
+
+def stageSmoke(def context) {
+  if (stackdeploy == true) {
+    stage('Smoke')
+    {
+      withCredentials([
+        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
+        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+     ])
+      {
+        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegionTesting))
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make smoke-test ''', 
+            returnStatus: true)
+          if (status != 0) {
+            error "Smoke-Test failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Smoke Test port has been skipped."}
+}
+
+//execute make test of the project
+def stageTest(def context) {
+  if (stackdeploy == true) {
+    stage('Test') {
+      withCredentials([
+        string(credentialsId: awsAccessKeyIdTesting, variable: 'AWS_ACCESS_KEY_ID'),
+        string(credentialsId: awsSecretAccessKeyTesting, variable: 'AWS_SECRET_ACCESS_KEY'),
+        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+      ])
+      {
+        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, null, awsRegionTesting))
+        {
+          def status = sh(script: '''
+            ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
+            eval \"\$(rbenv init -)\" && \
+            make test''', 
+            returnStatus: true)
+          if (status != 0) {
+            error "Test failed!"
+          }   
+        }
+      } 
+    } 
+  } else { print "Stage Test has been skipped." }
+}
+
+//execute make plan of the project
+def stagePlan(def context) {
+  if (stackdeploy == true) {
+    stage('Plan')
+    {    
+      withCredentials([
+        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
+        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')       
+       ])
+      {
+        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegion))
+      {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make plan''',
+            returnStatus: true)
+          if (status != 0) {
+            error "Plan failed!"
+          }
+        }
+      } 
+    }
+  } else { print "Stage Plan has been skipped." }
+}
+
+//execute make deploy of the stack
+def stageDeploy(def context) {
+  if (stackdeploy == true) {
+    stage('Deploy') {  
+      withCredentials([
+        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
+        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')       
+     ])
+      {
+        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegion))
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make deploy''',
+            returnStatus: true) 
+          if (status != 0) {
+            error "Deploy failed!"
+          }
+        }
+      } 
+    }
+  } else { print "Stage Deploy has been skipped." }
+}

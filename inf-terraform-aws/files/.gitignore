@@ -1,0 +1,14 @@
+.bundle
+.kitchen
+.terraform
+.terraform-data.json
+.vscode
+*.auto.tfvars*
+inspec.lock
+outputs.json
+terraform.tfvars*
+terraform.tfstate*
+tfplan
+vendor
+test/integration/*/files/*.json
+.venv

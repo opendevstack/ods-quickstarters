@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Installation Report for '{{ metadata.name }}'</title>
+  <link href="./template/css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="page">
+    <table id="heading">
+      <tr>
+        <td>
+          <table>
+            <tr>
+              <th colspan="2">
+                Stack Information
+              </th>
+            </tr>
+            <tr>
+              <td class="lean" style="vertical-align: top;">Name:</td>
+              <td class="content-wrappable">{{ metadata.name }}</td>
+            </tr>
+            <tr>
+              <td class="lean" style="vertical-align: top;">Description:</td>
+              <td class="content-wrappable">{{ metadata.description }}</td>
+            </tr>
+            <tr>
+              <td class="lean" style="vertical-align: top;">Version:</td>
+              <td class="content-wrappable">{{ metadata.version }}</td>
+            </tr>
+            <tr>
+              <td class="lean">Date Created:</td>
+              <td class="content-wrappable">{{ metadata.date_created }}</td>
+            </tr>
+          </table>
+        </td>
+        <td id="logo" class="lean">
+          <img src="./template/images/bi_logo_155x43.gif" />
+        </td>
+      </tr>
+    </table>
+
+    <div id="blueband">&nbsp;</div>
+
+    <h1>Installation Report for '{{ metadata.name }}'</h1>
+
+    <h2>Table of Contents</h2>
+    <ol class="table-of-contents">
+      <li><a href="#introduction">Introduction</a></li>
+      <ol>
+        <li><a href="#introduction-inputs">Inputs</a></li>
+        <li><a href="#introduction-outputs">Outputs</a></li>
+        <li><a href="#introduction-modules">Modules</a></li>
+      </ol>
+      <li><a href="#installation">Installation</a></li>
+      <ol>
+        <li><a href="#installation-inputs">Input Values</a></li>
+        <li><a href="#installation-outputs">Output Values</a></li>
+      </ol>
+      <li><a href="#diagnostics-and-testing">Diagnostics and Testing</a></li>
+      <ol>
+        <li><a href="#diagnostics-and-testing-pre-install-tests">Pre-Installation Tests</a></li>
+        <ol>
+          <li><a href="#diagnostics-and-testing-pre-install-tests-blueprints">Blueprints</a></li>
+          <ol>
+            {{ #blueprint_test_reports }}
+            <li><a href="#diagnostics-and-testing-pre-install-tests-{{ name }}">{{ name }}</a></li>
+            {{ /blueprint_test_reports }}
+          </ol>
+          <li><a href="#diagnostics-and-testing-pre-install-tests-stack">Stack</a></li>
+        </ol>
+        <li><a href="#diagnostics-and-testing-post-install-tests">Post-Installation Tests</a></li>
+      </ol>
+      <li><a href="#conclusion-statement">Conclusion Statement</a></li>
+      <li><a href="#definitions-and-abbreviations">Definitions and Abbreviations</a></li>
+      <ol>
+        <li><a href="#definitions">Definitions</a></li>
+        <li><a href="#abbreviations">Abbreviations</a></li>
+      </ol>
+      <li><a href="#reference-documents">Reference Documents</a></li>
+    </ol>
+  </div>
+
+  <div class="page">
+    <!-- Introduction -->
+    <h2 id="introduction"><span>1</span>Introduction</h2>
+
+    <p>A <em>Blueprint</em> is a configurable and reusable infrastructure-as-code artefact. Practical examples include foundational infrastructure services, such as compute, networking, and storage, but may as well be of arbitrary higher-level nature, such as an AWS Lambda function.</p>
+    <p>A <em>Stack</em> is a composition of reusable Blueprints (potentially in combination with other random infrastructure code) to provide ready-to-use infrastructure for your digital application.</p>
+
+    <p>This document describes the installation of the following stack:</p>
+
+    <table>
+      <tr>
+        <td class="header lean">Name</td>
+        <td>{{ metadata.name }}</td>
+      </tr>
+      <tr>
+        <td class="header lean">Description</td>
+        <td>{{ metadata.description }}</td>
+      </tr>
+      <tr>
+        <td class="header lean">Version</td>
+        <td>{{ metadata.version }}</td>
+      </tr>
+      <tr>
+        <td class="header lean">URL</td>
+        <td>{{ metadata.url }}</td>
+      </tr>
+      <tr>
+        <td class="header lean">Git URL</td>
+        <td>{{ metadata.git_uri }}</td>
+      </tr>
+      <tr>
+        <td class="header lean">Plan URL</td>
+        <td>tbd.</td>
+      </tr>
+      <tr>
+        <td class="header lean">Date Created</td>
+        <td>{{ metadata.date_created }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Introduction: Inputs -->
+    <h3 id="introduction-inputs"><span>1.1</span>Inputs</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      {{ #terraform_docs.inputs }}
+      <tr>
+        <td class="lean">{{ name }}</td>
+        <td class="content-wrappable">{{ description }}</td>
+      </tr>
+      {{ /terraform_docs.inputs }}
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Introduction: Outputs -->
+    <h3 id="introduction-outputs"><span>1.2</span>Outputs</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      {{ #terraform_docs.outputs }}
+      <tr>
+        <td class="lean">{{ name }}</td>
+        <td class="content-wrappable">{{ description }}</td>
+      </tr>
+      {{ /terraform_docs.outputs }}
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Introduction: Modules -->
+    <h3 id="introduction-modules"><span>1.3</span>Modules</h3>
+    <table>
+      <tr>
+        <th>Source</th>
+      </tr>
+      {{ #terraform_modules }}
+      <tr>
+        <td>{{ Source }} {{ Version }}</td>
+      </tr>
+      {{ /terraform_modules }}
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Installation -->
+    <h2 id="installation"><span>2</span>Installation</h2>
+
+    <!-- Installation: Input Names/Values -->
+    <h3 id="installation-inputs"><span>2.1</span>Input Values</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+      {{ #terraform_install.inputs }}
+      <tr>
+        <td class="lean">{{ key }}</td>
+        <td class="content-wrappable">{{ value }}</td>
+      </tr>
+      {{ /terraform_install.inputs }}
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Installation: Outputs Names/Values -->
+    <h3 id="installation-outputs"><span>2.2</span>Output Values</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+      {{ #terraform_install.outputs }}
+      <tr>
+        <td class="lean">{{ key }}</td>
+        <td class="content-wrappable">{{ value.value }}</td>
+      </tr>
+      {{ /terraform_install.outputs }}
+    </table>
+  </div>
+
+  <!-- Diagnostics and Testing -->
+  <h1 id="diagnostics-and-testing"><span>3</span>Diagnostics and Testing</h1>
+
+  <p>This section documents the results of comparing the actual state of a live stack deployment against a desired state.</p>
+
+  <!-- Diagnostics and Testing: Pre-Install Tests -->
+  <h2 id="diagnostics-and-testing-pre-install-tests"><span>3.1</span>Pre-Installation Tests</h2>
+
+  <!-- Diagnostics and Testing: Pre-Install Tests: Blueprints -->
+  <h3 id="diagnostics-and-testing-pre-install-tests-blueprints"><span>3.1.1</span>Blueprints</h3>
+
+  <p>The values used to test the following blueprints are for testing purposes only.</p>
+
+  {{ #blueprint_test_reports }}
+  <h4 id="diagnostics-and-testing-pre-install-tests-{{ name }}">{{ name }}</h4>
+
+  {{ #data.inspec.profiles}}
+  {{ #controls}}
+  <div class="page">
+    <h5>{{ title }}</h5>
+    <p>{{ desc }}</p>
+
+    <table>
+      <tr>
+        <th>Description / Expected Result</th>
+        <th class="lean">Start Time</th>
+        <th class="lean">Status</th>
+      </tr>
+      {{ #results }}
+      <tr>
+        <td class="content-wrappable">{{ code_desc }}</td>
+        <td class="right">{{ start_time }}</td>
+        <td class="center">{{ status }}</td>
+      </tr>
+      {{ /results }}
+    </table>
+
+    <table class="results">
+      <tr>
+        <td class="lean"><strong>Actual Results</strong></td>
+        <td>All tests successful (no deviations or failures).</td>
+        <td class="lean">
+          <input type="checkbox" checked="checked" /><label>Pass</label><br/>
+          <input type="checkbox" disabled="disabled" /><label>Fail</label>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Comments:</strong></td>
+        <td colspan="2"><em>n/a</em></td>
+      </tr>
+    </table>
+  </div>
+  {{ /controls }}
+  {{ /data.inspec.profiles }}
+  {{ /blueprint_test_reports }}
+
+  <div class="page">
+    <!-- Diagnostics and Testing: Pre-Install Tests: Stack -->
+    <h3 id="diagnostics-and-testing-pre-install-tests-stack"><span>3.1.2</span>Stack</h3>
+
+    <p>The values used to test the stack are for testing purposes only.</p>
+
+    {{ #inspec.pre-install.profiles }}
+    {{ #controls }}
+    <h4>{{ title }}</h4>
+    <p>{{ desc }}</p>
+
+    <table>
+      <tr>
+        <th>Description / Expected Result</th>
+        <th class="lean">Start Time</th>
+        <th class="lean">Status</th>
+      </tr>
+      {{ #results }}
+      <tr>
+        <td class="content-wrappable">{{ code_desc }}</td>
+        <td class="right">{{ start_time }}</td>
+        <td class="center">{{ status }}</td>
+      </tr>
+      {{ /results }}
+    </table>
+
+    {{ /controls }}
+    {{ /inspec.pre-install.profiles }}
+  </div>
+
+  <div class="page">
+    <!-- Diagnostics and Testing: Post-Install Tests -->
+    <h2 id="diagnostics-and-testing-post-install-tests"><span>3.2</span>Post-Installation Tests</h2>
+
+    {{ #inspec.post-install.profiles }}
+    {{ #controls }}
+    <h3>{{ title }}</h3>
+    <p>{{ desc }}</p>
+
+    <table>
+      <tr>
+        <th>Description / Expected Result</th>
+        <th class="lean">Start Time</th>
+        <th class="lean">Status</th>
+      </tr>
+      {{ #results }}
+      <tr>
+        <td class="content-wrappable">{{ code_desc }}</td>
+        <td class="right">{{ start_time }}</td>
+        <td class="center">{{ status }}</td>
+      </tr>
+      {{ /results }}
+    </table>
+
+    {{ /controls }}
+    {{ /inspec.post-install.profiles }}
+
+    <table class="results">
+      <tr>
+        <td class="lean"><strong>Actual Results</strong></td>
+        <td>All tests successful (no deviations or failures).</td>
+        <td class="lean">
+          <input type="checkbox" checked="checked" /><label>Pass</label><br/>
+          <input type="checkbox" disabled="disabled" /><label>Fail</label>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Comments:</strong></td>
+        <td colspan="2"><em>n/a</em></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="page">
+    <!-- Conclusion Statement -->
+    <h1 id="conclusion-statement"><span>4</span>Conclusion Statement</h1>
+
+    <p>All deliverables of the Technical Installation Plan have been successfully executed and the signature of this Report verifies that
+the system has been installed according to all requirements stated in the Installation Plan or, in the event the requirements
+are not met, that the deviations and/or failures are properly documented and addressed.</p>
+  </div>
+
+  <div class="page">
+    <!-- Definitions and Abbreviations -->
+    <h1 id="definitions-and-abbreviations"><span>5</span>Definitions and Abbreviations</h1>
+
+    <!-- Definitions and Abbreviations: Definitions -->
+    <h2 id="definitions"><span>5.1</span>Definitions</h2>
+
+    <table>
+      <tr>
+        <th class="lean">Term</th>
+        <th>Definition</th>
+      </tr>
+      <tr>
+        <td>Git</td>
+        <td class="content-wrappable">A distributed version control system, e.g., Bitbucket, GitHub, and GitLab.</td>
+      </tr>
+    </table>
+
+    <!-- Definitions and Abbreviations: Abbreviations -->
+    <h2 id="abbreviations"><span>5.2</span>Abbreviations</h2>
+
+    <table>
+      <tr>
+        <th class="lean">Abbreviation</th>
+        <th>Meaning</th>
+      </tr>
+      <tr>
+        <td>URL</td>
+        <td class="content-wrappable">A uniform resource locator (URL) is the address of a resource on the Internet.</td>
+      </tr>
+    </table>
+
+    <p>See <a href="https://docs.aws.amazon.com/general/latest/gr/glos-chap.html">https://docs.aws.amazon.com/general/latest/gr/glos-chap.html</a> for a list of AWS-specific definitions and abbreviations.</p>
+
+    <!-- Reference Documents -->
+    <h1 id="reference-documents"><span>6</span>Reference Documents</h2>
+
+    <table>
+      <tr>
+        <th class="lean">Document ID</th>
+        <th style="width: 100%;">Name</th>
+      </tr>
+      <tr>
+        <td class="right"><em>n/a</em></td>
+        <td><em>n/a</em></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

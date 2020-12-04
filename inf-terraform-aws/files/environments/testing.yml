@@ -1,0 +1,10 @@
+region: eu-west-1 
+  
+credentials:
+  key: awsinblah-cd-aws-access-key-id-testing
+  secret: awsinblah-cd-aws-secret-access-key-testing
+           
+consul:
+  httpaddr: https://consul-coe-cicd.inh-apps.eu.boehringer.com
+  httptoken: awsinblah-cd-consul-http-token
+

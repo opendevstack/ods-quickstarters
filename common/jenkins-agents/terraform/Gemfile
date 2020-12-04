@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+gem 'activesupport'
+gem 'inspec'
+gem 'kitchen-terraform', '~> 5.5.0'
+gem 'test-kitchen'
+gem 'winrm', '2.2.3'
+gem 'rspec-retry'
+
+# Azure SDK is still in PREVIEW thus locked and updated manually from time to time
+# gem 'azure_sdk', '0.28.0'
+

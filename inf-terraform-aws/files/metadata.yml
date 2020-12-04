@@ -1,0 +1,6 @@
+---
+name: AWS
+description: "Amazon Web Services (AWS) offers reliable, scalable, and inexpensive cloud computing services. Free to join, pay only for what you use."
+supplier: https://aws.amazon.com/
+version: x.x
+type: ods-infra
