@@ -1,6 +1,6 @@
-# AWS PLAIN (aws-plain)
+# AWS Quickstarter Docker image (inf-terraform-aws)
 
-Documentation is located in our [official documentation](https://confluence.biscrum.com/pages/viewpage.action?pageId=151088969)
+Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 
-
+Please update documentation in the [antora page directory](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
 

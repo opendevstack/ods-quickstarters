@@ -8,17 +8,14 @@ parameters:
   value: opendevstack
 - name: REPO_BASE
   required: true
-- name: NEXUS_URL
-  required: true
-- name: NEXUS_USERNAME
-  required: true
-- name: NEXUS_PASSWORD
-  required: true
 - name: ODS_IMAGE_TAG
   required: true
   value: latest
 - name: ODS_GIT_REF
   required: true
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.rhel7
+  description: Dockerfile variant to use
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -52,17 +49,9 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        dockerfilePath: Dockerfile.rhel7
-        env:
-          - name: NEXUS_HOST
-            value: ${NEXUS_URL}
-          - name: NEXUS_USERNAME
-            value: ${NEXUS_USERNAME}
-          - name: NEXUS_PASSWORD
-            value: ${NEXUS_PASSWORD}
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
       type: Docker
-    triggers: []
-
+    successfulBuildsHistoryLimit: 5
