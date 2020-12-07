@@ -28,10 +28,11 @@ odsComponentPipeline(
     odsComponentStageBuildOpenShiftImage(context, [resourceName: trainingServiceName, buildArgs: buildArgs])
   }
   def trainingDeployInfo = odsComponentStageRolloutOpenShiftDeployment(context, [resourceName: trainingServiceName])
+  def trainingDeployFirstPodName = trainingDeployInfo['DeploymentConfig'][trainingServiceName][0].podName
 
-  stageTrainingUnitTests(context, trainingDeployInfo.podName)
-  stageTraining(context, trainingDeployInfo.podName)
-  stageTrainingIntegrationTests(context, trainingDeployInfo.podName)
+  stageTrainingUnitTests(context, trainingDeployFirstPodName)
+  stageTraining(context, trainingDeployFirstPodName)
+  stageTrainingIntegrationTests(context, trainingDeployFirstPodName)
   odsComponentStageScanWithSonar(context)
 
   odsComponentStageImportOpenShiftImageOrElse(context, [resourceName: predictionServiceName]) {
