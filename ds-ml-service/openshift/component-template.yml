@@ -179,6 +179,8 @@ objects:
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
+      labels:
+        deploymentconfig: '${COMPONENT}-prediction-service'
       name: '${COMPONENT}-prediction-service'
     spec:
       replicas: 1
@@ -262,6 +264,8 @@ objects:
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
+      labels:
+        deploymentconfig: '${COMPONENT}-training-service'
       name: '${COMPONENT}-training-service'
     spec:
       replicas: 1
