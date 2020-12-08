@@ -16,7 +16,7 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Deploy to OpenShift (ml-training-service)",
+    "stage": "Deploy to OpenShift (deploymentconfig=ml-training-service)",
     "status": "SUCCESS"
   },
   {
@@ -40,7 +40,7 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Deploy to OpenShift (ml-prediction-service)",
+    "stage": "Deploy to OpenShift (deploymentconfig=ml-prediction-service)",
     "status": "SUCCESS"
   },
   {
