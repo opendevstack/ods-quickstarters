@@ -144,7 +144,7 @@ jobs:
         uses: actions/checkout@v2.0.0
       -
         name: Build docker image
-        working-directory: tests
+        working-directory: tests/ods-quickstarters-tests-runner
         run: |
           docker build --tag ods-quickstarters-tests-runner --file Dockerfile .
 
