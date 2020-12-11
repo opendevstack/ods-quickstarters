@@ -20,19 +20,6 @@ oc login --insecure-skip-tls-verify $OPENSHIFT_CONSOLE_HOST -n $ODS_NAMESPACE
 # export HTTP_PROXY=$http_proxy 
 # export HTTPS_PROXY=$https_proxy 
 
-QUICKSTARTER=""
-
 cd ods-quickstarters/tests
 
-while [[ "$#" -gt 0 ]]; do case $1 in
-  -q=*|--quickstarter=*) QUICKSTARTER="${1#*=}";;
-  -q|--quickstarter) QUICKSTARTER="$2"; shift;;
-esac; shift; done
-
-if [ -z "${QUICKSTARTER}" ]; then
-  echo "--quickstarter not specified. Running all the tests";
-  make test
-else
-  echo "Running quickstarter: ${QUICKSTARTER}"
-  make test QUICKSTARTER=${QUICKSTARTER}
-fi
+make test
