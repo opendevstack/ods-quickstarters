@@ -12,7 +12,6 @@ test: docker-plain/jenkinsfile_test.go go.mod go.sum
 test-docker: build-qs-tests-runner-image run-qs-tests-runner-image
 
 build-qs-tests-runner-image:
-	echo $(qs)
 	cd ods-quickstarters-tests-runner && \
 	docker build --tag ods-quickstarters-tests-runner .
 .PHONY: build-qs-tests-runner-image
