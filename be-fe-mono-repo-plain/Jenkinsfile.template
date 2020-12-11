@@ -29,7 +29,7 @@ odsComponentPipeline(
 
   def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
 
-  stageTestDeployedComponents (context, deploymentInfo)
+  stageTestDeployedComponents(context, deploymentInfo)
 }
 
 def stageBuildFrontend(def context) {
@@ -57,7 +57,7 @@ def stageUnitTestBackend(def context) {
 }
 
 def stageTestDeployedComponents(def context, def deploymentInfo) {
-  def podName = deploymentInfo['DeploymentConfig'][context.componentId][0].podName
+  def podName = deploymentInfo["DeploymentConfig/${context.componentId}"][0].podName
   stage('Test Deployed Component') {
     sh(
       script: "oc port-forward ${podName} 8081 -n ${context.targetProject} &",
