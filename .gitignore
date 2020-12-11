@@ -26,4 +26,5 @@
 .vscode
 
 test-setup.bin
-/tests/
+/tests/*
+!/tests/ods-quickstarters-tests-runner/

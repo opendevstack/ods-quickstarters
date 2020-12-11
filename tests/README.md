@@ -78,4 +78,47 @@ Lets look at a single test in detail - in this case the one for [spring boot](be
 All necessary utils, except for [scripts](scripts) are housed in [ods-core/tests](https://github.com/opendevstack/ods-core/tree/master/tests/utils)
 
 ## Running the tests
-just run `make test` in the [this](Makefile) directory
+To run the quickstarter tests, some prerequisites are required, e.g. go, oc, jq, etc. You could either install them in your local machine and just run `make test` in [this](Makefile) directory or, use a Docker image that ships all the required dependencies.
+
+### Building the Docker image
+
+The assets to build the Docker image are in the [ods-quickstarters-tests-runner](ods-quickstarters-tests-runner) directory.
+
+If you're running behind a corporate proxy, update **both** the [Dockerfile](ods-quickstarters-tests-runner/Dockerfile) and [entrypoint.sh](ods-quickstarters-tests-runner/entrypoint.sh) files to configure them properly by setting the `HTTP_PROXY`, `HTTPS_PROXY`, ... values accordingly.
+
+Next, make sure you're in the [ods-quickstarters-tests-runner](ods-quickstarters-tests-runner) directory where the [Dockerfile](ods-quickstarters-tests-runner/Dockerfile)(Dockerfile) is present to build the image as follows:
+
+```cli
+docker build --tag ods-quickstarters-tests-runner .
+```
+
+### Run the tests with Docker
+
+To run the quickstarter tests using Docker, you need to be in the **umbrella directory**. This is a directory holding all ODS respositories, for instance:
+
+```cli
+UMBRELLA_DIR=~/opendevstack
+```
+
+When running the image, we will use a bind mount, where the directories under the umbrella directory on the host machine is mounted into the `/work` directory within the container.
+
+To run **all** the tests, just execute:
+
+```cli
+cd $UMBRELLA_DIR
+
+docker run --rm -it \
+    -v $(pwd):/work \
+    ods-quickstarters-tests-runner
+```
+
+If wanted, you also have the option to run a **specific** test instead of all of them. For that, use the `-q` or `--quickstarter` argument to specify which quickstarter you want to run.
+
+For instance, to run the `be-golang-plain` quickstarter test, execute:
+
+```cli
+docker run --rm -it \
+    -v $(pwd):/work \
+    ods-quickstarters-tests-runner \
+    -q be-golang-plain
+```
