@@ -1,0 +1,9 @@
+region: eu-west-1 
+  
+credentials:
+  key: @project_id@-cd-aws-access-key-id-dev
+  secret: @project_id@-cd-aws-secret-access-key-dev
+           
+consul:
+  httpaddr: https://consul-coe-cicd.inh-apps.eu.boehringer.com
+  httptoken: @project_id@-cd-consul-http-token
