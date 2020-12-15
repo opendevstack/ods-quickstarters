@@ -30,7 +30,7 @@ odsComponentPipeline(
   def trainingDeployInfo = odsComponentStageRolloutOpenShiftDeployment(
     context, [selector: "deploymentconfig=${trainingServiceName}"]
   )
-  def trainingDeployFirstPodName = trainingDeployInfo['DeploymentConfig'][trainingServiceName][0].podName
+  def trainingDeployFirstPodName = trainingDeployInfo["DeploymentConfig/${trainingServiceName}"][0].podName
 
   stageTrainingUnitTests(context, trainingDeployFirstPodName)
   stageTraining(context, trainingDeployFirstPodName)
