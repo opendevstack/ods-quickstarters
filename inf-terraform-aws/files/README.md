@@ -1,7 +1,6 @@
 # ODS Prototype
 
-This stack deploys a basic stack, consisting of a VPC, EC2, Security Groups, Endpoints and a keypair, for using as an OpenDevStack quickstarter.
-
+This exemplary stack consists of a single module (aka blueprint) and deploys a S3 bucket.
 
 ## What is a Stack?
 
@@ -64,6 +63,11 @@ Extending a stack basically involves adding more [blueprints](https://bitbucket.
 Setting up stack development guardrails requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), `python`, [`pre-commit`](https://pre-commit.com/) [`terraform`](https://www.terraform.io/), and [`terraform-docs`](https://github.com/segmentio/terraform-docs). Once installed, run `make install-dev-deps` to install a set of quality improving *pre-commit hooks* into your local Git repository. Upon a `git commit`, these hooks will make sure that your code is both syntactically and functionally correct and that your `README.md` contains up-to-date documentation of your stack's supported set of *inputs* and *outputs*.
 
 More information on the development flow is available in [Confluence](https://confluence.biscrum.com/pages/viewpage.action?spaceKey=CPIS&title=Contribution+Guide).
+
+## Environments
+The stack supports multiple environments (Testing/DEV/QA/PROD) within OpenDevStack. The behaviour of the stack in the environments can be controlled within the **environments** directory.
+The *.yml files define the Jenkins secrets to read and are used to deploy into the right environments.
+The *.json files can override variables from **variables.tf** in case different environments request different inputs (e.g. deploy a smaller version of the stack in DEV).
 
 ## Problems? Questions? Suggestions?
 
