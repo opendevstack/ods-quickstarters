@@ -16,6 +16,9 @@ parameters:
 - name: JENKINS_AGENT_DOCKERFILE_PATH
   value: Dockerfile.rhel7
   description: Dockerfile variant to use
+- name: GO_DISTRIBUTION_URL
+  value: https://golang.org/dl/go1.14.2.linux-amd64.tar.gz
+  description: URL pointing to go binary
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -53,5 +56,8 @@ objects:
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
+        buildArgs:
+          - name: goDistributionUrl
+            value: ${GO_DISTRIBUTION_URL}
       type: Docker
     successfulBuildsHistoryLimit: 5

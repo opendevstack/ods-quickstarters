@@ -2,21 +2,23 @@ FROM opendevstackorg/ods-jenkins-agent-base-centos7:latest
 
 LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
 
-ENV GO_VERSION 1.14.2
+ARG goDistributionUrl
 
 RUN yum install -y gcc gcc-c++
 
 RUN cd /tmp && \
-    curl -LO https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz && \
-    rm -f *.tar.gz && \
+    curl -LfSso /tmp/go.tar.gz $goDistributionUrl && \
+    tar -C /usr/local -xzf go.tar.gz && \
+    rm -f /tmp/go.tar.gz && \
     cd - && \
     mkdir /go
 
 ENV PATH $PATH:/usr/local/go/bin
 ENV GOBIN /usr/local/bin
 
-RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.25.0
+COPY install-golangci-lint.sh /tmp/install-golangci-lint.sh
+RUN /tmp/install-golangci-lint.sh -b /usr/local/bin v1.25.0 && \
+    rm -f /tmp/install-golangci-lint.sh
 
 RUN go get -u github.com/jstemmer/go-junit-report
 
