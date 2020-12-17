@@ -37,10 +37,6 @@ parameters:
   description: The version to be used.
   value: latest
   required: true
-- name: COMPLETION_DEADLINE_SECONDS
-  displayName: Completion Deadline Seconds
-  description: how long the docker build of the component can last before it is canceled
-  value: "1800"
 - name: READINESS_PATH
   description: Path for readiness probe
   value: /health
@@ -84,35 +80,6 @@ objects:
       deploymentconfig: "${COMPONENT}"
     sessionAffinity: None
     type: ClusterIP
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    name: "${COMPONENT}"
-  spec:
-    lookupPolicy:
-      local: false
-- apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    name: ${COMPONENT}
-  spec:
-    completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
-    failedBuildsHistoryLimit: 5
-    nodeSelector: null
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${COMPONENT}:${TAGVERSION}
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      type: Binary
-      binary: {}
-    strategy:
-      type: Docker
-      dockerStrategy: {}
-    successfulBuildsHistoryLimit: 5
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
