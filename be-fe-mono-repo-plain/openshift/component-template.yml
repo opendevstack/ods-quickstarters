@@ -37,10 +37,6 @@ parameters:
     description: The version to be used.
     value: latest
     required: true
-  - name: COMPLETION_DEADLINE_SECONDS
-    displayName: Completion Deadline Seconds
-    description: how long the docker build of the component can last before it is canceled
-    value: "1800"
 objects:
   - apiVersion: v1
     kind: Service
@@ -71,65 +67,7 @@ objects:
         app: '${PROJECT}-${COMPONENT}'
         deploymentconfig: '${COMPONENT}'
       sessionAffinity: None
-      type: ClusterIP      
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: '${COMPONENT}-backend'
-    spec:
-      lookupPolicy:
-        local: false
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: '${COMPONENT}-frontend'
-    spec:
-      lookupPolicy:
-        local: false
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}-frontend
-    spec:
-      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}-frontend:${TAGVERSION}
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}-backend
-    spec:
-      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}-backend:${TAGVERSION}
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
+      type: ClusterIP
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:

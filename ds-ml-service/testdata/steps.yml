@@ -18,9 +18,6 @@ steps:
           tag: latest
         - name: "{{.ComponentID}}-prediction-service"
           tag: latest
-        buildConfigs:
-        - "{{.ComponentID}}-training-service"
-        - "{{.ComponentID}}-prediction-service"
         imageStreams:
         - "{{.ComponentID}}-training-service"
         - "{{.ComponentID}}-prediction-service"

@@ -19,7 +19,5 @@ steps:
         imageTags:
         - name: "{{.ComponentID}}"
           tag: "{{.SanitizedOdsGitRef}}"
-        buildConfigs:
-        - "{{.ComponentID}}"
         imageStreams:
         - "{{.ComponentID}}"

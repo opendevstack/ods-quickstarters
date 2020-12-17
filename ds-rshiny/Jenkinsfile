@@ -28,17 +28,6 @@ odsQuickstarterPipeline(
       --nexus-username ${context.nexusUsername} \
       --nexus-password ${context.nexusPassword} \
       --non-interactive"""
-
-    for (def env : ['dev', 'test']) {
-      sh """oc patch bc ${context.componentId} --type=json --patch '
-        [{"op":
-          "replace", "path": "/spec/resources",
-          "value": {
-            "limits":{"cpu":"1","memory":"2Gi"},
-            "requests":{"cpu":"500m","memory":"1Gi"}
-          }
-        }]' -n ${context.projectId}-${env}"""
-    }
   }
 
   odsQuickstarterStageRenderJenkinsfile(context)
