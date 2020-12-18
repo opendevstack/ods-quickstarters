@@ -17,7 +17,7 @@ locals {
 # S3 Bucket
 # -------------------------------------
 module "s3data" {
-  source = "git::ssh://git@bitbucket.biscrum.com:7999/infiaas/blueprint-aws-s3.git?ref=v2.0.0"
+  source = "git::ssh://git@bitbucket.biscrum.com:7999/infiaas/blueprint-aws-s3.git?ref=v2.2.0"
   id     = local.id
   name   = var.data_bucket_name
   tags   = local.tags
