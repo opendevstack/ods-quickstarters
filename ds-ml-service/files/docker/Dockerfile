@@ -41,6 +41,8 @@ RUN if [[ ! -z ${nexusHostWithBasicAuth} ]]; \
     else pip install --upgrade pip && pip install -r requirements.txt; \
     fi
 
+RUN pip check
+
 # Copying all the code
 COPY dist /app
 
