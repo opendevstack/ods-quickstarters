@@ -18,6 +18,8 @@ parameters:
 - name: ODS_GIT_REF
   required: true
   value: production
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.rhel7
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -64,6 +66,7 @@ objects:
             value: ${NEXUS_URL}
           - name: nexusAuth
             value: ${NEXUS_AUTH}
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
