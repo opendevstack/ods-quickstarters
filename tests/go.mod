@@ -6,8 +6,8 @@ require (
 	github.com/google/go-cmp v0.4.0
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
-	github.com/opendevstack/ods-core/tests v0.0.0-20200806091158-90b46eba9893
-	github.com/openshift/api v3.9.0+incompatible
+	github.com/opendevstack/ods-core/tests v0.0.0-20210114094623-9d0f99004e06
+	github.com/openshift/api v0.0.0-20180801171038-322a19404e37
 	github.com/openshift/client-go v3.9.0+incompatible
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
