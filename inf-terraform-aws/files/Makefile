@@ -6,8 +6,8 @@ GIT_REMOTE_ORIGIN_URI    := $(shell git remote get-url origin)
 GIT_REMOTE_UPSTREAM_NAME := upstream
 GIT_REMOTE_UPSTREAM_URI  := ssh://git@bitbucket.biscrum.com:7999/infiaas/stack-aws-skeleton.git
 
-RELEASE_EMAIL_FROM       := zzITINFCoEforCloudComputing@boehringer-ingelheim.com
-RELEASE_EMAIL_TO         := cb4f6d49.boehringer.onmicrosoft.com@emea.teams.ms
+RELEASE_EMAIL_FROM       := 
+RELEASE_EMAIL_TO         := 
 
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
