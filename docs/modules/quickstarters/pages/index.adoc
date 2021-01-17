@@ -32,7 +32,7 @@ This repository contains quickstarters, which are basically templates that help 
 === Other Quickstarter
 * xref::e2e-cypress.adoc[E2E test - Cypress]
 
-Next to those, there is a https://github.com/opendevstack/ods-quickstarters/blob/2.x/README.md["blank" quickstarter] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
+Next to those, there is a xref::2.x/README.md["blank" quickstarter (Docker/Plain)] allowing to start from scratch, while still providing all the OCP resources / Jenkins / SonarQube conveniences described in the following sections.
 
 All quickstarters are used by the https://github.com/opendevstack/ods-provisioning-app[Provisioning App] to create a new component which basically consists of resources in OpenShift (typically `BuildConfig`, `ImageStream`, `DeploymentConfig` and `Service`) and a BitBucket repository.
 
