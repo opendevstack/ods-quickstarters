@@ -57,7 +57,7 @@ function create_meta_data() {
 }
 
 function create_terraform_docs_data() {
-  terraform-docs --with-aggregate-type-defaults json "${ROOT_DIR}"
+  terraform-docs json "${ROOT_DIR}"
 }
 
 function create_terraform_modules_data() {
