@@ -1,4 +1,6 @@
-require_relative '../../../shared/spec_helper.rb'
+require_relative '../libraries/terraform_data.rb'
+require_relative '../libraries/fixture_data.rb'
+require_relative '../libraries/aws.rb'
 
 t    = SpecHelper::TerraformData.new
 id   = t['id']
