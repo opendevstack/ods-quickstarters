@@ -2,7 +2,6 @@
 boto3
 requests
 simplejson
-awscli
 argparse
 botocore
 pre-commit
@@ -11,5 +10,5 @@ paramiko
 jinja2
 ansible
 pywinrm
-molecule==2.20.2
+molecule~=3.0
 pipenv
