@@ -3,7 +3,7 @@ fail_fast: true
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v2.4.0
+  rev: v3.4.0
   hooks:
   - id: check-added-large-files
     args: [--maxkb=5000]
@@ -24,13 +24,13 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.24.0
+  rev: v1.45.0
   hooks:
   - id: terraform_fmt
   - id: terraform_docs
 
 - repo: ssh://git@bitbucket.biscrum.com:7999/infiaas/pre-commit-hooks-terraform.git
-  rev: v1.4.1bi
+  rev: v1.5.0
   hooks:
   - id: terraform_inputs_jenkins_pipeline_params
     language_version: python3
@@ -42,9 +42,9 @@ repos:
   - id: test
     name: make test
     description: Run integration tests.
-    entry: make test WITH_DEEP_TESTING=1
+    entry: make test
     language: system
     files: (\.tf|\.rb)$
     pass_filenames: false
     verbose: true
-    
+
