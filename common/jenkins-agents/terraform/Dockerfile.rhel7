@@ -19,6 +19,7 @@ ENV RUBY_VERSION 2.6.6
 ENV PACKER_VERSION 1.6.6
 ENV CONSUL_VERSION 1.9.1
 ENV TFENV_VERSION 2.0.0
+ENV WKHTMLTOPDF_VERSION 0.12.5-1
 ENV BUNDLER_VERSION 2.1.4
 ENV GEM_HOME=/opt/bundle
 
@@ -74,9 +75,9 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 RUN python3 -m pip install -r /tmp/requirements.txt
 
 # Install wkhtmltopdf
-RUN wget -q -O /tmp/wkhtmltox-0.12.5-1.centos7.x86_64.rpm https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox-0.12.5-1.centos7.x86_64.rpm \
-    && yum install -y /tmp/wkhtmltox-0.12.5-1.centos7.x86_64.rpm \
-    && rm -f /tmp/wkhtmltox-0.12.5-1.centos7.x86_64.rpm \
+RUN wget -q -O /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION%-*}/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
+    && yum install -y /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
+    && rm -f /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
     && wkhtmltoimage -h \
     && yum clean all
 
