@@ -30,15 +30,6 @@ ENV HOME=/home/jenkins
 
 COPY python_requirements /tmp/requirements.txt
 
-RUN set -x \
-    && yum update -y \
-    && yum upgrade -y \
-    && yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
-    && yum clean all \
-    && rm -rf /var/cache/yum/* \
-    && ls -lisa /home/jenkins \
-    && /bin/sleep 60
-
 # Install PYTHON3
 RUN cd /tmp \
     && curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
