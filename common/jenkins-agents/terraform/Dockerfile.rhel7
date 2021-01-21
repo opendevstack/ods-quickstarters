@@ -20,7 +20,6 @@ ENV PACKER_VERSION 1.6.6
 ENV CONSUL_VERSION 1.9.1
 ENV TFENV_VERSION 2.0.0
 ENV BUNDLER_VERSION 2.1.4
-ENV CINC_AUDITOR_VERSION 4.23.11
 ENV GEM_HOME=/opt/bundle
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
@@ -177,7 +176,6 @@ RUN cd $HOME \
     && rbenv global $RUBY_VERSION \
     && gem install bundler \
     && bundle config default $BUNDLER_VERSION \
-    && gem install cinc-auditor-bin --version "=$CINC_AUDITOR_VERSION" \
     && cd $GEM_HOME \
     && BUNDLE_SILENCE_ROOT_WARNING=true bundle install --full-index --path $GEM_HOME --jobs=8 \
     && rm -Rf /home/jenkins/.bundle/cache
