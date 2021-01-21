@@ -39,12 +39,6 @@ RUN set -x \
     && ls -lisa /home/jenkins \
     && /bin/sleep 60
 
-# Install newer git client
-#RUN yum erase git -y \
-#    && yum install -y http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm  \
-#    && yum install -y git \
-#    && yum clean all
-
 # Install PYTHON3
 RUN cd /tmp \
     && curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
