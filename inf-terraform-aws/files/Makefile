@@ -6,8 +6,8 @@ GIT_REMOTE_ORIGIN_URI    := $(shell git remote get-url origin)
 GIT_REMOTE_UPSTREAM_NAME := upstream
 GIT_REMOTE_UPSTREAM_URI  := ssh://git@bitbucket.biscrum.com:7999/infiaas/stack-aws-skeleton.git
 
-RELEASE_EMAIL_FROM       := zzITINFCoEforCloudComputing@boehringer-ingelheim.com
-RELEASE_EMAIL_TO         := cb4f6d49.boehringer.onmicrosoft.com@emea.teams.ms
+RELEASE_EMAIL_FROM       := 
+RELEASE_EMAIL_TO         := 
 
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
@@ -105,12 +105,6 @@ smoke-test: install-test-deps
 	for profile in $$inspec_profiles; do \
 		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
 	done
-
-.PHONY: install-report
-install-report:
-#	$(call create_report,$(INSTALL_REPORT_HOME))
-	awk '/Creation complete/  && !/terraform-data/ {print}' "$(INSTALL_REPORT_HOME)/tf_apply.log" > $(INSTALL_REPORT_HOME)/tf_created.log
-#	echo "---end of file ---" >> $(INSTALL_REPORT_HOME)/tf_created.log
 
 .PHONY: describe
 # Describe infrastructure.
@@ -227,17 +221,6 @@ __check_defined = \
 		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
 			required by target `$@')))
 
-# Adds a previously created report to the current Git branch.
-add_report_to_git_branch = \
-	git add -f $(1)/report.* && \
-	git commit -n -m "Add test report for v$(2)."
-
-# Creates a new report in the given reports directory.
-create_report = \
-	$(shell cd $(1) && \
-		bash ./scripts/clean.sh && \
-		bash ./scripts/compile.sh "$(PWD)" "$(NAME)" "$(VERSION)" "$(DESCRIPTION)" "$(GIT_REMOTE_ORIGIN_URI)" "$(call rfc3339_datetime)")
-
 # Exits with an error if a given release already exists.
 exit_if_release_exists = \
 	if git branch -a | grep -q -e release-v$(1); then \
@@ -270,14 +253,6 @@ git_uri_to_url = \
 		GIT_URL=`echo "$${GIT_URL}" | sed 's/^git@/https:\/\//'`; \
 		GIT_URL=`echo "$${GIT_URL}" | sed 's/.git$$//'`; \
 		echo "$${GIT_URL}")
-
-# Creates an RFC3339 date and time string. Example: 2018-11-01T11:12:13+01:00.
-rfc3339_datetime = \
-	$(shell \
-		DATETIME=`date +"%Y-%m-%dT%H:%M:%S"`; \
-		TIME_OFFSET_HOURS=`date +"%z" | cut -c 1-3`; \
-		TIME_OFFSET_MINUTES=`date +"%z" | cut -c 4-5`; \
-		echo "$${DATETIME}$${TIME_OFFSET_HOURS}:$${TIME_OFFSET_MINUTES}")
 
 # Sends an email to announce a new release.
 send_release_email = \
