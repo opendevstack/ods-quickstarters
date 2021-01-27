@@ -103,7 +103,7 @@ smoke-test: install-test-deps
 	sh ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for profile in $$inspec_profiles; do \
-		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
+		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
 	done
 
 .PHONY: describe
