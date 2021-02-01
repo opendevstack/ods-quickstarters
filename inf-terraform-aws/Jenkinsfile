@@ -26,7 +26,7 @@ odsQuickstarterPipeline(
   odsQuickstarterStageRenderJenkinsfile(
     context,
    [source: 'environment.yml.template',
-     target: 'environments/qa.yml']
+     target: 'environments/test.yml']
   )
 
   odsQuickstarterStageRenderJenkinsfile(
