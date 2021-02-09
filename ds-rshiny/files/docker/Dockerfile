@@ -26,13 +26,12 @@ ENV LANG en_US.UTF-8
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
     echo 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' > /etc/apt/sources.list.d/cran.list
 
-# Add Cloudera apt repo
-RUN apt-key adv --fetch-keys http://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh/archive.key && \
-    echo 'deb [arch=amd64] http://archive.cloudera.com/cdh5/ubuntu/xenial/amd64/cdh xenial-cdh5 contrib' > /etc/apt/sources.list.d/cloudera.list
+# Add Cloudera mirror
+RUN echo 'deb [arch=amd64] http://mirror.one.com/pub/cloudera/cdh5/ubuntu/xenial/amd64/cdh xenial-cdh5 contrib' > /etc/apt/sources.list.d/cloudera.list
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -yqq \
+    apt-get install -yqq --allow-unauthenticated \
         gdebi-core \
         libcairo2-dev \
         libcurl4-gnutls-dev \
