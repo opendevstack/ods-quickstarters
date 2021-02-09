@@ -24,7 +24,7 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-  rev: 
+  rev: ''
   hooks:
   - id: terraformstackmoduleoutputs
 
