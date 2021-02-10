@@ -1,6 +1,7 @@
 terraform {
-  backend "local" {
-    path = "../../terraform.tfstate"
-    workspace_dir = "../../../.terraform-state/workspaces"
+  backend "s3" {
+    bucket    = "tfstatetest1"
+    region    = "eu-west-1"
+    acl       = "bucket-owner-full-control"
   }
 }

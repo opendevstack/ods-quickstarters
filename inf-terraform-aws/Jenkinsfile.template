@@ -16,9 +16,8 @@ def stackdeploy  = false
 def awsAccessKeyId
 def awsSecretAccessKey
 def awsRegion
-
-def consulHttpAddr  
-def consulHttpToken 
+def s3Key
+def workspaceKeyPrefix
 
 def awsAccessKeyIdTesting     
 def awsSecretAccessKeyTesting 
@@ -28,7 +27,7 @@ def git_login_url
 def git_login_port
 def tfvarsjsonfile
 def tfvarsjson
-def tfconsulpath
+
 
 @Library('ods-jenkins-shared-library@master') _
 
@@ -64,19 +63,15 @@ odsComponentPipeline(
   // odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
-def getEnvSettings(def consulPath, def consulHttpAddr, def workspace, def region ) {
+def getEnvSettings(def preFix, def key, def workspace, def region ) {
   def config = [
     "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
     "GIT_LOGIN_URL=git@bitbucket.biscrum.com",
-    "GIT_LOGIN_PORT=7999"
+    "GIT_LOGIN_PORT=7999",
+    "PREFIX=${preFix}",
+    "S3KEY=${key}"
   ]
 
-  if (consulPath) {
-    config << "CONSUL_PATH=${consulPath}"
-  }
-  if (consulHttpAddr) {
-    config << "CONSUL_HTTP_ADDR=${consulHttpAddr}"
-  }
   if (workspace) {
     config << "TF_WORKSPACE=${workspace}"
   }
@@ -101,13 +96,12 @@ def stageGetConfig(def context) {
       awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
       awsSecretAccessKey  = environmentFile.credentials.secret.toLowerCase()
       awsRegion           = environmentFile.region.toLowerCase() 
-    
       awsAccessKeyIdTesting     = environmentFileTesting.credentials.key.toLowerCase()
       awsSecretAccessKeyTesting = environmentFileTesting.credentials.secret.toLowerCase()
       awsRegionTesting          = environmentFileTesting.region.toLowerCase()
 
-      consulHttpAddr  = environmentFile.consul.httpaddr.toLowerCase()
-      consulHttpToken = environmentFile.consul.httptoken.toLowerCase()
+      workspaceKeyPrefix        = environmentFile.account
+      s3Key                     = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
 
       echo "Stack Environment ${context.environment} "
       echo "AWS Access Key ID ${awsAccessKeyId}"  
@@ -148,10 +142,9 @@ def stageInit(def context) {
           error "Creation of tfvars failed!"
         }
         tfvarsjson = readJSON file: './terraform.tfvars.json'
-        tfconsulpath="stacks/v1/"+tfvarsjson['meta_computer_system_name']+"/"+tfvarsjson['name']+"/"+tfvarsjson['meta_environment_type']+"/terraform-state"
+
         git_login_url  = "git@bitbucket.biscrum.com"
         git_login_port = 7999
-        println tfconsulpath
 
         def status = sh(script: '''
           mkdir $HOME/.ssh && \
@@ -175,12 +168,10 @@ def stageDestroy(def context) {
       withCredentials([
         string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: awsRegion, variable: 'AWS_DEFAULT_REGION'),
-        string(credentialsId: consulHttpAddr, variable: 'CONSUL_HTTP_ADDR'),
-        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+        string(credentialsId: awsRegion, variable: 'AWS_DEFAULT_REGION')
        ])
       {
-        withEnv(["CONSUL_PATH=${tfconsulpath}",
+        withEnv([
           "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
           "TF_WORKSPACE=${tfvarsjson['meta_environment_type']}",
           "GIT_LOGIN_URL=${git_login_url}",
@@ -227,11 +218,10 @@ def stageSmoke(def context) {
     {
       withCredentials([
         string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
      ])
       {
-        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegionTesting))
+       withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegionTesting))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -252,11 +242,10 @@ def stageTest(def context) {
     stage('Test') {
       withCredentials([
         string(credentialsId: awsAccessKeyIdTesting, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKeyTesting, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')      
+        string(credentialsId: awsSecretAccessKeyTesting, variable: 'AWS_SECRET_ACCESS_KEY')
       ])
       {
-        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, null, awsRegionTesting))
+        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, null, awsRegionTesting))
         {
           def status = sh(script: '''
             ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
@@ -279,12 +268,11 @@ def stagePlan(def context) {
     {    
       withCredentials([
         string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')       
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
        ])
       {
-        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegion))
-      {
+        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegion))
+        {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
             make plan''',
@@ -304,11 +292,10 @@ def stageDeploy(def context) {
     stage('Deploy') {  
       withCredentials([
         string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: consulHttpToken, variable: 'CONSUL_HTTP_TOKEN')       
-     ])
+        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
+      ])
       {
-        withEnv(getEnvSettings(tfconsulpath, consulHttpAddr, tfvarsjson['meta_environment_type'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \

@@ -14,7 +14,7 @@ GEMS_HOME                ?= $(PWD)/vendor/bundle
 INSTALL_REPORT_HOME      := ./reports/install
 SHELL                    := /usr/bin/env bash
 
-TF_WORKSPACE             ?= default
+TF_WORKSPACE             = default
 
 
 default: test
@@ -157,13 +157,7 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
-	$(call check_defined,CONSUL_HTTP_ADDR,Consul's DNS name and port (in the format dnsname:port))
-	$(call check_defined,CONSUL_HTTP_TOKEN,The ACL token to use with HTTP requests to Consul)
-	$(call check_defined,CONSUL_PATH,The path to use into Consul's key-value store)
-
-	#echo 1 | CONSUL_HTTP_ADDR="$(CONSUL_HTTP_ADDR)" CONSUL_HTTP_TOKEN="$(CONSUL_HTTP_TOKEN)" terraform init -backend=true -backend-config="path=$(CONSUL_PATH)" -force-copy -input=false
-	echo 1 | terraform init -backend=true -force-copy -input=false
-
+	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="workspace_key_prefix=$(PREFIX)" -backend-config="key=$(S3KEY)/terraform.tfstate"
 
 .PHONY: install-test-deps
 # Install testing dependencies.
