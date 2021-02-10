@@ -3,5 +3,6 @@ region: eu-west-1
 credentials:
   key: @project_id@-cd-aws-access-key-id-dev
   secret: @project_id@-cd-aws-secret-access-key-dev
-           
-account: put your account id here
+
+# put your account id in here with double quotes           
+account: "nnnnnnnnn"
