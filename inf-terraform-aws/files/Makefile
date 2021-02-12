@@ -106,6 +106,10 @@ smoke-test: install-test-deps
 		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
 	done
 
+.PHONY: install-report
+install-report:
+	awk '/Creation complete/  && !/terraform-data/ {print}' "$(INSTALL_REPORT_HOME)/tf_apply.log" > $(INSTALL_REPORT_HOME)/tf_created.log
+
 .PHONY: describe
 # Describe infrastructure.
 describe: init-terraform
