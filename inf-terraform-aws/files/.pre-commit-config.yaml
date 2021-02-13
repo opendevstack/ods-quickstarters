@@ -23,6 +23,11 @@ repos:
     args: [--autofix, --indent=2, --no-ensure-ascii]
   - id: trailing-whitespace
 
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.45.0
+  hooks:
+  - id: terraform_fmt
+
 - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
   rev: ''
   hooks:
