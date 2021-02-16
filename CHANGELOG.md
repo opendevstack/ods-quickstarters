@@ -3,6 +3,7 @@
 ## Unreleased
 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
+- nodejs12 jenkins agent requires more memory on OpenShift4 ([#545](https://github.com/opendevstack/ods-quickstarters/pull/545))
 
 ## [3.0] - 2020-08-11
 
