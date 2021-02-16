@@ -36,9 +36,6 @@ odsComponentPipeline(
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
-  ],
-  podVolumes: [
-    persistentVolumeClaim(mountPath: "/tmp/.terraform-state", claimName: "terraform-state", readOnly: false)
   ]
 ) { context ->
 
@@ -96,6 +93,7 @@ def stageGetConfig(def context) {
       awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
       awsSecretAccessKey  = environmentFile.credentials.secret.toLowerCase()
       awsRegion           = environmentFile.region.toLowerCase() 
+      
       awsAccessKeyIdTesting     = environmentFileTesting.credentials.key.toLowerCase()
       awsSecretAccessKeyTesting = environmentFileTesting.credentials.secret.toLowerCase()
       awsRegionTesting          = environmentFileTesting.region.toLowerCase()

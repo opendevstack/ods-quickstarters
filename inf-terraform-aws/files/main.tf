@@ -1,8 +1,3 @@
-provider "aws" {
-  version = "2.67"
-}
-
-
 locals {
   tags = {
     Computer-System-Name  = var.meta_computer_system_name

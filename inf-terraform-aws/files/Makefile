@@ -48,8 +48,8 @@ test: install-test-deps test-terraform-modules
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for fdir in $$inspec_profiles; do \
 		mkdir -p test/integration/$$fdir/files ; \
-		pipenv run hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
-    done \
+		./.venv/bin/python3 ./.venv/bin/hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
+	done \
 
 	# See https://github.com/hashicorp/terraform/issues/17655 for TF_WARN_OUTPUT_ERRORS=1.
 	# See https://github.com/test-kitchen/test-kitchen/issues/1436 for why a simple `bundle exec kitchen test` is not an option.
@@ -151,7 +151,8 @@ install-git-pre-commit-hooks:
 .PHONY: install-ruby-gems
 # Install Ruby gems specified in Gemfile.
 install-ruby-gems:
-	BUNDLE_SILENCE_ROOT_WARNING=true bundle install --path $(GEMS_HOME) --jobs=8
+	BUNDLE_SILENCE_ROOT_WARNING=true bundle config --local path $(GEMS_HOME)
+	BUNDLE_SILENCE_ROOT_WARNING=true bundle install --jobs=8
 
 .PHONY: install-python-env
 # Install python virtual environment based on Pipfile

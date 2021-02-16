@@ -1,10 +1,10 @@
-FROM opendevstackorg/ods-jenkins-agent-base-centos7:latest
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-terraform-rhel7-docker" \
-      name="openshift3/jenkins-agent-terraform-rhel7" \
+LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
+      name="openshift/jenkins-agent-terraform-ubi8" \
       version="0.1" \
       architecture="x86_64" \
       release="1" \
@@ -19,7 +19,8 @@ ENV RUBY_VERSION 2.6.6
 ENV PACKER_VERSION 1.6.6
 ENV CONSUL_VERSION 1.9.1
 ENV TFENV_VERSION 2.0.0
-ENV WKHTMLTOPDF_VERSION 0.12.5-1
+ENV WKHTMLTOPDF_VERSION 0.12.6-1
+ENV MUSTACHE_VERSION 1.2.0
 ENV BUNDLER_VERSION 2.1.4
 ENV GEM_HOME=/opt/bundle
 
@@ -29,35 +30,6 @@ ENV PATH=/opt/tfenv/bin:$PATH:$HOME/.rbenv/bin
 ENV HOME=/home/jenkins
 
 COPY python_requirements /tmp/requirements.txt
-
-RUN set -x \
-    && yum update -y \
-    && yum upgrade -y \
-    && yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
-    && yum clean all \
-    && rm -rf /var/cache/yum/* \
-    && ls -lisa /home/jenkins \
-    && /bin/sleep 60
-
-# Install newer git client
-RUN yum erase git -y \
-    && yum install -y http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm  \
-    && yum install -y git \
-    && yum clean all
-
-# Install PYTHON3
-RUN cd /tmp \
-    && curl -O https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
-    && tar xzf Python-${PYTHON_VERSION}.tgz -C / \
-    && rm -rf Python-${PYTHON_VERSION}.tgz
-
-RUN cd /Python-${PYTHON_VERSION} \
-    && ./configure \
-    && make altinstall \
-    && ln -s /Python-${PYTHON_VERSION}/python /usr/local/sbin/python3 \
-    && python3 -V \
-    && chmod a+rx /Python-${PYTHON_VERSION} \
-    && chmod a+rx /Python-${PYTHON_VERSION}/python
 
 RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
@@ -75,15 +47,13 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 RUN python3 -m pip install -r /tmp/requirements.txt
 
 # Install wkhtmltopdf
-RUN wget -q -O /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION%-*}/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
-    && yum install -y /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
-    && rm -f /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm \
-    && wkhtmltoimage -h \
-    && yum clean all
+RUN dnf -y install https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos8.x86_64.rpm \
+    && wkhtmltopdf -V \
+    && dnf clean all
 
-# Install mustache v1.2.0
+# Install mustache
 RUN rm -f /usr/local/bin/mustache \
-    && wget -q -O /tmp/mustache.tar.gz https://github.com/cbroglie/mustache/releases/download/v1.2.0/mustache_1.2.0_linux_amd64.tar.gz \
+    && wget -q -O /tmp/mustache.tar.gz https://github.com/cbroglie/mustache/releases/download/v${MUSTACHE_VERSION}/mustache_${MUSTACHE_VERSION}_linux_amd64.tar.gz \
     && tar -C /usr/local/bin -zxpf /tmp/mustache.tar.gz mustache \
     && chmod a+rx /usr/local/bin/mustache \
     && rm -f /tmp/mustache.tar.gz \
