@@ -4,6 +4,8 @@
 
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@agent_image_tag@',
+  resourceRequestMemory: '1.5Gi',
+  resourceLimitMemory: '3Gi',
   branchToEnvironmentMapping: [
     'master': 'dev',
   // 'release/': 'test'
