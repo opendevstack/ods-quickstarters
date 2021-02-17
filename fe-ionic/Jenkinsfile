@@ -18,8 +18,6 @@ def ionicVersion = "5.4.16"
 
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
-  resourceRequestMemory: '1.5Gi',
-  resourceLimitMemory: '3Gi',
 ) { context ->
 
   stage("update ionic cli") {
