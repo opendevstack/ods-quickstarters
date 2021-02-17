@@ -18,8 +18,6 @@ def angularCliVersion = "8.0.3"
 
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
-  resourceRequestMemory: '1.5Gi',
-  resourceLimitMemory: '3Gi',
 ) { context ->
 
   stage("update angular cli") {
