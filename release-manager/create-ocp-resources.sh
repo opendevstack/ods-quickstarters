@@ -29,6 +29,9 @@ while [[ "$#" > 0 ]]; do case $1 in
 
   -r=*|--docker-registry=*) DOCKER_REGISTRY="${1#*=}";;
   -r|--docker-registry) DOCKER_REGISTRY="$2"; shift;;
+  
+  -m=*|--bitbucket-ods-project=*) ODS_BITBUCKET_PROJECT="${1#*=}";;
+  -m|--bitbucket-ods-project) ODS_BITBUCKET_PROJECT="$2"; shift;;
 
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
@@ -49,6 +52,5 @@ tailor --namespace=${PROJECT}-cd --non-interactive \
   --param=ODS_NAMESPACE=${ODS_NAMESPACE} \
   --param=ODS_IMAGE_TAG=${ODS_IMAGE_TAG} \
   --param=DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+  --param=ODS_BITBUCKET_PROJECT=${ODS_BITBUCKET_PROJECT} \
   --selector template=release-manager
-
-
