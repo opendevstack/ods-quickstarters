@@ -3,6 +3,7 @@ def odsGitRef = ''
 def odsImageTag = ''
 def sharedLibraryRef = ''
 def agentImageTag = ''
+def odsMainBitbucketProject = env.ODS_BITBUCKET_PROJECT ?: 'opendevstack'
 
 node {
   odsNamespace = env.ODS_NAMESPACE ?: 'ods'
@@ -35,6 +36,7 @@ odsQuickstarterPipeline(
         --ods-namespace ${odsNamespace} \
         --ods-image-tag ${odsImageTag} \
         --docker-registry ${context.dockerRegistry}
+        --bitbucket-ods-project ${odsMainBitbucketProject}
       """
     }
   }
