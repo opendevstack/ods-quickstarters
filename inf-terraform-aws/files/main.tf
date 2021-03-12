@@ -1,4 +1,8 @@
 locals {
+  unique_name = var.name
+
+  cf_stack_name = "cft-s3"
+
   tags = {
     Computer-System-Name  = var.meta_computer_system_name
     Contact-Email-Address = var.meta_contact_email_address
@@ -8,14 +12,9 @@ locals {
   }
 }
 
-# -------------------------------------
-# S3 Bucket
-# -------------------------------------
-module "s3data" {
-  source = "git::ssh://git@bitbucket.biscrum.com:7999/infiaas/blueprint-aws-s3.git?ref=v2.2.0"
-  id     = local.id
-  name   = var.data_bucket_name
-  tags   = local.tags
+resource "aws_cloudformation_stack" "cft-s3" {
+  name          = var.name
+  template_body = file("${path.module}/cfs3.json")
 }
 
 

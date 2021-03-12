@@ -10,7 +10,6 @@ def dockerRegistry
 // QS Variables
 def preFix
 def stackConfig
-def stackdestroy = false
 def stackdeploy  = false
 
 def awsAccessKeyId
@@ -41,7 +40,6 @@ odsComponentPipeline(
 
     stageGetConfig(context)
     stageInit(context)
-    stageDestroy(context)
     stageTest(context)
     stagePlan(context)
     stageDeploy(context)
@@ -62,7 +60,6 @@ odsComponentPipeline(
 
 def getEnvSettings(def preFix, def key, def workspace, def region ) {
   def config = [
-    "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
     "GIT_LOGIN_URL=git@bitbucket.biscrum.com",
     "GIT_LOGIN_PORT=7999",
     "PREFIX=${preFix}",
@@ -87,7 +84,6 @@ def stageGetConfig(def context) {
       environmentFile         = readYaml file: "./environments/${context.environment}.yml"   
       environmentFileTesting  = readYaml file: "./environments/testing.yml"
     
-      stackdestroy = false
       stackdeploy  = true
     
       awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
@@ -125,7 +121,7 @@ def stageGetConfig(def context) {
 
 //initialize pre-requisites
 def stageInit(def context) {
-  if (stackdestroy || stackdeploy) 
+  if (stackdeploy) 
   {
     stage('Init') {
       withCredentials([
@@ -156,38 +152,6 @@ def stageInit(def context) {
       }
     }
   } else { print "Stage Init has been skipped."}
-}
-
-//will be removed
-def stageDestroy(def context) {
-  if (stackdestroy == true) {
-    stage('Destroy')
-    {
-      withCredentials([
-        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: awsRegion, variable: 'AWS_DEFAULT_REGION')
-       ])
-      {
-        withEnv([
-          "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
-          "TF_WORKSPACE=${tfvarsjson['meta_environment_type']}",
-          "GIT_LOGIN_URL=${git_login_url}",
-          "GIT_LOGIN_PORT=${git_login_port}"
-        ])
-        {
-          def status = sh(script: '''
-            eval \"\$(rbenv init -)\" && \
-            ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
-            make destroy''', 
-            returnStatus: true)
-          if (status != 0) {
-            error "Test failed!"
-          }
-        }
-      }
-    }
-  } else { print "Stage Destroy has been skipped."}
 }
 
 def stageReport(def context) {

@@ -1,13 +1,6 @@
-NAME                     := AWS Prototype
+NAME                     := AWS Quickstarter
 DESCRIPTION              := The '$(NAME)' is a is a prototype for an ODS quickstarter
 VERSION                  := $(shell cat ./VERSION | tr -d [:space:])
-
-GIT_REMOTE_ORIGIN_URI    := $(shell git remote get-url origin)
-GIT_REMOTE_UPSTREAM_NAME := upstream
-GIT_REMOTE_UPSTREAM_URI  := ssh://git@bitbucket.biscrum.com:7999/infiaas/stack-aws-skeleton.git
-
-RELEASE_EMAIL_FROM       := 
-RELEASE_EMAIL_TO         := 
 
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
@@ -27,8 +20,13 @@ init: install-dev-deps install-test-deps
 
 .PHONY: create-tfvars
 # create terraform.tfvars.json
-create-tfvars:  
+create-tfvars:
 	terraform-docs json . | jq '.inputs | map({ (.name): .default }) | add' > terraform.tfvars.json
+
+.PHONY: prep-test
+prep-test:
+	pre-commit run terraformcreatei2o -a
+	pre-commit run terraformstackmoduleoutputs -a
 
 .PHONY: test
 # Run (pre-deployment) tests.
@@ -39,7 +37,7 @@ test: install-test-deps test-terraform-modules
 
 	# output aws account and user id for testing
 	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_testing_account.log
-			
+
 	# Remove any previously created Terraform test artefacts.
 	for dir in .terraform terraform.tfstate.d; do \
 		find test/fixtures -name $$dir -print0 | xargs -0 rm -rf; \
@@ -57,19 +55,6 @@ test: install-test-deps test-terraform-modules
 		TF_WARN_OUTPUT_ERRORS=1 bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
 		bundle exec kitchen destroy $$suite; \
 	done
-
-.PHONY: release
-# Create and push a release branch and tag for VERSION.
-release: test
-	$(call exit_if_release_exists,$(VERSION))
-
-	$(call git_create_branch,release-v$(VERSION))
-		$(call git_push,release-v$(VERSION))
-
-		$(call git_create_tag,$(VERSION))
-		$(call git_push,v$(VERSION))
-		git checkout master
-	$(call send_release_email)
 
 .PHONY: plan
 # Plan infrastructure deployment.
@@ -89,7 +74,7 @@ deploy: init-terraform plan
 
 	# output aws account and user id for testing
 	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_deploy_account.log
-		
+
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
 
@@ -99,7 +84,7 @@ smoke-test: install-test-deps
 	$(call check_defined,AWS_ACCESS_KEY_ID)
 	$(call check_defined,AWS_SECRET_ACCESS_KEY)
 	$(call check_defined,AWS_DEFAULT_REGION)
-    
+
 	sh ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for profile in $$inspec_profiles; do \
@@ -157,7 +142,7 @@ install-ruby-gems:
 .PHONY: install-python-env
 # Install python virtual environment based on Pipfile
 install-python-env:
-	PIPENV_VENV_IN_PROJECT=true pipenv install
+	CI=true PIPENV_VENV_IN_PROJECT=true pipenv install
 
 .PHONY: init-terraform
 # Install Terraform workspace.
@@ -188,28 +173,11 @@ ifeq ($(WITH_DEEP_TESTING),1)
 	$(call test_included_blueprints)
 endif
 
-.PHONY: tf012upgrade
-# Migrate to terraform 0.12, upgrade from skeleton, precheck and run the upgrade command
-# https://www.terraform.io/upgrade-guides/0-12.html
-tf012upgrade:
-	mv backend.tf backned.tf.UPGRADE12.START
-
-	for suite in $$(ls -d . test/fixtures/*); do \
-		rm -Rf $$suite/.terraform ; \
-		/usr/local/bin/terraform11 init $$suite ; \
-		/usr/local/bin/terraform11 0.12checklist $$suite || exit 1 ; \
-	done
-
-	for suite in $$(ls -d . test/fixtures/*); do \
-		rm -Rf $$suite/.terraform ; \
-		/usr/local/bin/terraform12 init $$suite ; \
-		/usr/local/bin/terraform12 0.12upgrade -yes $$suite || exit 1 ; \
-	done
-
-	mv backned.tf.UPGRADE12.START backend.tf
-
-	git status
-
+.PHONY: cinc-auditor-test
+# run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
+cinc-auditor-test:
+	sh ./lib/scripts/createstackoutputs2yml.sh
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
 
 # Checks if a variable is defined and produces a fatal error if not.
 check_defined = \

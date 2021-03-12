@@ -1,3 +1,5 @@
+# This file has been created automatically.
+
 ---
 name: stackdefault
 supports:
@@ -5,10 +7,4 @@ supports:
 depends:
   - name: inspec-aws
     git: https://github.com/inspec/inspec-aws
-    tag: v1.31.0
-  ## Begin - blueprint inspec profiles
-  - name: blueprint_aws_s3
-    git: ssh://git@bitbucket.biscrum.com:7999/infiaas/blueprint-aws-s3.git
-    tag: v2.2.0
-    relative_path: test/integration/default
-  ## End   - blueprint inspec profiles
+    tag: v1.33.0

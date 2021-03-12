@@ -6,7 +6,6 @@
 *.auto.tfvars*
 inspec.lock
 outputs.json
-reports
 terraform.tfvars*
 terraform.tfstate*
 tfplan
