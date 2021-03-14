@@ -8,6 +8,10 @@ def sharedLibraryRepository
 def dockerRegistry
 
 // QS Variables
+
+gitUrl  = 'git@bitbucket.biscrum.com'
+gitPort = 7999
+
 def preFix
 def stackConfig
 def stackdeploy  = false
@@ -22,8 +26,6 @@ def awsAccessKeyIdTesting
 def awsSecretAccessKeyTesting 
 def awsRegionTesting          
 
-def git_login_url
-def git_login_port
 def tfvarsjsonfile
 def tfvarsjson
 
@@ -34,10 +36,8 @@ odsComponentPipeline(
   imageStreamTag: 'ods/jenkins-agent-terraform:latest',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/': 'test'
   ]
 ) { context ->
-
     stageGetConfig(context)
     stageInit(context)
     stageTest(context)
@@ -45,23 +45,12 @@ odsComponentPipeline(
     stageDeploy(context)
     stageSmoke(context)
     stageReport(context)
-
-  // odsComponentStageImportOpenShiftImageOrElse(context) {
-    /*
-    * if you want to introduce scanning, uncomment the below line
-    * and change the type in metadata.yml to 'ods'
-    *
-    * odsComponentStageScanWithSonar(context)
-    */
-  // odsComponentStageBuildOpenShiftImage(context)
-  //}
-  // odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def getEnvSettings(def preFix, def key, def workspace, def region ) {
   def config = [
-    "GIT_LOGIN_URL=git@bitbucket.biscrum.com",
-    "GIT_LOGIN_PORT=7999",
+    "GIT_LOGIN_URL=${gitUrl}",
+    "GIT_LOGIN_PORT=${gitPort}",
     "PREFIX=${preFix}",
     "S3KEY=${key}"
   ]
@@ -72,7 +61,6 @@ def getEnvSettings(def preFix, def key, def workspace, def region ) {
   if (region) {
     config << "AWS_DEFAULT_REGION=${region}"
   }
-  // for (i = 0; i < config.size(); i++) {println "|"+ config.get(i)}
   return config
 }
 
@@ -103,7 +91,7 @@ def stageGetConfig(def context) {
       echo "AWS Region        ${awsRegion}"
 
       // handle environment specific variables
-      // copy json from /environments/${context.environment}.auto.tfvars.json to /"
+      // copy json from /environments/${context.environment}.auto.tfvars.json to /
       if (fileExists("./environments/${context.environment}.json")) {
         withEnv(["VARIABLESFILE=./environments/${context.environment}.json"])
         {
@@ -137,9 +125,6 @@ def stageInit(def context) {
         }
         tfvarsjson = readJSON file: './terraform.tfvars.json'
 
-        git_login_url  = "git@bitbucket.biscrum.com"
-        git_login_port = 7999
-
         def status = sh(script: '''
           mkdir $HOME/.ssh && \
           mv -f -v $GITLAB_COE $HOME/.ssh/id_rsa && \
@@ -165,7 +150,6 @@ def stageReport(def context) {
         error "Report failed!"
       }  
 
-      // Fixme allowEmpty
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)  
       stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)  
       stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/aws_deploy_account.log' , allowEmpty: true)  

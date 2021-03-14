@@ -40,7 +40,7 @@ variable "meta_environment_type" {
 variable "meta_contact_email_address" {
   description = "An email address of a contact person."
   type        = string
-  default     = "changeme@boehringer-ingelheim.com"
+  default     = "changeme@phoenix.com"
 }
 
 # ---------------------------------------------

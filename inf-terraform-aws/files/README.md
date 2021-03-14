@@ -33,7 +33,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 |------|-------------|------|---------|:--------:|
 | data\_bucket\_name | The name of the S3 data bucket. | `string` | `"bi-qs-demo-quicky"` | no |
 | meta\_computer\_system\_name | The name of the computer system. | `string` | `"quickstarter"` | no |
-| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@boehringer-ingelheim.com"` | no |
+| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@phoenix.com"` | no |
 | meta\_environment\_type | The type of the environment. Can be any of development, evaluation, productive, qualityassurance, training, or validation. | `string` | `"test"` | no |
 | name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
