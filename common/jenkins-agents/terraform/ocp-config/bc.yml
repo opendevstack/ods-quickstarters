@@ -42,7 +42,7 @@ objects:
     source:
       contextDir: common/jenkins-agents/terraform
       git:
-        ref: feature/add-aws-terraform-qs
+        ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
       sourceSecret:
         name: cd-user-token
@@ -55,3 +55,4 @@ objects:
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
       type: Docker
     successfulBuildsHistoryLimit: 5
+    triggers: []
