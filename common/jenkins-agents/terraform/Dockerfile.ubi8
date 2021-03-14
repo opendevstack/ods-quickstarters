@@ -79,7 +79,7 @@ RUN umask 0002 && cd /opt && git clone --branch v2.0.0 https://github.com/tfutil
     && /opt/tfenv/bin/tfenv use ${TERRAFORM_DEFAULT_VERSION} \
     && chown -R 1001:0 /opt/tfenv && chmod +x /opt/tfenv/bin/* \
     && terraform --version \
-    && tfenv list && \
+    && tfenv list \
     && tfenv list-remote
 
 # Install Packer
