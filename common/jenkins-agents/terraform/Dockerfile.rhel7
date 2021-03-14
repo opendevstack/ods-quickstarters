@@ -12,20 +12,21 @@ LABEL com.redhat.component="jenkins-agent-terraform-rhel7-docker" \
       io.k8s.description="The jenkins Agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws"
 
-ENV TERRAFORM_VERSION 0.13.5
-ENV TERRAFORM_DOCS_VERSION v0.10.1
-ENV PYTHON_VERSION 3.7.9
+ENV TERRAFORM_VERSION 0.13.6
+ENV TERRAFORM_DEFAULT_VERSION 0.14.8
+ENV TERRAFORM_DOCS_VERSION v0.11.2
+ENV PYTHON_VERSION 3.7.10
 ENV RUBY_VERSION 2.6.6
-ENV PACKER_VERSION 1.6.6
-ENV CONSUL_VERSION 1.9.1
-ENV TFENV_VERSION 2.0.0
+ENV PACKER_VERSION 1.7.0
+ENV CONSUL_VERSION 1.9.4
+ENV TFENV_VERSION 2.2.0
 ENV WKHTMLTOPDF_VERSION 0.12.5-1
 ENV BUNDLER_VERSION 2.1.4
 ENV GEM_HOME=/opt/bundle
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
     libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel"
-ENV PATH=/opt/tfenv/bin:$PATH:$HOME/.rbenv/bin
+ENV PATH=/opt/tfenv/bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH
 ENV HOME=/home/jenkins
 
 COPY python_requirements /tmp/requirements.txt
@@ -36,8 +37,7 @@ RUN set -x \
     && yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
     && yum clean all \
     && rm -rf /var/cache/yum/* \
-    && ls -lisa /home/jenkins \
-    && /bin/sleep 60
+    && ls -lisa /home/jenkins
 
 # Install newer git client
 RUN yum erase git -y \
@@ -81,7 +81,7 @@ RUN wget -q -O /tmp/wkhtmltox-${WKHTMLTOPDF_VERSION}.centos7.x86_64.rpm https://
     && wkhtmltoimage -h \
     && yum clean all
 
-# Install mustache v1.2.0
+# Install mustache
 RUN rm -f /usr/local/bin/mustache \
     && wget -q -O /tmp/mustache.tar.gz https://github.com/cbroglie/mustache/releases/download/v1.2.0/mustache_1.2.0_linux_amd64.tar.gz \
     && tar -C /usr/local/bin -zxpf /tmp/mustache.tar.gz mustache \
@@ -103,12 +103,12 @@ RUN wget --no-check-certificate -q -O /tmp/terraform.zip "https://releases.hashi
     && terraform -h
 
 #Install tfenv and multiple terraform versions
-RUN umask 0002 && cd /opt && git clone --branch v2.0.0 https://github.com/tfutils/tfenv.git \
+RUN umask 0002 && cd /opt && git clone --branch v${TFENV_VERSION} https://github.com/tfutils/tfenv.git \
     && /opt/tfenv/bin/tfenv install ${TERRAFORM_VERSION} \
     && /opt/tfenv/bin/tfenv install ${TERRAFORM_DEFAULT_VERSION} \
     && /opt/tfenv/bin/tfenv use ${TERRAFORM_DEFAULT_VERSION} \
     && chown -R 1001:0 /opt/tfenv && chmod +x /opt/tfenv/bin/* \
-    && terraform --version \
+    && terraform -version \
     && tfenv list \
     && tfenv list-remote
 
@@ -116,7 +116,7 @@ RUN umask 0002 && cd /opt && git clone --branch v2.0.0 https://github.com/tfutil
 RUN wget --no-check-certificate -q -O /tmp/packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip" \
     && unzip /tmp/packer.zip -d /usr/local/bin \
     && rm -rf /tmp/packer.zip \
-    && packer -h
+    && packer --version
 
 # Install Terraform Docs
 RUN wget -q -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64 \
@@ -137,7 +137,7 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.n
 #Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
     && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
-    && chmod +x /usr/local/bin/consul && /usr/local/bin/consul --version
+    && chmod +x /usr/local/bin/consul && /usr/local/bin/consul -version
     
 RUN chown -R 1001:0 $HOME \
     && chmod -R g+rw $HOME
@@ -167,7 +167,7 @@ ENV GEM_HOME=/opt/bundle
 RUN cd $HOME \
     && umask 0002 \ 
     && git clone https://github.com/rbenv/rbenv.git .rbenv \
-    && echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile \
+    && echo 'export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile \
     && echo 'eval "$(rbenv init -)"' >> ~/.bash_profile \
     && source ~/.bash_profile \
     && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build \
@@ -177,7 +177,8 @@ RUN cd $HOME \
     && rbenv global $RUBY_VERSION \
     && gem install bundler \
     && bundle config default $BUNDLER_VERSION \
+    && bundle config set --global path $GEM_HOME \
     && cd $GEM_HOME \
-    && BUNDLE_SILENCE_ROOT_WARNING=true bundle install --full-index --path $GEM_HOME --jobs=8 \
+    && BUNDLE_SILENCE_ROOT_WARNING=true bundle install --full-index --jobs=8 \
     && rm -Rf /home/jenkins/.bundle/cache
 
