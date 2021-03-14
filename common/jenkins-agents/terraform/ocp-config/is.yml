@@ -1,19 +1,14 @@
 apiVersion: v1
 kind: Template
 metadata:
-  annotations: {}
-  creationTimestamp: null
   name: jenkins-agent-terraform
 objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    annotations: {}
-    creationTimestamp: null
     name: jenkins-agent-terraform
     labels:
       app: jenkins-agent-terraform
   spec:
-    dockerImageRepository: jenkins-agent-terraform
     lookupPolicy:
       local: false
