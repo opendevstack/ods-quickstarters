@@ -9,8 +9,8 @@ def dockerRegistry
 
 // QS Variables
 
-gitUrl  = 'git@bitbucket.biscrum.com'
-gitPort = 7999
+gitUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
+gitPort = <put_your_gitserver_port_here> // eg.  2222
 
 def preFix
 def stackConfig
