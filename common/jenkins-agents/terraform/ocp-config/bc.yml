@@ -31,7 +31,7 @@ objects:
         kind: ImageStreamTag
         name: jenkins-agent-terraform:${ODS_IMAGE_TAG}
     postCommit: {}
-    resources: 
+    resources:
       limits:
         cpu: "1"
         memory: "2Gi"
@@ -40,7 +40,7 @@ objects:
         memory: "1Gi"
     runPolicy: Serial
     source:
-      contextDir: common/jenkins-agents/terraform
+      contextDir: common/jenkins-agents/terraform/docker
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
