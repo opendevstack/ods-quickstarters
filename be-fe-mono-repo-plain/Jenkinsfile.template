@@ -29,7 +29,7 @@ odsComponentPipeline(
 
   def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
 
-  stageTestDeployedComponents (context, deploymentInfo)
+  stageTestDeployedComponents(context, deploymentInfo)
 }
 
 def stageBuildFrontend(def context) {
@@ -57,10 +57,16 @@ def stageUnitTestBackend(def context) {
 }
 
 def stageTestDeployedComponents(def context, def deploymentInfo) {
+  def podName = deploymentInfo["DeploymentConfig/${context.componentId}"][0].podName
   stage('Test Deployed Component') {
-	sh (script : "oc port-forward ${deploymentInfo.podName} 8081 -n ${context.targetProject} &", label : "Setting up port forward for pod ${deploymentInfo.podName}")
-	// wait for port-forward to map the ports or for 10s
-	sh (script : "timeout 10s bash -c 'until ! curl -v --silent http://localhost:8081 2>&1 | grep -m 1 \"Connection refused\"; do sleep 1 ; done'; echo -e \\\\a", 
-        label : "send request to service")
+    sh(
+      script: "oc port-forward ${podName} 8081 -n ${context.targetProject} &",
+      label: "Setting up port forward for pod ${podName}"
+    )
+    // wait for port-forward to map the ports for 10s
+    sh(
+      script: "timeout 10s bash -c 'until ! curl -v --silent http://localhost:8081 2>&1 | grep -m 1 \"Connection refused\"; do sleep 1 ; done'; echo -e \\\\a",
+      label: "send request to service"
+    )
   }
 }

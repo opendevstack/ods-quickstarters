@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "Init",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Test",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Release",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Finalize",
+    "status": "SUCCESS"
+  }
+]

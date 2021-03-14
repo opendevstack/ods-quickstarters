@@ -37,10 +37,6 @@ parameters:
     description: The version to be used.
     value: latest
     required: true
-  - name: COMPLETION_DEADLINE_SECONDS
-    displayName: Completion Deadline Seconds
-    description: how long the docker build of the component can last before it is canceled
-    value: "1800"
   - name: TRAINING_USERNAME
     description: Username for training service
     displayName: Training service username
@@ -113,74 +109,10 @@ objects:
       sessionAffinity: None
       type: ClusterIP
   - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: '${COMPONENT}-prediction-service'
-    spec:
-      lookupPolicy:
-        local: false
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: '${COMPONENT}-training-service'
-    spec:
-      lookupPolicy:
-        local: false
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}-prediction-service
-    spec:
-      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}-prediction-service:${TAGVERSION}
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
-      triggers: []
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}-training-service
-    spec:
-      completionDeadlineSeconds: "${{COMPLETION_DEADLINE_SECONDS}}"
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}-training-service:${TAGVERSION}
-      postCommit: {}
-      resources:
-        limits:
-          cpu: '1'
-          memory: 2Gi
-        requests:
-          cpu: 500m
-          memory: 1Gi
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
-      triggers: []
-  - apiVersion: v1
     kind: DeploymentConfig
     metadata:
+      labels:
+        deploymentconfig: '${COMPONENT}-prediction-service'
       name: '${COMPONENT}-prediction-service'
     spec:
       replicas: 1
@@ -264,6 +196,8 @@ objects:
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
+      labels:
+        deploymentconfig: '${COMPONENT}-training-service'
       name: '${COMPONENT}-training-service'
     spec:
       replicas: 1

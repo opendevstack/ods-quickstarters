@@ -17,8 +17,6 @@ steps:
         imageTags:
         - name: "{{.ComponentID}}"
           tag: latest
-        buildConfigs:
-        - "{{.ComponentID}}"
         imageStreams:
         - "{{.ComponentID}}"
         deploymentConfigs:

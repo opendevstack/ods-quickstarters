@@ -19,6 +19,9 @@ parameters:
   value: latest
 - name: ODS_GIT_REF
   required: true
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.rhel7
+  description: Dockerfile variant to use
 objects:
 - apiVersion: v1
   kind: BuildConfig
@@ -59,9 +62,9 @@ objects:
             value: ${NEXUS_USERNAME}
           - name: nexusPassword
             value: ${NEXUS_PASSWORD}
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}
       type: Docker
     successfulBuildsHistoryLimit: 5
-    triggers: []

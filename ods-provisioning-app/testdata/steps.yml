@@ -15,11 +15,9 @@ steps:
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
       testResults: 204
       openShiftResources:
-        namespace: "{{.ProjectID}}-test"
+        namespace: "{{.ProjectID}}-cd"
         imageTags:
         - name: "{{.ComponentID}}"
           tag: "{{.SanitizedOdsGitRef}}"
-        buildConfigs:
-        - "{{.ComponentID}}"
         imageStreams:
         - "{{.ComponentID}}"

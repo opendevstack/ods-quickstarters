@@ -63,29 +63,6 @@ objects:
       type: ClusterIP
 
   - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}
-    spec:
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}:${TAGVERSION}
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
-      triggers: []
-
-  - apiVersion: v1
     kind: DeploymentConfig
     metadata:
       creationTimestamp: null
@@ -159,10 +136,3 @@ objects:
               namespace: ${PROJECT}-${ENV}
           type: ImageChange
     status: {}
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: "${COMPONENT}"
-    spec:
-      lookupPolicy:
-        local: false

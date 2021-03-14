@@ -23,8 +23,7 @@ ENV NODEJS_VERSION=12 \
 
 # install google-chrome (for angular)
 RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum makecache
+    yum-config-manager --enable rhel-7-server-optional-rpms
 
 ADD https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm /root/google-chrome-stable_current_x86_64.rpm
 RUN yum -y install redhat-lsb libXScrnSaver

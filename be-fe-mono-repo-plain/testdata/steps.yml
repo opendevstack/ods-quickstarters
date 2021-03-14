@@ -14,9 +14,6 @@ steps:
           tag: latest
         - name: "{{.ComponentID}}-frontend"
           tag: latest
-        buildConfigs:
-        - "{{.ComponentID}}-backend"
-        - "{{.ComponentID}}-frontend"
         imageStreams:
         - "{{.ComponentID}}-backend"
         - "{{.ComponentID}}-frontend"
