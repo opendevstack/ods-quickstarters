@@ -125,7 +125,7 @@ RUN chown -R 1001:0 $HOME \
 COPY Gemfile Gemfile.lock $GEM_HOME/
 
 RUN chown -R 1001:0 $GEM_HOME \
-    && echo Skipping chmod -R g+rw $GEM_HOME \
+    && chmod -R g+rw $GEM_HOME \
     && ls -lisa /home/jenkins $GEM_HOME
     
 RUN ls $JAVA_HOME/lib/security/cacerts \
