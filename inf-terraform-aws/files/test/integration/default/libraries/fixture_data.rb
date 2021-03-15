@@ -22,12 +22,12 @@ module SpecHelper
     end
 
     def for_module(name = nil)
-      json_vars? ? @data : extract_first_element_of_array(@data['module'].select{|x| x[name]}.first[name])
+      json_vars? ? @data : extract_first_element_of_array(@data['module'].select { |x| x[name] }.first[name])
     end
 
     def for_resource(type = nil, name = nil)
-      tdata = @data['resource'].select{|x| x[type]}      # array having all resources of given type
-      tdata = tdata.select{|x| x[type][name]}.first      # select the item matching resource name
+      tdata = @data['resource'].select { |x| x[type] }      # array having all resources of given type
+      tdata = tdata.select { |x| x[type][name] }.first      # select the item matching resource name
       extract_first_element_of_array(tdata[type][name])  # trim given structure
       json_vars? ? @data : tdata[type][name]
     end
@@ -35,9 +35,10 @@ module SpecHelper
     private :json_vars?
 
     private
+
     def extract_first_element_of_array(myhash = nil)
-      myhash.each do |k,v|
-        if !(['module','resource','data'].include? k.to_s)
+      myhash.each do |k, v|
+        if !(['module', 'resource', 'data'].include? k.to_s)
           if v.kind_of?(Array)
             myhash[k] = v[0]
           end
