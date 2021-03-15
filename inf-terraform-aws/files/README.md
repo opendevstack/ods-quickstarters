@@ -1,39 +1,47 @@
-# ODS Prototype
+# ODS AWS Quickstarter
 
-This exemplary stack consists of a single module (aka blueprint) and deploys a S3 bucket.
+This Quickstarter can be used to deploy AWS resources. It's primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation, by wrapping this in Terraform.
 
 ## What is a Stack?
 
-A stack is a useful combination of reusable [*blueprints*](https://bitbucket.biscrum.com/projects/INFIAAS) and infrastructure code, typically for the purpose of providing a digital product's technical fundament.
+A stack is a useful combination of reusable modules or blueprints and infrastructure code, typically for the purpose of providing a digital product's technical fundament.
 
 ## How to use this Stack?
 
 The behavior of a stack is determined by its purpose and the set of input parameters. Here is an overview of the *inputs* and *outputs* available for this stack.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13 |
+| aws | 3.24.1 |
+| random | 3.0.1 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
+| aws | 3.24.1 |
 | local | n/a |
-| random | ~> 2.2.1 |
+| random | 3.0.1 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | data\_bucket\_name | The name of the S3 data bucket. | `string` | `"bi-qs-demo-quicky"` | no |
-| meta\_computer\_system\_name | The name of the computer system. | `string` | `"bi-cs-quickstarter"` | no |
-| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@boehringer-ingelheim.com"` | no |
-| meta\_environment\_type | The type of the environment. Can be any of development, evaluation, productive, qualityassurance, training, or validation. | `string` | `"TEST"` | no |
-| name | The name of the stack. | `string` | `"stack-aws-bi-quickstarter"` | no |
+| meta\_computer\_system\_name | The name of the computer system. | `string` | `"quickstarter"` | no |
+| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@phoenix.com"` | no |
+| meta\_environment\_type | The type of the environment. Can be any of development, evaluation, productive, qualityassurance, training, or validation. | `string` | `"test"` | no |
+| name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| data\_bucket\_arn | The data S3 bucket ARN. |
-| data\_bucket\_name | The data S3 bucket name. |
+| inputs2outputs | all inputs passed to outputs |
 | meta\_computer\_system\_name | The name of the computer system. |
 | meta\_contact\_email\_address | An email address of a contact person. |
 | meta\_environment\_type | The type of the environment. |
@@ -58,11 +66,9 @@ $ make test
 
 ## How to extend a Stack?
 
-Extending a stack basically involves adding more [blueprints](https://bitbucket.biscrum.com/projects/INFIAAS) whichever fit, and garnish it with custom infrastructure code if necessary.
+Extending a stack basically involves adding more blueprints whichever fit, and garnish it with custom infrastructure code if necessary.
 
 Setting up stack development guardrails requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), `python`, [`pre-commit`](https://pre-commit.com/) [`terraform`](https://www.terraform.io/), and [`terraform-docs`](https://github.com/segmentio/terraform-docs). Once installed, run `make install-dev-deps` to install a set of quality improving *pre-commit hooks* into your local Git repository. Upon a `git commit`, these hooks will make sure that your code is both syntactically and functionally correct and that your `README.md` contains up-to-date documentation of your stack's supported set of *inputs* and *outputs*.
-
-More information on the development flow is available in [Confluence](https://confluence.biscrum.com/pages/viewpage.action?spaceKey=CPIS&title=Contribution+Guide).
 
 ## Environments
 The stack supports multiple environments (Testing/DEV/QA/PROD) within OpenDevStack. The behaviour of the stack in the environments can be controlled within the **environments** directory.

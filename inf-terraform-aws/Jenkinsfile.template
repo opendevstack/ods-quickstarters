@@ -8,9 +8,12 @@ def sharedLibraryRepository
 def dockerRegistry
 
 // QS Variables
+
+gitUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
+gitPort = <put_your_gitserver_port_here> // eg.  2222
+
 def preFix
 def stackConfig
-def stackdestroy = false
 def stackdeploy  = false
 
 def awsAccessKeyId
@@ -23,8 +26,6 @@ def awsAccessKeyIdTesting
 def awsSecretAccessKeyTesting 
 def awsRegionTesting          
 
-def git_login_url
-def git_login_port
 def tfvarsjsonfile
 def tfvarsjson
 
@@ -35,36 +36,21 @@ odsComponentPipeline(
   imageStreamTag: 'ods/jenkins-agent-terraform:latest',
   branchToEnvironmentMapping: [
     'master': 'dev',
-    // 'release/': 'test'
   ]
 ) { context ->
-
     stageGetConfig(context)
     stageInit(context)
-    stageDestroy(context)
     stageTest(context)
     stagePlan(context)
     stageDeploy(context)
     stageSmoke(context)
     stageReport(context)
-
-  // odsComponentStageImportOpenShiftImageOrElse(context) {
-    /*
-    * if you want to introduce scanning, uncomment the below line
-    * and change the type in metadata.yml to 'ods'
-    *
-    * odsComponentStageScanWithSonar(context)
-    */
-  // odsComponentStageBuildOpenShiftImage(context)
-  //}
-  // odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def getEnvSettings(def preFix, def key, def workspace, def region ) {
   def config = [
-    "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
-    "GIT_LOGIN_URL=git@bitbucket.biscrum.com",
-    "GIT_LOGIN_PORT=7999",
+    "GIT_LOGIN_URL=${gitUrl}",
+    "GIT_LOGIN_PORT=${gitPort}",
     "PREFIX=${preFix}",
     "S3KEY=${key}"
   ]
@@ -75,7 +61,6 @@ def getEnvSettings(def preFix, def key, def workspace, def region ) {
   if (region) {
     config << "AWS_DEFAULT_REGION=${region}"
   }
-  // for (i = 0; i < config.size(); i++) {println "|"+ config.get(i)}
   return config
 }
 
@@ -87,7 +72,6 @@ def stageGetConfig(def context) {
       environmentFile         = readYaml file: "./environments/${context.environment}.yml"   
       environmentFileTesting  = readYaml file: "./environments/testing.yml"
     
-      stackdestroy = false
       stackdeploy  = true
     
       awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
@@ -107,7 +91,7 @@ def stageGetConfig(def context) {
       echo "AWS Region        ${awsRegion}"
 
       // handle environment specific variables
-      // copy json from /environments/${context.environment}.auto.tfvars.json to /"
+      // copy json from /environments/${context.environment}.auto.tfvars.json to /
       if (fileExists("./environments/${context.environment}.json")) {
         withEnv(["VARIABLESFILE=./environments/${context.environment}.json"])
         {
@@ -125,7 +109,7 @@ def stageGetConfig(def context) {
 
 //initialize pre-requisites
 def stageInit(def context) {
-  if (stackdestroy || stackdeploy) 
+  if (stackdeploy) 
   {
     stage('Init') {
       withCredentials([
@@ -141,9 +125,6 @@ def stageInit(def context) {
         }
         tfvarsjson = readJSON file: './terraform.tfvars.json'
 
-        git_login_url  = "git@bitbucket.biscrum.com"
-        git_login_port = 7999
-
         def status = sh(script: '''
           mkdir $HOME/.ssh && \
           mv -f -v $GITLAB_COE $HOME/.ssh/id_rsa && \
@@ -158,38 +139,6 @@ def stageInit(def context) {
   } else { print "Stage Init has been skipped."}
 }
 
-//will be removed
-def stageDestroy(def context) {
-  if (stackdestroy == true) {
-    stage('Destroy')
-    {
-      withCredentials([
-        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY'),
-        string(credentialsId: awsRegion, variable: 'AWS_DEFAULT_REGION')
-       ])
-      {
-        withEnv([
-          "NO_PROXY=127.0.0.1,10.0.0.0/8,10.183.175.157,localhost,boehringer.com,eu.boehringer.com,am.boehringer.com",
-          "TF_WORKSPACE=${tfvarsjson['meta_environment_type']}",
-          "GIT_LOGIN_URL=${git_login_url}",
-          "GIT_LOGIN_PORT=${git_login_port}"
-        ])
-        {
-          def status = sh(script: '''
-            eval \"\$(rbenv init -)\" && \
-            ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
-            make destroy''', 
-            returnStatus: true)
-          if (status != 0) {
-            error "Test failed!"
-          }
-        }
-      }
-    }
-  } else { print "Stage Destroy has been skipped."}
-}
-
 def stageReport(def context) {
   if (stackdeploy == true) {
     stage('Report')
@@ -201,7 +150,6 @@ def stageReport(def context) {
         error "Report failed!"
       }  
 
-      // Fixme allowEmpty
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)  
       stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)  
       stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/aws_deploy_account.log' , allowEmpty: true)  

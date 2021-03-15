@@ -24,12 +24,3 @@ output "meta_environment_type" {
   value       = var.meta_environment_type
 }
 
-output "data_bucket_name" {
-  description = "The data S3 bucket name."
-  value       = module.s3data.id
-}
-
-output "data_bucket_arn" {
-  description = "The data S3 bucket ARN."
-  value       = module.s3data.arn
-}

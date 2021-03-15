@@ -22,13 +22,13 @@
 variable "name" {
   description = "The name of the stack."
   type        = string
-  default     = "stack-aws-bi-quickstarter"
+  default     = "stack-aws-quickstarter"
 }
 
 variable "meta_computer_system_name" {
   description = "The name of the computer system."
   type        = string
-  default     = "bi-cs-quickstarter"
+  default     = "quickstarter"
 }
 
 variable "meta_environment_type" {
@@ -40,15 +40,18 @@ variable "meta_environment_type" {
 variable "meta_contact_email_address" {
   description = "An email address of a contact person."
   type        = string
-  default     = "changeme@boehringer-ingelheim.com"
+  default     = "changeme@phoenix.com"
 }
 
 # ---------------------------------------------
 # S3 Bucket Variables
 # ---------------------------------------------
+
 variable "data_bucket_name" {
   description = "The name of the S3 data bucket."
-  default     = "bi-qs-demo-quicky"
+  default     = "quickstarter"
   type        = string
 }
+
+
 

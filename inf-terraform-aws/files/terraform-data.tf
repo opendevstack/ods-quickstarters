@@ -4,6 +4,7 @@ locals {
     name             = var.name
     tags             = local.tags
     data_bucket_name = var.data_bucket_name
+    cf_stack_outputs = aws_cloudformation_stack.cft-s3.outputs
   }
 }
 
