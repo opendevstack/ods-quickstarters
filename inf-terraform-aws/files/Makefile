@@ -109,21 +109,6 @@ destroy: init-terraform
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform destroy -auto-approve
 
-
-.PHONY: merge-upstream
-# Merge the upstream remote's master branch into this repository's current branch.
-merge-upstream:
-	$(call git_add_remote,$(GIT_REMOTE_UPSTREAM_NAME),$(GIT_REMOTE_UPSTREAM_URI))
-	git fetch $(GIT_REMOTE_UPSTREAM_NAME)
-	git merge $(GIT_REMOTE_UPSTREAM_NAME)/master
-
-.PHONY: merge-upstream011
-# Merge the upstream remote's terraform011 branch into this repository's current branch.
-merge-upstream011:
-	$(call git_add_remote,$(GIT_REMOTE_UPSTREAM_NAME),$(GIT_REMOTE_UPSTREAM_URI))
-	git fetch $(GIT_REMOTE_UPSTREAM_NAME)
-	git merge $(GIT_REMOTE_UPSTREAM_NAME)/terraform011
-
 .PHONY: install-dev-deps
 # Install development dependencies.
 install-dev-deps: install-git-pre-commit-hooks
@@ -153,26 +138,6 @@ init-terraform:
 # Install testing dependencies.
 install-test-deps: install-ruby-gems install-python-env
 
-.PHONY: test-terraform-modules
-# Run Terraform modules tests.
-test-terraform-modules:
-ifeq ($(WITH_DEEP_TESTING),1)
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
-
-	# Remove any previously installed modules.
-	if [ -d .terraform ]; then \
-		find .terraform -name modules -type d -print0 | xargs -0 rm -rf; \
-	fi
-
-	# Fetch Terraform modules.
-	terraform get -update=true
-
-	# Run included blueprint tests.
-	$(call test_included_blueprints)
-endif
-
 .PHONY: cinc-auditor-test
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
@@ -187,48 +152,6 @@ __check_defined = \
 	$(if $(value $1),, \
 		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
 			required by target `$@')))
-
-# Exits with an error if a given release already exists.
-exit_if_release_exists = \
-	if git branch -a | grep -q -e release-v$(1); then \
-		echo "Error: a release with version $(1) already exists.";  \
-		exit 1;  \
-	fi
-
-# Adds a Git remote if it doesn't exist already.
-git_add_remote = \
-	if ! git remote -v | grep -q -e $(1); then \
-		git remote add $(1) $(2); \
-	fi
-
-# Creates and switches to a new Git branch.
-git_create_branch = \
-	git checkout -b $(1)
-
-# Creates an annotated Git tag.
-git_create_tag = \
-	git tag -a v$(1) -m v$(1)
-
-# Updates the origin remote with local changes.
-git_push = \
-	git push origin $(1)
-
-# Computes a URL from a Git URI.
-git_uri_to_url = \
-	$(shell \
-		GIT_URL=`echo "$(1)" | sed 's/:/\//g'`; \
-		GIT_URL=`echo "$${GIT_URL}" | sed 's/^git@/https:\/\//'`; \
-		GIT_URL=`echo "$${GIT_URL}" | sed 's/.git$$//'`; \
-		echo "$${GIT_URL}")
-
-# Sends an email to announce a new release.
-send_release_email = \
-	$(shell \
-		FROM="$(RELEASE_EMAIL_FROM)"; \
-		TO="$(RELEASE_EMAIL_TO)"; \
-		SUBJECT="New Release: $(NAME) v$(VERSION)"; \
-		BODY="Available at $(call git_uri_to_url,$(GIT_REMOTE_ORIGIN_URI))."; \
-		mail -s "$${SUBJECT}" -r "$${FROM}" "$${TO}" <<< "$${BODY}")
 
 # Execute tests in included blueprints.
 test_included_blueprints = \
