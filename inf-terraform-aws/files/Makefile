@@ -1,6 +1,5 @@
 NAME                     := AWS Quickstarter
 DESCRIPTION              := The '$(NAME)' is a is a prototype for an ODS quickstarter
-VERSION                  := $(shell cat ./VERSION | tr -d [:space:])
 
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
@@ -13,7 +12,7 @@ TF_WORKSPACE             = default
 .PHONY: default
 default: test
 
-.PHONY: all 
+.PHONY: all
 all: test plan deploy smoke-test describe
 
 .PHONY: init
