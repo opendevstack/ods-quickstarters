@@ -10,8 +10,10 @@ SHELL                    := /usr/bin/env bash
 TF_WORKSPACE             = default
 
 
+.PHONY: default
 default: test
 
+.PHONY: all 
 all: test plan deploy smoke-test describe
 
 .PHONY: init
