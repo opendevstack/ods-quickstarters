@@ -136,7 +136,7 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
-	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="workspace_key_prefix=$(PREFIX)" -backend-config="key=$(S3KEY)/terraform.tfstate"
+	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="workspace_key_prefix=$(TF_BACKEND_PREFIX)" -backend-config="key=$(TF_BACKEND_S3KEY)/terraform.tfstate"
 
 .PHONY: install-test-deps
 # Install testing dependencies.

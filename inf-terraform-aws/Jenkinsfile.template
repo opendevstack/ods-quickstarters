@@ -9,17 +9,17 @@ def dockerRegistry
 
 // QS Variables
 
-gitUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
-gitPort = <put_your_gitserver_port_here> // eg.  2222
+bitbucketSshUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
+bitbucketSshPort = <put_your_gitserver_port_here> // eg.  2222
 
-def preFix
+def tfBackendPrefix
 def stackConfig
 def stackdeploy  = false
 
 def awsAccessKeyId
 def awsSecretAccessKey
 def awsRegion
-def s3Key
+def tfBackendS3Key
 def workspaceKeyPrefix
 
 def awsAccessKeyIdTesting     
@@ -47,12 +47,12 @@ odsComponentPipeline(
     stageReport(context)
 }
 
-def getEnvSettings(def preFix, def key, def workspace, def region ) {
+def getEnvSettings(def tfBackendPrefix, def tfBackendS3Key, def workspace, def region ) {
   def config = [
-    "GIT_LOGIN_URL=${gitUrl}",
-    "GIT_LOGIN_PORT=${gitPort}",
-    "PREFIX=${preFix}",
-    "S3KEY=${key}"
+    "GIT_LOGIN_URL=${bitbucketSshUrl}",
+    "GIT_LOGIN_PORT=${bitbucketSshPort}",
+    "TF_BACKEND_PREFIX=${tfBackendPrefix}",
+    "TF_BACKEND_S3KEY=${tfBackendS3Key}"
   ]
 
   if (workspace) {
@@ -83,7 +83,7 @@ def stageGetConfig(def context) {
       awsRegionTesting          = environmentFileTesting.region.toLowerCase()
 
       workspaceKeyPrefix        = environmentFile.account
-      s3Key                     = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
+      tfBackendS3Key            = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
 
       echo "Stack Environment ${context.environment} "
       echo "AWS Access Key ID ${awsAccessKeyId}"  
@@ -113,7 +113,7 @@ def stageInit(def context) {
   {
     stage('Init') {
       withCredentials([
-        sshUserPrivateKey(credentialsId: '@project_id@-cd-gitlab-coe', keyFileVariable: 'GITLAB_COE')
+        sshUserPrivateKey(credentialsId: '@project_id@-cd-bitbucket-ssh', keyFileVariable: 'BITBUCKET_SSH')
       ])
       {
         def workspace = env.WORKSPACE
@@ -127,7 +127,7 @@ def stageInit(def context) {
 
         def status = sh(script: '''
           mkdir $HOME/.ssh && \
-          mv -f -v $GITLAB_COE $HOME/.ssh/id_rsa && \
+          mv -f -v $BITBUCKET_SSH $HOME/.ssh/id_rsa && \
           chmod 700 ~/.ssh && \
           chmod 400 ~/.ssh/id_rsa*''',
           returnStatus: true) 
@@ -167,7 +167,7 @@ def stageSmoke(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
      ])
       {
-       withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegionTesting))
+       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegionTesting))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -191,10 +191,10 @@ def stageTest(def context) {
         string(credentialsId: awsSecretAccessKeyTesting, variable: 'AWS_SECRET_ACCESS_KEY')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, null, awsRegionTesting))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, null, awsRegionTesting))
         {
           def status = sh(script: '''
-            ssh -o StrictHostKeyChecking=no -T -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
+            ssh-keyscan -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
             eval \"\$(rbenv init -)\" && \
             make test''', 
             returnStatus: true)
@@ -217,7 +217,7 @@ def stagePlan(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
        ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -241,7 +241,7 @@ def stageDeploy(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, s3Key, tfvarsjson['meta_environment_type'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
