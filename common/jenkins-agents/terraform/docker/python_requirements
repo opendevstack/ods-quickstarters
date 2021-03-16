@@ -6,3 +6,4 @@ argparse~=1.4
 botocore
 pipenv~=2020.11
 python-hcl2~=2.0
+pre-commit~=2.11
