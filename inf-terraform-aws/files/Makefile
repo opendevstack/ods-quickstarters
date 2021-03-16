@@ -8,6 +8,9 @@ SHELL                    := /usr/bin/env bash
 
 TF_WORKSPACE             = default
 
+# tfenv hack
+DEBUG                    := 0
+
 
 .PHONY: default
 default: test
