@@ -194,7 +194,7 @@ def stageTest(def context) {
         withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, null, awsRegionTesting))
         {
           def status = sh(script: '''
-            ssh-keyscan -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL || true  && \
+            ssh-keyscan -p \$GIT_LOGIN_PORT \$GIT_LOGIN_URL > $HOME/.ssh/known_hosts || true  && \
             eval \"\$(rbenv init -)\" && \
             make test''', 
             returnStatus: true)
