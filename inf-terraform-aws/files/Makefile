@@ -31,7 +31,7 @@ prep-test:
 
 .PHONY: test
 # Run (pre-deployment) tests.
-test: install-test-deps test-terraform-modules
+test: install-test-deps
 	$(call check_defined,AWS_ACCESS_KEY_ID)
 	$(call check_defined,AWS_SECRET_ACCESS_KEY)
 	$(call check_defined,AWS_DEFAULT_REGION)
