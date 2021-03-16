@@ -81,7 +81,7 @@ RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TE
     && rm -rf /tmp/terraform.zip \
     && terraform -h
 
-#Install tfenv and multiple terraform versions
+#Install tfenv
 RUN umask 0002 && cd /opt && git clone --branch v${TFENV_VERSION} https://github.com/tfutils/tfenv.git \
     && TFENV_CURL_OUTPUT=0 /opt/tfenv/bin/tfenv install ${TERRAFORM_VERSION} \
     && /opt/tfenv/bin/tfenv use ${TERRAFORM_VERSION} \
