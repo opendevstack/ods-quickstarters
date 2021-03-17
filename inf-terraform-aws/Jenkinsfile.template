@@ -1,14 +1,6 @@
 /* generated jenkins file used for building and deploying AWS-infrastructure in projects */
 
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-
-def sharedLibraryRepository
-def dockerRegistry
-
 // QS Variables
-
 bitbucketSshUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
 bitbucketSshPort = <put_your_gitserver_port_here> // eg.  2222
 
