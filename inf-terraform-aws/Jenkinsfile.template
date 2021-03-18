@@ -159,7 +159,7 @@ def stageSmoke(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
      ])
       {
-       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegionTesting))
+       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegionTesting))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -209,7 +209,7 @@ def stagePlan(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
        ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -233,7 +233,7 @@ def stageDeploy(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment_type'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
