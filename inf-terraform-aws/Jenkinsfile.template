@@ -1,9 +1,5 @@
 /* generated jenkins file used for building and deploying AWS-infrastructure in projects */
 
-// QS Variables
-bitbucketSshUrl  = <place_your_gitserver_here>    // eg. 'git@git.phoenix.com'
-bitbucketSshPort = <put_your_gitserver_port_here> // eg.  2222
-
 def tfBackendPrefix
 def stackConfig
 def stackdeploy  = false
@@ -24,6 +20,11 @@ def tfvarsjson
 
 @Library('ods-jenkins-shared-library@master') _
 
+import org.ods.services.ServiceRegistry
+import org.ods.services.BitbucketService
+import org.ods.util.GitCredentialStore
+
+
 odsComponentPipeline(
   imageStreamTag: 'ods/jenkins-agent-terraform:latest',
   branchToEnvironmentMapping: [
@@ -41,8 +42,6 @@ odsComponentPipeline(
 
 def getEnvSettings(def tfBackendPrefix, def tfBackendS3Key, def workspace, def region ) {
   def config = [
-    "GIT_LOGIN_URL=${bitbucketSshUrl}",
-    "GIT_LOGIN_PORT=${bitbucketSshPort}",
     "TF_BACKEND_PREFIX=${tfBackendPrefix}",
     "TF_BACKEND_S3KEY=${tfBackendS3Key}"
   ]
@@ -103,30 +102,22 @@ def stageGetConfig(def context) {
 def stageInit(def context) {
   if (stackdeploy) 
   {
-    stage('Init') {
-      withCredentials([
-        sshUserPrivateKey(credentialsId: '@project_id@-cd-bitbucket-ssh', keyFileVariable: 'BITBUCKET_SSH')
-      ])
-      {
-        def workspace = env.WORKSPACE
-        def statusTF = sh(script: '''
-              make create-tfvars''', 
-              returnStatus: true)
-        if (statusTF != 0) {
-          error "Creation of tfvars failed!"
-        }
-        tfvarsjson = readJSON file: './terraform.tfvars.json'
+    stage('Init')
+    {
+      def bitbucketService = ServiceRegistry.instance.get(BitbucketService)
 
-        def status = sh(script: '''
-          mkdir $HOME/.ssh && \
-          mv -f -v $BITBUCKET_SSH $HOME/.ssh/id_rsa && \
-          chmod 700 ~/.ssh && \
-          chmod 400 ~/.ssh/id_rsa*''',
-          returnStatus: true) 
-        if (status != 0) {
-          error "Init failed!"
-        }
+      bitbucketService.withTokenCredentials { String username, String pw -> 
+        GitCredentialStore.configureAndStore(this, context.bitbucketUrl, username, pw)
       }
+  
+      def workspace = env.WORKSPACE
+      def statusTF = sh(script: '''
+            make create-tfvars''', 
+            returnStatus: true)
+      if (statusTF != 0) {
+        error "Creation of tfvars failed!"
+      }
+      tfvarsjson = readJSON file: './terraform.tfvars.json'
     }
   } else { print "Stage Init has been skipped."}
 }
@@ -186,8 +177,6 @@ def stageTest(def context) {
         withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, null, awsRegionTesting))
         {
           def status = sh(script: '''
-            ssh-keyscan -p \$GIT_LOGIN_PORT \${GIT_LOGIN_URL#git@} > $HOME/.ssh/known_hosts || true  && \
-            eval \"\$(rbenv init -)\" && \
             make test''', 
             returnStatus: true)
           if (status != 0) {
