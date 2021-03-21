@@ -1,0 +1,6 @@
+componentID: saas-documentation-test
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
