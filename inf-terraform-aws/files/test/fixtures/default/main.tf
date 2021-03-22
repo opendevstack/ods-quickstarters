@@ -12,8 +12,8 @@ module "stack-aws-quickstarter-test" {
 
   name = local.name
 
-  meta_business_application_name = "ProjectPhoenix"
-  meta_contact_email_address     = "changeme@phoenix.com"
-  meta_environment               = "DEVELOPMENT"
+  meta_computer_system_name  = "Project Phoenix"
+  meta_contact_email_address = "changeme@phoenix.com"
+  meta_environment_type      = "evaluation"
 
 }
