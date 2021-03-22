@@ -9,9 +9,9 @@ output "name" {
   value       = var.name
 }
 
-output "meta_business_application_name" {
-  description = "The name of the business application system."
-  value       = var.meta_business_application_name
+output "meta_computer_system_name" {
+  description = "The name of the computer system."
+  value       = var.meta_computer_system_name
 }
 
 output "meta_contact_email_address" {
@@ -19,12 +19,8 @@ output "meta_contact_email_address" {
   value       = var.meta_contact_email_address
 }
 
-output "meta_environment" {
+output "meta_environment_type" {
   description = "The type of the environment."
   value       = var.meta_environment_type
 }
 
-output "meta_dynamic_resource_name" {
-  description = "The name of the dynamic resource."
-  value       = var.meta_dynamic_resource_name
-}
