@@ -18,7 +18,7 @@ def tfvarsjsonfile
 def tfvarsjson
 
 
-@Library('ods-jenkins-shared-library@master') _
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 import org.ods.services.ServiceRegistry
 import org.ods.services.BitbucketService
@@ -26,7 +26,7 @@ import org.ods.util.GitCredentialStore
 
 
 odsComponentPipeline(
-  imageStreamTag: 'ods/jenkins-agent-terraform:latest',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
   ]
