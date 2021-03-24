@@ -1,0 +1,53 @@
+exclude: '.terraform'
+fail_fast: true
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks.git
+  rev: v3.4.0
+  hooks:
+  - id: check-added-large-files
+    args: [--maxkb=5000]
+  - id: check-byte-order-marker
+  - id: check-case-conflict
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-symlinks
+  - id: check-yaml
+    args: [--allow-multiple-documents]
+  - id: detect-aws-credentials
+    args: [--allow-missing-credentials]
+  - id: detect-private-key
+  - id: mixed-line-ending
+    args: [--fix=lf]
+  - id: pretty-format-json
+    args: [--autofix, --indent=2, --no-ensure-ascii]
+  - id: trailing-whitespace
+
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.45.0
+  hooks:
+  - id: terraform_fmt
+
+- repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
+  rev: v0.2.0
+  hooks:
+  - id: terraformcreatei2o
+  - id: terraformstackmoduleoutputs
+
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.45.0
+  hooks:
+  - id: terraform_fmt
+  - id: terraform_docs
+
+- repo: local
+  hooks:
+  - id: test
+    name: make test
+    description: Run integration tests.
+    entry: make test
+    language: system
+    files: (\.tf|\.rb)$
+    pass_filenames: false
+    verbose: true
+
