@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: ODS_BITBUCKET_PROJECT
     description: Bitbucket project name.
-    value: opendevstack
+    value: ${ODS_BITBUCKET_PROJECT}
   - name: PROJECT
     description: The name of the application project.
     required: true
