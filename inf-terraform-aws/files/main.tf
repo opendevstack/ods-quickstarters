@@ -4,21 +4,17 @@ locals {
   cf_stack_name = "cft-s3"
 
   tags = {
-    BusinessApplicationName = upper(var.meta_business_application_name)
-    DynamicResourceName     = upper(var.meta_dynamic_resource_name)
-    ContactEmailAddress     = lower(var.meta_contact_email_address)
-    Environment             = upper(var.meta_environment)
-    StackId                 = local.id
-    StackName               = lower(var.name)
-    DeploymentDate          = formatdate("YYYYMMDD", timestamp())
-    CostIdentifier          = "ProjectPhoenixCostTag"
+    Computer-System-Name  = var.meta_computer_system_name
+    Contact-Email-Address = var.meta_contact_email_address
+    Environment-Type      = lower(var.meta_environment_type)
+    Stack-ID              = local.id
+    Stack-Name            = var.name
   }
 }
 
 resource "aws_cloudformation_stack" "cft-s3" {
   name          = var.name
   template_body = file("${path.module}/cfs3.json")
-  tags          = local.tags
 }
 
 

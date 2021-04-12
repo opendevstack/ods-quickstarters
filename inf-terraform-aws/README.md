@@ -1,4 +1,4 @@
-# AWS Quickstarter Docker image (inf-terraform-aws)
+# AWS Quickstarter (inf-terraform-aws)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 
