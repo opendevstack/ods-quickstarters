@@ -46,7 +46,7 @@ variable "meta_contact_email_address" {
 variable "meta_dynamic_resource_name" {
   description = "The name of the dynamic resource."
   type        = string
-  default     = ""
+  default     = "undefined"
 }
 
 # ---------------------------------------------

@@ -21,7 +21,7 @@ output "meta_contact_email_address" {
 
 output "meta_environment" {
   description = "The type of the environment."
-  value       = var.meta_environment_type
+  value       = var.meta_environment
 }
 
 output "meta_dynamic_resource_name" {
