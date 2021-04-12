@@ -16,25 +16,38 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | terraform | >= 0.13 |
-| aws | 3.24.1 |
+| aws | 3.36.0 |
 | random | 3.0.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | 3.24.1 |
+| aws | 3.36.0 |
 | local | n/a |
 | random | 3.0.1 |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.36.0/docs/resources/cloudformation_stack) |
+| [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.0.1/docs/resources/id) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| data\_bucket\_name | The name of the S3 data bucket. | `string` | `"bi-qs-demo-quicky"` | no |
-| meta\_computer\_system\_name | The name of the computer system. | `string` | `"quickstarter"` | no |
+| data\_bucket\_name | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
+| meta\_business\_application\_name | The name of the business application system. | `string` | `"quickstarter"` | no |
 | meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@phoenix.com"` | no |
-| meta\_environment\_type | The type of the environment. Can be any of development, evaluation, productive, qualityassurance, training, or validation. | `string` | `"test"` | no |
+| meta\_dynamic\_resource\_name | The name of the dynamic resource. | `string` | `"undefined"` | no |
+| meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
 | name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
 ## Outputs
@@ -42,11 +55,11 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Description |
 |------|-------------|
 | inputs2outputs | all inputs passed to outputs |
-| meta\_computer\_system\_name | The name of the computer system. |
+| meta\_business\_application\_name | The name of the business application system. |
 | meta\_contact\_email\_address | An email address of a contact person. |
-| meta\_environment\_type | The type of the environment. |
+| meta\_dynamic\_resource\_name | The name of the dynamic resource. |
+| meta\_environment | The type of the environment. |
 | name | The name of the stack. |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## How to test this Stack?

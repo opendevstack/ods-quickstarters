@@ -25,16 +25,16 @@ variable "name" {
   default     = "stack-aws-quickstarter"
 }
 
-variable "meta_computer_system_name" {
-  description = "The name of the computer system."
+variable "meta_business_application_name" {
+  description = "The name of the business application system."
   type        = string
   default     = "quickstarter"
 }
 
-variable "meta_environment_type" {
-  description = "The type of the environment. Can be any of development, evaluation, productive, qualityassurance, training, or validation."
+variable "meta_environment" {
+  description = "The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION."
   type        = string
-  default     = "test"
+  default     = "DEVELOPMENT"
 }
 
 variable "meta_contact_email_address" {
@@ -43,15 +43,19 @@ variable "meta_contact_email_address" {
   default     = "changeme@phoenix.com"
 }
 
+variable "meta_dynamic_resource_name" {
+  description = "The name of the dynamic resource."
+  type        = string
+  default     = "undefined"
+}
+
 # ---------------------------------------------
 # S3 Bucket Variables
 # ---------------------------------------------
 
 variable "data_bucket_name" {
   description = "The name of the S3 data bucket."
-  default     = "quickstarter"
   type        = string
+  default     = "quickstarter"
 }
-
-
 

@@ -32,7 +32,9 @@ repos:
   rev: v0.3.0
   hooks:
   - id: terraformcreatei2o
+    files: (\.tf)$
   - id: terraformstackmoduleoutputs
+    files: (\.tf)$
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
   rev: v1.48.0
