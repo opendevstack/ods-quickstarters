@@ -24,18 +24,20 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.45.0
+  rev: v1.48.0
   hooks:
   - id: terraform_fmt
 
 - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-  rev: v0.2.0
+  rev: v0.3.0
   hooks:
   - id: terraformcreatei2o
+    files: (\.tf)$
   - id: terraformstackmoduleoutputs
+    files: (\.tf)$
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.45.0
+  rev: v1.48.0
   hooks:
   - id: terraform_fmt
   - id: terraform_docs
