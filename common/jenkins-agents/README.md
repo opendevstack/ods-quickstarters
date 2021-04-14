@@ -20,6 +20,7 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 3. [Node.js 12](nodejs12)
 5. [Python](python)
 6. [Scala & SBT](scala)
+7. [Terraform](terraform)
 
 ## OCP Config / Installation
 

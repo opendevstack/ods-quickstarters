@@ -123,6 +123,34 @@ jobs:
         run: |
           docker build --tag agent-python-test-ubi8 --file Dockerfile.ubi8 .
 
+
+  jenkins-agent-terraform-rhel7:
+    name: Jenkins agent Terraform (RHEL7)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/terraform/docker
+        run: |
+          docker build --tag agent-terraform-test-rhel7 --file Dockerfile.rhel7 .
+
+  jenkins-agent-terraform-ubi8:
+    name: Jenkins agent Terraform (UBI8)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/terraform/docker
+        run: |
+          docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
+
+
 # jenkins-agent-scala:
 #   name: Jenkins agent Scala
 #   runs-on: ubuntu-18.04
