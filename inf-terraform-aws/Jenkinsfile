@@ -1,0 +1,38 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-base:${odsImageTag}",  
+) { context ->
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'environment.yml.template',
+     target: 'environments/dev.yml']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+   [source: 'environment.yml.template',
+     target: 'environments/test.yml']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'environment.yml.template',
+     target: 'environments/prod.yml']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'environment.yml.template',
+     target: 'environments/testing.yml']
+  )
+}
