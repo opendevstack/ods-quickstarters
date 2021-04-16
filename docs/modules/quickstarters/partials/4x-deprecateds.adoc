@@ -1,0 +1,3 @@
+== ds-ml-service quickstarter no longer supported
+
+If you provisioned `ds-ml-service` quickstarter, please note that it has been moved out from the officially supported quickstarters (`ods-quickstarters`) repository and moved to `extra-quickstarters`. It has been set as deprecated due to being superseded by other OpenSource projects like MLflow and Cloud SaaS solutions.
