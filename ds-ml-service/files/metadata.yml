@@ -1,6 +1,0 @@
----
-name: Data Science Industrialization Boilerplate
-description: "This boilerplate enables data scientists to develop, serve, version models within a CI/CD pipeline hosted on OpenShift with the goal in mind that one does not have to take care/change much of the needed pipeline and infrastructure. Technologies: Python 3.8, Flask 1.1.2, Pandas 1.0.5"
-supplier: Boehringer Ingelheim
-version: 4.x
-type: ods
