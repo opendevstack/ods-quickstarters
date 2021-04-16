@@ -36,6 +36,6 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 
 https://github.com/opendevstack/ods-core/tree/master/jenkins/agent-base[jenkins-agent-base]
 
-== Known limitions
+== Known limitations
 
 N/A
