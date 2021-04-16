@@ -26,6 +26,7 @@
 - Provide quickstarter metadata in release-manager.yml ([#75](https://github.com/opendevstack/ods-quickstarters/issues/75))
 - Add release-manager quickstarter documentation ([#98](https://github.com/opendevstack/ods-quickstarters/pull/98))
 - Add AWS quickstarter ([#515](https://github.com/opendevstack/ods-quickstarters/pull/515))
+- Add AWS Terraform agent into makefile ([#570](https://github.com/opendevstack/ods-quickstarters/pull/570))
 
 ### Changed
 - Upgrade to the latest python 3.8 ([#415](https://github.com/opendevstack/ods-quickstarters/issues/415))
