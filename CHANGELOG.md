@@ -4,6 +4,7 @@
 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - ds-rshiny upgrade and housekeeping ([#563](https://github.com/opendevstack/ods-quickstarters/issues/563))
+- ds-ml-service deprecated and moved to extra-quickstarters ([#568](https://github.com/opendevstack/ods-quickstarters/issues/568))
 
 ## [3.0] - 2020-08-11
 
@@ -52,7 +53,7 @@
 - unify stage names and also use @ for library imports ([#160](https://github.com/opendevstack/ods-quickstarters/pull/160))
 - enable WSGI for python related quickstarters ([#82](https://github.com/opendevstack/ods-quickstarters/issues/82))
 - Update and improve docker-plain quickstarter docs ([#102](https://github.com/opendevstack/ods-quickstarters/pull/102))
-- Bump urllib by bot ([#566](https://github.com/opendevstack/ods-quickstarters/issues/566)) 
+- Bump urllib by bot ([#566](https://github.com/opendevstack/ods-quickstarters/issues/566))
 
 ### Fixed
 - fix issue with too long names on be-typescript-express ([#378](https://github.com/opendevstack/ods-quickstarters/pull/378))

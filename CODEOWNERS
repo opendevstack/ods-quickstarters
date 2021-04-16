@@ -7,7 +7,6 @@
 /be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter
 /ds-jupyter-notebook/ @gerardcl @hugowschneider
-/ds-ml-service/ @gerardcl @hugowschneider @sklingel
 /ds-rshiny/ @gerardcl
 /e2e-cypress/ @herrkoch
 /e2e-spock-geb/ @metmajer
