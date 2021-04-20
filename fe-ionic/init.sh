@@ -32,9 +32,6 @@ cd ../$COMPONENT
 # remove empty temp-dir
 rm -r ../start_$COMPONENT
 
-echo "Initialize eslint"
-npx eslint --init
-
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js
 
@@ -87,3 +84,7 @@ rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
+
+echo "configure eslint"
+npm install @typescript-eslint/eslint-plugin@latest --save-dev
+npx eslint -c .eslintrc.json
