@@ -32,6 +32,9 @@ cd ../$COMPONENT
 # remove empty temp-dir
 rm -r ../start_$COMPONENT
 
+echo "Initialize eslint"
+npx eslint --init
+
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js
 
@@ -76,9 +79,6 @@ sed -i "s|\s*__dirname, '\.\./coverage'|__dirname, 'coverage'|" ./karma.conf.js
 echo "Adjust package.json to have the full test"
 sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
 sed -i "s|\s*\"devDependencies\": {|\"devDependencies\": { \"karma-junit-reporter\": \"^2.0.1\",|" ./package.json
-
-echo "Fix linting rules to run with generated tests"
-sed -i "s|\s*\"rules\": {|\"rules\": { \"one-variable-per-declaration\": false,|" ./tslint.json
 
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
