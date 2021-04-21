@@ -77,9 +77,6 @@ echo "Adjust package.json to have the full test"
 sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
 sed -i "s|\s*\"devDependencies\": {|\"devDependencies\": { \"karma-junit-reporter\": \"^2.0.1\",|" ./package.json
 
-echo "Fix linting rules to run with generated tests"
-sed -i "s|\s*\"rules\": {|\"rules\": { \"one-variable-per-declaration\": false,|" ./tslint.json
-
 echo "fix nexus repo path"
 repo_path=$(echo "$GROUP" | tr . /)
 sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/Dockerfile
@@ -87,3 +84,8 @@ rm $SCRIPT_DIR/files/docker/Dockerfile.bak
 
 echo "copy files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
+
+echo "configure eslint"
+ESLINT_PLUG_VER="4.22.0"
+npm install @typescript-eslint/eslint-plugin@$ESLINT_PLUG_VER --save-dev
+npx eslint -c .eslintrc.json
