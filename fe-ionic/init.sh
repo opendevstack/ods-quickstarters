@@ -86,5 +86,6 @@ echo "copy files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
 
 echo "configure eslint"
-npm install @typescript-eslint/eslint-plugin@latest --save-dev
+ESLINT_PLUG_VER="4.22.0"
+npm install @typescript-eslint/eslint-plugin@$ESLINT_PLUG_VER --save-dev
 npx eslint -c .eslintrc.json
