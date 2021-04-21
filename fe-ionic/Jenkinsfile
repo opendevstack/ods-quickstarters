@@ -15,6 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 def ionicVersion = "5.4.16"
+def eslintVersion = "7.24.0"
 
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
@@ -22,7 +23,7 @@ odsQuickstarterPipeline(
 
   stage("update ionic cli") {
     sh "npm install -g ionic@${ionicVersion} && ionic version"
-    sh "npm install -g eslint && eslint -v"
+    sh "npm install -g eslint@${eslintVersion} && eslint -v"
   }
 
   stage("init ionic project") {
