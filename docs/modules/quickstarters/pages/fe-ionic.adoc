@@ -4,7 +4,7 @@ Ionic quickstarter project
 
 == Purpose of this quickstarter
 
-This quickstarter generates an Ionic 3 project, you can use it when you want to develop a cross platform mobile app (iOS, android and PWA) in one codebase using Web technologies like CSS, HTML and JavaScript/Typescript.
+This quickstarter generates an Ionic 6.13.1 project, you can use it when you want to develop a cross platform mobile app (iOS, android and PWA) in one codebase using Web technologies like CSS, HTML and JavaScript/Typescript.
 
 It contains the basic setup for https://www.docker.com/[Docker], https://jenkins.io/[Jenkins], https://www.sonarqube.org/[SonarQube] and https://www.openshift.com/[OpenShift], so you have your CI/CD process out of the box.
 
@@ -62,7 +62,7 @@ The files are generated using https://ionicframework.com/docs/cli/[Ionic CLI]. I
 == Frameworks used
 
 * https://ionicframework.com/docs/cli/[Ionic CLI]
-* https://ionicframework.com/docs/v3/[Ionic Framework]
+* https://ionicframework.com/docs/[Ionic Framework]
 * https://angular.io/[Angular]
 * http://www.typescriptlang.org/[Typescript]
 
@@ -73,7 +73,7 @@ As pre-requisite you'll need to have installed:
 * https://nodejs.org/en/download/[node]
 * npm which is bundled with the node installation
 * https://git-scm.com/downloads[git]
-* Ionic CLI globally in your local environment by running: `npm install -g ionic`
+* Ionic CLI globally in your local environment by running: `npm install -g @ionic/cli`
 
 Once you have you developer environment set up you can simply:
 
