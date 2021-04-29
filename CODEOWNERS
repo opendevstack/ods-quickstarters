@@ -6,7 +6,7 @@
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter
-/ds-jupyter-notebook/ @gerardcl @hugowschneider
+/ds-jupyter-lab/ @gerardcl @hugowschneider
 /ds-rshiny/ @gerardcl
 /e2e-cypress/ @herrkoch
 /e2e-spock-geb/ @metmajer

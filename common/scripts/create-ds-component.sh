@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -eu
 
-# This script is currently being used for ds-rshiny and ds-jupyter-notebook
+# This script is currently being used for ds-rshiny and ds-jupyter-lab
 # components. It sets up the following resource objects:
 # * image streams
 # * build configs: pipelines
 # * build configs: images
-# *·secrets
+# * secrets
 # * services
 # * routes
 
