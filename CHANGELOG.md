@@ -1,7 +1,7 @@
 # Changelog
 
 ### Modified
-- Added correct ionic package in Jenkinsfile
+- Added correct ionic package in Jenkinsfile ([#580](https://github.com/opendevstack/ods-quickstarters/pull/581))
 
 ### Modified
 - Removed forcing eslint configuration as it is default ([#573](https://github.com/opendevstack/ods-quickstarters/pull/578))
