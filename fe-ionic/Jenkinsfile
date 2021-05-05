@@ -22,7 +22,7 @@ odsQuickstarterPipeline(
 ) { context ->
 
   stage("update ionic cli") {
-    sh "npm install -g ionic@${ionicVersion} && ionic version"
+    sh "npm install -g @ionic/cli@${ionicVersion} && ionic version"
     sh "npm install -g eslint@${eslintVersion} && eslint -v"
   }
 
