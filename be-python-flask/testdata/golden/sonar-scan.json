@@ -1,0 +1,26 @@
+{
+  "key": "unitt-python-flask-iq-test",
+  "organization": "default-organization",
+  "name": "unitt-python-flask-iq-test",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "py",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-python-flask-iq-test",
+      "name": "unitt-python-flask-iq-test",
+      "qualifier": "TRK"
+    }
+  ]
+}
