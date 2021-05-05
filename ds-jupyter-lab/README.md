@@ -1,7 +1,7 @@
-# Jupyter Notebook (ds-jupyter-notebook)
+# Jupyter Lab (ds-jupyter-lab)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 
 Please update documentation in the [antora page directory](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
 
-Tested thru [automated tests](../tests/ds-jupyter-notebook)
+Tested thru [automated tests](../tests/ds-jupyter-lab)

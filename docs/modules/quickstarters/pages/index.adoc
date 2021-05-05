@@ -36,7 +36,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 * xref::fe-ionic.adoc[Mobile - Ionic]
 
 === Data Science Quickstarter
-* xref::ds-jupyter-notebook.adoc[Data Science - Jupyter Notebook]
+* xref::ds-jupyter-lab.adoc[Data Science - Jupyter Lab]
 * xref::ds-rshiny.adoc[Data Science - R-Shiny]
 
 === E2E Test Quickstarter

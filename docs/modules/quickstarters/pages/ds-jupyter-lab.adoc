@@ -1,0 +1,66 @@
+= Data Science Jupyter Lab
+
+== Purpose of this quickstarter
+
+Provision a shared Jupyter Lab within OpenShift for rapid prototyping of data science applications using OpenShift OAuth.
+
+== What files / architecture is generated?
+
+----
+.
+├── Jenkinsfile
+├── docker
+│   ├── Dockerfile
+│   ├── jupyter_lab_config.json
+│   ├── requirements.txt
+│   └── run.sh
+├── metadata.yml - Component metadata
+└── release-manager.yml - Configuration file for the Release Manager
+----
+
+== Frameworks used
+
+* https://docs.python.org/3.8[Python 3.8]
+* https://jupyterlab.readthedocs.io/en/stable/[JupyterLab]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+The quickstarter sets up two pods in OpenShift. The `ds-jupyter-lab` instance is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
+
+The directory `/opt/app-root/src/work` is created where code can be organized using installed git. +
+Please consider mounting a persistent volume claim for this path. +
+New python requirements are specified using the `requirements.txt`. +
+
+=== Setting up independent environments/kernels ===
+
+One can setup specific and independent IPython kernels based on specific Python virtual environments:
+
+* Open a new terminal session in your Jupyter Lab, then:
+
+----
+cd <PATH_WHERE_TO_LOCATE_NEW_VENV_OR_NONE>
+python -m venv <YOUR NEW VENV NAME>
+. <YOUR NEW VENV NAME>/bin/activate
+pip install ipykernel pip --upgrade
+python -m ipykernel install --user --name=<YOUR NEW VENV NAME>
+jupyter kernelspec list  # this is for validating installation
+----
+
+Now on a notebook you can select that new kernel by clicking on the name you see on the top right where you see the dot status.
+
+
+== How this quickstarter is built through jenkins
+
+The build pipeline is defined in the `Jenkinsfile` in the project root. The main stages of the pipeline are:
+
+. Start OpenShift build
+. Deploy image to OpenShift
+
+== Builder agent used
+
+https://github.com/opendevstack/ods-core/tree/master/jenkins/agent-base[jenkins-agent-base]
+
+== Known limitations
+
+Consider if sufficient computing resources can be provided by the OpenShift cluster. +
+You might require installing NodeJS if requiring specific JupyterLab extensions (nodejs >=12.0.0).

@@ -1,10 +1,4 @@
-FROM centos/python-38-centos7:latest
-# If you want to enable the redhat supported version, uncomment the following line
-# and remove the line above
-#
-#FROM registry.access.redhat.com/rhscl/python-38-rhel7
-
-LABEL maintainer="Stefan Klingelschmitt <stefan.klingelschmitt@boehringer-ingelheim.com>"
+FROM registry.access.redhat.com/ubi8/python-38
 
 ARG nexusHostWithBasicAuth
 ARG nexusHostWithoutScheme
@@ -28,7 +22,7 @@ RUN if [ ! -z ${nexusHostWithBasicAuth} ]; \
 USER root
 
 COPY run.sh /opt/app-root/run.sh
-COPY jupyter_notebook_config.json /opt/app-root/src/.jupyter/jupyter_notebook_config.json
+COPY jupyter_lab_config.json /opt/app-root/src/.jupyter/jupyter_lab_config.json
 
 RUN chown -R 1001 /opt/app-root/src && \
     chgrp -R 0 /opt/app-root/src && \
