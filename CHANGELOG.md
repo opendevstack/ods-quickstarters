@@ -1,6 +1,9 @@
 # Changelog
 
 ### Modified
+- Added correct ionic package in Jenkinsfile
+
+### Modified
 - Removed forcing eslint configuration as it is default ([#573](https://github.com/opendevstack/ods-quickstarters/pull/578))
 ### Modified
 - Default linter for Ionic is now eslint as tslint is deprecated ([#573](https://github.com/opendevstack/ods-quickstarters/pull/575))
