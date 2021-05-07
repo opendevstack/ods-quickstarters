@@ -20,7 +20,7 @@ RUN if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
     fi; \
     pip config set global.cert /etc/ssl/certs/ca-bundle.crt && \
     pip install --upgrade pip --user && \
-    pip install virtualenv==20.0.28 setuptools==49.2.0 Cython==0.29.21 pypandoc==1.5
+    pip install virtualenv==20.4.6 setuptools==56.1.0 Cython==0.29.23 pypandoc==1.5
 
 # Enables default user to access $HOME folder
 RUN chown -R 1001:0 $HOME && \
