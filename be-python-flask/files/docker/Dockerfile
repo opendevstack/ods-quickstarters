@@ -1,18 +1,10 @@
-FROM python:3.8-buster
+FROM registry.access.redhat.com/ubi8/python-38
 
 ARG nexusHostWithBasicAuth
 ARG nexusHostWithoutScheme
 
-RUN mkdir -p /app
-
-WORKDIR /app
-
-COPY run.sh /app
-COPY dist/* /app/
-
-RUN chown -R 1001:0 /app && \
-    chmod -R g=u /app && \
-    chmod +x /app/run.sh
+COPY app /app
+COPY run.sh /app/
 
 WORKDIR /app
 
@@ -21,6 +13,11 @@ RUN if [ ! -z ${nexusHostWithBasicAuth} ]; \
     else pip install --upgrade pip && pip install -r requirements.txt; \
     fi && \
     pip check
+
+USER root
+RUN chown -R 1001:0 /app && \
+    chmod -R g=u /app && \
+    chmod +x /app/run.sh
 
 USER 1001
 

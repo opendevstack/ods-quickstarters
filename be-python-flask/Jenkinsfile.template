@@ -29,9 +29,9 @@ def stageTestSuite(def context) {
 
   stage('Prepare Test Suite') {
     sh """
-      virtualenv testsuite
+      python -m venv testsuite
       . ./testsuite/bin/activate
-      pip install -r tests/requirements.txt
+      pip install -r tests_requirements.txt
       pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}
@@ -50,11 +50,10 @@ def stageTestSuite(def context) {
     def status = sh(
       script: """
         . ./testsuite/bin/activate
-        cd src
-        python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=. ../tests/
-        mv tests.xml ../${testLocation}
-        mv coverage.xml ../${coverageLocation}
-        mv .coverage ../${coverageLocation}
+        PYTHONPATH=src python -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+        mv tests.xml ${testLocation}
+        mv coverage.xml ${coverageLocation}
+        mv .coverage ${coverageLocation}
       """,
       returnStatus: true
     )
@@ -68,8 +67,8 @@ def stageTestSuite(def context) {
 def stageBuild(def context) {
   stage('Build') {
     sh """
-      mkdir docker/dist
-      cp -rv src docker/dist
+      cp -rv src docker/app
+      cp -rv requirements.txt docker/app
     """
   }
 }

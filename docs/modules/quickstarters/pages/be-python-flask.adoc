@@ -5,7 +5,7 @@ installation and integration of it with OpenShift CD pipelines.
 
 == Purpose of this quickstarter
 
-The quickstarter is simmple WEB-server written on Python using Flask framework.
+The quickstarter comes with a simple API-server example written in Python and using Flask framework.
 The package allows easily build a Python project, using different Python modules
 and frameworks.
 It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
@@ -19,17 +19,16 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 │   ├── Dockerfile
 │   └── run.sh - This bash script solves issue with permissions for a container user
 ├── src
-│    ├── main.py - This file is the main entry point in the project.
-│    └── requirements.txt - This file contains a list of required Python modules to run application
+│   └── main.py - This file is the main entry point in the project.
 ├── tests
-│        ├── __init__.py
-│        ├── main_test.py - Unit testing src/main.py
-│        ├── pytest.ini - pytest configuration file
-│        └── requirements.txt - required Python modules for the Test Suite and IDE integration
+│   ├── __init__.py
+│   └── main_test.py - Unit testing src/main.py
 ├── .coveragerc - Coverage configuration file
 ├── metadata.yml - Component metadata
 ├── mypy.ini - mypy configuration file
 ├── release-manager.yml - Configuration file for the Release Manager
+├── requirements.txt - This file contains a list of required Python modules to run your application
+├── tests_requirements.txt - required Python modules for the Test Suite (includes requirements.txt) and IDE integration
 └── sonar-project.properties - This file contains SonarQube configuration settings
 ----
 
@@ -46,26 +45,25 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 The project is production ready when deployed in OpenShift thanks to gunicorn.
 
-It is recommended when you are developing a Python project to use separated environments.
-For this purpose usually one can use
-https://virtualenv.pypa.io/en/latest/[virtualenv] package.
+It is strongly recommended when you are developing a Python project to use separated environments.
+For this purpose usually one can use Python's
+https://docs.python.org/3.8/library/venv.html[venv] core package (check how to use it in the next steps).
+
+NOTE: since the version of Python is 3.8, ensure your system's python executable is also in version 3.8
 
 [source,bash]
 ----
-# Command install virtualenv package (run only once)
-pip install virtualenv
-
-# Creates virtual environment 'mylocaldevelopment' (will be located in the folder mylocaldevelopment) (run only once)
-virtualenv mylocaldevelopment
+# Create virtual environment 'mylocaldevelopment' (will be located in the folder mylocaldevelopment) (run only once)
+python -m venv mylocaldevelopment
 
 # Initiate virtual environment for the project (every time)
 source mylocaldevelopment/bin/activate
 
 # Runs installation of required modules in the virtual environment (run only once)
-pip install -r src/requirements.txt
+pip install -r requirements.txt
 
 # Start your application
-python src/main.py
+PYTHONPATH=src python src/main.py
 ----
 
 == How this quickstarter is built through Jenkins
@@ -76,7 +74,7 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 +
 [source,bash]
 ----
-  pip install -r tests/requirements.txt
+  pip install -r tests_requirements.txt
 ----
 
 * *Lint* - Runs mypy and flake8 for increasing code quality:
@@ -91,8 +89,7 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 +
 [source,bash]
 ----
-  cd src/
-  python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=. ../tests/
+  PYTHONPATH=src python -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
 ----
 
 * *Build* - Builds the application: copies src folder into docker/dist folder.
@@ -103,4 +100,4 @@ This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/ma
 
 == Known limitations
 
-NA
+Let us know if you find any, thanks!
