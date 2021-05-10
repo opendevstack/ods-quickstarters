@@ -4,6 +4,8 @@
 
 ### Added
 
+- requests access logging enabled for openshift oauth proxy component (used by ds-rshiny and ds-jupyter-lab) ([#590](https://github.com/opendevstack/ods-quickstarters/issues/590))
+
 ### Changed
 
 - ds-rshiny upgrade and housekeeping ([#563](https://github.com/opendevstack/ods-quickstarters/issues/563))
