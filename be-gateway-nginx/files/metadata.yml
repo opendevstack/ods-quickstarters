@@ -1,7 +1,36 @@
 ---
+# Human-friendly name of the software deployed in this component.
 name: nginx
+
+# Description of the component.
 description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.19.3.1"
+
+# URL of the home page for the software deployed in this component.
 supplier: https://openresty.org
-version: 4.x
+
+# Version of the software deployed in this component.
+version: 1.19.3
+
+# Type of component. One of ods, ods-service, ods-test or ods-infra.
 type: ods-service
-appName: nginx
+
+# Id of the software deployed in this component. This can be based in the image name, maven artifactId...
+# Default: component id.
+id: nginx
+
+# Role of this component in the project. One of frontend, backend, database, integration, cache, queue...
+# For nginx, most probably backend, frontend or integration.
+# Default: backend.
+# role: backend
+
+# Higher-level application or system this component is part of.
+# Could be the project name or some other application name. It is just a component grouping.
+# For example, if this could be a component of an on-line shop called Sock Shop:
+# partOf: sock-shop
+
+# Top-level system this application is part of.
+# systemName: acme-system
+
+# Project-wide version.
+# This version is typically shared by all components in the same project (or grouping, when specifying partOf).
+# projectVersion: 1.0
