@@ -11,6 +11,9 @@ supplier: https://openresty.org
 # Version of the software deployed in this component.
 version: 1.19.3
 
+# Version of OpenDevStack
+odsVersion: 4.x
+
 # Type of component. One of ods, ods-service, ods-test or ods-infra.
 type: ods-service
 
