@@ -1,20 +1,8 @@
 ---
-# Human-friendly name of the software deployed in this component.
 name: nginx
-
-# Description of the component.
 description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.19.3.1"
-
-# URL of the home page for the software deployed in this component.
 supplier: https://openresty.org
-
-# Version of the software deployed in this component.
-version: 1.19.3
-
-# Version of OpenDevStack
-odsVersion: 4.x
-
-# Type of component. One of ods, ods-service, ods-test or ods-infra.
+version: 4.x
 type: ods-service
 
 # Id of the software deployed in this component. This can be based in the image name, maven artifactId...
