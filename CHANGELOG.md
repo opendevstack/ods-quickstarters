@@ -1,6 +1,8 @@
 # Changelog
 
 ### Fixed
+- Fix Ionic quickstarter build after provisioning, proper npm install command ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
+### Fixed
 - Fix Ionic quickstarter build after provisioning ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 
 ## Unreleased
