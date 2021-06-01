@@ -1,5 +1,8 @@
 # Changelog
 
+### Fixed
+- Fix Ionic quickstarter build after provisioning ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
+
 ## Unreleased
 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
