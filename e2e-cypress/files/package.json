@@ -10,7 +10,7 @@
     "cypress:run-installation": "cypress run --config-file cypress-installation.json --browser chrome",
     "cypress:run-integration": "cypress run --config-file cypress-integration.json --browser chrome",
     "cypress:run-acceptance": "cypress run --config-file cypress-acceptance.json --browser chrome",
-    "delete-junit-results": "rm -rf build/test-results || true",
+    "delete-junit-results": "rimraf build/test-results",
     "e2e": "npm-run-all lint build delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance"
   },
   "private": true,
@@ -21,6 +21,7 @@
     "@types/node": "^15.12.2",
     "cypress": "^7.5.0",
     "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "rxjs-tslint": "^0.1.8",
     "ts-node": "^10.0.0",
     "tslint": "^5.11.0",

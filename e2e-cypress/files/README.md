@@ -10,7 +10,7 @@ Please note that each stage is executed with its own cypress configuration file 
 
 ## Running end-to-end tests
 
-Run `npm run e2e` to execute all end-to-end tests via [cypress](http://www.cypress.io) against the test instance of the front end. (This includes a cleanup task called `delete-junit-results` which only runs in a UNIX-based shell. On a Windows command line you will probably get an error around `rm` not being found, please adapt `delete-unit-results` accordingly in that case.)
+Run `npm run e2e` to execute all end-to-end tests via [cypress](http://www.cypress.io) against the test instance of the front end.
 
 ## Local development
 

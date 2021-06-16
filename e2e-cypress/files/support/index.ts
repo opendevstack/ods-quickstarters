@@ -20,7 +20,7 @@ declare global {
     namespace Cypress {
         interface Chainable {
             msalv2Login(): void;
-            crowdLogin(asTest): boolean;
+            crowdLogin(asTest: boolean): void;
         }
     }
 }
