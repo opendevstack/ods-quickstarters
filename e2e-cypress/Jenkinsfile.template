@@ -17,11 +17,11 @@ def stageTest(def context) {
   stage('Integration Test') {
   // OPTIONAL: load environment variables for Azure SSO with MSALv2; please adapt variable names to your OpenShift config
   // sh "oc project <project-with-configured-secrets>"
-  // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o yaml | grep USERNAME: | cut -d':' -f 2 | base64 -di")
-  // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o yaml | grep PASSWORD: | cut -d':' -f 2 | base64 -di")
-  // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o yaml | grep AZURE_CLIENT_ID: | cut -d':' -f 2 | base64 -di")
-  // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o yaml | grep AZURE_CLIENT_SECRET: | cut -d':' -f 2 | base64 -di")
-  // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o yaml | grep AZURE_TENANT: | cut -d':' -f 2 ").trim() // config map values are not base64 encoded
+  // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.USERNAME}' | base64 -d")
+  // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.PASSWORD}' | base64 -d")
+  // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_ID}' | base64 -d")
+  // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_SECRET}' | base64 -d")
+  // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o jsonpath='{.data.AZURE_TENANT}'") // config map values are not base64 encoded
 
   withEnv(["TAGVERSION=${context.tagversion}",
            "NEXUS_HOST=${context.nexusHost}",
