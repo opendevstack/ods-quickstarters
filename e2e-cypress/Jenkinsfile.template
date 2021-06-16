@@ -15,7 +15,24 @@ odsComponentPipeline(
 
 def stageTest(def context) {
   stage('Integration Test') {
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "OPENSHIFT_PROJECT=${context.targetProject}", "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
+  // OPTIONAL: load environment variables for Azure SSO with MSALv2; please adapt variable names to your OpenShift config
+  // sh "oc project <project-with-configured-secrets>"
+  // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o yaml | grep USERNAME: | cut -d':' -f 2 | base64 -di")
+  // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o yaml | grep PASSWORD: | cut -d':' -f 2 | base64 -di")
+  // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o yaml | grep AZURE_CLIENT_ID: | cut -d':' -f 2 | base64 -di")
+  // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o yaml | grep AZURE_CLIENT_SECRET: | cut -d':' -f 2 | base64 -di")
+  // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o yaml | grep AZURE_TENANT: | cut -d':' -f 2 ").trim() // config map values are not base64 encoded
+
+  withEnv(["TAGVERSION=${context.tagversion}",
+           "NEXUS_HOST=${context.nexusHost}",
+           "OPENSHIFT_PROJECT=${context.targetProject}",
+           "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
+           // "CYPRESS_TENANT_ID=${azureTenantId}",
+           // "CYPRESS_CLIENT_ID=${azureClientId}",
+           // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
+           // "CYPRESS_USERNAME=${cypressUser}",
+           // "CYPRESS_PASSWORD=${cypressPassword}"
+    ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
       junit(testResults:'build/test-results/*.xml', allowEmptyResults:true)
