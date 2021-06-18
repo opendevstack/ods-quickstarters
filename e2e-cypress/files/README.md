@@ -12,18 +12,25 @@ Please note that each stage is executed with its own cypress configuration file 
 
 Run `npm run e2e` to execute all end-to-end tests via [cypress](http://www.cypress.io) against the test instance of the front end.
 
-### Local development 
+## Local development
 
 Run `npm run watch` to develop the e2e test. The tests will automatically rebuild and run, if you change any of the source files.
-The test will run against a local instance of the front end, e.g. `localhost:4200`. This destination is configurable in the different `cypress-<stage>.json` files. Provide credentials for a test user by defining them in a file called `secrets.json` inside the base directory. This file should have the following format:
-  {
-    "e2e": {
-      "testUserName": "User Name",
-      "testUserPassword": "xxxx"
-    }
-  }
+The test will run against a local instance of the front end, e.g. `localhost:4200`. This destination is configurable in the `cypress-<stage>.json` files.
+
+## e2e test user authentication
+### Atlassian Crowd
+For crowd login support, please provide credentials for a test user by defining them in a file called `secrets.json` inside the base directory. This file should have the following format:
+`{
+"e2e": {
+"testUserName": "User Name",
+"testUserPassword": "xxxx"
+}
+}`
 
 Please note: `secrets.json` is mentioned in `.gitignore` to prevent it from being added to version control. Please keep it this way.
+
+### Azure SSO with MSALv2
+Please check the comments in `commands.ts` for details on how to configure this.
 
 ## Links
 * [cypress](http://www.cypress.io)
