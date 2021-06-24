@@ -12,4 +12,4 @@ steps:
       runAttachments:
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
-      testResults: 4
+      testResults: 2
