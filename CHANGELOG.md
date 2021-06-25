@@ -114,7 +114,6 @@
 - Remove deprecated sonar.language property ([#325](https://github.com/opendevstack/ods-quickstarters/pull/325))
 - Remove old Scala quickstarter ([#138](https://github.com/opendevstack/ods-quickstarters/issues/138))
 - Remove outdated be-scala-akka, fe-vue and fe-react quickstarters ([#322](https://github.com/opendevstack/ods-quickstarters/pull/322))
->>>>>>> origin/master
 
 ## [2.0] - 2019-12-13
 
