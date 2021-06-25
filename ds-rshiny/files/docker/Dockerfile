@@ -44,18 +44,11 @@ RUN echo 'force-unsafe-io' > /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 # Install Shiny
-<<<<<<< HEAD
 RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cloud.r-project.org/")'
-
-# Install RJDBC and other deps from CRAN
-RUN R -e 'install.packages(c("RJDBC", "shinythemes", "d3heatmap"), repos="http://cran.uni-muenster.de/")'
-=======
-RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cran.uni-muenster.de/")'
->>>>>>> origin/master
 
 # Install app dependencies and fail if any missing
 RUN R -e 'packages = c("shinythemes", "ggplot2", "reshape2"); \
-    install.packages(packages, repos="http://cran.uni-muenster.de/"); \
+    install.packages(packages, repos="https://cloud.r-project.org/"); \
     package.check <- lapply(packages, FUN = function(p) { if(!require(p, character.only = TRUE)) { stop("package not found!") } })'
 
 # Setup app
