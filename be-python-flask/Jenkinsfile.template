@@ -1,51 +1,37 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
-def dockerRegistry
-node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
-  dockerRegistry = env.DOCKER_REGISTRY
-}
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of
-  the python slave used here - the code of the python slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/python
- */
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-python:@ods_image_tag@",
-  projectId: projectId,
-  componentId: componentId,
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-python:@agent_image_tag@',
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/': 'test'
   ]
 ) { context ->
-  stageTestSuite(context, context.nexusHostWithBasicAuth, context.nexusHost.tokenize('//')[1])
-  stageScanForSonarqube(context)
-  stageBuild(context)
-  stageStartOpenshiftBuild(context, [nexusHostWithBasicAuth: context.nexusHostWithBasicAuth, nexusHostWithoutScheme: context.nexusHost.tokenize('//')[1]])
-  stageDeployToOpenshift(context)
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    stageTestSuite(context)
+    odsComponentStageScanWithSonar(context)
+    stageBuild(context)
+    odsComponentStageBuildOpenShiftImage(context, [
+      buildArgs: [
+        nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
+        nexusHostWithoutScheme: context.nexusHostWithoutScheme
+      ]
+    ])
+  }
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
-def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithoutScheme) {
+def stageTestSuite(def context) {
   String testLocation = 'build/test-results/test'
   String coverageLocation = 'build/test-results/coverage'
 
   stage('Prepare Test Suite') {
     sh """
-      virtualenv testsuite
+      python -m venv testsuite
       . ./testsuite/bin/activate
-      pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r tests/requirements.txt
+      pip install -r tests_requirements.txt
       pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}
@@ -60,20 +46,17 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
     """
   }
 
-  stage('Test') {
+  stage('Unit Test') {
     def status = sh(
       script: """
         . ./testsuite/bin/activate
-        cd src
-        python -m pytest --junitxml=tests.xml --cov-report term-missing --cov-report xml --cov=. ../tests/
-        mv tests.xml ../${testLocation}
-        mv coverage.xml ../${coverageLocation}
-        mv .coverage ../${coverageLocation}
+        PYTHONPATH=src python -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+        mv tests.xml ${testLocation}
+        mv coverage.xml ${coverageLocation}
+        mv .coverage ${coverageLocation}
       """,
       returnStatus: true
     )
-
-    junit "${testLocation}/tests.xml"
 
     if (status != 0) {
       error "Unit tests failed!"
@@ -84,8 +67,8 @@ def stageTestSuite(def context, def nexusHostWithBasicAuth, def nexusHostWithout
 def stageBuild(def context) {
   stage('Build') {
     sh """
-      mkdir docker/dist
-      cp -rv src docker/dist
+      cp -rv src docker/app
+      cp -rv requirements.txt docker/app
     """
   }
 }

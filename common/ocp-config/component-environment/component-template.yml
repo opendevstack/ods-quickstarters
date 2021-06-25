@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Template
 labels:
   template: component-template
-  app: '${PROJECT}-${COMPONENT}'
+  app: "${PROJECT}-${COMPONENT}"
 parameters:
   - name: PROJECT
     displayName: Application
@@ -37,70 +37,32 @@ parameters:
     description: The version to be used.
     value: latest
     required: true
-  - name: COMPLETION_DEADLINE_SECONDS
-    displayName: Completion Deadline Seconds
-    description: how long the docker build of the component can last before it is canceled
-    value: "1800"
-    required: true
 objects:
   - apiVersion: v1
     kind: Service
     metadata:
-      annotations:
-        service.alpha.openshift.io/dependencies: '[]'
-      name: '${COMPONENT}'
+      name: "${COMPONENT}"
     spec:
       ports:
-      -   name: 8080-tcp
+        - name: 8080-tcp
           port: 8080
           protocol: TCP
           targetPort: 8080
       selector:
-        app: '${PROJECT}-${COMPONENT}'
-        deploymentconfig: '${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
       sessionAffinity: None
       type: ClusterIP
   - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: '${COMPONENT}'
-    spec:
-      dockerImageRepository: '${COMPONENT}'
-      lookupPolicy:
-        local: false
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: ${COMPONENT}
-    spec:
-      completionDeadlineSeconds: ${COMPLETION_DEADLINE_SECONDS}
-      failedBuildsHistoryLimit: 5
-      nodeSelector: null
-      output:
-        to:
-          kind: ImageStreamTag
-          name: ${COMPONENT}:${TAGVERSION}
-      postCommit: {}
-      resources: {}
-      runPolicy: Serial
-      source:
-        type: Binary
-        binary: {}
-      strategy:
-        type: Docker
-        dockerStrategy: {}
-      successfulBuildsHistoryLimit: 5
-      triggers: []
-  - apiVersion: v1
     kind: DeploymentConfig
     metadata:
-      name: '${COMPONENT}'
+      name: "${COMPONENT}"
     spec:
       replicas: 1
       revisionHistoryLimit: 10
       selector:
-        app: '${PROJECT}-${COMPONENT}'
-        deploymentconfig: '${COMPONENT}'
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -114,24 +76,24 @@ objects:
       template:
         metadata:
           labels:
-            app: '${PROJECT}-${COMPONENT}'
-            deploymentconfig: '${COMPONENT}'
-            env: '${ENV}'
+            app: "${PROJECT}-${COMPONENT}"
+            deploymentconfig: "${COMPONENT}"
+            env: "${ENV}"
         spec:
           containers:
-            - image: '${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}'
+            - image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
               imagePullPolicy: IfNotPresent
-              name: '${COMPONENT}'
+              name: "${COMPONENT}"
               ports:
                 - containerPort: 8080
                   protocol: TCP
               resources:
                 limits:
-                  cpu:  '${CPU_LIMIT}'
-                  memory: '${MEMORY_LIMIT}'
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
                 requests:
-                  cpu:  '${CPU_REQUEST}'
-                  memory: '${MEMORY_REQUEST}'
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
@@ -145,9 +107,9 @@ objects:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - '${COMPONENT}'
+              - "${COMPONENT}"
             from:
               kind: ImageStreamTag
-              name: '${COMPONENT}:${TAGVERSION}'
-              namespace: '${PROJECT}-${ENV}'
+              name: "${COMPONENT}:${TAGVERSION}"
+              namespace: "${PROJECT}-${ENV}"
           type: ImageChange

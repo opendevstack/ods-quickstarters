@@ -1,68 +1,45 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
-def dockerRegistry
-node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
-  dockerRegistry = env.DOCKER_REGISTRY
-}
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
-  the base slave used here - the code of the base slave can be found at
-  https://github.com/opendevstack/ods-core/tree/master/jenkins/slave-base
- */ 
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:@ods_image_tag@",
-  projectId: projectId,
-  componentId: componentId,
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@agent_image_tag@',
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+  // 'release/': 'test'
   ]
 ) { context ->
-  stageBuild(context)
-  stageUnitTest(context)
-  /*
-   * if you want to introduce scanning, uncomment
-   * 
-   * stageScanForSonarqube(context)
-   */ 
-  stageStartOpenshiftBuild(context)
-  stageDeployToOpenshift(context)
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    stageBuild(context)
+    stageUnitTest(context)
+    odsComponentStageScanWithSonar(context)
+    odsComponentStageBuildOpenShiftImage(context)
+  }
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh "npm install"
-      sh "npm run build"
+      sh 'npm install'
+      if ('master'.equals(context.gitBranch)) {
+        sh 'npm run build'
+      } else {
+        sh 'npm run build -- --sourceMap=true'
+      }
     }
     sh "cp -r dist/${context.componentId} docker/dist"
   }
 }
 
 def stageUnitTest(def context) {
-  try {
-    stage('Unit Test') {
-      sh "npm run test"
-    }
-  } finally {
-    junit 'build/test-results/test/test-results.xml'
+  stage('Unit Test') {
+    sh 'npm run test'
   }
 }
 
 def stageLint(def context) {
   stage('Lint') {
-    sh "npm run lint"
+    sh 'npm run lint'
   }
 }

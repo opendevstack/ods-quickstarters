@@ -1,0 +1,14 @@
+= Maven / Gradle Jenkins agent
+
+== Introduction
+This agent is used to build Java code, through Maven or Gradle.
+
+The image is built in the global `ods` project and is named `jenkins-agent-maven`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-maven`.
+
+== Features
+. Nexus configuration for Maven & Gradle
+. HTTP proxy awareness for both builders
+
+== Known limitations
+n/a

@@ -1,0 +1,20 @@
+id: unitt
+name: Project unitt
+description: Description of unitt.
+
+services:
+  bitbucket:
+    credentials:
+      id: unitt-cd-cd-user-with-password
+
+  nexus:
+    repository:
+      name: leva-documentation
+
+repositories:
+  - id: golang
+    type: ods
+
+capabilities:
+  - LeVADocs:
+      GAMPCategory: 5

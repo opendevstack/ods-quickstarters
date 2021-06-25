@@ -1,0 +1,69 @@
+= Plain docker image (docker-plain)
+
+== Purpose of this quickstarter
+
+Use this quickstarter when you want to start from a plain Dockerfile only, without any framework on top.
+A good usecase here is a Dockerfile you found on GitHub which you want to run with OpenDevStack features,
+or that you need to "OpenShiftify", by setting an (non-root) execution user, etc.
+
+== What files / architecture is generated?
+
+----
+├── Jenkinsfile - Contains Jenkins build configuration
+├── README.md
+├── docker - Contains Dockerfile for the build
+│   └── Dockerfile
+├── metadata.yml - Component metadata
+├── release-manager.yml - Configuration file for the Release Manager
+└── sonar-project.properties  - SonarQube Configuration
+----
+
+== Frameworks used
+
+None, except for the ODS https://github.com/opendevstack/ods-jenkins-shared-library[jenkins shared library].
+
+== Usage - how do you start after you provisioned this quickstarter
+
+Amend the generated `Dockerfile` as needed.
+
+== How this quickstarter is built through Jenkins
+
+Whatever is in the `/docker` folder will be passed to `oc start build` as the docker context. You can add other files to that context as needed:
+
+----
+def stageBuild(def context) {
+  stage('Build') {
+    // copy any other artifacts, if needed
+    // sh "cp -r build docker/dist"
+    // the docker context passed in /docker
+  }
+}
+----
+
+In case you want to run unit tests, you can add a corresponding statement to `stageUnitTest`:
+
+----
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+    // add your unit tests here, if needed
+  }
+}
+----
+
+Assuming your component contains source code you want to have delivered by the _Release Manager_, the execution of tests and the reporting of their results is mandatory. For this, your component will have to...
+
+- define `name`, `description`, `supplier`, and `version` metadata for your component in `files/release-manager.yml`
+
+- place the test results in the xUnit XML format in a path known to `context.testResults` (defaults to `build/test-results/test`)
+
+- provide these test results to the link:https://plugins.jenkins.io/junit[Jenkins JUnit plugin] via its `junit` step function.
+
+Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
+
+== Builder agent used
+
+none
+
+== Known limitations
+
+N/A

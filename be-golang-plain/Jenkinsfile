@@ -1,82 +1,40 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
-def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-golang-plain"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
 node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
 }
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-golang:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-golang:${agentImageTag}",
+) { context ->
 
+  odsQuickstarterStageCopyFiles(context)
 
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage("initialize target folder ${componentId}") {
-              sh "mkdir -p ${componentId}"
-          }
-          stage('copy files from quickstart to generated project') {
-              sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
-          }
-          stage('write go.mod') {
-            sh "echo 'module example.com/${projectId}/${componentId}' > ${componentId}/go.mod"
-            sh "echo '' >>  ${componentId}/go.mod"
-            sh "echo 'go 1.12' >>  ${componentId}/go.mod"
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Create sonar-project.properties') {
-            sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/sonar-project.properties.template \
-                  --target ${componentId}/sonar-project.properties \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
-          }
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
-      }
+  stage('Initialize new Go module') {
+    dir(context.targetDir) {
+      sh(
+        script: "go mod init example.com/${context.projectId}/${context.projectId}-${context.componentId}",
+        label: 'Initialize new Go module'
+      )
+    }
+  }
+
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component']
+  )
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderSonarProperties(context)
 }

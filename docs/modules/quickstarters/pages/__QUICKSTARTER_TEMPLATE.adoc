@@ -1,0 +1,25 @@
+= (quickstarter name)
+
+== Purpose of this quickstarter
+
+Use this when you want to ...
+
+== What files / which architecture is generated?
+
+...
+
+== Frameworks used
+
+...
+
+== Usage
+
+How do you start after you provisioned this quickstarter?
+
+== Jenkins agent image used
+
+...
+
+== Known limitations
+
+...

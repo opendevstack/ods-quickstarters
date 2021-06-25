@@ -1,0 +1,33 @@
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
+
+node {
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+}
+
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${agentImageTag}",
+) { context ->
+
+  odsQuickstarterStageForkODS(
+    context,
+    [odsComponent: 'ods-provisioning-app', branch: "${odsGitRef}"]
+  )
+
+  /*
+   * see templates in the ods-provisioning-app repository
+   */
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: "${context.targetDir}/ocp-config"]
+  )
+}

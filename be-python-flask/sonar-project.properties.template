@@ -7,14 +7,15 @@ sonar.projectName=@project_id@-@component_id@
 # Comma-separated paths to directories with sources (required)
 sonar.sources=src
 
-# Forced Language (optional)
-sonar.language=py
+# Comma-separated paths to directories containing test source files.
+sonar.tests=tests
+sonar.test.inclusions=**/*_test.py
 
 # Encoding of the source files (optional but recommended as default is ASCII)
 sonar.sourceEncoding=UTF-8
 
 # Exclude test files from coverage analysis
-sonar.coverage.exclusions=src/tests/**
+sonar.coverage.exclusions=tests/**
 
 # Define unit test information inside the python project
 sonar.python.xunit.reportPath=build/test-results/test/tests.xml

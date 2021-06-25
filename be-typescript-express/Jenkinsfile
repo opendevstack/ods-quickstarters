@@ -1,79 +1,62 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
-def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "be-typescript-express"
-def yoVersion = "3.1.1"
-def generatorVersion = "4.2.2"
-def dockerRegistry
-def gitHost
-// vars from jenkins master
 node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
 }
 
-def conts = containerTemplate(
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-nodejs10-angular:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
+) { context ->
 
-podTemplate(
-      label: podLabel,
-      cloud: 'openshift',
-      containers: [conts],
-      volumes: [],
-      serviceAccount: 'jenkins'
-    ) {
-        node(podLabel) {
-          stage('Checkout quickstarter') {
-            checkout scm
-          }
-          stage("init yo") {
-            sh "npm install -g yo@${yoVersion} && npm install -g generator-node-express-typescript@${generatorVersion}"
-            sh "yo --generators"
-          }
-          stage("init Project") {
-              sh "sh ${quickstarterBasepath}/init.sh --project ${projectId} --component ${componentId} --group ${group}"
-          }
-          stage('Setup OpenShift resources') {
-            sh "sh common/scripts/create-component.sh -qs ${quickstarterBasepath} -p ${projectId} -c ${componentId} --force"
-          }
-          stage('Create Jenkinsfile') {
-            sh "sh common/scripts/renderJenkinsTemplate.sh \
-                  --source ${quickstarterBasepath}/Jenkinsfile.template \
-                  --target ${componentId}/Jenkinsfile \
-                  --url ${gitUrlHttp} \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath} \
-                  --ods-image-tag ${odsImageTag} \
-                  --ods-git-ref ${odsGitRef}"
-          }
-          stage('Create sonar-project.properties') {
-            sh "sh common/scripts/renderSonarqubeTemplate.sh \
-                  --source ${quickstarterBasepath}/sonar-project.properties.template \
-                  --target ${componentId}/sonar-project.properties \
-                  --project-id ${projectId} \
-                  --component-id ${componentId}  \
-                  --component-type ${quickstarterBasepath}"
-          }
-          stage('Push to remote') {
-            withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-              writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-            }
-            sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-          }
-      }
+  stage("init Project") {
+    dir("$context.targetDir") {
+      print "Generate package json"
+      sh "npm init -y"
+
+      print "Install dependencies"
+      def typescriptVersion = "3.9.5"
+      def nodeTypeVersion = "14.0.13"
+      def expressVersion = "4.17.1"
+      def jestVersion = "26.0.0"
+      def jestJunitVersion = "10.0.0"
+
+      sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestVersion"
+      sh "npm i jest-junit@$jestJunitVersion --save-dev"
+
+      print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
+      print "Target 10.0.0 and newer versions. Tell the compiler its okay to output JS syntax features from ES2018."
+      sh "npx tsc --init --lib 'es2018' --target 'es2018' --skipLibCheck --outDir './dist'"
+
+      print "Modify script commands in package json file"
+      addScriptsToPackageJson()
+    }
+  }
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageCreateOpenShiftResources(
+    context,
+    [directory: 'common/ocp-config/component-environment']
+  )
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderSonarProperties(context)
+}
+
+def addScriptsToPackageJson() {
+  def data = readJSON file: './package.json'
+  data.scripts.test = "JEST_JUNIT_OUTPUT_DIR='build/test-results/test' JEST_JUNIT_OUTPUT_NAME='test-results.xml' npx jest --reporters=default --reporters=jest-junit --coverage --coverageDirectory=coverage_output --forceExit ./dist"
+  data.scripts.put("build", "tsc")
+  data.scripts.put("start", "node dist/src/index.js")
+  writeJSON file: './package.json', json: data, pretty: 4
 }

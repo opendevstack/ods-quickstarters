@@ -1,0 +1,20 @@
+componentID: docker-plain-test
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: build
+  buildParams:
+    verify:
+      jenkinsStages: golden/jenkins-build-stages.json
+      openShiftResources:
+        imageTags:
+        - name: "{{.ComponentID}}"
+          tag: latest
+        imageStreams:
+        - "{{.ComponentID}}"
+        deploymentConfigs:
+        - "{{.ComponentID}}"
+        services:
+        - "{{.ComponentID}}"

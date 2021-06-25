@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-python
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-python
+    labels:
+      app: jenkins-agent-python
+  spec:
+    lookupPolicy:
+      local: false

@@ -1,0 +1,91 @@
+componentID: releasemanager
+steps:
+- type: provision
+  description: 'provision RM repo'
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: provision
+  description: 'provision one component for the RM'
+  componentID: golang
+  provisionParams:
+    quickstarter: be-golang-plain
+    verify:
+      jenkinsStages: "../../be-golang-plain/testdata/golden/jenkins-provision-stages.json"
+- type: build
+  description: 'run RM pipeline without any repos'
+  buildParams:
+    pipeline: mro-pipeline
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-after-provisioning.json
+- type: upload
+  description: 'configure one component in RM repo'
+  uploadParams:
+    file: fixtures/metadata.yml
+- type: build
+  description: 'RM defaults run (WIP)'
+  buildParams:
+    pipeline: mro-pipeline
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-with-added-repo.json
+      runAttachments:
+      - DTP-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - DTR-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - TIP-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+      - TIR-{{.ProjectID}}-WIP-{{.BuildNumber}}.zip
+- type: build
+  description: 'RM version=1 target=DEV run'
+  buildParams:
+    pipeline: mro-pipeline
+    env:
+    - name: environment
+      value: DEV
+    - name: version
+      value: '1'
+    - name: changeId
+      value: '12345'
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-with-added-repo.json
+      runAttachments:
+      - DTP-{{.ProjectID}}-1-{{.BuildNumber}}.zip
+      - DTR-{{.ProjectID}}-1-{{.BuildNumber}}.zip
+      - TIP-{{.ProjectID}}-1-{{.BuildNumber}}.zip
+      - TIR-{{.ProjectID}}-1-{{.BuildNumber}}.zip
+      openShiftResources:
+        namespace: "{{.ProjectID}}-dev"
+        imageTags:
+        - name: golang
+          tag: latest
+        imageStreams:
+        - golang
+        deploymentConfigs:
+        - golang
+        services:
+        - golang
+- type: build
+  description: 'RM version=1 target=QA run'
+  buildParams:
+    pipeline: mro-pipeline
+    env:
+    - name: environment
+      value: QA
+    - name: version
+      value: '1'
+    - name: changeId
+      value: '12345'
+    verify:
+      jenkinsStages: golden/jenkins-build-stages-qa.json
+      runAttachments:
+      - TIR-{{.ProjectID}}-1-{{.BuildNumber}}.zip
+      openShiftResources:
+        namespace: "{{.ProjectID}}-test"
+        imageTags:
+        - name: golang
+          tag: latest
+        imageStreams:
+        - golang
+        deploymentConfigs:
+        - golang
+        services:
+        - golang
+

@@ -6,14 +6,16 @@ services:
   bitbucket:
     credentials:
       id: @project_id@-cd-cd-user-with-password
-  jira:
-    credentials:
-      id: @project_id@-cd-cd-user-with-password
+
+# Uncomment (below) to connect to jira
+#  jira:
+#    credentials:
+#      id: @project_id@-cd-cd-user-with-password
   nexus:
     repository:
       name: leva-documentation
 
-#repositories:
+repositories: []
 #  - id: A
 #    url: https://github.com/my-org/my-repo-A.git
 #    branch: master
@@ -24,5 +26,14 @@ services:
 #    type: ods
 #  - id: C
 #    type: ods
+#  - id: D
+#    type: ods
+#    forceRebuild: true
 
-repositories: []
+# Uncomment (below) to generate documents	  
+# capabilities:
+#  - LeVADocs:
+#      GAMPCategory: 5
+
+# Uncomment (below) to allow partial rebuilding during development
+# allowPartialRebuild: true

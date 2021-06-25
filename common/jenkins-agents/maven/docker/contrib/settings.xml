@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+ <mirrors>
+   <!-- ### configured mirrors ### -->
+ </mirrors>
+
+ <proxies>
+   <!-- ### configured http proxy ### -->
+  </proxies>
+
+  <!-- inject nexus server credentials -->
+  <servers>
+   <server>
+      <id>nexus</id>
+      <username>__NEXUS_USER</username>
+      <password>__NEXUS_PW</password>
+   </server>
+   <server>
+      <id>mavenpublic</id>
+      <username>__NEXUS_USER</username>
+      <password>__NEXUS_PW</password>
+   </server>
+   <server>
+      <id>atlassianpublic</id>
+      <username>__NEXUS_USER</username>
+      <password>__NEXUS_PW</password>
+   </server>
+   <server>
+      <id>atlassian3rdpartypublic</id>
+      <username>__NEXUS_USER</username>
+      <password>__NEXUS_PW</password>
+   </server>
+  </servers>
+
+ <profiles>
+    <profile>
+      <id>nexusinternal</id>
+      <repositories>
+        <repository>
+          <id>mavenpublic</id>
+          <url>__NEXUS_URL/repository/maven-public</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
+        <repository>
+          <id>atlassianpublic</id>
+          <url>__NEXUS_URL/repository/atlassian_public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
+        <repository>
+          <id>atlassian3rdpartypublic</id>
+          <url>__NEXUS_URL/repository/atlassian_3rdParty/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>mavenpublic</id>
+          <url>__NEXUS_URL/repository/maven-public</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </pluginRepository>
+        <pluginRepository>
+          <id>atlassianpublic</id>
+          <url>__NEXUS_URL/repository/atlassian_public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </pluginRepository>
+        <pluginRepository>
+          <id>atlassian3rdpartypublic</id>
+          <url>__NEXUS_URL/repository/atlassian_3rdParty/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+
+    <!-- Override the repository "central" from the Maven Super POM, to set HTTPS by default -->
+    <profile>
+      <id>securecentral</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>nexusinternal</activeProfile>
+  </activeProfiles>
+</settings>

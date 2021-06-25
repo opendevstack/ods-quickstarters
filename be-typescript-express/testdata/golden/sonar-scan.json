@@ -1,0 +1,26 @@
+{
+  "key": "unitt-typescript-iq-test",
+  "organization": "default-organization",
+  "name": "unitt-typescript-iq-test",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "ts",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-typescript-iq-test",
+      "name": "unitt-typescript-iq-test",
+      "qualifier": "TRK"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM adoptopenjdk/openjdk8:ubi-minimal-jre
 
 WORKDIR /app
 COPY lib/* /app/lib/

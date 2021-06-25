@@ -1,0 +1,17 @@
+    if (!no_nexus) {
+        def nexusMaven = { repoUrl ->
+            maven {
+                credentials {
+                    username = "${nexus_user}"
+                    password = "${nexus_pw}"
+                }
+                url repoUrl
+            }
+        }
+        nexusMaven("${nexus_url}/repository/jcenter/")
+        nexusMaven("${nexus_url}/repository/maven-public/")
+        nexusMaven("${nexus_url}/repository/atlassian_public/")
+    } else {
+        mavenCentral()
+        jcenter()
+    }

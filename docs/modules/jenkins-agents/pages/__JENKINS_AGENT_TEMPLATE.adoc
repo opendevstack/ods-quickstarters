@@ -1,0 +1,15 @@
+= (jenkins agent name)
+
+== Overview
+
+The image is built in the global `cd` project and is named `jenkins-agent-&lt;NAME&gt;`.
+
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-&lt;NAME&gt;`
+
+== Features
+
+What's inside, which plugins are installed, etc.
+
+== Known limitations
+
+...

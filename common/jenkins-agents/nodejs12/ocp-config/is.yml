@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-agent-nodejs12
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-nodejs12
+    labels:
+      app: jenkins-agent-nodejs12
+  spec:
+    lookupPolicy:
+      local: false

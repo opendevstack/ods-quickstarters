@@ -1,4 +1,0 @@
-registry=NEXUS_HOST/repository/npmjs/
-always-auth=true
-_auth=NEXUS_AUTH
-email=no-reply@opendevstack.org

@@ -1,39 +1,20 @@
-/* generated jenkins file used for building and deploying @component_id@ in projects @project_id@ */
-def final projectId = '@project_id@'
-def final componentId = '@component_id@'
-def final credentialsId = "${projectId}-cd-cd-user-with-password"
-def sharedLibraryRepository
-def dockerRegistry
-node {
-  sharedLibraryRepository = env.SHARED_LIBRARY_REPOSITORY
-  dockerRegistry = env.DOCKER_REGISTRY
-}
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
-library identifier: 'ods-library@@ods_git_ref@', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: sharedLibraryRepository,
-   credentialsId: credentialsId])
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
-/*
-  See readme of shared library for usage and customization
-  @ https://github.com/opendevstack/ods-jenkins-shared-library/blob/master/README.md
-  eg. to create and set your own builder slave instead of 
-  the maven/gradle slave used here - the code of the slave can be found at
-  https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-slaves/maven
- */ 
-odsPipeline(
-  image: "${dockerRegistry}/cd/jenkins-slave-maven:@ods_image_tag@",
-  projectId: projectId,
-  componentId: componentId,
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-maven:@agent_image_tag@',
   branchToEnvironmentMapping: [
-    'master': 'test',
-    '*': 'dev'
+    'master': 'dev',
+    // 'release/': 'test'
   ]
 ) { context ->
-  stageBuild(context)
-  stageScanForSonarqube(context)
-  stageStartOpenshiftBuild(context)
-  stageDeployToOpenshift(context)
+  odsComponentStageImportOpenShiftImageOrElse(context) {
+    stageBuild(context)
+    odsComponentStageScanWithSonar(context)
+    odsComponentStageBuildOpenShiftImage(context)
+  }
+  odsComponentStageRolloutOpenShiftDeployment(context)
 }
 
 def stageBuild(def context) {
@@ -43,10 +24,9 @@ def stageBuild(def context) {
   if (springBootEnv.contains('-dev')) {
     springBootEnv = 'dev'
   }
-  stage('Build') {
+  stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}"]) {
       def status = sh(script: "./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
-      junit 'build/test-results/test/*.xml'
       if (status != 0) {
         error "Build failed!"
       }

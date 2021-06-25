@@ -38,8 +38,7 @@ testem.log
 
 # e2e
 /build/
-/screenshots/
-/videos/
+/cypress/
 secrets.json
 
 # System Files

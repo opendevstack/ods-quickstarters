@@ -1,0 +1,16 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src/test/integration/java, src/test/acceptance/java, src/test/resources, src/test/acceptance/groovy, src/test/integration/groovy
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8
+
+# Plugin-specific settings
+sonar.java.binaries=build/classes
+sonar.junit.reportPaths=build/test-results/test
+sonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml

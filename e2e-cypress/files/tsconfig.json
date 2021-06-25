@@ -1,9 +1,8 @@
 {
   "include": [
-    "integration/**/*.spec.ts",
+    "tests/**/*.spec.ts",
     "support/*.ts",
-    "plugins/*.ts",
-    "node_modules/cypress"
+    "plugins/*.ts"
   ],
   "compilerOptions": {
     "baseUrl": "./",
@@ -20,6 +19,6 @@
       "es2017",
       "dom"
     ],
-    "types": ["cypress"]
+    "types": ["cypress", "node"]
   }
 }

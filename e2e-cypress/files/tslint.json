@@ -25,7 +25,7 @@
     "indent": [
       true,
       "spaces",
-       2
+      2
     ],
     "interface-over-type-literal": true,
     "label-position": true,

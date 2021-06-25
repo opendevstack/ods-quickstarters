@@ -1,0 +1,32 @@
+= Contribution ODS Document Generation Service (ods-document-gen-svc)
+
+== Purpose of this quickstarter
+
+The purpose of this quickstarter is to create a fork from github/opendevstack/ods-document-generation-svc,
+so people can easily contribute. It will create a fork and push that into the newly created repository.
+
+== What files / which architecture is generated?
+
+----
+none - clone from https://github.com/opendevstack/ods-document-generation-svc
+----
+
+== Frameworks used
+
+None, except the ODS https://github.com/opendevstack/ods-jenkins-shared-library[Jenkins Shared Library]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+see https://github.com/opendevstack/ods-document-generation-svc
+
+== How this quickstarter is built through Jenkins
+
+see https://github.com/opendevstack/ods-document-generation-svc
+
+== Builder agent used
+
+see https://github.com/opendevstack/ods-document-generation-svc
+
+== Known limitations
+
+N/A

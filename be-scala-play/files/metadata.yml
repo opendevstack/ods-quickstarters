@@ -1,0 +1,6 @@
+---
+name: Playframework
+description: "The High Velocity Web Framework For Java and Scala"
+supplier: https://www.playframework.com/
+version: 4.x
+type: ods

@@ -1,0 +1,26 @@
+{
+  "key": "unitt-golang-iq-test",
+  "organization": "default-organization",
+  "name": "unitt-golang-iq-test",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "go",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "unitt-golang-iq-test",
+      "name": "unitt-golang-iq-test",
+      "qualifier": "TRK"
+    }
+  ]
+}

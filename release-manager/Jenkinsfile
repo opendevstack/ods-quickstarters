@@ -1,83 +1,44 @@
-// build params
-def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
-def odsGitRef = env.ODS_GIT_REF ?: 'production'
-def projectId = env.PROJECT_ID
-def componentId = env.COMPONENT_ID.toLowerCase()
-def packageName = env.PACKAGE_NAME
-def gitUrlHttp = env.GIT_URL_HTTP
-def group = env.GROUP_ID
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
+def odsMainBitbucketProject = ''
 
-def credentialsId = "${projectId}-cd-cd-user-with-password"
-def quickstarterBasepath = "release-manager"
-def dockerRegistry
-def gitHost
-def bitbucketUrl
-
-// vars from jenkins master
 node {
-  dockerRegistry = env.DOCKER_REGISTRY
-  gitHost =  env.BITBUCKET_HOST.split(":")[0]
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+  odsMainBitbucketProject = env.ODS_BITBUCKET_PROJECT ?: 'opendevstack'
 }
 
-def conts = containerTemplate( 
-  name: 'jnlp',
-  image: "${dockerRegistry}/cd/jenkins-slave-base:${odsImageTag}",
-  workingDir: '/tmp',
-  alwaysPullImage: true,
-  args: ''
-)
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
-def podLabel = "quickstarter-${quickstarterBasepath}-${projectId}-${componentId}"
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-base:${agentImageTag}",
+) { context ->
 
-podTemplate(
-  label: podLabel,
-  cloud: 'openshift',
-  containers: [conts],
-  volumes: [],
-  serviceAccount: 'jenkins'
-) {
-  node(podLabel) {
+  odsQuickstarterStageCopyFiles(context)
 
-    stage('Checkout quickstarter') {
-      checkout scm
-      def useHttps = sh(
-        returnStdout: true,
-        script: 'git config remote.origin.url'
-      ).trim().startsWith("https");
-      def bitbucketScheme = useHttps ? 'https://' : 'http://'
-      bitbucketUrl = bitbucketScheme + gitHost
+  stage('Configure metadata.yml for project') {
+    sh "sed 's|@project_id@|'${context.projectId}'|g' ${context.sourceDir}/metadata.yml.tmpl > ${context.componentId}/metadata.yml"
+  }
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  stage('Setup OpenShift resources') {
+    dir(context.sourceDir) {
+      sh """./create-ocp-resources.sh \
+        --project ${context.projectId} \
+        --component ${context.componentId} \
+        --bitbucket ${context.bitbucketUrl} \
+        --ods-namespace ${odsNamespace} \
+        --ods-image-tag ${odsImageTag} \
+        --docker-registry ${context.dockerRegistry} \
+        --bitbucket-ods-project ${odsMainBitbucketProject}
+      """
     }
-
-    stage("initialize target folder ${componentId}") {
-      sh "mkdir -p ${componentId}"
-    }
-
-    stage('copy files from quickstart to generated project') {
-      sh "cp -rv ${quickstarterBasepath}/files/. ${componentId}"
-    }
-
-    stage('configure metadata.yml') {
-      sh "sed 's|@project_id@|'${projectId}'|g' ${quickstarterBasepath}/metadata.yml.tmpl > ${componentId}/metadata.yml"
-    }
-
-    stage('Setup OpenShift resources') {
-      dir(quickstarterBasepath) {
-        sh "sh ./create-ocp-resources.sh -p ${projectId} -c ${componentId} -b ${bitbucketUrl}"
-      }
-    }
-
-    stage('Push to remote') {
-      withCredentials([usernamePassword(credentialsId: credentialsId, passwordVariable: 'pass', usernameVariable: 'user')]) {
-        writeFile file: "/home/jenkins/.netrc", text: "machine ${gitHost} login ${user} password ${pass}"
-      }
-      sh "sh common/scripts/git_push.sh --dir ${componentId} --url ${gitUrlHttp}"
-    }
-
   }
 }
-
-
-
-
-
-
