@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Fixed
+- Rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
+
 ## [2.0] - 2019-12-13
 
 ### Added
