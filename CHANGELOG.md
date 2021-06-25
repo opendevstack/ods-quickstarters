@@ -8,6 +8,7 @@
 ## Unreleased
 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
+- ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
 
 ## [3.0] - 2020-08-11
 
