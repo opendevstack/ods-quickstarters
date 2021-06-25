@@ -40,7 +40,7 @@ RUN apt-get update && \
         r-cran-rjava
 
 # Install Shiny
-RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cran.uni-muenster.de/")'
+RUN R -e 'install.packages(c("shiny", "rmarkdown"), repos="https://cloud.r-project.org/")'
 
 # Install app dependencies and fail if any missing
 RUN R -e 'packages = c("RJDBC", "shinythemes", "ggplot2", "reshape2"); \
