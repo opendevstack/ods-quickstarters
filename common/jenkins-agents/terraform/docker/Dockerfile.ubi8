@@ -57,6 +57,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     && rm -f awscliv2.zip \
     && rm -Rf ./aws
 
+#Install awssamcli
+RUN curl -L "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "awssam.zip" \
+    && unzip -qq -d awssam awssam.zip \
+    && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
+
 # Install Terraform
 RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
     && unzip /tmp/terraform.zip -d /usr/local/bin \
