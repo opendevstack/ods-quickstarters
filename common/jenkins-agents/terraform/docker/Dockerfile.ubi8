@@ -26,7 +26,7 @@ ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
-    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel"
+    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel xz"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
@@ -68,7 +68,7 @@ RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-
     && xzcat node-v${NODEJS_VERSION}-linux-x64.tar.xz | tar xpf - -C /opt/ \
     && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/node \
     && /opt/node/bin/npm install -g aws-cdk \
-    && chown -R jenkins:root /opt/node && chmod +x /opt/node/bin/* \
+    && chown -R 1001:0 /opt/node && chmod +x /opt/node/bin/* \
     && node --version \
     && cdk --version
 
