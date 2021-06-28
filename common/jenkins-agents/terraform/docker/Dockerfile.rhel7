@@ -20,7 +20,7 @@ ENV PACKER_VERSION 1.7.0
 ENV CONSUL_VERSION 1.9.4
 ENV TFENV_VERSION 2.2.0
 ENV BUNDLER_VERSION 2.2.14
-ENV NODE_VERSION 14.17.1
+ENV NODEJS_VERSION 14.17.1
 ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
@@ -82,9 +82,9 @@ RUN curl -L "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam
     && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
 
 # Install aws cdk
-RUN wget -q "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
-    && xzcat node-v${NODE_VERSION}-linux-x64.tar.xz | tar xpf - -C /opt/ \
-    && mv /opt/node-v${NODE_VERSION}-linux-x64 /opt/node \
+RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz" \
+    && xzcat node-v${NODEJS_VERSION}-linux-x64.tar.xz | tar xpf - -C /opt/ \
+    && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/node \
     && /opt/node/bin/npm install -g aws-cdk \
     && chown -R jenkins:root /opt/node && chmod +x /opt/node/bin/* \
     && node --version \
