@@ -15,7 +15,7 @@
 - be-python-flask housekeeping and UBI8 base image introduction ([#585](https://github.com/opendevstack/ods-quickstarters/issues/585))
 - be-gateway-nginx upgrade (OpenResty/nginx 1.19.3) and maintenance ([#588](https://github.com/opendevstack/ods-quickstarters/issues/588))
 - e2e-cypress: Updated Cypress + dependencies to latest compatible versions ([#601](https://github.com/opendevstack/ods-quickstarters/pull/601)), ([#603](https://github.com/opendevstack/ods-quickstarters/issues/603))
-- int-terraform-aws: Update terraform version from 0.14.11 to 1.0.1
+- inf-terraform-aws: Update terraform version from 0.14.11 to 1.0.1, update kitchen-terraform to 5.8.0 ([#614](https://github.com/opendevstack/ods-quickstarters/pull/614))
 
 ### Modified
 
