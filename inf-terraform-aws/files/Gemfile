@@ -1,7 +1,7 @@
 source 'https://rubygems.org' do
   gem 'activesupport'
   gem 'irb'
-  gem 'kitchen-terraform', '~> 5.7.2'
+  gem 'kitchen-terraform', '~> 5.8.0'
   gem 'test-kitchen'
   gem 'rspec-retry'
   gem 'aws-sdk', '~> 3'
