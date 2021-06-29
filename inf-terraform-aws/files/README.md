@@ -15,15 +15,15 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13 |
-| aws | 3.36.0 |
+| terraform | >= 1.0 |
+| aws | 3.47.0 |
 | random | 3.0.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | 3.36.0 |
+| aws | 3.47.0 |
 | local | n/a |
 | random | 3.0.1 |
 
@@ -35,7 +35,7 @@ No Modules.
 
 | Name |
 |------|
-| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.36.0/docs/resources/cloudformation_stack) |
+| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.47.0/docs/resources/cloudformation_stack) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
 | [random_id](https://registry.terraform.io/providers/hashicorp/random/3.0.1/docs/resources/id) |
 
