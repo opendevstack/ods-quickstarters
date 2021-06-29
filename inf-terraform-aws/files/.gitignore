@@ -13,4 +13,5 @@ tfplan
 vendor
 test/integration/*/files/*.json
 test/integration/*/files/*.yml
+Pipfile.lock
 .venv
