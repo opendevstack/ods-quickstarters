@@ -1,5 +1,5 @@
 # https://github.com/openresty/docker-openresty
-FROM openresty/openresty:1.19.3.1-centos7
+FROM openresty/openresty:1.19.3.2-fedora-rpm
 
 ENV LANG=C.UTF-8
 
