@@ -3,7 +3,7 @@ fail_fast: true
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v3.4.0
+  rev: v4.0.1
   hooks:
   - id: check-added-large-files
     args: [--maxkb=5000]
@@ -24,12 +24,12 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.48.0
+  rev: v1.50.0
   hooks:
   - id: terraform_fmt
 
 - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-  rev: v0.3.0
+  rev: v0.3.1
   hooks:
   - id: terraformcreatei2o
     files: (\.tf)$
@@ -37,7 +37,7 @@ repos:
     files: (\.tf)$
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.48.0
+  rev: v1.50.0
   hooks:
   - id: terraform_fmt
   - id: terraform_docs
