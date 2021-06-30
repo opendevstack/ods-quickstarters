@@ -17,7 +17,7 @@ locals {
 
 resource "aws_cloudformation_stack" "cft-s3" {
   name          = var.name
-  template_body = file("${path.module}/cfs3.json")
+  template_body = file("${path.module}/cfn-templates/cfs3.json")
   tags          = local.tags
 }
 

@@ -13,7 +13,7 @@ repos:
   - id: check-merge-conflict
   - id: check-symlinks
   - id: check-yaml
-    args: [--allow-multiple-documents]
+    args: [--allow-multiple-documents, --unsafe]
   - id: detect-aws-credentials
     args: [--allow-missing-credentials]
   - id: detect-private-key
@@ -22,6 +22,12 @@ repos:
   - id: pretty-format-json
     args: [--autofix, --indent=2, --no-ensure-ascii]
   - id: trailing-whitespace
+
+- repo: https://github.com/awslabs/cfn-python-lint
+  rev: v0.52.0
+  hooks:
+  - id: cfn-python-lint
+    files: cfn-templates/.*\.(json|yml|yaml)$
 
 - repo: https://github.com/antonbabenko/pre-commit-terraform
   rev: v1.50.0
