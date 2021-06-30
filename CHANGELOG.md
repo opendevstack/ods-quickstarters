@@ -30,6 +30,7 @@
 - Recover be-python-flask ([#583](https://github.com/opendevstack/ods-quickstarters/issues/583))
 - ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
 - Fix UBI8 Build for Terraform Agent
+- ds-rshiny not able to deploy in OCP 4 ([#609](https://github.com/opendevstack/ods-quickstarters/issues/609))
 
 ### Removed
 
