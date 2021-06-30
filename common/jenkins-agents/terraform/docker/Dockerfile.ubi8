@@ -32,7 +32,6 @@ ENV HOME=/home/jenkins
 COPY python_requirements /tmp/requirements.txt
 
 RUN set -x \
-    && dnf repolist|grep -v -i centos|grep 8 |cut -f1 -d' '|xargs dnf config-manager --disable \
     && dnf -y install $INSTALL_PKGS
 
 RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
