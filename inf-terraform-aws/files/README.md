@@ -1,6 +1,6 @@
 # ODS AWS Quickstarter
 
-This Quickstarter can be used to deploy AWS resources. It's primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation, by wrapping this in Terraform.
+This Quickstarter can be used to deploy AWS resources. Its primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation (native or built using AWS SAM), by wrapping it in Terraform resource.
 
 ## What is a Stack?
 
@@ -17,7 +17,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 |------|---------|
 | terraform | >= 1.0 |
 | aws | 3.47.0 |
-| random | 3.0.1 |
+| random | 3.1.0 |
 
 ## Providers
 
@@ -25,7 +25,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 |------|---------|
 | aws | 3.47.0 |
 | local | n/a |
-| random | 3.0.1 |
+| random | 3.1.0 |
 
 ## Modules
 
@@ -37,7 +37,7 @@ No Modules.
 |------|
 | [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.47.0/docs/resources/cloudformation_stack) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
-| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.0.1/docs/resources/id) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
 
 ## Inputs
 
