@@ -52,6 +52,7 @@ RUN R -e 'packages = c("shinythemes", "ggplot2", "reshape2"); \
     package.check <- lapply(packages, FUN = function(p) { if(!require(p, character.only = TRUE)) { stop("package not found!") } })'
 
 # Setup app
+RUN mkdir /app
 WORKDIR /app
 ADD app.R /app
 EXPOSE 8080
