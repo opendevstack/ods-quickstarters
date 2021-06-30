@@ -29,7 +29,7 @@ repos:
   - id: terraform_fmt
 
 - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-  rev: v0.3.1
+  rev: v0.3.2
   hooks:
   - id: terraformcreatei2o
     files: (\.tf)$
