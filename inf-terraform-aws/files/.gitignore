@@ -13,5 +13,6 @@ tfplan
 vendor
 test/integration/*/files/*.json
 test/integration/*/files/*.yml
+reports/install/*
 Pipfile.lock
 .venv
