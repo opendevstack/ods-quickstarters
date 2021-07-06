@@ -53,10 +53,9 @@ test: install-test-deps
 		./.venv/bin/python3 ./.venv/bin/hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
 	done \
 
-	# See https://github.com/hashicorp/terraform/issues/17655 for TF_WARN_OUTPUT_ERRORS=1.
 	# See https://github.com/test-kitchen/test-kitchen/issues/1436 for why a simple `bundle exec kitchen test` is not an option.
 	for suite in $$(bundle exec kitchen list --bare); do \
-		TF_WARN_OUTPUT_ERRORS=1 bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
+		bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
 		bundle exec kitchen destroy $$suite; \
 	done
 
