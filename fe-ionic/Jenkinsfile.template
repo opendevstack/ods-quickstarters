@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs10-angular:@ods_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
