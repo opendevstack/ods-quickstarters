@@ -22,6 +22,7 @@
 - Default linter for Ionic is now eslint as tslint is deprecated ([#573](https://github.com/opendevstack/ods-quickstarters/pull/575))
 - Upgraded Ionic CLI to v6.13.1 ([#577](https://github.com/opendevstack/ods-quickstarters/pull/577))
 - Updating used base image for nginx to fix CVE ([#602](https://github.com/opendevstack/ods-quickstarters/pull/602))
+- be-gateway-nginx switch from CentOS to Fedora ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 
 ### Fixed
 
