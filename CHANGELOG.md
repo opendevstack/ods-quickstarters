@@ -33,6 +33,7 @@
 - Fix UBI8 Build for Terraform Agent
 - ds-rshiny not able to deploy in OCP 4 ([#609](https://github.com/opendevstack/ods-quickstarters/issues/609))
 - fixed mixed line endings on multiple files ([#618](https://github.com/opendevstack/ods-quickstarters/issues/618))
+- fix dead sbt rpm bintray repo ([#622](https://github.com/opendevstack/ods-quickstarters/issues/622))
 
 ### Removed
 
