@@ -54,9 +54,6 @@ No Modules.
 | Name | Description |
 |------|-------------|
 | inputs2outputs | all inputs passed to outputs |
-| meta\_business\_application\_name | The name of the business application system. |
-| meta\_contact\_email\_address | An email address of a contact person. |
-| meta\_dynamic\_resource\_name | The name of the dynamic resource. |
 | meta\_environment | The type of the environment. |
 | name | The name of the stack. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
