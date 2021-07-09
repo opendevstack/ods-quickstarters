@@ -145,7 +145,7 @@ install-test-deps: install-ruby-gems install-python-env
 .PHONY: cinc-auditor-test
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
-	sh ./lib/scripts/createstackoutputs2yml.sh
+	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
 	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
 
 # Checks if a variable is defined and produces a fatal error if not.
