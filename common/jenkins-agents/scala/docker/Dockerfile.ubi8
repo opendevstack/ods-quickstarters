@@ -16,6 +16,9 @@ RUN yum install -y --enablerepo centos-appstream java-11-openjdk-devel && \
     javac -version
 ENV JAVA_HOME=/usr/lib/jvm/jre
 
+# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
+ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
+
 # Install sbt
 ENV SBT_VERSION=1.5.4
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
