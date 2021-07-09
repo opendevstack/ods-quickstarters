@@ -26,6 +26,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | aws | 3.47.0 |
 | local | n/a |
 | random | 3.1.0 |
+| time | n/a |
 
 ## Modules
 
@@ -38,15 +39,13 @@ No Modules.
 | [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.47.0/docs/resources/cloudformation_stack) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
 | [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
+| [time_static](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | data\_bucket\_name | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
-| meta\_business\_application\_name | The name of the business application system. | `string` | `"quickstarter"` | no |
-| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@phoenix.com"` | no |
-| meta\_dynamic\_resource\_name | The name of the dynamic resource. | `string` | `"undefined"` | no |
 | meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
 | name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
