@@ -1,0 +1,7 @@
+region: eu-west-1 
+  
+credentials:
+  key: @project_id@-cd-aws-access-key-id-prod
+  secret: @project_id@-cd-aws-secret-access-key-prod
+
+account: "<your_aws_account_id"
