@@ -6,11 +6,27 @@ ARG nexusUrl
 ARG nexusUsername
 ARG nexusPassword
 
-ENV SBT_VERSION=1.3.13
-ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
+# Install Java
+RUN yum install -y java-11-openjdk-devel && \
+    yum clean all -y && \
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
+    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
+    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
+    java -version && \
+    javac -version
+ENV JAVA_HOME=/usr/lib/jvm/jre
 
-RUN curl -O -L http://dl.bintray.com/sbt/rpm/sbt-$SBT_VERSION.rpm && \
-    yum -y install sbt-$SBT_VERSION.rpm && \
+# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
+ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
+
+
+# Install sbt
+ENV SBT_VERSION=1.5.4
+ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
+RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
+    curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
+    mv sbt-rpm.repo /etc/yum.repos.d/ && \
+    yum -y install sbt-$SBT_VERSION && \
     yum clean all && \
     rm -rf /var/cache/yum
 
@@ -29,16 +45,10 @@ RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/
     sed -i.bak -e "s|NEXUS_PASSWORD|$nexusPassword|g" $HOME/.sbt/.credentials && \
     rm $HOME/.sbt/.credentials.bak && \
     cd /tmp && \
-    /tmp/set_sbt_proxy.sh
+    /tmp/set_sbt_proxy.sh && \
+    if [ ! -f "/usr/bin/sbt" ]; then echo "sbt path /usr/bin/sbt could not be found"; exit 1 ; fi
 
-RUN sbt new scala/scala-seed.g8 --name="scala-test" -v && \
-    cd scala-test && \
-    sbt test && \
-    rm -rf /tmp/scala-test /tmp/target
 
-RUN	\
-    chgrp -R 0 $HOME && \
-    chmod -R 777 $HOME && \
-	chown -R 1001 $HOME
-
+RUN chgrp -R 0 $HOME && \
+    chmod -R g=u $HOME
 USER 1001

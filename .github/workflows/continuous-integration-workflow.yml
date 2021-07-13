@@ -150,20 +150,36 @@ jobs:
         run: |
           docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
 
+  jenkins-agent-scala-rhel7:
+    name: Jenkins agent Scala (RHEL7)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/scala/docker
+        run: |
+          docker build --tag agent-scala-test-rhel7 --file Dockerfile.rhel7 \
+             --build-arg nexusUrl=https://nexus.example.com \
+             --build-arg nexusUsername=developer \
+             --build-arg nexusPassword=s3cr3t \
+             .
 
-# jenkins-agent-scala:
-#   name: Jenkins agent Scala
-#   runs-on: ubuntu-18.04
-#   steps:
-#     -
-#       name: Checkout repository
-#       uses: actions/checkout@v2.0.0
-#     -
-#       name: Build docker image
-#       working-directory: common/jenkins-agents/scala/docker
-#       run: |
-#           docker build --tag agent-scala-test \
-#             --build-arg nexusUrl=https://nexus.example.com \
-#             --build-arg nexusUsername=developer \
-#             --build-arg nexusPassword=s3cr3t \
-#             .
+  jenkins-agent-scala-ubi8:
+    name: Jenkins agent Scala (UBI8)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/scala/docker
+        run: |
+          docker build --tag agent-scala-test-rhel7 --file Dockerfile.ubi8 \
+             --build-arg nexusUrl=https://nexus.example.com \
+             --build-arg nexusUsername=developer \
+             --build-arg nexusPassword=s3cr3t \
+             .
