@@ -20,13 +20,14 @@ ENV PACKER_VERSION 1.7.0
 ENV CONSUL_VERSION 1.9.4
 ENV TFENV_VERSION 2.2.0
 ENV BUNDLER_VERSION 2.2.14
+ENV NODEJS_VERSION 14.17.1
 ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
-    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel"
-ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:$PATH
+    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel xz"
+ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
 COPY python_requirements /tmp/requirements.txt
@@ -68,12 +69,26 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 # Install python requirements
 RUN python3 -m pip install -r /tmp/requirements.txt
 
-#Install awscli2
+# Install awscli2
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip -qq awscliv2.zip \
     && ./aws/install \
     && rm -f awscliv2.zip \
     && rm -Rf ./aws
+
+# Install awssamcli
+RUN curl -L "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "awssam.zip" \
+    && unzip -qq -d awssam awssam.zip \
+    && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
+
+# Install aws cdk
+RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz" \
+    && xzcat node-v${NODEJS_VERSION}-linux-x64.tar.xz | tar xpf - -C /opt/ \
+    && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/node \
+    && /opt/node/bin/npm install -g aws-cdk \
+    && chown -R 1001:0 /opt/node && chmod +x /opt/node/bin/* \
+    && node --version \
+    && cdk --version
 
 # Install Terraform
 RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
@@ -81,7 +96,7 @@ RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TE
     && rm -rf /tmp/terraform.zip \
     && terraform -h
 
-#Install tfenv
+# Install tfenv
 RUN umask 0002 && cd /opt && git clone --branch v${TFENV_VERSION} https://github.com/tfutils/tfenv.git \
     && TFENV_CURL_OUTPUT=0 /opt/tfenv/bin/tfenv install ${TERRAFORM_VERSION} \
     && /opt/tfenv/bin/tfenv use ${TERRAFORM_VERSION} \
