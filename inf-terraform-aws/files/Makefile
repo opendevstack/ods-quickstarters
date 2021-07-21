@@ -125,7 +125,8 @@ install-git-pre-commit-hooks:
 # Install Ruby gems specified in Gemfile.
 install-ruby-gems:
 	BUNDLE_SILENCE_ROOT_WARNING=true bundle config --local path $(GEMS_HOME)
-	BUNDLE_SILENCE_ROOT_WARNING=true bundle install --jobs=8
+	# see https://github.com/rubygems/rubygems/issues/4466 to get rid of error messages in Jenkins
+	BUNDLE_SILENCE_ROOT_WARNING=true TMPDIR=./vendor/tmp bundle install --jobs=8
 
 .PHONY: install-python-env
 # Install python virtual environment based on Pipfile
