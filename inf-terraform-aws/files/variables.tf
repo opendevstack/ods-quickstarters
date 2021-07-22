@@ -25,28 +25,10 @@ variable "name" {
   default     = "stack-aws-quickstarter"
 }
 
-variable "meta_business_application_name" {
-  description = "The name of the business application system."
-  type        = string
-  default     = "quickstarter"
-}
-
 variable "meta_environment" {
   description = "The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION."
   type        = string
   default     = "DEVELOPMENT"
-}
-
-variable "meta_contact_email_address" {
-  description = "An email address of a contact person."
-  type        = string
-  default     = "changeme@phoenix.com"
-}
-
-variable "meta_dynamic_resource_name" {
-  description = "The name of the dynamic resource."
-  type        = string
-  default     = "undefined"
 }
 
 # ---------------------------------------------

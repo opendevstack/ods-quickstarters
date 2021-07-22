@@ -1,6 +1,6 @@
 # ODS AWS Quickstarter
 
-This Quickstarter can be used to deploy AWS resources. It's primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation, by wrapping this in Terraform.
+This Quickstarter can be used to deploy AWS resources. Its primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation (native or built using AWS SAM), by wrapping it in Terraform resource.
 
 ## What is a Stack?
 
@@ -15,17 +15,18 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13 |
-| aws | 3.36.0 |
-| random | 3.0.1 |
+| terraform | >= 1.0 |
+| aws | 3.47.0 |
+| random | 3.1.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | 3.36.0 |
+| aws | 3.47.0 |
 | local | n/a |
-| random | 3.0.1 |
+| random | 3.1.0 |
+| time | n/a |
 
 ## Modules
 
@@ -35,18 +36,16 @@ No Modules.
 
 | Name |
 |------|
-| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.36.0/docs/resources/cloudformation_stack) |
+| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.47.0/docs/resources/cloudformation_stack) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
-| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.0.1/docs/resources/id) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
+| [time_static](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | data\_bucket\_name | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
-| meta\_business\_application\_name | The name of the business application system. | `string` | `"quickstarter"` | no |
-| meta\_contact\_email\_address | An email address of a contact person. | `string` | `"changeme@phoenix.com"` | no |
-| meta\_dynamic\_resource\_name | The name of the dynamic resource. | `string` | `"undefined"` | no |
 | meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
 | name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
@@ -55,9 +54,6 @@ No Modules.
 | Name | Description |
 |------|-------------|
 | inputs2outputs | all inputs passed to outputs |
-| meta\_business\_application\_name | The name of the business application system. |
-| meta\_contact\_email\_address | An email address of a contact person. |
-| meta\_dynamic\_resource\_name | The name of the dynamic resource. |
 | meta\_environment | The type of the environment. |
 | name | The name of the stack. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

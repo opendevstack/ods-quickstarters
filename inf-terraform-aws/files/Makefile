@@ -53,10 +53,9 @@ test: install-test-deps
 		./.venv/bin/python3 ./.venv/bin/hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
 	done \
 
-	# See https://github.com/hashicorp/terraform/issues/17655 for TF_WARN_OUTPUT_ERRORS=1.
 	# See https://github.com/test-kitchen/test-kitchen/issues/1436 for why a simple `bundle exec kitchen test` is not an option.
 	for suite in $$(bundle exec kitchen list --bare); do \
-		TF_WARN_OUTPUT_ERRORS=1 bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
+		bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
 		bundle exec kitchen destroy $$suite; \
 	done
 
@@ -126,7 +125,8 @@ install-git-pre-commit-hooks:
 # Install Ruby gems specified in Gemfile.
 install-ruby-gems:
 	BUNDLE_SILENCE_ROOT_WARNING=true bundle config --local path $(GEMS_HOME)
-	BUNDLE_SILENCE_ROOT_WARNING=true bundle install --jobs=8
+	# see https://github.com/rubygems/rubygems/issues/4466 to get rid of error messages in Jenkins
+	BUNDLE_SILENCE_ROOT_WARNING=true TMPDIR=./vendor/tmp bundle install --jobs=8
 
 .PHONY: install-python-env
 # Install python virtual environment based on Pipfile
@@ -145,7 +145,7 @@ install-test-deps: install-ruby-gems install-python-env
 .PHONY: cinc-auditor-test
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
-	sh ./lib/scripts/createstackoutputs2yml.sh
+	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
 	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
 
 # Checks if a variable is defined and produces a fatal error if not.
