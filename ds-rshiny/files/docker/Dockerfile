@@ -22,12 +22,11 @@ RUN echo 'force-unsafe-io' > /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
     /usr/sbin/update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
     # Add CRAN apt repo / focal (Ubuntu 20.04) R/4.0
     if [ -n "$HTTP_PROXY" ]; then \
-        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --keyserver-options http-proxy=$HTTP_PROXY --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-        echo 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' > /etc/apt/sources.list.d/cran.list; \
+        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --keyserver-options http-proxy=$HTTP_PROXY --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9; \
     else \
-        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-        echo 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' > /etc/apt/sources.list.d/cran.list; \
+        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9; \
     fi && \
+    echo 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' > /etc/apt/sources.list.d/cran.list && \
     # Install dependencies
     apt-get update && \
     apt-get install -yqq \
