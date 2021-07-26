@@ -38,6 +38,7 @@
 - fix dead sbt rpm bintray repo ([#622](https://github.com/opendevstack/ods-quickstarters/issues/622))
 - openjdk 11 does not recognize VM setting ([#623](https://github.com/opendevstack/ods-quickstarters/issues/623))
 - inf-terraform-aws - drop Pipfile.lock
+- fix r-shiny build behind proxy ([#627](https://github.com/opendevstack/ods-quickstarters/issues/627))
 
 ### Removed
 
