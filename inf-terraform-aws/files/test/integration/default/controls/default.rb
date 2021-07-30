@@ -9,9 +9,9 @@ tags = { :Name => name + '-' + id }
 
 f = SpecHelper::FixtureData.new.for_module(name)
 
-control 'stackdefault' do
+control 'stack' do
   impact 1.0
-  title  "Test Suite: 'Stack Default'"
+  title  "Test Suite: 'Stack'"
   desc   "This test suite asserts the correct functionality of the stack under test."
   tag    name
 

@@ -1,0 +1,51 @@
+= Infrastructure Terraform AWS Quickstarter (inf-terraform-aws)
+
+The project supports generation of AWS deployments utilizing terraform tooling.
+installation and integration of it with OpenShift CD pipelines.
+
+== Purpose of this quickstarter
+
+The quickstarter comes with a sample terraform resource which deploys a S3 bucket using AWS CloudFormation.
+This is a showcase to elaborate the combination of both technologies.
+
+The quickstarter includes kitchen-terraform with InSpec / cinc-auditor for testing.
+
+== What files / architecture is generated?
+
+----
+├── Jenkinsfile - This file contains Jenkins stages.
+├── README.md
+├── environments
+│   ├── dev.json - This file describes parameters for the development AWS environment.
+│   ├── test.json - This file describes parameters for the test AWS environment.
+│   └── prod.json - This file describes parameters for the production AWS environment.
+├── test - This folder contains the root for test-kitchen
+│   ├── fixtures/default - This folder contains the test case to deploy.
+│   └── integration/default/controls/ - This folder contains the test cases to test.
+
+----
+
+== Frameworks used
+
+* https://www.terraform.io[terraform]
+* https://github.com/newcontext-oss/kitchen-terraform[kitchen-terraform]
+* https://www.ruby-lang.org/en/[Ruby]
+* https://community.chef.io/tools/chef-inspec[Chef-InSpec]
+* https://cinc.sh/start/auditor/[cinc-auditor]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+Inject preferred tags into common-tags.tf, add/remove resources needed to main.tf.
+
+
+== How this quickstarter is built through Jenkins
+
+The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages.
+
+== Jenkins agent used
+
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/terraform[terraform] Jenkins agent.
+
+== Known limitations
+
+Let us know if you find any, thanks!

@@ -1,5 +1,5 @@
 # This file has been created automatically.
 
-output "module_coco_storage" {
+output "module_ods_quickstarters" {
   value = module.stack-aws-quickstarter-test.*
 }

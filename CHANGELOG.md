@@ -6,6 +6,7 @@
 
 - requests access logging enabled for openshift oauth proxy component (used by ds-rshiny and ds-jupyter-lab) ([#590](https://github.com/opendevstack/ods-quickstarters/issues/590))
 - e2e-cypress: Added support for login with Azure SSO + MSALv2 ([#601](https://github.com/opendevstack/ods-quickstarters/pull/601))
+- terraform jenkins agent: Added AWS SAM CLI and AWS CDK ([#608](https://github.com/opendevstack/ods-quickstarters/pull/608))
 
 ### Changed
 
@@ -14,6 +15,7 @@
 - be-python-flask housekeeping and UBI8 base image introduction ([#585](https://github.com/opendevstack/ods-quickstarters/issues/585))
 - be-gateway-nginx upgrade (OpenResty/nginx 1.19.3) and maintenance ([#588](https://github.com/opendevstack/ods-quickstarters/issues/588))
 - e2e-cypress: Updated Cypress + dependencies to latest compatible versions ([#601](https://github.com/opendevstack/ods-quickstarters/pull/601)), ([#603](https://github.com/opendevstack/ods-quickstarters/issues/603))
+- inf-terraform-aws: Update terraform version from 0.14.11 to 1.0.3, update kitchen-terraform to 5.8.0, remove Pipfile.lock, bump hashcorp/random to 3.1.0, rename inspec test suite from stackdefault to stack, bump inspec-aws to 1.51.5, bump inspec to 4.37.30, bump ruby to 2.7.4, add cfn-lint to pre-commit-hooks, set QS version to 4.1 in metadata, drop TF_WARN_OUTPUT_ERRORS=1 when running kitchen verify ([#617](https://github.com/opendevstack/ods-quickstarters/pull/617))
 
 ### Modified
 
@@ -35,7 +37,10 @@
 - fixed mixed line endings on multiple files ([#618](https://github.com/opendevstack/ods-quickstarters/issues/618))
 - fix dead sbt rpm bintray repo ([#622](https://github.com/opendevstack/ods-quickstarters/issues/622))
 - openjdk 11 does not recognize VM setting ([#623](https://github.com/opendevstack/ods-quickstarters/issues/623))
-- fix environment templates in AWS QS 
+- inf-terraform-aws - drop Pipfile.lock
+- fix r-shiny build behind proxy ([#627](https://github.com/opendevstack/ods-quickstarters/issues/627))
+- fix environment templates (AWS QS) ([#629](https://github.com/opendevstack/ods-quickstarters/issues/629))
+- Fix Smoke Test Region (AWS QS) ([#633](https://github.com/opendevstack/ods-quickstarters/issues/633)
 
 ### Removed
 
