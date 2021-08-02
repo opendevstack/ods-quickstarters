@@ -150,7 +150,7 @@ def stageSmoke(def context) {
         string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
      ])
       {
-       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegionTesting))
+       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegion))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
