@@ -1,12 +1,12 @@
 driver:
   name: terraform
-  command_timeout: 5400
+  command_timeout: 10800
 
 provisioner:
   name: terraform
 
 platforms:
-- name: aws
+- name: azure
 
 verifier:
   name: terraform
@@ -22,8 +22,8 @@ suites:
     root_module_directory: test/fixtures/default
   verifier:
     systems:
-    - name: aws
-      backend: aws
+    - name: azure
+      backend: azure
       reporter:
       - cli
       - json:reports/install/data/inspec/pre-install/default.json

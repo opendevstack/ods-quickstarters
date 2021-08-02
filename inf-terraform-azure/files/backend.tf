@@ -1,3 +1,4 @@
+# //TODO: decide on Azure Backend
 terraform {
   backend "s3" {
     bucket = "<your_bucket_name>"

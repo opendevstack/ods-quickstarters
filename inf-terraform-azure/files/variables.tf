@@ -3,9 +3,10 @@
 # This stack supports the following secrets as environment variables.
 # -----------------------------------------------------------------------------
 
-# AWS_ACCESS_KEY_ID
-# AWS_SECRET_ACCESS_KEY
-# AWS_DEFAULT_REGION
+# ARM_SUBSCRIPTION_ID
+# ARM_TENANT_ID
+# ARM_CLIENT_ID
+# ARM_CLIENT_SECRET
 
 # -----------------------------------------------------------------------------
 # REQUIRED PARAMETERS
@@ -22,22 +23,12 @@
 variable "name" {
   description = "The name of the stack."
   type        = string
-  default     = "stack-aws-quickstarter"
+  default     = "stack-azure-quickstarter"
 }
 
 variable "meta_environment" {
   description = "The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION."
   type        = string
   default     = "DEVELOPMENT"
-}
-
-# ---------------------------------------------
-# S3 Bucket Variables
-# ---------------------------------------------
-
-variable "data_bucket_name" {
-  description = "The name of the S3 data bucket."
-  type        = string
-  default     = "quickstarter"
 }
 

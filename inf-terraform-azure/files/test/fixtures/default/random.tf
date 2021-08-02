@@ -4,7 +4,7 @@ resource "random_id" "id" {
   byte_length = 4
 }
 
-resource "random_string" "passwordrds" {
+resource "random_string" "passworddb" {
   length           = 16
   min_lower        = 1
   min_upper        = 1
@@ -15,5 +15,5 @@ resource "random_string" "passwordrds" {
 
 locals {
   id       = random_id.id.hex
-  password = random_string.passwordrds.result
+  password = random_string.passworddb.result
 }

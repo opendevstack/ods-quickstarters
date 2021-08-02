@@ -1,6 +1,6 @@
-# ODS AWS Quickstarter
+# ODS Azure Quickstarter
 
-This Quickstarter can be used to deploy AWS resources. Its primary usage is to build a stack based on Terraform modules, but it also supports Cloudformation (native or built using AWS SAM), by wrapping it in Terraform resource.
+This Quickstarter can be used to deploy Azure resources. Its primary usage is to build a stack based on Terraform modules, but it also supports Azure RM templates, by wrapping these in Terraform resources.
 
 ## What is a Stack?
 
@@ -16,14 +16,12 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | terraform | >= 1.0 |
-| aws | 3.47.0 |
 | random | 3.1.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | 3.47.0 |
 | local | n/a |
 | random | 3.1.0 |
 | time | n/a |
@@ -36,7 +34,6 @@ No Modules.
 
 | Name |
 |------|
-| [aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/3.47.0/docs/resources/cloudformation_stack) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
 | [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
 | [time_static](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) |
@@ -47,7 +44,7 @@ No Modules.
 |------|-------------|------|---------|:--------:|
 | data\_bucket\_name | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
 | meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
-| name | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
+| name | The name of the stack. | `string` | `"stack-azure-quickstarter"` | no |
 
 ## Outputs
 
@@ -64,12 +61,13 @@ No Modules.
 Testing the functionality of this stack requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), and [`terraform`](https://www.terraform.io/). Once installed, run `make test` from the command line.
 
 
-Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *AWS* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
+Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *Azure* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
 
 ```
-$ export AWS_ACCESS_KEY_ID=...
-$ export AWS_SECRET_ACCESS_KEY=...
-$ export AWS_DEFAULT_REGION=us-east-1
+$ export AZURE_SUBSCRIPTION_ID=...
+$ export AZURE_TENANT_ID=...
+$ export AZURE_CLIENT_ID=...
+$ export AZURE_CLIENT_SECRET=...
 $ make test
 ```
 

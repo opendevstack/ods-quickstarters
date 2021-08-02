@@ -1,13 +1,11 @@
 locals {
-  name = "stack-aws-quickstarter-test"
+  name = "stack-azure-quickstarter-test"
   tags = {
     Name = local.name
   }
 }
 
-data "aws_region" "current" {}
-
-module "stack-aws-quickstarter-test" {
+module "stack-azure-quickstarter-test" {
   source = "../../.."
 
   name             = local.name

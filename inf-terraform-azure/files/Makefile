@@ -1,5 +1,5 @@
-NAME                     := AWS Quickstarter
-DESCRIPTION              := The '$(NAME)' is a is a prototype for an ODS quickstarter
+NAME                     := Azure Quickstarter
+DESCRIPTION              := The '$(NAME)' is a is a prototype for an ODS quickstarter utilizing Azure Cloud Infrastructure.
 
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
@@ -33,14 +33,21 @@ prep-test:
 	pre-commit run terraformstackmoduleoutputs -a
 
 .PHONY: test
-# Run (pre-deployment) tests.
+# Run (pre-deployment) tests. Terraform uses ARM_*, RubySDK/ inspec-azure use AZURE_*
 test: install-test-deps
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+test: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+test: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
+test: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
+test: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+test: install-test-deps test-terraform-modules
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,AZURE_TENANT_ID)
+	$(call check_defined,AZURE_CLIENT_ID)
+	$(call check_defined,AZURE_CLIENT_SECRET)
 
-	# output aws account and user id for testing
-	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_testing_account.log
+	# output azure subscription id and user
+	# //TODO: az cli ....
+	# az.......... | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
 
 	# Remove any previously created Terraform test artefacts.
 	for dir in .terraform terraform.tfstate.d; do \
@@ -62,21 +69,34 @@ test: install-test-deps
 .PHONY: plan
 # Plan infrastructure deployment.
 plan: init-terraform
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+test: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+test: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
+test: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
+test: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+test: install-test-deps test-terraform-modules
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,AZURE_TENANT_ID)
+	$(call check_defined,AZURE_CLIENT_ID)
+	$(call check_defined,AZURE_CLIENT_SECRET)
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform plan -input=false -out=tfplan
 
 .PHONY: deploy
 # Deploy infrastructure.
 deploy: init-terraform plan
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+test: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+test: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
+test: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
+test: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+test: install-test-deps test-terraform-modules
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,AZURE_TENANT_ID)
+	$(call check_defined,AZURE_CLIENT_ID)
+	$(call check_defined,AZURE_CLIENT_SECRET)
 
-	# output aws account and user id for testing
-	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_deploy_account.log
+	# output azure subscription id and user
+	# //TODO: az cli ....
+	# az.......... | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
@@ -84,14 +104,15 @@ deploy: init-terraform plan
 .PHONY: smoke-test
 # Run (post-deployment) tests.
 smoke-test: install-test-deps
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,AZURE_TENANT_ID)
+	$(call check_defined,AZURE_CLIENT_ID)
+	$(call check_defined,AZURE_CLIENT_SECRET)
 
 	sh ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for profile in $$inspec_profiles; do \
-		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
+		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target azure://; \
 	done
 
 .PHONY: install-report
@@ -106,9 +127,16 @@ describe: init-terraform
 .PHONY: destroy
 # Destroy infrastructure.
 destroy: init-terraform
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+destroy: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+destroy: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
+destroy: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
+destroy: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+destroy: init-terraform
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,AZURE_TENANT_ID)
+	$(call check_defined,AZURE_CLIENT_ID)
+	$(call check_defined,AZURE_CLIENT_SECRET)
+
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform destroy -auto-approve
 
@@ -136,6 +164,7 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
+	# TODO: define backend
 	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="workspace_key_prefix=$(TF_BACKEND_PREFIX)" -backend-config="key=$(TF_BACKEND_S3KEY)/terraform.tfstate"
 
 .PHONY: install-test-deps
@@ -146,7 +175,7 @@ install-test-deps: install-ruby-gems install-python-env
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target azure://
 
 # Checks if a variable is defined and produces a fatal error if not.
 check_defined = \

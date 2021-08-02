@@ -1,7 +1,7 @@
 ---
-name: AWS
+name: AZURE
 # yamllint disable-line rule:line-length
-description: "Amazon Web Services (AWS) offers reliable, scalable, and inexpensive cloud computing services. Free to join, pay only for what you use."
-supplier: https://aws.amazon.com/
-version: 4.1
+description: "Azure offers reliable, scalable, and inexpensive cloud computing services. Free to join, pay only for what you use."
+supplier: https://azure.microsoft.com/
+version: 4.0
 type: ods-infra
