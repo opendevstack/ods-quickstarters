@@ -40,7 +40,7 @@
 - inf-terraform-aws - drop Pipfile.lock
 - fix r-shiny build behind proxy ([#627](https://github.com/opendevstack/ods-quickstarters/issues/627))
 - fix environment templates (AWS QS) ([#629](https://github.com/opendevstack/ods-quickstarters/issues/629))
-- Fix Smoke Test Region (AWS QS) ([#633](https://github.com/opendevstack/ods-quickstarters/issues/633)
+- fix Smoke Test Region (AWS QS) ([#633](https://github.com/opendevstack/ods-quickstarters/issues/633)
 
 ### Removed
 
