@@ -1,0 +1,196 @@
+= Component metadata
+
+The quickstarters include a skeleton metadata file metadata.yml.
+
+This file provides information about the component, but some metadata entries are also used to label
+the OpenShift resources created for the component.
+
+The following is a table with the supported metadata entries and the labels for which they are used:
+
+[cols="1,2,3,4"]
+|===
+
+| Entry key | Meaning | Example | Label
+
+| <<_name>>
+| The name of the software deployed in this component
+| mongodb
+| app.kubernetes.io/name
+
+| <<_description>>
+| Description of the software deployed in this component
+| MongoDB is a general-purpose document-based distributed database.
+|
+
+| <<_supplier>>
+| Supplier of the software deployed in this component
+| https://www.mongodb.com/
+|
+
+| <<_version>>
+| Version of the software deployed in this component
+| 4.0.8
+| app.kubernetes.io/version
+
+| <<_type>>
+| Type of OpenDevStack component
+| ods-service
+| app.opendevstack.org/type
+
+| <<_role>>
+| Role this component plays in the architecture
+| database
+| app.kubernetes.io/component
+
+| <<_partof>>
+| Name of a higher-level application this component is part of
+| my-online-shop
+| app.kubernetes.io/part-of
+
+| <<_runtime>>
+| The runtime this software runs on
+| spring-boot
+| app.openshift.io/runtime
+
+| <<_runtimeversion>>
+| The version of the runtime this software runs on
+| 1.4.4.RELEASE
+| app.openshift.io/runtime-version
+
+|===
+
+== Detailed description
+
+Detailed description of the supported metadata entries.
+
+It is strongly recommended to follow the guidelines for the entries that are used to label OpenShift resources.
+
+Moreover, OpenShift label values must meet the following restrictions: must be 63 characters or less and must be empty
+or begin and end with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between.
+
+The values given in the metadata file will be sanitised to adhere to those restrictions,
+but it is recommended to use compliant values that need no sanitation.
+
+=== name
+
+This is the software deployed in this component. There may be other instances of the same software in other components.
+
+For components of type ods, which are pieces of software developed as part of the project,
+this is recommended to be set to the component ID.
+For components of type ods-service, which are instances of some existing software,
+this is recommended to be set to a well-known id of the software being deployed.
+
+Suitable values for this label can be retrieved from Maven artifactId, Gradle project.name, docker image name,
+Helm {{ template "name" . }}…
+
+Examples: user-service, mongodb.
+
+This metadata entry will be used as the value of the label app.kubernetes.io/name.
+
+=== description
+
+This is the description of the software deployed in this component.
+
+Examples: "User-management microservice" or "MongoDB is a general-purpose document-based distributed database".
+
+=== supplier
+
+The supplier of the software being deployed. Possible a web-page link.
+
+Example: https://www.mongodb.com/
+
+=== version
+
+This is the version of the software identified by the name entry.
+
+Example: 4.0.8.
+
+This metadata entry will be used as the value of the label app.kubernetes.io/version.
+
+=== type
+
+The type of OpenDevStack component.
+
+Valid types are ods, ods-service, ods-test and ods-infra.
+
+When using the release manager, this value should match the type parameter for this component in the
+release manager metadata file.
+
+Example: ods-service
+
+This metadata entry will be used as the value of the label app.kubernetes.io/name.
+
+=== role
+
+This is the role this component plays in the architecture.
+
+Example: database.
+
+Any value can be set, but the following values are recommended:
+
+[cols="1,2"]
+|===
+| Value | Meaning
+
+| frontend
+| Serves the UI or part of the UI for an application.
+
+| backend
+| Usually an application code that is running on a runtime or framework.
+
+| database
+| Data persistence.
+
+| integration
+| Integration middleware such as API gateways or single-sign-on software.
+
+| cache
+| Stores information from other components for performance purposes.
+
+| queue
+| Message queue, asynchronous communication component.
+
+|===
+
+Whenever one of these values is appropriate, it is recommended to use it.
+
+This metadata entry will be used as the value of the label app.kubernetes.io/component.
+
+=== partOf
+
+The name of a higher level application this component is part of.
+
+This is used to group components as part of a higher-level application, when suitable.
+
+Example: you are building an online shop, and this component is part of it.
+You can set partOf: my-online-shop.
+
+This metadata entry will be used as the value of the label app.kubernetes.io/part-of.
+
+=== runtime
+
+The runtime to be used to bootstrap the component.
+
+There may be more than one runtime, so the most meaningful or specific one should be set here.
+A typical example is a Spring-Boot application. Both Spring Boot and the JRE are suitable runtimes,
+but the first one is chosen, as the JRE is implied by Spring Boot, but not the other way around.
+
+Other possible runtimes are nodejs, angularjs, etc.
+
+Suitable values can be taken from the runtime Maven artifactId, Gradle project.name, docker image name…
+
+Example: spring-boot.
+
+This metadata entry will be used as the value of the label app.openshift.io/runtime.
+
+=== runtimeVersion
+
+The version of the runtime.
+
+Suitable values can be taken from the runtime Maven version, Gradle project.version, docker image version tag…
+
+This label does not make sense, if runtime is not also specified.
+
+Example: 1.4.4.RELEASE.
+
+This metadata entry will be used as the value of the label app.openshift.io/runtime-version.

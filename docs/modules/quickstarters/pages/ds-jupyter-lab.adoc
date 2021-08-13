@@ -48,6 +48,18 @@ jupyter kernelspec list  # this is for validating installation
 
 Now on a notebook you can select that new kernel by clicking on the name you see on the top right where you see the dot status.
 
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the OpenShift resources will be labeled based on this metadata.
+
+```yaml
+name: jupyterlab
+description: "JupyterLab is a web-based interactive development environment for Jupyter notebooks, code, and data."
+supplier: https://jupyter.org/
+version: 3.0.14
+type: ods-service
+```
 
 == How this quickstarter is built through jenkins
 

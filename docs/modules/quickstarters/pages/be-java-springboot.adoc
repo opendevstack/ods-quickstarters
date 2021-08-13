@@ -99,6 +99,22 @@ After cloning it use `./gradlew build` to verify that the project compiles and t
 
 NOTE: java 8 or later version is required to run gradlew and compile java classes.
 
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the OpenShift resources will be labeled based on this metadata.
+
+```yaml
+name: <the component id (this is the default, if omitted)>
+description: "Some microservice implemented in Java over Spring Boot"
+supplier: https://example.com
+version: 1.0.1
+type: ods
+role: backend
+runtime: spring-boot
+runtimeVersion: 2.1.16.RELEASE
+```
+
 == How this quickstarter is built thru jenkins
 The `Jenkinsfile` implements the CI/CD pipeline of your project.
 
