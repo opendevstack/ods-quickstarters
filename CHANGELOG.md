@@ -41,6 +41,7 @@
 - fix r-shiny build behind proxy ([#627](https://github.com/opendevstack/ods-quickstarters/issues/627))
 - fix environment templates (AWS QS) ([#629](https://github.com/opendevstack/ods-quickstarters/issues/629))
 - fix Smoke Test Region (AWS QS) ([#633](https://github.com/opendevstack/ods-quickstarters/issues/633)
+- Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
 
 ### Removed
 
