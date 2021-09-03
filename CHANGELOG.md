@@ -11,6 +11,7 @@
 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
+- be-gateway-nginx switch from Alpine to Fedora - backport from master/4.x ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 - scala agent broken, update repo ([#625](https://github.com/opendevstack/ods-quickstarters/issues/625))
 
 ## [3.0] - 2020-08-11

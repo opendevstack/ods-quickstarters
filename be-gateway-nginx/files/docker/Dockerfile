@@ -1,5 +1,5 @@
 # https://github.com/openresty/docker-openresty
-FROM openresty/openresty:1.15.8.2-6-alpine-fat
+FROM openresty/openresty:1.19.3.2-fedora-rpm
 
 ENV LANG=C.UTF-8
 
