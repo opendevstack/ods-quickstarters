@@ -13,6 +13,7 @@
 - ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
 - be-gateway-nginx switch from Alpine to Fedora - backport from master/4.x ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 - scala agent broken, update repo ([#625](https://github.com/opendevstack/ods-quickstarters/issues/625))
+- Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
 
 ## [3.0] - 2020-08-11
 
