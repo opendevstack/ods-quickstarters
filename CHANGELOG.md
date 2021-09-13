@@ -25,6 +25,7 @@
 - Upgraded Ionic CLI to v6.13.1 ([#577](https://github.com/opendevstack/ods-quickstarters/pull/577))
 - Updating used base image for nginx to fix CVE ([#602](https://github.com/opendevstack/ods-quickstarters/pull/602))
 - be-gateway-nginx switch from CentOS to Fedora ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
+- Change rhel7 to centos7 base jenkins node, as the image is Centos (congruent with ods-core) ([#646](https://github.com/opendevstack/ods-quickstarters/pull/646))
 
 ### Fixed
 
