@@ -22,8 +22,8 @@ describe('acceptance e2e tests', function () {
   // see installation.spec.ts for examples
 
   it('Application is reachable', function () {
-    cy.visit('/html/tryit.asp?filename=tryhtml_basic_paragraphs');
-    cy.title().should('include', 'Tryit Editor v3.6');
+    cy.visit('/html/tryit.asp?filename=tryhtml_paragraphs1');
+    cy.title().should('include', 'Tryit Editor v3.7');
     printEvidenceForPageElement(
       this.test.fullTitle(), 1, '#textareaCode', 'code area');
     printEvidenceForPageElement(
