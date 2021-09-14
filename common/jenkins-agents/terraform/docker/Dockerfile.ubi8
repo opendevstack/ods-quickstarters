@@ -82,7 +82,7 @@ RUN wget -q -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraf
     && chmod +x /usr/local/bin/terraform-docs
 
 #Install jq
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-13.el8.noarch.rpm \
     && yum install -y jq parallel \
     && jq -Version \
     && yum clean all
