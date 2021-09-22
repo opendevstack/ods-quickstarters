@@ -7,7 +7,7 @@ the OpenShift resources] created for the component.
 
 The following is a table with the supported metadata entries and the labels for which they are used:
 
-[cols="1,2,3,4"]
+[cols="2,3,2,4"]
 |===
 
 | Entry key | Meaning | Example | Label
@@ -71,7 +71,7 @@ or begin and end with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`
 The values given in the metadata file will be sanitised to adhere to those restrictions,
 but it is recommended to use compliant values that need no sanitation.
 
-=== `name`
+=== name
 
 This is the software deployed in this component. There may be other instances of the same software in other components.
 
@@ -87,19 +87,19 @@ Examples: `user-service`, `mongodb`.
 
 This metadata entry will be used as the value of the label `app.kubernetes.io/name`.
 
-=== `description`
+=== description
 
 This is the description of the software deployed in this component.
 
 Examples: "User-management microservice" or "MongoDB is a general-purpose document-based distributed database".
 
-=== `supplier`
+=== supplier
 
 The supplier of the software being deployed. Possible a web-page link.
 
 Example: https://www.mongodb.com/
 
-=== `version`
+=== version
 
 This is the version of the software identified by the <<_name>> entry.
 
@@ -107,7 +107,7 @@ Example: `4.0.8`
 
 This metadata entry will be used as the value of the label `app.kubernetes.io/version`.
 
-=== `type`
+=== type
 
 The type of OpenDevStack component.
 
@@ -120,7 +120,7 @@ Example: `ods-service`
 
 This metadata entry will be used as the value of the label `app.kubernetes.io/name`.
 
-=== `role`
+=== role
 
 This is the role this component plays in the architecture.
 
@@ -128,7 +128,7 @@ Example: `database`
 
 Any value can be set, but the following values are recommended:
 
-[cols="1,2"]
+[cols="1,4"]
 |===
 | Value | Meaning
 
@@ -156,7 +156,7 @@ Whenever one of these values is appropriate, it is recommended to use it.
 
 This metadata entry will be used as the value of the label `app.kubernetes.io/component`.
 
-=== `partOf`
+=== partOf
 
 The name of a higher level application this component is part of.
 
@@ -167,7 +167,7 @@ You can set `partOf: my-online-shop`
 
 This metadata entry will be used as the value of the label `app.kubernetes.io/part-of`.
 
-=== `runtime`
+=== runtime
 
 The runtime to be used to bootstrap the component.
 
@@ -183,7 +183,7 @@ Example: `spring-boot`
 
 This metadata entry will be used as the value of the label `app.openshift.io/runtime`.
 
-=== `runtimeVersion`
+=== runtimeVersion
 
 The version of the runtime.
 
