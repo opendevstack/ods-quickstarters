@@ -1,5 +1,7 @@
 = Component metadata
 
+== Overview
+
 The quickstarters include a skeleton metadata file metadata.yml.
 
 This file provides information about the component, but some metadata entries are also used to xref:jenkins-shared-library:labelling.adoc[label
