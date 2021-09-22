@@ -88,7 +88,7 @@ For *android* support configure your environment like this https://ionicframewor
 === Metadata
 
 The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
-Note that the OpenShift resources will be labeled based on this metadata.
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
 
 ```yaml
 name: <the component id (this is the default, if omitted)>

@@ -17,7 +17,7 @@ The only technical requirement is to have a `Jenkinsfile`, but depending on the 
 - Support for Nexus (pulling dependencies from there)
 - HTTP proxy awareness
 - Documentation. Both for the quickstarter itself (located at https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages, following the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/quickstarters/pages/$$__QUICKSTARTER_TEMPLATE$$.adoc[quickstarter template]) and any Jenkins agent image (located at https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-agents/pages, following the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-agents/pages/$$__JENKINS_AGENT_TEMPLATE$$.adoc[agent image template]).
-- It is recommended to set up proper default xref:quickstarters:metadata.adoc[metadata] values in files/metadata.yml.
+- It is recommended to set up proper default xref:quickstarters:metadata.adoc[metadata] values in files/metadata.yml. These default values will also be used to xref:jenkins-shared-library:labelling.adoc[label the generated OpenShift resources] when provisioning a new component from the quickstarter for the first time.
 
 If you write any custom stages in the quickstarter pipeline, you have access to the xref:jenkins-shared-library:quickstarter-pipeline.adoc#_pipeline_context[pipeline context].
 

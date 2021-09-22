@@ -2,8 +2,8 @@
 
 The quickstarters include a skeleton metadata file metadata.yml.
 
-This file provides information about the component, but some metadata entries are also used to label
-the OpenShift resources created for the component.
+This file provides information about the component, but some metadata entries are also used to xref:jenkins-shared-library:labelling.adoc[label
+the OpenShift resources] created for the component.
 
 The following is a table with the supported metadata entries and the labels for which they are used:
 
@@ -14,8 +14,8 @@ The following is a table with the supported metadata entries and the labels for 
 
 | <<_name>>
 | The name of the software deployed in this component
-| mongodb
-| app.kubernetes.io/name
+| `mongodb`
+| `app.kubernetes.io/name`
 
 | <<_description>>
 | Description of the software deployed in this component
@@ -29,33 +29,33 @@ The following is a table with the supported metadata entries and the labels for 
 
 | <<_version>>
 | Version of the software deployed in this component
-| 4.0.8
-| app.kubernetes.io/version
+| `4.0.8`
+| `app.kubernetes.io/version`
 
 | <<_type>>
 | Type of OpenDevStack component
-| ods-service
-| app.opendevstack.org/type
+| `ods-service`
+| `app.opendevstack.org/type`
 
 | <<_role>>
 | Role this component plays in the architecture
-| database
-| app.kubernetes.io/component
+| `database`
+| `app.kubernetes.io/component`
 
 | <<_partof>>
 | Name of a higher-level application this component is part of
-| my-online-shop
-| app.kubernetes.io/part-of
+| `my-online-shop`
+| `app.kubernetes.io/part-of`
 
 | <<_runtime>>
 | The runtime this software runs on
-| spring-boot
-| app.openshift.io/runtime
+| `spring-boot`
+| `app.openshift.io/runtime`
 
 | <<_runtimeversion>>
 | The version of the runtime this software runs on
-| 1.4.4.RELEASE
-| app.openshift.io/runtime-version
+| `1.4.4.RELEASE`
+| `app.openshift.io/runtime-version`
 
 |===
 
@@ -66,65 +66,65 @@ Detailed description of the supported metadata entries.
 It is strongly recommended to follow the guidelines for the entries that are used to label OpenShift resources.
 
 Moreover, OpenShift label values must meet the following restrictions: must be 63 characters or less and must be empty
-or begin and end with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between.
+or begin and end with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`), underscores (`_`), dots (`.`), and alphanumerics between.
 
 The values given in the metadata file will be sanitised to adhere to those restrictions,
 but it is recommended to use compliant values that need no sanitation.
 
-=== name
+=== `name`
 
 This is the software deployed in this component. There may be other instances of the same software in other components.
 
 For components of type ods, which are pieces of software developed as part of the project,
 this is recommended to be set to the component ID.
-For components of type ods-service, which are instances of some existing software,
+For components of type `ods-service`, which are instances of some existing software,
 this is recommended to be set to a well-known id of the software being deployed.
 
-Suitable values for this label can be retrieved from Maven artifactId, Gradle project.name, docker image name,
-Helm {{ template "name" . }}…
+Suitable values for this label can be retrieved from Maven `artifactId`, Gradle `project.name`, docker image name,
+Helm `{{ template "name" . }}`…
 
-Examples: user-service, mongodb.
+Examples: `user-service`, `mongodb`.
 
-This metadata entry will be used as the value of the label app.kubernetes.io/name.
+This metadata entry will be used as the value of the label `app.kubernetes.io/name`.
 
-=== description
+=== `description`
 
 This is the description of the software deployed in this component.
 
 Examples: "User-management microservice" or "MongoDB is a general-purpose document-based distributed database".
 
-=== supplier
+=== `supplier`
 
 The supplier of the software being deployed. Possible a web-page link.
 
 Example: https://www.mongodb.com/
 
-=== version
+=== `version`
 
-This is the version of the software identified by the name entry.
+This is the version of the software identified by the <<_name>> entry.
 
-Example: 4.0.8.
+Example: `4.0.8`
 
-This metadata entry will be used as the value of the label app.kubernetes.io/version.
+This metadata entry will be used as the value of the label `app.kubernetes.io/version`.
 
-=== type
+=== `type`
 
 The type of OpenDevStack component.
 
-Valid types are ods, ods-service, ods-test and ods-infra.
+Valid types are `ods`, `ods-service`, `ods-test` and `ods-infra`.
 
 When using the release manager, this value should match the type parameter for this component in the
 release manager metadata file.
 
-Example: ods-service
+Example: `ods-service`
 
-This metadata entry will be used as the value of the label app.kubernetes.io/name.
+This metadata entry will be used as the value of the label `app.kubernetes.io/name`.
 
-=== role
+=== `role`
 
 This is the role this component plays in the architecture.
 
-Example: database.
+Example: `database`
 
 Any value can be set, but the following values are recommended:
 
@@ -132,42 +132,42 @@ Any value can be set, but the following values are recommended:
 |===
 | Value | Meaning
 
-| frontend
+| `frontend`
 | Serves the UI or part of the UI for an application.
 
-| backend
+| `backend`
 | Usually an application code that is running on a runtime or framework.
 
-| database
+| `database`
 | Data persistence.
 
-| integration
+| `integration`
 | Integration middleware such as API gateways or single-sign-on software.
 
-| cache
+| `cache`
 | Stores information from other components for performance purposes.
 
-| queue
+| `queue`
 | Message queue, asynchronous communication component.
 
 |===
 
 Whenever one of these values is appropriate, it is recommended to use it.
 
-This metadata entry will be used as the value of the label app.kubernetes.io/component.
+This metadata entry will be used as the value of the label `app.kubernetes.io/component`.
 
-=== partOf
+=== `partOf`
 
 The name of a higher level application this component is part of.
 
 This is used to group components as part of a higher-level application, when suitable.
 
 Example: you are building an online shop, and this component is part of it.
-You can set partOf: my-online-shop.
+You can set `partOf: my-online-shop`
 
-This metadata entry will be used as the value of the label app.kubernetes.io/part-of.
+This metadata entry will be used as the value of the label `app.kubernetes.io/part-of`.
 
-=== runtime
+=== `runtime`
 
 The runtime to be used to bootstrap the component.
 
@@ -175,22 +175,22 @@ There may be more than one runtime, so the most meaningful or specific one shoul
 A typical example is a Spring-Boot application. Both Spring Boot and the JRE are suitable runtimes,
 but the first one is chosen, as the JRE is implied by Spring Boot, but not the other way around.
 
-Other possible runtimes are nodejs, angularjs, etc.
+Other possible runtimes are `nodejs`, `angularjs`, etc.
 
-Suitable values can be taken from the runtime Maven artifactId, Gradle project.name, docker image name…
+Suitable values can be taken from the runtime Maven `artifactId`, Gradle `project.name`, docker image name…
 
-Example: spring-boot.
+Example: `spring-boot`
 
-This metadata entry will be used as the value of the label app.openshift.io/runtime.
+This metadata entry will be used as the value of the label `app.openshift.io/runtime`.
 
-=== runtimeVersion
+=== `runtimeVersion`
 
 The version of the runtime.
 
-Suitable values can be taken from the runtime Maven version, Gradle project.version, docker image version tag…
+Suitable values can be taken from the runtime Maven `version`, Gradle `project.version`, docker image version tag…
 
-This label does not make sense, if runtime is not also specified.
+This label does not make sense, if <<_runtime>> is not also specified.
 
-Example: 1.4.4.RELEASE.
+Example: `1.4.4.RELEASE`
 
-This metadata entry will be used as the value of the label app.openshift.io/runtime-version.
+This metadata entry will be used as the value of the label `app.openshift.io/runtime-version`.

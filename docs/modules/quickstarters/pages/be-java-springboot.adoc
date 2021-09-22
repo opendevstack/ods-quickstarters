@@ -102,7 +102,7 @@ NOTE: java 8 or later version is required to run gradlew and compile java classe
 === Metadata
 
 The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
-Note that the OpenShift resources will be labeled based on this metadata.
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
 
 ```yaml
 name: <the component id (this is the default, if omitted)>
