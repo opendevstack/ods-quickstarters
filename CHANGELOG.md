@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
 
 ### Added
 
