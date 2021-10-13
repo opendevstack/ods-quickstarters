@@ -1,8 +1,8 @@
 # Changelog
 
 ## Unreleased
-
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
+- Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 
 ## [3.0] - 2020-08-11
 
