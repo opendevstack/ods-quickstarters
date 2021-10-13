@@ -36,8 +36,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 * xref::fe-ionic.adoc[Mobile - Ionic]
 
 === Data Science Quickstarter
-* xref::ds-ml-service.adoc[Data Science - Machine Learning]
-* xref::ds-jupyter-notebook.adoc[Data Science - Jupyter Notebook]
+* xref::ds-jupyter-lab.adoc[Data Science - Jupyter Lab]
 * xref::ds-rshiny.adoc[Data Science - R-Shiny]
 
 === E2E Test Quickstarter
@@ -53,4 +52,3 @@ Next to those, there is a xref::docker-plain.adoc["blank" quickstarter (Docker/P
 == Authoring quickstarters
 
 As mentioned above, it is possible to supply your own quickstarters. Pleasee see the xref:authoring-quickstarters.adoc[authoring quickstarters] guide on how to make completely new quickstarters or how to adapt existing quickstarters to your needs.
-

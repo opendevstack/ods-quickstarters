@@ -22,7 +22,7 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh 'npm i -g @ionic/cli@6.3.0'
+      sh 'npm i -g @ionic/cli@6.13.1'
       sh 'npm install'
       if ('master'.equals(context.gitBranch)) {
         sh 'ionic build --prod'

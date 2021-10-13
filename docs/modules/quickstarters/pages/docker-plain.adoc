@@ -26,6 +26,21 @@ None, except for the ODS https://github.com/opendevstack/ods-jenkins-shared-libr
 
 Amend the generated `Dockerfile` as needed.
 
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
+
+```yaml
+name: software-name
+description: "Some software packaged in a docker container"
+supplier: https://example.com
+version: 3.2
+type: ods-service
+role: <the role of this software in the project>
+```
+
+
 == How this quickstarter is built through Jenkins
 
 Whatever is in the `/docker` folder will be passed to `oc start build` as the docker context. You can add other files to that context as needed:

@@ -1,0 +1,14 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-terraform
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-terraform
+    labels:
+      app: jenkins-agent-terraform
+  spec:
+    lookupPolicy:
+      local: false

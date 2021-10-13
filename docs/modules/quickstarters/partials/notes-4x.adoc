@@ -1,0 +1,7 @@
+== ds-ml-service quickstarter no longer supported
+
+If you provisioned `ds-ml-service` quickstarter, please note that it has been moved out from the officially supported quickstarters (`ods-quickstarters`) repository and moved to `extra-quickstarters`. It has been set as deprecated due to being superseded by other OpenSource projects like MLflow and Cloud SaaS solutions.
+
+== ds-jupyter-notebook renamed to ds-jupyter-lab
+
+The quickstarter `ds-jupyter-lab` is the new name for the known `ds-jupyter-notebook`. Which also comes with the newest JupyterLab version 3.

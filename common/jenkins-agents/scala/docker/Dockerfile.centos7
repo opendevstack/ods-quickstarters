@@ -1,0 +1,54 @@
+FROM opendevstackorg/ods-jenkins-agent-base-centos7
+
+LABEL maintainer="Jan Frank <jan.frank@boehringer-ingelheim.com>"
+
+ARG nexusUrl
+ARG nexusUsername
+ARG nexusPassword
+
+# Install Java
+RUN yum install -y java-11-openjdk-devel && \
+    yum clean all -y && \
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
+    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
+    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
+    java -version && \
+    javac -version
+ENV JAVA_HOME=/usr/lib/jvm/jre
+
+# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
+ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
+
+
+# Install sbt
+ENV SBT_VERSION=1.5.4
+ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
+RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
+    curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
+    mv sbt-rpm.repo /etc/yum.repos.d/ && \
+    yum -y install sbt-$SBT_VERSION && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
+COPY sbtconfig/repositories $HOME/.sbt/repositories
+COPY sbtconfig/credentials.sbt $HOME/.sbt/1.0/plugins/credentials.sbt
+COPY sbtconfig/credentials $HOME/.sbt/.credentials
+COPY sbtconfig/sbtopts /etc/sbt/sbtopts
+COPY set_sbt_proxy.sh /tmp/set_sbt_proxy.sh
+
+RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/repositories.tmp && \
+    mv $HOME/.sbt/repositories.tmp $HOME/.sbt/repositories  && \
+    nexusHost=$(echo $nexusUrl | sed -e "s|https://||g" | sed -e "s|http://||g") && \
+    nexusHost=$(echo $nexusHost | sed -e "s|:.*||g") && \
+    sed -i.bak -e "s|NEXUS_HOST|$nexusHost|g" $HOME/.sbt/.credentials && \
+    sed -i.bak -e "s|NEXUS_USERNAME|$nexusUsername|g" $HOME/.sbt/.credentials && \
+    sed -i.bak -e "s|NEXUS_PASSWORD|$nexusPassword|g" $HOME/.sbt/.credentials && \
+    rm $HOME/.sbt/.credentials.bak && \
+    cd /tmp && \
+    /tmp/set_sbt_proxy.sh && \
+    if [ ! -f "/usr/bin/sbt" ]; then echo "sbt path /usr/bin/sbt could not be found"; exit 1 ; fi
+
+
+RUN chgrp -R 0 $HOME && \
+    chmod -R g=u $HOME
+USER 1001

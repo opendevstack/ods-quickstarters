@@ -10,6 +10,7 @@ BITBUCKET_URL=""
 ODS_NAMESPACE=""
 ODS_IMAGE_TAG=""
 DOCKER_REGISTRY=""
+ODS_BITBUCKET_PROJECT=""
 
 while [[ "$#" > 0 ]]; do case $1 in
   -c=*|--component=*) COMPONENT="${1#*=}";;

@@ -1,8 +1,3 @@
-options(java.parameters = c("-Xss2560k", "-Xmx4g"))
-
-library(DBI)
-library(rJava)
-library(RJDBC)
 library(shiny)
 library(shinythemes)
 library(ggplot2)
@@ -49,6 +44,5 @@ server <- function(input, output) {
   })
 
 }
-
 
 shinyApp(ui, server)

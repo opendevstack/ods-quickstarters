@@ -101,6 +101,19 @@ body_filter_by_lua_block {
 }
 ```
 
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
+
+```yaml
+name: nginx
+description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.19.3.2"
+supplier: https://openresty.org
+version: 1.19.3
+type: ods-service
+role: integration
+```
 
 == How this quickstarter is built through Jenkins
 
