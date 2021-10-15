@@ -1,8 +1,10 @@
-# //TODO: decide on Azure Backend
 terraform {
-  backend "s3" {
-    bucket = "<your_bucket_name>"
-    region = "eu-west-1"
-    acl    = "bucket-owner-full-control"
+  backend "azurerm" {
+    resource_group_name  = "<your resource group>"
+    storage_account_name = "<your storage account>"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+    use_azuread_auth     = true
   }
 }
+

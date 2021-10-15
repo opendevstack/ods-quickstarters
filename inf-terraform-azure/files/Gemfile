@@ -1,5 +1,4 @@
 source 'https://rubygems.org' do
-  gem 'activesupport'
   gem 'irb'
   gem 'kitchen-terraform', '~> 5.8.0'
   gem 'test-kitchen'
