@@ -1,19 +1,18 @@
 # Changelog
 
-### Fixed
-- Fix Ionic quickstarter by adding Nodejs 12 as requirement for ODS 3.x ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
-### Fixed
-- Fix Ionic quickstarter build after provisioning, proper npm install command ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
-### Fixed
-- Fix Ionic quickstarter build after provisioning ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
-
 ## Unreleased
 
+### Fixed
+
+- Fix Ionic quickstarter by adding Nodejs 12 as requirement for ODS 3.x ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
+- Fix Ionic quickstarter build after provisioning, proper npm install command ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
+- Fix Ionic quickstarter build after provisioning ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
 - be-gateway-nginx switch from Alpine to Fedora - backport from master/4.x ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 - scala agent broken, update repo ([#625](https://github.com/opendevstack/ods-quickstarters/issues/625))
 - Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
+- Fix openresty/nginx SSL certs path ([#652](https://github.com/opendevstack/ods-quickstarters/issues/652))
 
 ## [3.0] - 2020-08-11
 
