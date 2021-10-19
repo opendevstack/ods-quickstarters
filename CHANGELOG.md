@@ -6,7 +6,6 @@
 
 - Fix Ionic quickstarter by adding Nodejs 12 as requirement for ODS 3.x ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 - Fix Ionic quickstarter build after provisioning, proper npm install command ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
-- Fix Ionic quickstarter build after provisioning ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - ds-rshiny quickstarter goes to broken repository ([#605](https://github.com/opendevstack/ods-quickstarters/issues/605))
 - be-gateway-nginx switch from Alpine to Fedora - backport from master/4.x ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
