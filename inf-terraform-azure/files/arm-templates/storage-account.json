@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
+    "storageAccountType": "Standard_GRS",
+    "publicIPAddressName": "[concat('myPublicIp', uniquestring(resourceGroup().id))]",
+    "publicIPAddressType": "Dynamic",
+    "apiVersion": "2015-06-15",
+    "dnsLabelPrefix": "terraform-acctest"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]",
+        "supportsHttpsTrafficOnly": "true"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "[variables('apiVersion')]",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('dnsLabelPrefix')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    }
+  }
+}
+
