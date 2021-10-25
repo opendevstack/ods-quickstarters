@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- jenkins nodejs12 agent build failing due to incompatible chrome package with centos 7 ([#656](https://github.com/opendevstack/ods-quickstarters/pull/656))
 - Fix Ionic quickstarter by adding Nodejs 12 as requirement for ODS 3.x ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 - Fix Ionic quickstarter build after provisioning, proper npm install command ([#595](https://github.com/opendevstack/ods-quickstarters/issues/595))
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))

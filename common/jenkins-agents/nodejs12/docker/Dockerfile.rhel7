@@ -19,19 +19,20 @@ ENV NODEJS_VERSION=12 \
     ENV=/usr/local/bin/scl_enable \
     PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
     LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8
+    LC_ALL=en_US.UTF-8 \
+    CHROME_VERSION=94.0.4606.81
 
 # install google-chrome (for angular)
 RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms
 
-ADD https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm /root/google-chrome-stable_current_x86_64.rpm
+ADD https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-${CHROME_VERSION}-1.x86_64.rpm /root/google-chrome.rpm
 RUN yum -y install redhat-lsb libXScrnSaver
-RUN yum -y install /root/google-chrome-stable_current_x86_64.rpm && \
+RUN yum -y install /root/google-chrome.rpm && \
     ln -s /usr/lib64/libOSMesa.so.8 /opt/google/chrome/libosmesa.so && \
     yum clean all && \
-    dbus-uuidgen > /etc/machine-id
-
+    dbus-uuidgen > /etc/machine-id && \
+    rm /root/google-chrome.rpm
 
 # Install cypress dependencies
 # Please note: xorg-x11-server-Xvfb is not available on RHEL via yum anymore, so "RUN yum install -y xorg-x11-server-Xvfb" won't work.
