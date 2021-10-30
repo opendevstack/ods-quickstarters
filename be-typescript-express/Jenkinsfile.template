@@ -31,22 +31,5 @@ def stageBuild(def context) {
 def stageUnitTest(def context) {
   stage('Unit Test') {
     sh 'npm run test'
-
-    if (false) {
-      junit 'artifacts/xunit.xml'
-      step([
-        $class: 'CoberturaPublisher',
-        autoUpdateHealth: false,
-        autoUpdateStability: false,
-        coberturaReportFile: 'artifacts/cobertura-coverage.xml',
-        failNoReports: false,
-        failUnhealthy: false,
-        failUnstable: false,
-        maxNumberOfBuilds: 0,
-        onlyStable: false,
-        sourceEncoding: 'UTF_8',
-        zoomCoverageChart: false
-      ])
-    }
   }
 }
