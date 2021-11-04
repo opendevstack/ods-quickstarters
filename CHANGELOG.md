@@ -13,6 +13,7 @@
 - scala agent broken, update repo ([#625](https://github.com/opendevstack/ods-quickstarters/issues/625))
 - Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
 - Fix openresty/nginx SSL certs path ([#652](https://github.com/opendevstack/ods-quickstarters/issues/652))
+- Fix fe-angular to resolve dependencies on newer nodeJS versions ([#662](https://github.com/opendevstack/ods-quickstarters/issues/662))
 
 ## [3.0] - 2020-08-11
 
