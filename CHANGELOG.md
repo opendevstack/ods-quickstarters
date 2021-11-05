@@ -1,12 +1,13 @@
 # Changelog
 
 ## Unreleased
+
+## [4.0] - 2021-05-11
+
+### Added
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 - Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
-
-### Added
-
 - requests access logging enabled for openshift oauth proxy component (used by ds-rshiny and ds-jupyter-lab) ([#590](https://github.com/opendevstack/ods-quickstarters/issues/590))
 - e2e-cypress: Added support for login with Azure SSO + MSALv2 ([#601](https://github.com/opendevstack/ods-quickstarters/pull/601))
 - terraform jenkins agent: Added AWS SAM CLI and AWS CDK ([#608](https://github.com/opendevstack/ods-quickstarters/pull/608))
