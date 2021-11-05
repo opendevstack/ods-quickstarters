@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Modified
+
+- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+
 ## [4.0] - 2021-05-11
 
 ### Added
