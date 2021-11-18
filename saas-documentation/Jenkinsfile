@@ -20,29 +20,4 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  odsQuickstarterStageRenderJenkinsfile(context)
-
-  odsQuickstarterStageRenderJenkinsfile(
-    context,
-    [source: 'dev.yml.template',
-     target: 'environments/dev.yml']
-  )
-
-  odsQuickstarterStageRenderJenkinsfile(
-    context,
-   [source: 'test.yml.template',
-     target: 'environments/test.yml']
-  )
-
-  odsQuickstarterStageRenderJenkinsfile(
-    context,
-    [source: 'prod.yml.template',
-     target: 'environments/prod.yml']
-  )
-
-  odsQuickstarterStageRenderJenkinsfile(
-    context,
-    [source: 'testing.yml.template',
-     target: 'environments/testing.yml']
-  )
 }

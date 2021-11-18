@@ -1,0 +1,8 @@
+---
+name: a saas system
+description: a saas system description.
+supplier: a saas supplier
+version: 4.x
+type: ods-saas-service
+installation: a description of what the supplier does
+

@@ -2,8 +2,16 @@
 
 ## Unreleased
 
-### Added
+### Modified
 
+- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+
+## [4.0] - 2021-05-11
+
+### Added
+- ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
+- Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
+- Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
 - requests access logging enabled for openshift oauth proxy component (used by ds-rshiny and ds-jupyter-lab) ([#590](https://github.com/opendevstack/ods-quickstarters/issues/590))
 - e2e-cypress: Added support for login with Azure SSO + MSALv2 ([#601](https://github.com/opendevstack/ods-quickstarters/pull/601))
 - terraform jenkins agent: Added AWS SAM CLI and AWS CDK ([#608](https://github.com/opendevstack/ods-quickstarters/pull/608))
@@ -25,9 +33,11 @@
 - Upgraded Ionic CLI to v6.13.1 ([#577](https://github.com/opendevstack/ods-quickstarters/pull/577))
 - Updating used base image for nginx to fix CVE ([#602](https://github.com/opendevstack/ods-quickstarters/pull/602))
 - be-gateway-nginx switch from CentOS to Fedora ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
+- Change rhel7 to centos7 base jenkins node, as the image is Centos (congruent with ods-core) ([#646](https://github.com/opendevstack/ods-quickstarters/pull/646))
 
 ### Fixed
 
+- jenkins nodejs12 agent build failing due to incompatible chrome package with centos 7 ([#656](https://github.com/opendevstack/ods-quickstarters/pull/656))
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Removed forcing eslint configuration as it is default ([#573](https://github.com/opendevstack/ods-quickstarters/pull/578))
 - Recover be-python-flask ([#583](https://github.com/opendevstack/ods-quickstarters/issues/583))
@@ -39,6 +49,12 @@
 - openjdk 11 does not recognize VM setting ([#623](https://github.com/opendevstack/ods-quickstarters/issues/623))
 - inf-terraform-aws - drop Pipfile.lock
 - fix r-shiny build behind proxy ([#627](https://github.com/opendevstack/ods-quickstarters/issues/627))
+- fix environment templates (AWS QS) ([#629](https://github.com/opendevstack/ods-quickstarters/issues/629))
+- fix Smoke Test Region (AWS QS) ([#633](https://github.com/opendevstack/ods-quickstarters/issues/633)
+- fix openshift templates deprecation notice ([#639](https://github.com/opendevstack/ods-quickstarters/issues/639))
+- Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
+- fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
+- fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
 
 ### Removed
 

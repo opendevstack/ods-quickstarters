@@ -25,6 +25,21 @@ Provisions a R Shiny application within OpenShift using OpenShift OAuth.
 
 The quickstarter sets up two pods in OpenShift. The `ds-rshiny` application is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
 
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
+
+```yaml
+name: shiny
+description: "Shiny is an R package that makes it easy to build interactive web apps straight from R."
+supplier: https://www.rstudio.com/
+version: 1.6.0
+type: ods-service
+runtime: r
+runtimeVersion: 4.1.1
+```
+
 == How this quickstarter is built through jenkins
 
 The build pipeline is defined in the `Jenkinsfile` in the project root. The main stages of the pipeline are:
