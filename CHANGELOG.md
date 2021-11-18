@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-
+- Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
 ## [4.0] - 2021-18-11
 
 ### Added
