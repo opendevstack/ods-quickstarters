@@ -45,9 +45,6 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
 ENV MAVEN_HOME=/usr/share/maven
 ENV MAVEN_CONFIG=$HOME/.m2
 
-# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
-ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
-
 # When bash is started non-interactively, to run a shell script, for example it
 # looks for this variable and source the content of this file. This will enable
 # the SCL for all scripts without need to do 'scl enable'.
