@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM registry.access.redhat.com/ubi8/openjdk-17
 
 COPY app.jar app.jar
 
