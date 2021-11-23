@@ -22,7 +22,7 @@ ENV LANG=en_US.UTF-8 \
 # Install Maven
 RUN yum install -y --enablerepo centos-appstream java-17-openjdk-devel maven && \
     yum clean all -y && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-17-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
     alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
     mkdir -p $HOME/.m2 && \
