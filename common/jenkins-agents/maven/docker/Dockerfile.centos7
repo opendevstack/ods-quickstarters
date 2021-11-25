@@ -23,14 +23,20 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
     GRADLE_USER_HOME=/home/jenkins/.gradle
 
 # Install Java
-RUN yum install -y epel-release && yum repolist && yum install -y java-latest-openjdk-devel && \
+RUN yum install -y epel-release && yum repolist && yum install -y java-latest-openjdk-devel java-11-openjdk-devel && \
     yum clean all -y && rm -rf /var/cache/yum && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-17-openjdk-17.*\.x86_64" | awk '{print $NF}' | head -1) && \
+    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
     alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
     java -version && \
     javac -version
 ENV JAVA_HOME=/usr/lib/jvm/jre
+
+COPY j*.sh /home/jenkins/
+RUN chmod u+x /home/jenkins/j11.sh && \
+    chmod u+x /home/jenkins/j17.sh && \
+    /home/jenkins/j11.sh && \
+    /home/jenkins/j17.sh
 
 # Install Maven
 ENV MAVEN_VERSION=3.5.4
