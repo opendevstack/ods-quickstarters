@@ -31,11 +31,11 @@ RUN yum install -y --enablerepo centos-appstream java-17-openjdk-devel java-11-o
     javac -version && \
     mvn -v
 
-COPY j*.sh /home/jenkins/
-RUN chmod u+x /home/jenkins/j11.sh && \
-    chmod u+x /home/jenkins/j17.sh && \
-    /home/jenkins/j11.sh && \
-    /home/jenkins/j17.sh
+COPY use-j*.sh /home/jenkins/
+RUN chmod u+x /home/jenkins/use-j11.sh && \
+    chmod u+x /home/jenkins/use-j17.sh && \
+    /home/jenkins/use-j11.sh && \
+    /home/jenkins/use-j17.sh
 
 ADD contrib/bin/configure-agent /usr/local/bin/configure-agent
 ADD contrib/settings.xml $HOME/.m2/

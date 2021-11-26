@@ -32,9 +32,9 @@ RUN yum install -y epel-release && yum repolist && yum install -y java-latest-op
     javac -version
 ENV JAVA_HOME=/usr/lib/jvm/jre
 
-COPY j*.sh /home/jenkins/
-RUN chmod u+x /home/jenkins/j11.sh && \
-    chmod u+x /home/jenkins/j17.sh && \
+COPY use-j*.sh /home/jenkins/
+RUN chmod u+x /home/jenkins/use-j11.sh && \
+    chmod u+x /home/jenkins/use-j17.sh && \
     /home/jenkins/j11.sh && \
     /home/jenkins/j17.sh
 
