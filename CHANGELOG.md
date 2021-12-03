@@ -52,6 +52,7 @@
 - Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
 - fix typescript-express junit test report location ([#645](https://github.com/opendevstack/ods-quickstarters/issues/654))
+- fix java not in path for python quickstarter ([#645](https://github.com/opendevstack/ods-quickstarters/issues/685))
 
 ### Removed
 
