@@ -4,7 +4,7 @@ DESCRIPTION              := The '$(NAME)' is a is a prototype for an ODS quickst
 PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GEMS_HOME                ?= $(PWD)/vendor/bundle
 INSTALL_REPORT_HOME      := ./reports/install
-SHELL                    := /usr/bin/env bash -o pipefail
+SHELL                    := /usr/bin/env bash
 .SHELLFLAGS              := -eu -o pipefail -c
 .DELETE_ON_ERROR:
 MAKEFLAGS                += --warn-undefined-variables
