@@ -6,6 +6,7 @@
 
 - Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
 - Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
+- Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 
 ## [4.0] - 2021-05-11
 
