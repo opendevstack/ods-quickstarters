@@ -14,5 +14,6 @@ vendor
 test/integration/*/files/*.json
 test/integration/*/files/*.yml
 reports/install/*
+!reports/install/.gitkeep
 Pipfile.lock
 .venv
