@@ -3,7 +3,6 @@
   "Description": "CloudFormation template of an S3 bucket for the AWS Quickstarter.",
   "Resources": {
       "S3Bucket": {
-          "DeletionPolicy": "Retain",
           "Type": "AWS::S3::Bucket",
           "Description": "S3 bucket creation",
           "Properties": {
