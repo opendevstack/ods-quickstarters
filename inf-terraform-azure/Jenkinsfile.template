@@ -4,21 +4,24 @@ def tfBackendPrefix
 def stackConfig
 def stackdeploy  = false
 
-def awsAccessKeyId
-def awsSecretAccessKey
-def awsRegion
-def tfBackendS3Key
-def workspaceKeyPrefix
+def azureSubscriptionId
+def azureTenantId
+def azureClientId
+def azureClientSecret
 
-def awsAccessKeyIdTesting     
-def awsSecretAccessKeyTesting 
-def awsRegionTesting          
+def azureSubscriptionIdTesting
+def azureTenantIdTesting
+def azureClientIdTesting
+def azureClientSecretTesting
+
+def tfBackendKey
+def workspaceKeyPrefix
 
 def tfvarsjsonfile
 def tfvarsjson
 
 
-@Library('ods-jenkins-shared-library@@shared_library_ref@') _
+@Library('ods-jenkins-shared-library@3.x') _
 
 import org.ods.services.ServiceRegistry
 import org.ods.services.BitbucketService
@@ -26,7 +29,7 @@ import org.ods.util.GitCredentialStore
 
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform:3.x',
   branchToEnvironmentMapping: [
     'master': 'dev',
   ]
@@ -40,17 +43,15 @@ odsComponentPipeline(
     stageReport(context)
 }
 
-def getEnvSettings(def tfBackendPrefix, def tfBackendS3Key, def workspace, def region ) {
+def getEnvSettings(def tfBackendPrefix, def tfBackendKey, def workspace ) {
   def config = [
     "TF_BACKEND_PREFIX=${tfBackendPrefix}",
-    "TF_BACKEND_S3KEY=${tfBackendS3Key}"
+    "TF_BACKEND_KEY=${tfBackendKey}",
+    "HTTPS_PROXY=http://appaccess-zscaler.boehringer.com"
   ]
 
   if (workspace) {
     config << "TF_WORKSPACE=${workspace}"
-  }
-  if (region) {
-    config << "AWS_DEFAULT_REGION=${region}"
   }
   return config
 }
@@ -60,26 +61,28 @@ def stageGetConfig(def context) {
   stage('GetConfig') {
 
     if (context.environment) {
-      environmentFile         = readYaml file: "./environments/${context.environment}.yml"   
+      environmentFile         = readYaml file: "./environments/${context.environment}.yml"
       environmentFileTesting  = readYaml file: "./environments/testing.yml"
-    
-      stackdeploy  = true
-    
-      awsAccessKeyId      = environmentFile.credentials.key.toLowerCase()
-      awsSecretAccessKey  = environmentFile.credentials.secret.toLowerCase()
-      awsRegion           = environmentFile.region.toLowerCase() 
-      
-      awsAccessKeyIdTesting     = environmentFileTesting.credentials.key.toLowerCase()
-      awsSecretAccessKeyTesting = environmentFileTesting.credentials.secret.toLowerCase()
-      awsRegionTesting          = environmentFileTesting.region.toLowerCase()
 
-      workspaceKeyPrefix        = environmentFile.account
-      tfBackendS3Key            = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
+      stackdeploy  = true
+
+      azureSubscriptionId = environmentFile.credentials.azureSubscriptionId.toLowerCase()
+      azureTenantId       = environmentFile.credentials.azureTenantId.toLowerCase()
+      azureClientId       = environmentFileTesting.credentials.azureClientId.toLowerCase()
+      azureClientSecret   = environmentFileTesting.credentials.azureClientSecret.toLowerCase()
+
+      azureSubscriptionIdTesting = environmentFile.credentials.azureSubscriptionIdTesting.toLowerCase()
+      azureTenantIdTesting       = environmentFile.credentials.azureTenantIdTesting.toLowerCase()
+      azureClientIdTesting       = environmentFileTesting.credentials.azureClientIdTesting.toLowerCase()
+      azureClientSecretTesting   = environmentFileTesting.credentials.azureClientSecretTesting.toLowerCase()
+
+      workspaceKeyPrefix = environmentFile.account
+      tfBackendKey       = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
 
       echo "Stack Environment ${context.environment} "
-      echo "AWS Access Key ID ${awsAccessKeyId}"  
-      echo "AWS Secret Access ${awsSecretAccessKey}"  
-      echo "AWS Region        ${awsRegion}"
+      echo "Azure Subscription ID ${azureSubscripitionId}"
+      echo "Azure Client ID ${azureClientId}"
+      echo "Azure Client Secret ${azureClientSecret}"
 
       // handle environment specific variables
       // copy json from /environments/${context.environment}.auto.tfvars.json to /
@@ -100,7 +103,7 @@ def stageGetConfig(def context) {
 
 //initialize pre-requisites
 def stageInit(def context) {
-  if (stackdeploy) 
+  if (stackdeploy)
   {
     stage('Init')
     {
@@ -109,10 +112,10 @@ def stageInit(def context) {
       bitbucketService.withTokenCredentials { String username, String pw -> 
         GitCredentialStore.configureAndStore(this, context.bitbucketUrl, username, pw)
       }
-  
+
       def workspace = env.WORKSPACE
       def statusTF = sh(script: '''
-            make create-tfvars''', 
+            make create-tfvars''',
             returnStatus: true)
       if (statusTF != 0) {
         error "Creation of tfvars failed!"
@@ -125,13 +128,13 @@ def stageInit(def context) {
 def stageReport(def context) {
   if (stackdeploy == true) {
     stage('Report')
-    {      
+    {
       def status = sh(script: '''
-          make install-report ''', 
+          make install-report ''',
           returnStatus: true)
       if (status != 0) {
         error "Report failed!"
-      }  
+      }
 
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)  
       stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)  
@@ -146,15 +149,17 @@ def stageSmoke(def context) {
     stage('Smoke')
     {
       withCredentials([
-        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
      ])
       {
-       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegionTesting))
+       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
-            make smoke-test ''', 
+            make smoke-test ''',
             returnStatus: true)
           if (status != 0) {
             error "Smoke-Test failed!"
@@ -168,23 +173,27 @@ def stageSmoke(def context) {
 //execute make test of the project
 def stageTest(def context) {
   if (stackdeploy == true) {
-    stage('Test') {
+    stage('Test') 
+    {
       withCredentials([
-        string(credentialsId: awsAccessKeyIdTesting, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKeyTesting, variable: 'AWS_SECRET_ACCESS_KEY')
+        string(credentialsId: azureSubscriptionIdTesting, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantIdTesting, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientIdTesting, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecretTesting, variable: 'AZURE_CLIENT_SECRET')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, null, awsRegionTesting))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, null))
         {
           def status = sh(script: '''
-            make test''', 
+            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
+            make test''',
             returnStatus: true)
           if (status != 0) {
             error "Test failed!"
-          }   
+          }
         }
-      } 
-    } 
+      }
+    }
   } else { print "Stage Test has been skipped." }
 }
 
@@ -192,15 +201,18 @@ def stageTest(def context) {
 def stagePlan(def context) {
   if (stackdeploy == true) {
     stage('Plan')
-    {    
+    {
       withCredentials([
-        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
-       ])
+        string(credentialsId: azureSubscriptionId, variable: 'ARM_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'ARM_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'ARM_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'ARM_CLIENT_SECRET')
+    ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
+            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
             eval \"\$(rbenv init -)\" && \
             make plan''',
             returnStatus: true)
@@ -216,23 +228,27 @@ def stagePlan(def context) {
 //execute make deploy of the stack
 def stageDeploy(def context) {
   if (stackdeploy == true) {
-    stage('Deploy') {  
+    stage('Deploy') {
+    {
       withCredentials([
-        string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
-      ])
+        string(credentialsId: azureSubscriptionId, variable: 'ARM_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'ARM_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'ARM_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'ARM_CLIENT_SECRET')
+    ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendS3Key, tfvarsjson['meta_environment'], awsRegion))
+        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
+            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
             eval \"\$(rbenv init -)\" && \
             make deploy''',
-            returnStatus: true) 
+            returnStatus: true)
           if (status != 0) {
             error "Deploy failed!"
           }
         }
-      } 
+      }
     }
   } else { print "Stage Deploy has been skipped." }
 }

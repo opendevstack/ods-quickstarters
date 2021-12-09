@@ -23,7 +23,13 @@
 variable "name" {
   description = "The name of the stack."
   type        = string
-  default     = "stack-azure-quickstarter"
+  default     = "stack-azure-quickstarter-delete-me"
+}
+
+variable "is_test" {
+  description = "Whether this is part of a test execution of not. Defaults to false."
+  type        = bool
+  default     = false
 }
 
 variable "meta_environment" {

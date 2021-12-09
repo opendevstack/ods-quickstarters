@@ -54,20 +54,20 @@ prep-test:
 	pre-commit run terraformstackmoduleoutputs -a
 
 .PHONY: test
-# Run (pre-deployment) tests. Terraform uses ARM_*, RubySDK/ inspec-azure use AZURE_*
+# Run (pre-deployment) tests. Terraform uses AZURE_*, RubySDK/ inspec-azure use AZURE_*
 test: install-test-deps
-test: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
-test: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
-test: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
-test: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+test: export AZURE_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+test: export AZURE_TENANT_ID       := $(AZURE_TENANT_ID)
+test: export AZURE_CLIENT_ID       := $(AZURE_CLIENT_ID)
+test: export AZURE_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
 test: install-test-deps test-terraform-modules
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
 	$(call check_defined,AZURE_CLIENT_SECRET)
 
-	az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
-	az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
+	#az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
+	#az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
 
 	# Remove any previously created Terraform test artefacts.
 	for dir in .terraform terraform.tfstate.d; do \
@@ -89,10 +89,10 @@ test: install-test-deps test-terraform-modules
 .PHONY: plan
 # Plan infrastructure deployment.
 plan: init-terraform
-plan: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
-plan: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
-plan: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
-plan: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+plan: export AZURE_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+plan: export AZURE_TENANT_ID       := $(AZURE_TENANT_ID)
+plan: export AZURE_CLIENT_ID       := $(AZURE_CLIENT_ID)
+plan: export AZURE_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
 plan: install-test-deps test-terraform-modules
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
@@ -103,18 +103,18 @@ plan: install-test-deps test-terraform-modules
 .PHONY: deploy
 # Deploy infrastructure.
 deploy: init-terraform plan
-deploy: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
-deploy: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
-deploy: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
-deploy: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+deploy: export AZURE_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+deploy: export AZURE_TENANT_ID       := $(AZURE_TENANT_ID)
+deploy: export AZURE_CLIENT_ID       := $(AZURE_CLIENT_ID)
+deploy: export AZURE_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
 deploy: install-test-deps test-terraform-modules
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
 	$(call check_defined,AZURE_CLIENT_SECRET)
 
-	az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
-	az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
+	#az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
+	#az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
@@ -122,6 +122,10 @@ deploy: install-test-deps test-terraform-modules
 .PHONY: smoke-test
 # Run (post-deployment) tests.
 smoke-test: install-test-deps
+smoke-test: export AZURE_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+smoke-test: export AZURE_TENANT_ID       := $(AZURE_TENANT_ID)
+smoke-test: export AZURE_CLIENT_ID       := $(AZURE_CLIENT_ID)
+smoke-test: export AZURE_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
@@ -130,7 +134,7 @@ smoke-test: install-test-deps
 	sh ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for profile in $$inspec_profiles; do \
-		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target azure://; \
+		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target azure://; \
 	done
 
 .PHONY: install-report
@@ -145,10 +149,10 @@ describe: init-terraform
 .PHONY: destroy
 # Destroy infrastructure.
 destroy: init-terraform
-destroy: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
-destroy: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
-destroy: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
-destroy: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
+destroy: export AZURE_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
+destroy: export AZURE_TENANT_ID       := $(AZURE_TENANT_ID)
+destroy: export AZURE_CLIENT_ID       := $(AZURE_CLIENT_ID)
+destroy: export AZURE_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
 destroy: init-terraform
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
@@ -181,8 +185,8 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
-	az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
-	az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
+	#az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID) &> /dev/null
+	#az account show --output yaml | tee $(INSTALL_REPORT_HOME)/azure_testing_account.log
 
 	echo 1 | terraform init
 

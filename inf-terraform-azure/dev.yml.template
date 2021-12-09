@@ -1,11 +1,7 @@
-# TODO: define what's needed here
-# subscription, client_id, app_id, secret_id
+# TODO: map credentials here as they are stored prefixed with project_id?
 
-location: westeurope
-  
 credentials:
-  key: @project_id@-cd-aws-access-key-id-dev
-  secret: @project_id@-cd-aws-secret-access-key-dev
-
-# put your account id in here with double quotes           
-account: "nnnnnnnnn"
+  azureSubscriptionId: @project_id@-azure-cd-subscription-id
+  azureTenantId: @project_id@-azure-cd-tenant-id
+  azureClientId: @project_id@-azure-cd-client-id
+  azureClientSecret: @project_id@-azure-cd-client-secret

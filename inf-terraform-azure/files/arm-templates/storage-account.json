@@ -5,10 +5,7 @@
     "location": "[resourceGroup().location]",
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
     "storageAccountType": "Standard_GRS",
-    "publicIPAddressName": "[concat('myPublicIp', uniquestring(resourceGroup().id))]",
-    "publicIPAddressType": "Dynamic",
-    "apiVersion": "2015-06-15",
-    "dnsLabelPrefix": "terraform-acctest"
+    "apiVersion": "2015-06-15"
   },
   "resources": [
     {
@@ -19,18 +16,6 @@
       "properties": {
         "accountType": "[variables('storageAccountType')]",
         "supportsHttpsTrafficOnly": "true"
-      }
-    },
-    {
-      "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "[variables('apiVersion')]",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[variables('location')]",
-      "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-        "dnsSettings": {
-          "domainNameLabel": "[variables('dnsLabelPrefix')]"
-        }
       }
     }
   ],

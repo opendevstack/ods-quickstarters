@@ -1,5 +1,5 @@
 locals {
-  unique_name = var.name
+  unique_name = var.is_test ? "${var.name}-${local.id}" : var.name
   location    = "westeurope"
 
   tags = merge(local.common_tags, {
