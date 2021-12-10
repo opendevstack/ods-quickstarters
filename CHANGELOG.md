@@ -2,6 +2,8 @@
 
 ## Unreleased
 - Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
+- Updates maven agent to support HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+
 ## [4.0] - 2021-18-11
 
 ### Added
