@@ -9,6 +9,7 @@
 - Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 - Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
+- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
 
 ## [4.0] - 2021-05-11
 
