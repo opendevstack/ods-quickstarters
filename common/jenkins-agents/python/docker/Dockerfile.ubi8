@@ -7,7 +7,8 @@ ARG nexusAuth
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
-    PIP_NO_CACHE_DIR=off
+    PIP_NO_CACHE_DIR=off \
+    PATH=$JAVA_HOME/bin:$PATH
 
 RUN yum module install -y python38:3.8/build && \
     yum -y clean all && \
