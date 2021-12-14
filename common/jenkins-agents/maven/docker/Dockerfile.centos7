@@ -23,7 +23,7 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
     GRADLE_USER_HOME=/home/jenkins/.gradle
 
 # Install Java
-RUN yum install -y java-11-openjdk-devel && \
+RUN yum install -y java-11-openjdk-devel java-11-openjdk-jmods && \
     yum clean all -y && \
     exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
