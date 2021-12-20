@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Use Java 17 (LTS) in maven jenkins-agent and spring boot quickstarter ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 
 ### Modified
 

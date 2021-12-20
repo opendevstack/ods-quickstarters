@@ -7,8 +7,38 @@ The image is built in the global `ods` project and is named `jenkins-agent-maven
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-maven`.
 
 == Features
+. Gradlew distribution version preinstalled in gradle cache (/home/jenkins/.gradle/wrapper/dists/)
 . Nexus configuration for Maven & Gradle
 . HTTP proxy awareness for both builders
+
+== Supported Java Versions
+This agent provides 2 JDKs: `java 11` and `java 17`.
+
+For backwards compatibility `java 11` is the default version. Java projects migrating from previous ODS version will not require any change. A migration to `java 17` can be done afterwards.
+
+To switch the environment to `java 17` the script `use-j17.sh` is provided at the jenkins home folder.
+Following command shows how the jenkins build script from the springboot quickstarter switches the java version before calling the gradle wrapper:
+```
+def status = sh(script: "use-j17.sh && ./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
+```
+
+A script called `use-j11.sh` is also provided and can be called e.g. if a switch back to this version within the stages of project jenkins build script is required.
+
+== Installed packages
+
+Dockerfile.ubi8 installs:
+- java-17-openjdk-devel & java-17-openjdk-jmods (from AppStream repository)
+- java-11-openjdk-devel & java-11-openjdk-jmods (from AppStream repository)
+- maven-3.5.4-5.module_el8.0.0+39+6a9b6e22.noarch.rpm (from AppStream repository)
+- gradle wrapper distribution version 7.3.2 (https://services.gradle.org/)
+
+Dockerfile.centos7 installs
+- java-11-openjdk-devel & java-11-openjdk-jmods (from EPEL-Release repository)
+- java-17-openjdk-devel java-17-openjdk-jmods (from EPEL-Release repository)
+- maven 3.5.4 from apache distribution directory (https://apache.osuosl.org/maven/maven-3)
+- gradle wrapper distribution version 7.3.2 (https://services.gradle.org/)
+
+NOTE: detail about java and maven installed packages can be found in https://centos.pkgs.org
 
 == Known limitations
 n/a

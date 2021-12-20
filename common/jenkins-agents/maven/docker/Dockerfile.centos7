@@ -20,23 +20,21 @@ ENV BASH_ENV=/usr/local/bin/scl_enable \
     ENV=/usr/local/bin/scl_enable \
     PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
     HOME=/home/jenkins \
-    GRADLE_USER_HOME=/home/jenkins/.gradle
+    GRADLE_USER_HOME=/home/jenkins/.gradle \
+    JAVA_HOME=/usr/lib/jvm/jre
 
-# Install Java
-RUN yum install -y epel-release && yum repolist && yum install -y java-latest-openjdk-devel java-11-openjdk-devel && \
-    yum clean all -y && rm -rf /var/cache/yum && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
-    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
-    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
-    java -version && \
-    javac -version
-ENV JAVA_HOME=/usr/lib/jvm/jre
-
+# Copy use java scripts.
 COPY use-j*.sh /home/jenkins/
-RUN chmod u+x /home/jenkins/use-j11.sh && \
+
+# Install Maven & java 11 and java 17
+# Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
+ RUN yum install -y epel-release && yum repolist && yum install -y java-17-openjdk-devel java-17-openjdk-jmods java-11-openjdk-devel java-11-openjdk-jmods && \
+    yum clean all -y && rm -rf /var/cache/yum && \
     chmod u+x /home/jenkins/use-j17.sh && \
+    chmod u+x /home/jenkins/use-j11.sh && \
     /home/jenkins/use-j17.sh && \
-    /home/jenkins/use-j11.sh
+    /home/jenkins/use-j11.sh && \
+    echo $JAVA_HOME
 
 # Install Maven
 ENV MAVEN_VERSION=3.5.4
