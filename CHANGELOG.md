@@ -33,6 +33,7 @@
 - Updating used base image for nginx to fix CVE ([#602](https://github.com/opendevstack/ods-quickstarters/pull/602))
 - be-gateway-nginx switch from CentOS to Fedora ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 - Change rhel7 to centos7 base jenkins node, as the image is Centos (congruent with ods-core) ([#646](https://github.com/opendevstack/ods-quickstarters/pull/646))
+- Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
 
 ### Fixed
 
@@ -53,8 +54,8 @@
 - fix openshift templates deprecation notice ([#639](https://github.com/opendevstack/ods-quickstarters/issues/639))
 - Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
-- fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
-- fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
+- fix typescript-express junit test report location ([#645](https://github.com/opendevstack/ods-quickstarters/issues/654))
+- fix java not in path for python quickstarter ([#645](https://github.com/opendevstack/ods-quickstarters/issues/685))
 
 ### Removed
 
