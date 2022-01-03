@@ -1,7 +1,9 @@
 # Changelog
 
 ## Unreleased
-- Use Java 17 (LTS) in maven jenkins-agent and spring boot quickstarter ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
+
+### Added
+- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 
 ### Modified
 
@@ -16,7 +18,6 @@
 ## [4.0] - 2021-05-11
 
 ### Added
-- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651)) 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 - Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
