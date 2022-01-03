@@ -45,6 +45,9 @@ odsQuickstarterPipeline(
 
     echo "--- customise build.gradle ---"
 
+    // enforce minimal log4j2 version to avoid (CVE-2021-44228)
+	sh "sed -i -e '/ext {/{r ${context.sourceDir}/templates/gradle-minimal-log4j2-version.template'  -e 'd' -e '}' ${context.targetDir}/build.gradle"
+
     // add nexus credential settings
     sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
 
