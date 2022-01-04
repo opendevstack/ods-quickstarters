@@ -19,10 +19,9 @@ For backwards compatibility `java 11` is the default version. Java projects migr
 To switch the environment to `java 17` the script `use-j17.sh` is provided at the jenkins home folder.
 Following command shows how the jenkins build script from the springboot quickstarter switches the java version before calling the gradle wrapper:
 ```
-def status = sh(script: "use-j17.sh && ./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
+def status = sh(script: "$HOME/use-j17.sh && ./gradlew clean build --stacktrace --no-daemon && $HOME/use-j11.sh", returnStatus: true)
 ```
-
-A script called `use-j11.sh` is also provided and can be called e.g. if a switch back to this version within the stages of project jenkins build script is required.
+NOTE: like this example, you will need to switch back to `java 11` after running the gradlew build. This is required because the maven agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the latest java version.
 
 == Installed packages
 
