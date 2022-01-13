@@ -1,13 +1,18 @@
 # Changelog
 
 ## Unreleased
+
+### Modified
+
 - Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
 - Updates maven agent to support HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 
-## [4.0] - 2021-18-11
+## [4.0] - 2021-05-11
 
 ### Added
+ 
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 - Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
@@ -54,8 +59,8 @@
 - fix openshift templates deprecation notice ([#639](https://github.com/opendevstack/ods-quickstarters/issues/639))
 - Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
-- fix typescript-express junit test report location ([#645](https://github.com/opendevstack/ods-quickstarters/issues/654))
-- fix java not in path for python quickstarter ([#645](https://github.com/opendevstack/ods-quickstarters/issues/685))
+- fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
+- fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
 
 ### Removed
 
