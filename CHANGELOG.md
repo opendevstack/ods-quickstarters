@@ -14,6 +14,7 @@
 - Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
 - Fix openresty/nginx SSL certs path ([#652](https://github.com/opendevstack/ods-quickstarters/issues/652))
 - Fix fe-angular to resolve dependencies on newer nodeJS versions ([#662](https://github.com/opendevstack/ods-quickstarters/issues/662))
+- Fix R Shiny build. Upgrade and sync from master and 4.x ([#702](https://github.com/opendevstack/ods-quickstarters/issues/702))
 
 ## [3.0] - 2020-08-11
 
