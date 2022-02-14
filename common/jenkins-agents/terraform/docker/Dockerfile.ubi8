@@ -12,14 +12,15 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.k8s.description="The jenkins Agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws"
 
-ENV TERRAFORM_VERSION 1.0.3
-ENV TERRAFORM_DOCS_VERSION v0.11.2
-ENV PYTHON_VERSION 3.7.10
-ENV RUBY_VERSION 2.7.4
-ENV PACKER_VERSION 1.7.3
-ENV CONSUL_VERSION 1.9.4
+ENV TERRAFORM_VERSION 1.0.11
+ENV TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0
+ENV TERRAFORM_DOCS_VERSION v0.16.0
+ENV PYTHON_VERSION 3.7.12
+ENV RUBY_VERSION 2.7.5
+ENV PACKER_VERSION 1.7.10
+ENV CONSUL_VERSION 1.11.2
 ENV TFENV_VERSION 2.2.0
-ENV NODEJS_VERSION 14.17.1
+ENV NODEJS_VERSION 16.13.2
 ENV BUNDLER_VERSION 2.2.23
 ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
@@ -35,7 +36,7 @@ COPY python_requirements /tmp/requirements.txt
 RUN set -x \
     && dnf -y install $INSTALL_PKGS
 
-RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
+RUN curl "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
 
 # Upgrade PIP
@@ -91,8 +92,15 @@ RUN wget -q -O /tmp/packer.zip "https://releases.hashicorp.com/packer/${PACKER_V
     && rm -rf /tmp/packer.zip \
     && packer --version
 
+# Install terraform-config-inspect
+RUN wget -q -O /tmp/terraform-config-inspect.tar.gz https://github.com/nichtraunzer/terraform-config-inspect/releases/download/v${TERRAFORM_CONFIG_INSPECT_VERSION}/terraform-config-inspect_${TERRAFORM_CONFIG_INSPECT_VERSION}_linux_amd64.tar.gz \
+    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ \
+    && rm -f /tmp/terraform-config-inspect.tar.gz \
+    && chmod 755 /usr/local/bin/terraform-config-inspect
+
 # Install Terraform Docs
-RUN wget -q -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64 \
+RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
+    && tar zxpf /tmp/terraform-docs.tar.gz -C /usr/local/bin/ terraform-docs \
     && chmod +x /usr/local/bin/terraform-docs
 
 # Install jq
