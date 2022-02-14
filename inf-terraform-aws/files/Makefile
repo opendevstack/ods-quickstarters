@@ -156,32 +156,3 @@ __check_defined = \
 	$(if $(value $1),, \
 		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
 			required by target `$@')))
-
-# Execute tests in included blueprints.
-test_included_blueprints = \
-	function test_blueprint() { \
-		dir=$$(echo $$1 | jq -r '.Dir'); \
-		source=$$(echo $$1 | jq -r '.Source'); \
-		\
-		source=$$(basename $$source); \
-		if echo "$$source" | grep -q -e '\?ref='; then \
-			source=$$(echo $$source | sed 's/\(\.*\)?ref=.*/$1/'); \
-		fi; \
-		if echo "$$source" | grep -q -e '\.git$$'; then \
-			source=$$(echo $$source | sed 's/\(\.*\).git$$/$1/'); \
-		fi; \
-		\
-		if [ -f "$$dir/Makefile" ] && [ $$(grep -c "^test-report:" "$$dir/Makefile") == 1 ]; then \
-			echo "Running tests for module $$source in $$dir."; \
-			mkdir -p ./reports/install/data/blueprints/reports/test; \
-			GEMS_HOME=$(GEMS_HOME) make test-report -C $$dir || exit 1; \
-			cp "$$dir/reports/test/report.json" "./reports/install/data/blueprints/reports/test/$$source.json"; \
-		else \
-			echo "Module $$source in $$dir does not contain a valid Makefile. No tests executed."; \
-		fi \
-	}; \
-	\
-	if [ -f .terraform/modules/modules.json ]; then \
-		export -f test_blueprint; \
-		jq -c '.Modules | unique_by(.Source) | map(select(.Dir != ".")) | .[]' .terraform/modules/modules.json | parallel --halt soon,fail=1 --line-buffer --keep-order --quote test_blueprint "{}"; \
-	fi

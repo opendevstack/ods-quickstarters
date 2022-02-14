@@ -4,13 +4,14 @@
 
 ### Modified
 
-- Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
-- Updates maven agent to support HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
-- Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
-- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
-- Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
-- terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
-- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+- Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
+- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
+- Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
+- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
+- Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
