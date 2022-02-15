@@ -33,10 +33,10 @@ if [[ $HTTP_PROXY != "" ]]; then
 		echo "systemProp.https.proxyUser=$proxy_user" >> $GRADLE_WRAPPER_HOME/gradle-wrapper.properties
 		
 		proxy_pw=$(echo $proxy_userp | sed -e "s|$proxy_user:||g")
-		echo "systemProp.http.proxyUser=$proxy_pw" >> $GRADLE_USER_HOME/gradle.properties
-		echo "systemProp.https.proxyUser=$proxy_pw" >> $GRADLE_USER_HOME/gradle.properties
-		echo "systemProp.http.proxyUser=$proxy_pw" >> $GRADLE_WRAPPER_HOME/gradle-wrapper.properties
-		echo "systemProp.https.proxyUser=$proxy_pw" >> $GRADLE_WRAPPER_HOME/gradle-wrapper.properties
+		echo "systemProp.http.proxyPassword=$proxy_pw" >> $GRADLE_USER_HOME/gradle.properties
+		echo "systemProp.https.proxyPassword=$proxy_pw" >> $GRADLE_USER_HOME/gradle.properties
+		echo "systemProp.http.proxyPassword=$proxy_pw" >> $GRADLE_WRAPPER_HOME/gradle-wrapper.properties
+		echo "systemProp.https.proxyPassword=$proxy_pw" >> $GRADLE_WRAPPER_HOME/gradle-wrapper.properties
  	fi
 fi
 
