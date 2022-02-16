@@ -1,0 +1,6 @@
+---
+name: Vanilla
+description: A vanilla component to run the Jenkinsfile and execute its actions.
+supplier: https://www.opendevstack.org
+version: 4.x
+type: ods-service

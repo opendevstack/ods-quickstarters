@@ -1,0 +1,1 @@
+# Vanilla QuickStarter (vanilla)

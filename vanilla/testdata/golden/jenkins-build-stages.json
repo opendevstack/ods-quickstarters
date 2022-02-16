@@ -1,0 +1,10 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]
