@@ -1,0 +1,86 @@
+= Vanilla QuickStarter (vanilla)
+
+== Purpose of this quickstarter
+
+Use this quickstarter when you want to start from a vanilla CI setup only, without any framework on top.
+A good usecase here is a complex task that needs to be run in a reliable fashion but does not create any resources in OpenShift, like this:
+* Import VMDK images to EC2
+* Create a database snapshot and import to RDS for debugging in a specialized environment
+* Deploy to mixed environments that require the use
+* scripted tasks -- as in running a custom shell script that takes care of complex tasks
+* snapshot/restore a database from an existing production environment to an existing staging environment (to have a verified/tested and proven method to rule out human error)
+* access non-cloud / non-container resources e.g.: SSH/WinRM to access or modify resources that exist for on-premise solutions
+
+
+== What files / architecture is generated?
+
+----
+├── Jenkinsfile - Contains Jenkins build configuration
+├── README.md
+├── metadata.yml - Component metadata
+├── release-manager.yml - Configuration file for the Release Manager
+└── sonar-project.properties  - SonarQube Configuration
+----
+
+== Frameworks used
+
+None, except for the ODS https://github.com/opendevstack/ods-jenkins-shared-library[jenkins shared library].
+
+== Usage - how do you start after you provisioned this quickstarter
+
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
+
+```yaml
+name: software-name
+description: "Some software"
+supplier: https://example.com
+version: 4.x
+type: ods-service
+role: <the role of this software in the project>
+```
+
+
+== How this quickstarter is built through Jenkins
+
+Any actions defined in the Jenkinsfile will be run according:
+
+----
+def stageBuild(def context) {
+  stage('Build') {
+    // copy any other artifacts, if needed
+    // sh "cp -r build docker/dist"
+    // the docker context passed in /docker
+  }
+}
+----
+
+In case you want to run unit tests, you can add a corresponding statement to `stageUnitTest`:
+
+----
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+    // add your unit tests here, if needed
+  }
+}
+----
+
+Assuming your component contains source code you want to have delivered by the _Release Manager_, the execution of tests and the reporting of their results is mandatory. For this, your component will have to...
+
+- define `name`, `description`, `supplier`, and `version` metadata for your component in `files/release-manager.yml`
+
+- place the test results in the xUnit XML format in a path known to `context.testResults` (defaults to `build/test-results/test`)
+
+- provide these test results to the link:https://plugins.jenkins.io/junit[Jenkins JUnit plugin] via its `junit` step function.
+
+Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
+
+== Builder agent used
+
+none
+
+== Known limitations
+
+N/A
