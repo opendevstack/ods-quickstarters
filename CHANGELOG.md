@@ -15,6 +15,7 @@
 - Scala agent updated from Jenkins base image changes ([#721](https://github.com/opendevstack/ods-quickstarters/issues/721))
 - terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
 - Bump antora page version in master (https://github.com/opendevstack/ods-documentation/issues/66)
+- Default acceptance test in Spock makes the pipeline runs forever ([#706](https://github.com/opendevstack/ods-quickstarters/issues/706))
 
 ### Modified
 

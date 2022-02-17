@@ -58,24 +58,24 @@ repositories {
 }
 
 ext {
-    junitVersion = "5.5.2"
-    spockVersion = "1.3-groovy-2.5"
-    gebVersion = "3.2"
-    seleniumVersion = "3.141.59"
-    htmlunitVersion = "2.36.0"
-    unirestVersion = "3.2.00"
+    junitVersion = "5.8.2"
+    spockVersion = "2.1-groovy-3.0"
+    gebVersion = "5.1"
+    seleniumVersion = "4.1.2"
+    htmlunitVersion = "3.58.0"
+    unirestVersion = "3.13.6"
     // When a test fail we can continue or fail the stage
     CONTINUE_WHEN_TEST_FAIL = true
 }
 
 dependencies {
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testCompile "org.spockframework:spock-core:${spockVersion}"
-    testCompile "com.konghq:unirest-java:${unirestVersion}"
-    testCompile "org.gebish:geb-spock:${gebVersion}"
-    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
-    testCompile "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
-    testRuntime "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "com.konghq:unirest-java:${unirestVersion}"
+    testImplementation "org.gebish:geb-spock:${gebVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
 }
 
 sourceSets {
@@ -89,8 +89,8 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 
     integration {
@@ -103,8 +103,8 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 
     acceptance {
@@ -117,20 +117,20 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 }
 
 configurations {
-    installationCompile.extendsFrom testCompile
-    installationRuntime.extendsFrom testRuntime
+    installationCompile.extendsFrom testImplementation
+    installationRuntime.extendsFrom testRuntimeClasspath
 
-    integrationCompile.extendsFrom testCompile
-    integrationRuntime.extendsFrom testRuntime
+    integrationCompile.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntimeClasspath
 
-    acceptanceCompile.extendsFrom testCompile
-    acceptanceRuntime.extendsFrom testRuntime
+    acceptanceCompile.extendsFrom testImplementation
+    acceptanceRuntime.extendsFrom testRuntimeClasspath
 }
 
 class TestExecutionPhases {
@@ -154,10 +154,7 @@ def executeTest(def type, def language) {
         description = "Runs ${type} tests ${language}."
         group = "verification"
 
-        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
-            // Mandatory to run JUnit 5 test but incompatible with groovy tests
-            useJUnitPlatform()
-        }
+        useJUnitPlatform()
 
         ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
         testClassesDirs = sourceSets["${type}"].output.classesDirs
