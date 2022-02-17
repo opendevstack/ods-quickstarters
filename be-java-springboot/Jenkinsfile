@@ -20,7 +20,7 @@ odsQuickstarterPipeline(
 
   stage('Build spring project') {
     dir(context.targetDir) {
-      def springBootVersion = '2.3.1.RELEASE'
+      def springBootVersion = '2.6.1.RELEASE'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
       sh "curl https://start.spring.io/starter.tgz \
@@ -29,7 +29,7 @@ odsQuickstarterPipeline(
             -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
             -d bootVersion=${springBootVersion} \
             -d packaging=jar \
-            -d javaVersion=11 \
+            -d javaVersion=17 \
             -d groupId=${context.projectId} \
             -d artifactId=${context.componentId} \
             -d name=${context.componentId} \
@@ -44,6 +44,9 @@ odsQuickstarterPipeline(
     }
 
     echo "--- customise build.gradle ---"
+
+    // enforce minimal log4j2 version to avoid (CVE-2021-44228)
+	sh "sed -i -e '/ext {/{r ${context.sourceDir}/templates/gradle-minimal-log4j2-version.template'  -e 'd' -e '}' ${context.targetDir}/build.gradle"
 
     // add nexus credential settings
     sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
