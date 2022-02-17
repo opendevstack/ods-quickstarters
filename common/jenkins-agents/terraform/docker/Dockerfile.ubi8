@@ -14,7 +14,6 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
 
 ENV TERRAFORM_VERSION 1.0.3
 ENV TERRAFORM_DOCS_VERSION v0.11.2
-ENV PYTHON_VERSION 3.7.10
 ENV RUBY_VERSION 2.7.4
 ENV PACKER_VERSION 1.7.3
 ENV CONSUL_VERSION 1.9.4
@@ -35,7 +34,7 @@ COPY python_requirements /tmp/requirements.txt
 RUN set -x \
     && dnf -y install $INSTALL_PKGS
 
-RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" \
+RUN curl "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
 
 # Upgrade PIP
@@ -96,7 +95,7 @@ RUN wget -q -O /usr/local/bin/terraform-docs https://github.com/segmentio/terraf
     && chmod +x /usr/local/bin/terraform-docs
 
 # Install jq
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-13.el8.noarch.rpm \
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-14.el8.noarch.rpm \
     && yum install -y jq parallel \
     && jq -Version \
     && yum clean all
