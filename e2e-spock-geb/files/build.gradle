@@ -69,13 +69,13 @@ ext {
 }
 
 dependencies {
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testCompile "org.spockframework:spock-core:${spockVersion}"
-    testCompile "com.konghq:unirest-java:${unirestVersion}"
-    testCompile "org.gebish:geb-spock:${gebVersion}"
-    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
-    testCompile "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
-    testRuntime "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+    testImplementation "com.konghq:unirest-java:${unirestVersion}"
+    testImplementation "org.gebish:geb-spock:${gebVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
 }
 
 sourceSets {
@@ -89,8 +89,8 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 
     integration {
@@ -103,8 +103,8 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 
     acceptance {
@@ -117,20 +117,20 @@ sourceSets {
         resources {
             srcDir 'src/test/resources'
         }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.runtimeClasspath
+        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 }
 
 configurations {
-    installationCompile.extendsFrom testCompile
-    installationRuntime.extendsFrom testRuntime
+    installationCompile.extendsFrom testImplementation
+    installationRuntime.extendsFrom testRuntimeClasspath
 
-    integrationCompile.extendsFrom testCompile
-    integrationRuntime.extendsFrom testRuntime
+    integrationCompile.extendsFrom testImplementation
+    integrationRuntime.extendsFrom testRuntimeClasspath
 
-    acceptanceCompile.extendsFrom testCompile
-    acceptanceRuntime.extendsFrom runtimeClasspath
+    acceptanceCompile.extendsFrom testImplementation
+    acceptanceRuntime.extendsFrom testRuntimeClasspath
 }
 
 class TestExecutionPhases {
