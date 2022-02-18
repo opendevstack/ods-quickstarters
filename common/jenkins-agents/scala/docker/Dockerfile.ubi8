@@ -7,7 +7,7 @@ ARG nexusUsername
 ARG nexusPassword
 
 # Install Java
-RUN yum install -y --enablerepo centos-appstream java-11-openjdk-devel && \
+RUN yum install -y java-11-openjdk-devel && \
     yum clean all -y && \
     exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
