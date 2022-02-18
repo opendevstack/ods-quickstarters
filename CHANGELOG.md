@@ -8,6 +8,7 @@
 - Updates maven agent to support HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
+- Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
@@ -16,7 +17,7 @@
 ## [4.0] - 2021-05-11
 
 ### Added
- 
+
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 - Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
