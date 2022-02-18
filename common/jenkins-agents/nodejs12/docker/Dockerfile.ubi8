@@ -24,14 +24,6 @@ COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
 
-# Install Cypress dependencies
-# https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
-COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-RUN yum repolist \
-    && yum install -y --enablerepo centos-baseos,centos-appstream xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
-    && yum install -y --enablerepo centos-baseos,centos-appstream,google-chrome google-chrome-stable \
-    && yum clean all -y
-
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
     yum module enable -y nodejs:${NODEJS_VERSION} && \
@@ -42,6 +34,15 @@ RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
 # Install Yarn
 # https://classic.yarnpkg.com/en/docs/install
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+
+# Install Cypress dependencies
+# https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
+COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
+COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN yum repolist \
+    && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
+    && yum install -y --enablerepo google-chrome google-chrome-stable \
+    && yum clean all -y
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
