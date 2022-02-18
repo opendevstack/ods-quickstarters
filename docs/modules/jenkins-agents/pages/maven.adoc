@@ -26,14 +26,14 @@ NOTE: like this example, you will need to switch back to `java 11` after running
 == Installed packages
 
 Dockerfile.ubi8 installs:
-- java-17-openjdk-devel
-- java-11-openjdk-devel
+- java-17-openjdk-devel & java-17-openjdk-jmods
+- java-11-openjdk-devel & java-11-openjdk-jmods
 - maven-3.5.4
 - gradle wrapper distribution version 7.3.2 (https://services.gradle.org/)
 
 Dockerfile.centos7 installs
-- java-11-openjdk-devel
-- java-17-openjdk-devel
+- java-11-openjdk-devel & java-11-openjdk-jmods
+- java-17-openjdk-devel & java-17-openjdk-jmods
 - maven 3.5.4 from apache distribution directory (https://apache.osuosl.org/maven/maven-3)
 - gradle wrapper distribution version 7.3.2 (https://services.gradle.org/)
 
