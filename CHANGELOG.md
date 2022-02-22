@@ -6,6 +6,7 @@
 
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
+- terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
 
 ### Fixed
 
