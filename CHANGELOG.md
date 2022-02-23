@@ -21,7 +21,7 @@
 - Drop prerelease of antora page version in 4.x (https://github.com/opendevstack/ods-documentation/issues/66)
 
 
-## [4.0] - 2021-05-11
+## [4.0] - 2021-11-05
 
 ### Added
 
