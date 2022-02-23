@@ -9,6 +9,7 @@
 - Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
+- terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
