@@ -58,4 +58,3 @@ repos:
     files: (\.tf|\.rb)$
     pass_filenames: false
     verbose: true
-

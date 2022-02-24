@@ -5,6 +5,8 @@
     "location": "[resourceGroup().location]",
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
     "storageAccountType": "Standard_GRS",
+    "publicIPAddressName": "[concat('myPublicIp', uniquestring(resourceGroup().id))]",
+    "publicIPAddressType": "Dynamic",
     "apiVersion": "2015-06-15"
   },
   "resources": [
@@ -26,4 +28,3 @@
     }
   }
 }
-

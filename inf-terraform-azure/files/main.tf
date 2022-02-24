@@ -21,4 +21,3 @@ resource "azurerm_resource_group_template_deployment" "this" {
   deployment_mode     = "Incremental"
   template_content    = file("${path.module}/arm-templates/storage-account.json")
 }
-

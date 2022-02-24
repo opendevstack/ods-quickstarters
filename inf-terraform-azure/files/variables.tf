@@ -27,7 +27,7 @@ variable "name" {
 }
 
 variable "is_test" {
-  description = "Whether this is part of a test execution of not. Defaults to false."
+  description = "Whether is is part of a test execution or not. Defaults to false."
   type        = bool
   default     = false
 }
@@ -37,4 +37,3 @@ variable "meta_environment" {
   type        = string
   default     = "DEVELOPMENT"
 }
-

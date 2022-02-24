@@ -68,19 +68,20 @@ def stageGetConfig(def context) {
 
       azureSubscriptionId = environmentFile.credentials.azureSubscriptionId.toLowerCase()
       azureTenantId       = environmentFile.credentials.azureTenantId.toLowerCase()
-      azureClientId       = environmentFileTesting.credentials.azureClientId.toLowerCase()
-      azureClientSecret   = environmentFileTesting.credentials.azureClientSecret.toLowerCase()
+      azureClientId       = environmentFile.credentials.azureClientId.toLowerCase()
+      azureClientSecret   = environmentFile.credentials.azureClientSecret.toLowerCase()
 
-      azureSubscriptionIdTesting = environmentFile.credentials.azureSubscriptionIdTesting.toLowerCase()
-      azureTenantIdTesting       = environmentFile.credentials.azureTenantIdTesting.toLowerCase()
-      azureClientIdTesting       = environmentFileTesting.credentials.azureClientIdTesting.toLowerCase()
-      azureClientSecretTesting   = environmentFileTesting.credentials.azureClientSecretTesting.toLowerCase()
+      azureSubscriptionIdTesting = environmentFileTesting.credentials.azureSubscriptionId.toLowerCase()
+      azureTenantIdTesting       = environmentFileTesting.credentials.azureTenantId.toLowerCase()
+      azureClientIdTesting       = environmentFileTesting.credentials.azureClientId.toLowerCase()
+      azureClientSecretTesting   = environmentFileTesting.credentials.azureClientSecret.toLowerCase()
 
-      workspaceKeyPrefix = environmentFile.account
-      tfBackendKey       = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
+      workspaceKeyPrefix        = environmentFile.account
+      tfBackendKey            = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
 
       echo "Stack Environment ${context.environment} "
-      echo "Azure Subscription ID ${azureSubscripitionId}"
+      echo "Azure Subscription ID ${azureSubscriptionId}"
+      echo "Azure Tenant ID ${azureTenantId}"
       echo "Azure Client ID ${azureClientId}"
       echo "Azure Client Secret ${azureClientSecret}"
 
@@ -90,7 +91,7 @@ def stageGetConfig(def context) {
         withEnv(["VARIABLESFILE=./environments/${context.environment}.json"])
         {
           def statusVarEnv = sh(script: '''
-            cp $VARIABLESFILE env.auto.tfvars.json && echo "Variables file $VARIABLESFILE" ''', 
+            cp $VARIABLESFILE env.auto.tfvars.json && echo "Variables file $VARIABLESFILE" ''',
           returnStatus: true)
           if (statusVarEnv != 0) {
             error "Can not copy json file!"
@@ -109,7 +110,7 @@ def stageInit(def context) {
     {
       def bitbucketService = ServiceRegistry.instance.get(BitbucketService)
 
-      bitbucketService.withTokenCredentials { String username, String pw -> 
+      bitbucketService.withTokenCredentials { String username, String pw ->
         GitCredentialStore.configureAndStore(this, context.bitbucketUrl, username, pw)
       }
 
@@ -136,10 +137,10 @@ def stageReport(def context) {
         error "Report failed!"
       }
 
-      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)  
-      stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)  
-      stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/aws_deploy_account.log' , allowEmpty: true)  
-      stash(name: "state-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_show.log' , allowEmpty: true)  
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)
+      stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)
+      stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/aws_deploy_account.log' , allowEmpty: true)
+      stash(name: "state-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_show.log' , allowEmpty: true)
     }
   } else { print "Stage Report has been skipped."}
 }
@@ -148,12 +149,12 @@ def stageSmoke(def context) {
   if (stackdeploy == true) {
     stage('Smoke')
     {
-      withCredentials([
+       withCredentials([
         string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
         string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
         string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
         string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
-     ])
+      ])
       {
        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
@@ -173,8 +174,7 @@ def stageSmoke(def context) {
 //execute make test of the project
 def stageTest(def context) {
   if (stackdeploy == true) {
-    stage('Test') 
-    {
+    stage('Test') {
       withCredentials([
         string(credentialsId: azureSubscriptionIdTesting, variable: 'AZURE_SUBSCRIPTION_ID'),
         string(credentialsId: azureTenantIdTesting, variable: 'AZURE_TENANT_ID'),
@@ -203,16 +203,15 @@ def stagePlan(def context) {
     stage('Plan')
     {
       withCredentials([
-        string(credentialsId: azureSubscriptionId, variable: 'ARM_SUBSCRIPTION_ID'),
-        string(credentialsId: azureTenantId, variable: 'ARM_TENANT_ID'),
-        string(credentialsId: azureClientId, variable: 'ARM_CLIENT_ID'),
-        string(credentialsId: azureClientSecret, variable: 'ARM_CLIENT_SECRET')
-    ])
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
+       ])
       {
         withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
-            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
             eval \"\$(rbenv init -)\" && \
             make plan''',
             returnStatus: true)
@@ -220,7 +219,7 @@ def stagePlan(def context) {
             error "Plan failed!"
           }
         }
-      } 
+      }
     }
   } else { print "Stage Plan has been skipped." }
 }
@@ -229,18 +228,16 @@ def stagePlan(def context) {
 def stageDeploy(def context) {
   if (stackdeploy == true) {
     stage('Deploy') {
-    {
       withCredentials([
-        string(credentialsId: azureSubscriptionId, variable: 'ARM_SUBSCRIPTION_ID'),
-        string(credentialsId: azureTenantId, variable: 'ARM_TENANT_ID'),
-        string(credentialsId: azureClientId, variable: 'ARM_CLIENT_ID'),
-        string(credentialsId: azureClientSecret, variable: 'ARM_CLIENT_SECRET')
-    ])
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
+      ])
       {
         withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
-            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
             eval \"\$(rbenv init -)\" && \
             make deploy''',
             returnStatus: true)
