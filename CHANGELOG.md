@@ -2,9 +2,20 @@
 
 ## Unreleased
 
+### Added
+- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
+- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
+
 ### Modified
 
 - Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+- Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
+- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
+- Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
+- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
+- Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 
 ## [4.0] - 2021-05-11
 
@@ -55,6 +66,7 @@
 - Bumps jupyterlab from 3.0.14 to 3.0.17 by @dependabot security finding ([#641](https://github.com/opendevstack/ods-quickstarters/pull/641))
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
 - fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
+- fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
 
 ### Removed
 
