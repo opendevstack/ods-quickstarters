@@ -10,6 +10,7 @@
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
+- upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
