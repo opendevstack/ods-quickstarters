@@ -79,7 +79,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: flask
-runtimeVersion: 1.1.2
+runtimeVersion: 2.0.3
 ```
 
 
