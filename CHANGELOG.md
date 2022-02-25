@@ -5,11 +5,12 @@
 ### Modified
 
 - Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
-- Updates maven agent to support HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Updates maven agent to support HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
+- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
@@ -18,7 +19,8 @@
 - Scala agent updated from Jenkins base image changes ([#721](https://github.com/opendevstack/ods-quickstarters/issues/721))
 - terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
 - Default acceptance test in Spock makes the pipeline runs forever ([#706](https://github.com/opendevstack/ods-quickstarters/issues/706))
-- Drop prerelease of antora page version in 4.x (https://github.com/opendevstack/ods-documentation/issues/66)
+- Drop prerelease of antora page version in 4.x ([#66](https://github.com/opendevstack/ods-documentation/issues/66))
+- Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 
 
 ## [4.0] - 2021-11-05
