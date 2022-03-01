@@ -8,5 +8,5 @@ odsComponentPipeline(
     'master': 'dev',
   ]
 ) { context ->
-    odsComponentStageInfrastructure(context, [cloudProvider: 'AWS'] )
+    odsComponentStageInfrastructure(context, [cloudProvider: 'AWS'])
 }
