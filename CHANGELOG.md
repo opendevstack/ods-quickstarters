@@ -22,7 +22,7 @@
 
 - Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
 - Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
-- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Updates maven agent to support only HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 - Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
 - Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
@@ -30,6 +30,7 @@
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- Adopt new odsComponentStageInfrastructure stage ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
 
 ## [4.0] - 2021-11-05
 
