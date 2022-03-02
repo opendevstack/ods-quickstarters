@@ -9,7 +9,7 @@ The AirFlow Cluster setup that is provided is based on the KubernetesExecutor an
 create and destroy worker pods on demand. It also setup an ElasticSearch instance as the log
 repository for all workers. As illustrated bellow:
 
-image::Airflow Architecture Diagram.png?raw=true[Airflow Architecture]
+image::Airflow Architecture Diagram.png[Airflow Architecture]
 
 All Airflow images are based on your `<project_id>-cd/airflow` image stream.
 
