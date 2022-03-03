@@ -44,6 +44,9 @@ RUN yum repolist \
     && yum install -y --enablerepo google-chrome google-chrome-stable \
     && yum clean all -y
 
+# Install Python 3 because one ionic dependency uses it
+RUN yum install -y python38-devel python38-pip gcc inotify-tools
+
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
     npm config set _auth=$(echo -n $nexusAuth | base64) && \
