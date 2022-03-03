@@ -24,6 +24,9 @@ COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
 
+# Install Python 3 because one ionic dependency uses it
+RUN yum install -y python3
+
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
     yum module enable -y nodejs:${NODEJS_VERSION} && \
@@ -43,9 +46,6 @@ RUN yum repolist \
     && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
     && yum install -y --enablerepo google-chrome google-chrome-stable \
     && yum clean all -y
-
-# Install Python 3 because one ionic dependency uses it
-RUN yum install -y python38-devel python38-pip gcc inotify-tools
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
