@@ -24,8 +24,10 @@ COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
 
-# Install Python 3 because one ionic dependency uses it
-RUN yum install -y python3
+# Install Python 3 (because node-gyp, an ionic dependency, uses it) and set it as default
+RUN yum install -y python3 py3-pip && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
+    python -V
 
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
