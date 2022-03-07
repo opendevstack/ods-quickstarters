@@ -28,6 +28,7 @@ odsQuickstarterPipeline(
 
   stage("init ionic project") {
     sh "sh ${context.sourceDir}/init.sh --project ${context.projectId} --component ${context.componentId} --group ${context.group}"
+    cp "cp ${context.sourceDir}/.browserslistrc ${context.sourceDir}/${context.componentId}/.browserslistrc"
   }
 
   odsQuickstarterStageCreateOpenShiftResources(
