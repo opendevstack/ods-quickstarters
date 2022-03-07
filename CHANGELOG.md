@@ -30,7 +30,7 @@
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
-- Adopt new odsComponentStageInfrastructure stage ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
+- AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
 
 ## [4.0] - 2021-11-05
 
