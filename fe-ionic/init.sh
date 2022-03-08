@@ -32,6 +32,9 @@ cd ../$COMPONENT
 # remove empty temp-dir
 rm -r ../start_$COMPONENT
 
+echo "Copy browsers list "
+cp  ../fe-ionic/.browserslistrc .browserslistrc
+
 echo "Change test setup to single run in karma.conf.js"
 sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js
 
