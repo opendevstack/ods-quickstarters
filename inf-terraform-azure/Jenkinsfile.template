@@ -139,7 +139,7 @@ def stageReport(def context) {
 
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)
       stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)
-      stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/aws_deploy_account.log' , allowEmpty: true)
+      stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/azure_deploy_account.log' , allowEmpty: true)
       stash(name: "state-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_show.log' , allowEmpty: true)
     }
   } else { print "Stage Report has been skipped."}
