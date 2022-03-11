@@ -22,52 +22,19 @@ odsQuickstarterPipeline(
     dir(context.targetDir) {
       def springBootVersion = '2.6.1.RELEASE'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
-
-      sh "curl https://start.spring.io/starter.tgz \
-            -d type=gradle-project \
-            -d language=java \
-            -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
-            -d bootVersion=${springBootVersion} \
-            -d packaging=jar \
-            -d javaVersion=17 \
-            -d groupId=${context.projectId} \
-            -d artifactId=${context.componentId} \
-            -d name=${context.componentId} \
-            -d description='OpenDevStack%20Demo%20Project%20for%20Spring%20Boot' \
-            -d packageName='${context.packageName}' \
-            | tar -zxvf - "
+      sh "make create-project TARGET_DIR=. SPRING_BOOT_CLI_VERSION=${springBootVersion} PROJECT_ID=${context.projectId} COMPONENT_ID=${context.componentId} PACKAGE_NAME=${context.packageName}"
 
       echo "--- configure application.properties ---"
+      sh "make add-sb-app-properties TARGET_DIR=."
 
-      sh "echo 'spring.profiles.active: dev' > src/main/resources/application.properties"
-      sh "echo 'spring.jpa.database: HSQL' > src/main/resources/application-dev.properties"
+      echo "--- customise build.gradle ---"
+	  sh "pwd && ls -lart"
+      sh "make customise-build-gradle SOURCE_DIR=../${context.sourceDir} TARGET_DIR=."
+      sh "rm Makefile"
+
+      echo "--- end stage Build spring project ---"
     }
 
-    echo "--- customise build.gradle ---"
-
-    // enforce minimal log4j2 version to avoid (CVE-2021-44228)
-	sh "sed -i -e '/ext {/{r ${context.sourceDir}/templates/gradle-minimal-log4j2-version.template'  -e 'd' -e '}' ${context.targetDir}/build.gradle"
-
-    // add nexus credential settings
-    sh "cat ${context.sourceDir}/templates/gradle-buildscript.template ${context.targetDir}/build.gradle >out && mv out ${context.targetDir}/build.gradle"
-
-    // insert required plugins
-    sh "sed -i -e '/plugins {/{r ${context.sourceDir}/templates/gradle-plugins.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
-
-    // insert nexus repos
-    sh "sed -i -e '/mavenCentral()/{r ${context.sourceDir}/templates/gradle-repositories.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
-
-    // insert test settings
-    sh "sed -i -e '/test {/{r ${context.sourceDir}/templates/gradle-plugin-test.template' -e 'd' -e '}' ${context.targetDir}/build.gradle"
-
-    // append bootJar settings
-    sh "cat ${context.sourceDir}/templates/gradle-plugin-bootjar.template >> ${context.targetDir}/build.gradle"
-
-    // append jacoco settings
-    sh "cat ${context.sourceDir}/templates/gradle-plugin-jacoco.template >> ${context.targetDir}/build.gradle"
-
-    // append maven-publish settings
-    sh "cat ${context.sourceDir}/templates/gradle-maven-publish.template >> ${context.targetDir}/build.gradle"
   }
 
   odsQuickstarterStageCopyFiles(context)
