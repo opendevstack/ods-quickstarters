@@ -43,7 +43,6 @@ odsComponentPipeline(
 
 def getEnvSettings(def tfBackend, def workspace ) {
   def config = [
-    "HTTPS_PROXY=http://appaccess-zscaler.boehringer.com",
     "TF_BACKEND=${tfBackend}"
   ]
 
@@ -179,7 +178,6 @@ def stageTest(def context) {
         withEnv(getEnvSettings(context.environment, null))
         {
           def status = sh(script: '''
-            git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
             make test''',
             returnStatus: true)
           if (status != 0) {
