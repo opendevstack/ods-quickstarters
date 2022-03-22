@@ -1,6 +1,5 @@
 /* generated jenkins file used for building and deploying AWS-infrastructure in projects */
 
-def tfBackendPrefix
 def stackConfig
 def stackdeploy  = false
 
@@ -14,7 +13,6 @@ def azureTenantIdTesting
 def azureClientIdTesting
 def azureClientSecretTesting
 
-def tfBackendKey
 def workspaceKeyPrefix
 
 def tfvarsjsonfile
@@ -43,11 +41,10 @@ odsComponentPipeline(
     stageReport(context)
 }
 
-def getEnvSettings(def tfBackendPrefix, def tfBackendKey, def workspace ) {
+def getEnvSettings(def tfBackend, def workspace ) {
   def config = [
-    "TF_BACKEND_PREFIX=${tfBackendPrefix}",
-    "TF_BACKEND_KEY=${tfBackendKey}",
-    "HTTPS_PROXY=http://appaccess-zscaler.boehringer.com"
+    "HTTPS_PROXY=http://appaccess-zscaler.boehringer.com",
+    "TF_BACKEND=${tfBackend}"
   ]
 
   if (workspace) {
@@ -75,9 +72,6 @@ def stageGetConfig(def context) {
       azureTenantIdTesting       = environmentFileTesting.credentials.azureTenantId.toLowerCase()
       azureClientIdTesting       = environmentFileTesting.credentials.azureClientId.toLowerCase()
       azureClientSecretTesting   = environmentFileTesting.credentials.azureClientSecret.toLowerCase()
-
-      workspaceKeyPrefix        = environmentFile.account
-      tfBackendKey            = "${environmentFile.account}/${context.projectId}/${context.componentId}/${context.environment}"
 
       echo "Stack Environment ${context.environment} "
       echo "Azure Subscription ID ${azureSubscriptionId}"
@@ -156,7 +150,7 @@ def stageSmoke(def context) {
         string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
       ])
       {
-       withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
+       withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -182,7 +176,7 @@ def stageTest(def context) {
         string(credentialsId: azureClientSecretTesting, variable: 'AZURE_CLIENT_SECRET')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, null))
+        withEnv(getEnvSettings(context.environment, null))
         {
           def status = sh(script: '''
             git config --global http.proxy "http://appaccess-zscaler.boehringer.com:80"
@@ -209,7 +203,7 @@ def stagePlan(def context) {
         string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
        ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
+        withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \
@@ -235,7 +229,7 @@ def stageDeploy(def context) {
         string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
       ])
       {
-        withEnv(getEnvSettings(workspaceKeyPrefix, tfBackendKey, tfvarsjson['meta_environment']))
+        withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
         {
           def status = sh(script: '''
             eval \"\$(rbenv init -)\" && \

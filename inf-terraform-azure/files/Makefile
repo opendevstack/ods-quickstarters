@@ -188,7 +188,7 @@ install-python-env:
 # Install Terraform workspace.
 init-terraform:
 
-	echo 1 | terraform init
+	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="backends/$(TF_BACKEND).tfbackend"
 
 .PHONY: install-test-deps
 # Install testing dependencies.
