@@ -1,0 +1,3 @@
+resource_group_name  = "tfstate-westeurope-dev-06-rg"
+storage_account_name = "azsixdevftfstatesta"
+

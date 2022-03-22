@@ -45,9 +45,8 @@ odsComponentPipeline(
 
 def getEnvSettings(def tfBackendPrefix, def tfBackendKey, def workspace ) {
   def config = [
-    "TF_BACKEND_PREFIX=${tfBackendPrefix}",
-    "TF_BACKEND_KEY=${tfBackendKey}",
     "HTTPS_PROXY=http://appaccess-zscaler.boehringer.com"
+    "TF_BACKEND=${context.environment}"
   ]
 
   if (workspace) {
