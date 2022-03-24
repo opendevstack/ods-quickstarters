@@ -1,6 +1,5 @@
 require_relative '../libraries/terraform_data.rb'
 require_relative '../libraries/fixture_data.rb'
-require_relative '../libraries/azure.rb'
 
 t    = SpecHelper::TerraformData.new
 id   = t['id']
