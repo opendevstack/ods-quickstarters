@@ -16,6 +16,9 @@ The quickstarter includes kitchen-terraform with InSpec / cinc-auditor for testi
 ├── Jenkinsfile - This file contains Jenkins stages.
 ├── README.md
 ├── environments
+│   ├── dev.tfbackend.config - This file describes terraform backend parameters in the dev Azure subscription.
+│   ├── test.tfbackend.config - This file describes terraform backend parameters in the test Azure subscription.
+│   ├── prod.tfbackend.config - This file describes terraform backend parameters in the production Azure subscription.
 │   ├── dev.json - This file describes parameters for the development AWS environment.
 │   ├── test.json - This file describes parameters for the test AWS environment.
 │   └── prod.json - This file describes parameters for the production AWS environment.
