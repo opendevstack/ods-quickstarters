@@ -7,4 +7,4 @@ supports:
 depends:
   - name: inspec-azure
     git: https://github.com/inspec/inspec-azure
-    tag: v1.58.0
+    tag: v1.86.0
