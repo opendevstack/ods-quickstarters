@@ -76,6 +76,7 @@
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
 - fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
 - fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
+- fix gitignore in inf-terraform ([#767](https://github.com/opendevstack/ods-quickstarters/issues/767))
 
 ### Removed
 
