@@ -5,6 +5,10 @@ PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIS
 GEMS_HOME                ?= $(PWD)/vendor/bundle
 INSTALL_REPORT_HOME      := ./reports/install
 SHELL                    := /usr/bin/env bash
+.SHELLFLAGS              := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS                += --warn-undefined-variables
+MAKEFLAGS                += --no-builtin-rules
 
 TF_WORKSPACE             = default
 
