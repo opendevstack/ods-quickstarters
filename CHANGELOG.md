@@ -32,6 +32,7 @@
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 
 ## [4.0] - 2021-11-05
 
