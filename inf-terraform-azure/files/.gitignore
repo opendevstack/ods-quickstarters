@@ -1,7 +1,6 @@
 .bundle
 .kitchen
 .terraform
-.terraform.lock.hcl
 .terraform-data.json
 .vscode
 *.auto.tfvars*
@@ -13,6 +12,6 @@ tfplan
 vendor
 test/integration/*/files/*.json
 test/integration/*/files/*.yml
-!reports/install/.gitkeep
-Pipfile.lock
 .venv
+.terraform.lock.hcl
+Pipfile.lock
