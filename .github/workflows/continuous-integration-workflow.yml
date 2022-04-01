@@ -97,6 +97,38 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
+  jenkins-agent-nodejs16-centos7:
+    name: Jenkins agent NodeJS 16 (CENTOS7)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs16/docker
+        run: |
+            docker build --tag agent-nodejs16-test-centos7 --file Dockerfile.centos7 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
+  jenkins-agent-nodejs16-ubi8:
+    name: Jenkins agent NodeJS 16 (UBI8)
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2.0.0
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs16/docker
+        run: |
+            docker build --tag agent-nodejs16-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
   jenkins-agent-python-centos7:
     name: Jenkins agent Python (CENTOS7)
     runs-on: ubuntu-18.04
