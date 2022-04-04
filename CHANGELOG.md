@@ -35,6 +35,7 @@
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
 - update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
+- updated spring boot version to 2.6.6 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
 
 ## [4.0] - 2021-11-05
 
