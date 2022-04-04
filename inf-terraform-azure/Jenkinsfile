@@ -28,19 +28,17 @@ odsQuickstarterPipeline(
      target: 'environments/dev.yml']
   )
 
-// add those later when format is clear
-//
-//  odsQuickstarterStageRenderJenkinsfile(
-//    context,
-//   [source: 'test.yml.template',
-//     target: 'environments/test.yml']
-//  )
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'test.yml.template',
+     target: 'environments/test.yml']
+  )
 
-//  odsQuickstarterStageRenderJenkinsfile(
-//    context,
-//    [source: 'prod.yml.template',
-//     target: 'environments/prod.yml']
-//  )
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'prod.yml.template',
+     target: 'environments/prod.yml']
+  )
 
   odsQuickstarterStageRenderJenkinsfile(
     context,
