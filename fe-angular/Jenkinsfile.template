@@ -37,9 +37,3 @@ def stageUnitTest(def context) {
     sh 'npm run test'
   }
 }
-
-def stageLint(def context) {
-  stage('Lint') {
-    sh 'npm run lint'
-  }
-}
