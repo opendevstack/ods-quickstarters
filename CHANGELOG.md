@@ -2,34 +2,42 @@
 
 ## Unreleased
 
-### Modified
+### Added
 
-- Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
-- Updates maven agent to support HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
-- Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
-- Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
+- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
-- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
-- Update e2e-spock-geb quickstarter to disallow groovy tests runs twice
+- add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 
 ### Fixed
-- inf-terraform-agent: fix pip update and epel installation
+
 - Mavent agent updated from Jenkins base image changes ([#722](https://github.com/opendevstack/ods-quickstarters/issues/722))
 - NodeJS12 agent updated from Jenkins base image changes ([#720](https://github.com/opendevstack/ods-quickstarters/issues/720))
 - Scala agent updated from Jenkins base image changes ([#721](https://github.com/opendevstack/ods-quickstarters/issues/721))
 - terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
+- Bump antora page version in master (https://github.com/opendevstack/ods-documentation/issues/66)
 - Default acceptance test in Spock makes the pipeline runs forever ([#706](https://github.com/opendevstack/ods-quickstarters/issues/706))
-- Drop prerelease of antora page version in 4.x ([#66](https://github.com/opendevstack/ods-documentation/issues/66))
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
-- 
+
+### Modified
+
+- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+- Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
+- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
+- Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
+- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
+- Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
+- jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
+- upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 
 ## [4.0] - 2021-11-05
 
 ### Added
-
 - ds-rshiny cleanup cloudera dependency ([#540](https://github.com/opendevstack/ods-quickstarters/pull/540))
 - Add SaaS documentation quickstarter ([#556](https://github.com/opendevstack/ods-quickstarters/pull/556))
 - Documented the metadata file and its relationship with the labeling functionality ([#638](https://github.com/opendevstack/ods-quickstarters/pull/638))
@@ -55,7 +63,6 @@
 - Updating used base image for nginx to fix CVE ([#602](https://github.com/opendevstack/ods-quickstarters/pull/602))
 - be-gateway-nginx switch from CentOS to Fedora ([#611](https://github.com/opendevstack/ods-quickstarters/issues/611))
 - Change rhel7 to centos7 base jenkins node, as the image is Centos (congruent with ods-core) ([#646](https://github.com/opendevstack/ods-quickstarters/pull/646))
-- Update external url dependencies ([#649](https://github.com/opendevstack/ods-quickstarters/pull/649))
 
 ### Fixed
 
@@ -78,7 +85,6 @@
 - fix nodejs 12 jenkins agent build failing ([#642](https://github.com/opendevstack/ods-quickstarters/issues/642)
 - fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
 - fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
-- fix gitignore in inf-terraform ([#767](https://github.com/opendevstack/ods-quickstarters/issues/767))
 
 ### Removed
 

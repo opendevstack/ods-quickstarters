@@ -18,6 +18,7 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 1. [GoLang](golang)
 2. [Maven / Gradle](maven)
 3. [Node.js 12](nodejs12)
+4. [Node.js 16](nodejs16)
 5. [Python](python)
 6. [Scala & SBT](scala)
 7. [Terraform](terraform)

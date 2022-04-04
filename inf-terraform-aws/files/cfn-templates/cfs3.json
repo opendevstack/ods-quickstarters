@@ -1,37 +1,11 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "AWS CloudFormation Sample Template S3_Website_Bucket_With_Retain_On_Delete: Sample template showing how to create a publicly accessible S3 bucket configured for website access with a deletion policy of retain on delete. **WARNING** This template creates an S3 bucket that will NOT be deleted when the stack is deleted. You will be billed for the AWS resources used if you create a stack from this template.",
+  "Description": "CloudFormation template of an S3 bucket for the AWS Quickstarter.",
   "Outputs": {
     "S3BucketName": {
-      "Description": "Name of the sample Amazon S3 bucket with CORS enabled.",
+      "Description": "Bucket Created using this template.",
       "Value": {
         "Ref": "S3Bucket"
-      }
-    },
-    "S3BucketSecureURL": {
-      "Description": "Name of S3 bucket to hold website content",
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Fn::GetAtt": [
-                "S3Bucket",
-                "DomainName"
-              ]
-            }
-          ]
-        ]
-      }
-    },
-    "WebsiteURL": {
-      "Description": "URL for website hosted on S3",
-      "Value": {
-        "Fn::GetAtt": [
-          "S3Bucket",
-          "WebsiteURL"
-        ]
       }
     }
   },
@@ -47,10 +21,6 @@
               }
             }
           ]
-        },
-        "WebsiteConfiguration": {
-          "ErrorDocument": "error.html",
-          "IndexDocument": "index.html"
         }
       },
       "Type": "AWS::S3::Bucket"

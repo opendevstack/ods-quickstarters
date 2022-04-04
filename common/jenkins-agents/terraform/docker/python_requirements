@@ -1,9 +1,10 @@
 #  
-boto3~=1.17
-requests~=2.25
+boto3~=1.20
+requests~=2.27
 simplejson~=3.17
 argparse~=1.4
 botocore
-pipenv~=2020.11
+pipenv~=2022.1
 python-hcl2~=2.0
-pre-commit~=2.11
+pre-commit~=2.17
+azure-cli~=2.32
