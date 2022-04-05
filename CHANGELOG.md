@@ -2,33 +2,21 @@
 
 ## Unreleased
 
-<<<<<<< HEAD
-=======
-### Added
-
-- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
-- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
-- terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
-
-### Fixed
-
-- Mavent agent updated from Jenkins base image changes ([#722](https://github.com/opendevstack/ods-quickstarters/issues/722))
-- NodeJS12 agent updated from Jenkins base image changes ([#720](https://github.com/opendevstack/ods-quickstarters/issues/720))
-- Scala agent updated from Jenkins base image changes ([#721](https://github.com/opendevstack/ods-quickstarters/issues/721))
-- terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
-
->>>>>>> 8237bd8... fix terraform agents from jenkins agent base repo changes. (#731)
 ### Modified
 
-- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
-- Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
-- Updates maven agent to support only HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
-- Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
-- Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
-- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
-- Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
+- Updates maven agent to support HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Enforces use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
+- Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
+- terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
+- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
-<<<<<<< HEAD
+- terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
+- inf-terraform-aws: is using the new odsComponentStageInfrastructure concept now ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
+- inf-terraform-aws: enable devcontainer support ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
@@ -41,12 +29,7 @@
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
-=======
-- jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
-- upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
-- AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
-- update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
->>>>>>> eac3b54... Merge pull request #749 from nichtraunzer/feature/prep-for-stageInfrastructureAWS
+- inf-terraform-aws: Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 
 ## [4.0] - 2021-11-05
 
