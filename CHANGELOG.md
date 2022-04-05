@@ -36,6 +36,7 @@
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
 - AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
 - update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
+- AWS Quickstarter enable devcontainer support for inf-terraform-aws ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
 
 ## [4.0] - 2021-11-05
 
