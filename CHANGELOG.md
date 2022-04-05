@@ -7,6 +7,7 @@
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
+- add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 
 ### Fixed
 
@@ -19,12 +20,13 @@
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
+- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874] https://github.com/opendevstack/ods-jenkins-shared-library/issues/874)
 
 ### Modified
 
 - Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
 - Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
-- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Updates maven agent to support only HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 - Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
 - Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
@@ -32,6 +34,7 @@
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
 - update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 
 ## [4.0] - 2021-11-05
