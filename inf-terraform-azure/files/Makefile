@@ -133,10 +133,10 @@ smoke-test: install-test-deps
 	$(call check_defined,AZURE_CLIENT_ID)
 	$(call check_defined,AZURE_CLIENT_SECRET)
 
-	sh ./lib/scripts/createstackoutputs2yml.sh
+	bash ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
 	for profile in $$inspec_profiles; do \
-		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target azure://; \
+		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec test/integration/$$profile --no-distinct-exit --reporter=cli json:reports/install/data/inspec/post-install/$$profile.json --input-file test/integration/default/files/inputs-from-tfo-stack.yml --target azure://; \
 	done
 
 .PHONY: install-report
@@ -199,8 +199,9 @@ install-test-deps: install-ruby-gems install-python-env
 .PHONY: cinc-auditor-test
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
-	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target azure://
+	bash ./lib/scripts/createstackfixtureoutputs2yml.sh
+	bundle exec cinc-auditor exec test/integration/default --no-distinct-exit --no-create-lockfile --input-file test/integration/default/files/inputs-from-tfo-stack.yml --target azure://
+
 
 # Checks if a variable is defined and produces a fatal error if not.
 check_defined = \
