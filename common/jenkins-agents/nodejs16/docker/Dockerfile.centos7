@@ -12,7 +12,7 @@ LABEL com.redhat.component="jenkins-agent-nodejs-rhel7-docker" \
 ARG nexusUrl
 ARG nexusAuth
 
-ENV NODEJS_VERSION=12 \
+ENV NODEJS_VERSION=16 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     BASH_ENV=/usr/local/bin/scl_enable \
@@ -20,7 +20,7 @@ ENV NODEJS_VERSION=12 \
     PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
-    CHROME_VERSION=94.0.4606.81
+    CHROME_VERSION=99.0.4844.74
 
 # install google-chrome (for angular)
 RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
@@ -58,7 +58,7 @@ COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 
 # Install NodeJS
 # https://github.com/nodesource/distributions#installation-instructions-1
-RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
+RUN curl --silent --location https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x | bash - && \
     yum install -y nodejs && \
     yum install -y gcc-c++ make
 

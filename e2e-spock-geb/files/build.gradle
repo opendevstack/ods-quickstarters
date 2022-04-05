@@ -154,7 +154,10 @@ def executeTest(def type, def language) {
         description = "Runs ${type} tests ${language}."
         group = "verification"
 
-        useJUnitPlatform()
+        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
+            // Mandatory to run JUnit 5 test but incompatible with groovy tests
+            useJUnitPlatform()
+        }
 
         ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
         testClassesDirs = sourceSets["${type}"].output.classesDirs

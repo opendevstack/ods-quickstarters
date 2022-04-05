@@ -1,0 +1,62 @@
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+
+# Labels consumed by Red Hat build service
+LABEL com.redhat.component="jenkins-agent-nodejs-16-rhel7-container" \
+      name="openshift4/jenkins-agent-nodejs-16-rhel7" \
+      architecture="x86_64" \
+      io.k8s.display-name="Jenkins Agent Nodejs" \
+      io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins slave base image." \
+      io.openshift.tags="openshift,jenkins,agent,nodejs" \
+      maintainer="openshift-dev-services+jenkins@redhat.com"
+
+ARG nexusUrl
+ARG nexusAuth
+
+ENV NODEJS_VERSION=16 \
+    YARN_VERSION=1.22.18 \
+    NPM_CONFIG_PREFIX=$HOME/.npm-global \
+    PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
+
+# Generate machine ID
+RUN dbus-uuidgen > /etc/machine-id
+
+# Install NodeJS (https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x does NOT work)
+RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
+    yum module enable -y nodejs:${NODEJS_VERSION} && \
+    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum clean all -y
+
+# Install Yarn
+# https://classic.yarnpkg.com/en/docs/install
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+
+# Install Cypress dependencies
+# https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
+COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
+COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN yum repolist \
+    && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
+    && yum install -y --enablerepo google-chrome google-chrome-stable \
+    && yum clean all -y
+
+RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
+    npm config set always-auth=true && \
+    npm config set _auth=$(echo -n $nexusAuth | base64) && \
+    npm config set email=no-reply@opendevstack.org && \
+    npm config set ca=null && \
+    npm config set strict-ssl=false && \
+    yarn config set registry $nexusUrl/repository/npmjs/ -g && \
+    echo node version: $(node --version) && \
+    echo npm version: $(npm --version) && \
+    echo npx version: $(npx --version) && \
+    echo yarn version: $(yarn --version)
+
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME
+
+USER 1001
