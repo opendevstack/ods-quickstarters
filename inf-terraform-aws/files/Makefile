@@ -20,7 +20,7 @@ DEBUG                    := 0
 default: test
 
 .PHONY: all
-all: test plan deploy smoke-test describe
+all: test plan deploy deployment-test describe
 
 .PHONY: init
 # Initialize project.
@@ -85,9 +85,9 @@ deploy: init-terraform plan
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
 
-.PHONY: smoke-test
+.PHONY: deployment-test
 # Run (post-deployment) tests.
-smoke-test: install-test-deps
+deployment-test: install-test-deps
 	$(call check_defined,AWS_ACCESS_KEY_ID)
 	$(call check_defined,AWS_SECRET_ACCESS_KEY)
 	$(call check_defined,AWS_DEFAULT_REGION)
