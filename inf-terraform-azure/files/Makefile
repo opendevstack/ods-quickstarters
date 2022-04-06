@@ -22,27 +22,6 @@ all: test plan deploy smoke-test describe
 # Initialize project.
 init: install-dev-deps install-test-deps
 
-.PHONY: test-terraform-modules
-# Run Terraform modules tests.
-test-terraform-modules:
-ifeq ($(WITH_DEEP_TESTING),1)
-	$(call check_defined,AZURE_SUBSCRIPTION_ID)
-	$(call check_defined,AZURE_TENANT_ID)
-	$(call check_defined,AZURE_CLIENT_ID)
-	$(call check_defined,AZURE_CLIENT_SECRET)
-
-	# Remove any previously installed modules.
-	if [ -d .terraform ]; then \
-		find .terraform -name modules -type d -print0 | xargs -0 rm -rf; \
-	fi
-
-	# Fetch Terraform modules.
-	terraform get -update=true
-
-	# Run included blueprint tests.
-	$(call test_included_blueprints)
-endif
-
 .PHONY: create-tfvars
 # create terraform.tfvars.json
 create-tfvars:
@@ -60,7 +39,7 @@ test: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
 test: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
 test: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
 test: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
-test: install-test-deps test-terraform-modules
+test: install-test-deps
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
@@ -94,7 +73,7 @@ plan: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
 plan: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
 plan: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
 plan: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
-plan: install-test-deps test-terraform-modules
+plan: install-test-deps
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
@@ -108,7 +87,7 @@ deploy: export ARM_SUBSCRIPTION_ID := $(AZURE_SUBSCRIPTION_ID)
 deploy: export ARM_TENANT_ID       := $(AZURE_TENANT_ID)
 deploy: export ARM_CLIENT_ID       := $(AZURE_CLIENT_ID)
 deploy: export ARM_CLIENT_SECRET   := $(AZURE_CLIENT_SECRET)
-deploy: install-test-deps test-terraform-modules
+deploy: install-test-deps
 	$(call check_defined,AZURE_SUBSCRIPTION_ID)
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
@@ -200,7 +179,7 @@ install-test-deps: install-ruby-gems install-python-env
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target azure://
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/default/files/inputs-from-tfo-stack.yml --target azure://
 
 # Checks if a variable is defined and produces a fatal error if not.
 check_defined = \
@@ -210,33 +189,3 @@ __check_defined = \
 	$(if $(value $1),, \
 		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
 			required by target `$@')))
-
-# Execute tests in included blueprints.
-test_included_blueprints = \
-	function test_blueprint() { \
-		dir=$$(echo $$1 | jq -r '.Dir'); \
-		source=$$(echo $$1 | jq -r '.Source'); \
-		\
-		source=$$(basename $$source); \
-		if echo "$$source" | grep -q -e '\?ref='; then \
-			source=$$(echo $$source | sed 's/\(\.*\)?ref=.*/$1/'); \
-		fi; \
-		if echo "$$source" | grep -q -e '\.git$$'; then \
-			source=$$(echo $$source | sed 's/\(\.*\).git$$/$1/'); \
-		fi; \
-		\
-		if [ -f "$$dir/Makefile" ] && [ $$(grep -c "^test-report:" "$$dir/Makefile") == 1 ]; then \
-			echo "Running tests for module $$source in $$dir."; \
-			mkdir -p ./reports/install/data/blueprints/reports/test; \
-			GEMS_HOME=$(GEMS_HOME) make test-report -C $$dir || exit 1; \
-			cp "$$dir/reports/test/report.json" "./reports/install/data/blueprints/reports/test/$$source.json"; \
-		else \
-			echo "Module $$source in $$dir does not contain a valid Makefile. No tests executed."; \
-		fi \
-	}; \
-	\
-	if [ -f .terraform/modules/modules.json ]; then \
-		export -f test_blueprint; \
-		jq -c '.Modules | unique_by(.Source) | map(select(.Dir != ".")) | .[]' .terraform/modules/modules.json | parallel --halt soon,fail=1 --line-buffer --keep-order --quote test_blueprint "{}"; \
-	fi
-
