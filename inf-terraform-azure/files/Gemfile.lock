@@ -302,33 +302,13 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     azure_graph_rbac (0.17.2)
       ms_rest_azure (~> 0.12.0)
-    azure_mgmt_authorization (0.18.5)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_compute (0.22.0)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_container_registry (0.18.5)
-      ms_rest_azure (~> 0.12.0)
     azure_mgmt_key_vault (0.17.7)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_locks (0.17.4)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_netapp (0.23.0)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_network (0.26.1)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_operational_insights (0.20.0)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_policy (0.17.9)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_privatedns (0.17.2)
       ms_rest_azure (~> 0.12.0)
     azure_mgmt_resources (0.18.2)
       ms_rest_azure (~> 0.12.0)
     azure_mgmt_security (0.19.0)
       ms_rest_azure (~> 0.12.0)
     azure_mgmt_storage (0.23.0)
-      ms_rest_azure (~> 0.12.0)
-    azure_mgmt_storagecache (0.19.1)
       ms_rest_azure (~> 0.12.0)
     bcrypt_pbkdf (1.1.0)
     bson (4.14.1)
@@ -719,18 +699,6 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (< 7.0.0)!
-  azure_mgmt_authorization!
-  azure_mgmt_compute!
-  azure_mgmt_container_registry!
-  azure_mgmt_locks!
-  azure_mgmt_netapp!
-  azure_mgmt_network!
-  azure_mgmt_operational_insights!
-  azure_mgmt_policy!
-  azure_mgmt_privatedns!
-  azure_mgmt_resources!
-  azure_mgmt_storage!
-  azure_mgmt_storagecache!
   chef-config!
   chef-utils!
   cinc-auditor-bin!
