@@ -1,14 +1,14 @@
 = Infrastructure Terraform Azure Quickstarter (inf-terraform-azure)
 
-The project supports generation of Azure deployments utilizing terraform tooling.
+The project supports generation of Azure deployments utilizing terraform tooling,
 installation and integration of it with OpenShift CD pipelines.
 
 == Purpose of this quickstarter
 
-The quickstarter comes with a sample terraform resource which deploys nothing.
+The quickstarter comes with a sample terraform which deploys a resource group and a storage account via an ARM template. 
 This is a showcase to elaborate the combination of both technologies.
 
-The quickstarter includes kitchen-terraform with InSpec / cinc-auditor for testing.
+The quickstarter includes kitchen-terraform with Chef InSpec / cinc-auditor for testing.
 
 == What files / architecture is generated?
 
@@ -19,9 +19,12 @@ The quickstarter includes kitchen-terraform with InSpec / cinc-auditor for testi
 │   ├── dev.tfbackend.config - This file describes terraform backend parameters in the dev Azure subscription.
 │   ├── test.tfbackend.config - This file describes terraform backend parameters in the test Azure subscription.
 │   ├── prod.tfbackend.config - This file describes terraform backend parameters in the production Azure subscription.
-│   ├── dev.json - This file describes parameters for the development AWS environment.
-│   ├── test.json - This file describes parameters for the test AWS environment.
-│   └── prod.json - This file describes parameters for the production AWS environment.
+│   ├── dev.yml - This file describes credential parameters for the development environment. Values are names of secrets held in Jenkins.
+│   ├── test.yml - This file describes credential parameters for the test environment. Values are names of secrets held in Jenkins.
+│   ├── prod.yml - This file describes credential parameters for the producation environment. Values are names of secrets held in Jenkins.
+│   ├── dev.json - This file describes parameters for the development environment.
+│   ├── test.json - This file describes parameters for the test environment.
+│   └── prod.json - This file describes parameters for the production environment.
 ├── test - This folder contains the root for test-kitchen
 │   ├── fixtures/default - This folder contains the test case to deploy.
 │   └── integration/default/controls/ - This folder contains the test cases to test.
@@ -43,7 +46,7 @@ Inject preferred tags into common-tags.tf, add/remove resources needed to main.t
 
 == How this quickstarter is built through Jenkins
 
-The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages.
+The Jenkinsfile is provisioned with this quickstarter to ease CI/CD process. In Jenkinsfile, there are various stages.
 
 == Jenkins agent used
 

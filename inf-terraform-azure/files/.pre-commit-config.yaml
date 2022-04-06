@@ -40,8 +40,8 @@ repos:
     rev: v1.62.3
     hooks:
     -   id: terraform_fmt
--   repo: ssh://git@bitbucket.biscrum.com:7999/infiaas/ods-pre-commit-hooks
-    rev: v0.3.6
+-   repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
+    rev: v0.3.7
     hooks:
     -   id: terraformcreatei2o
         files: (\.tf)$
@@ -52,8 +52,8 @@ repos:
     hooks:
     -   id: terraform_fmt
     -   id: terraform_docs
--   repo: ssh://git@bitbucket.biscrum.com:7999/infiaas/pre-commit-hooks-terraform.git
-    rev: v1.5.1
+-   repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
+    rev: v0.3.7
     hooks:
     -   id: terraform_inputs_jenkins_pipeline_params
         language_version: python3
@@ -77,3 +77,4 @@ repos:
         files: (\.tf|\.rb)$
         pass_filenames: false
         verbose: true
+
