@@ -8,15 +8,15 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 
 # JENKINS AGENT
 ## Install or update Jenkins agent resources.
-install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs12 install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform
+install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-maven install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform
 .PHONY: install-jenkins-agent
 
 ## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs12-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-maven-build apply-jenkins-agent-nodejs12-build apply-jenkins-agent-nodejs16-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs12-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-maven-build start-jenkins-agent-nodejs12-build start-jenkins-agent-nodejs16-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build
 .PHONY: start-jenkins-agent-build
 
 
@@ -54,19 +54,26 @@ start-jenkins-agent-maven-build:
 
 # JENKINS AGENT NODEJS
 ## Install or update Jenkins Node agent resources.
-install-jenkins-agent-nodejs12: apply-jenkins-agent-nodejs12-build start-jenkins-agent-nodejs12-build
-.PHONY: install-jenkins-agent-nodejs12
+install-jenkins-agent-nodejs: apply-jenkins-agent-nodejs12-build apply-jenkins-agent-nodejs16-build start-jenkins-agent-nodejs12-build start-jenkins-agent-nodejs16-build
+.PHONY: install-jenkins-agent-nodejs
 
 ## Update OpenShift resources related to Jenkins Node agent image.
 apply-jenkins-agent-nodejs12-build:
 	cd common/jenkins-agents/nodejs12/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
 .PHONY: apply-jenkins-agent-nodejs12-build
 
-## Start build of BuildConfig "jenkins-agent-nodejs12".
+apply-jenkins-agent-nodejs16-build:
+	cd common/jenkins-agents/nodejs16/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-nodejs16-build
+
+## Start build of BuildConfig "jenkins-agent-nodejs*".
 start-jenkins-agent-nodejs12-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs12 --follow
 .PHONY: start-jenkins-agent-nodejs12-build
 
+start-jenkins-agent-nodejs16-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs16 --follow
+.PHONY: start-jenkins-agent-nodejs16-build
 
 # JENKINS AGENT PYTHON
 ## Install or update Jenkins Python agent resources.

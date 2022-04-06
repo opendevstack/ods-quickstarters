@@ -15,6 +15,8 @@
 - terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
 - inf-terraform-aws: is using the new odsComponentStageInfrastructure concept now ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
 - inf-terraform-aws: enable devcontainer support ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation

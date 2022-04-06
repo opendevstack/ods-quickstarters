@@ -1,0 +1,5 @@
+namespace ods
+selector app=jenkins-agent-nodejs16
+param-file ../../../../../ods-configuration/ods-core.env
+ignore-unknown-parameters true
+bc,is
