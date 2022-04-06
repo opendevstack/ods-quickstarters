@@ -1,8 +1,8 @@
 locals {
   terraform-data = {
-    id               = local.id
-    name             = var.name
-    tags             = local.tags
+    id   = local.id
+    name = var.name
+    tags = local.tags
   }
 }
 
