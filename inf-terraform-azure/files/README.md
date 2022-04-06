@@ -15,16 +15,20 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| terraform | >= 1.0 |
-| random | 3.1.0 |
+| terraform | >= 1.0.0 |
+| azurerm | 2.95.0 |
+| local | ~> 2.1.0 |
+| random | ~> 3.1.0 |
+| time | 0.7.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| local | n/a |
-| random | 3.1.0 |
-| time | n/a |
+| azurerm | 2.95.0 |
+| local | ~> 2.1.0 |
+| random | ~> 3.1.0 |
+| time | 0.7.2 |
 
 ## Modules
 
@@ -34,17 +38,19 @@ No Modules.
 
 | Name |
 |------|
-| [local_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) |
+| [azurerm_resource_group_template_deployment](https://registry.terraform.io/providers/hashicorp/azurerm/2.95.0/docs/resources/resource_group_template_deployment) |
+| [azurerm_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/2.95.0/docs/resources/resource_group) |
+| [local_file](https://registry.terraform.io/providers/hashicorp/local/2.1.0/docs/resources/file) |
 | [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
-| [time_static](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) |
+| [time_static](https://registry.terraform.io/providers/hashicorp/time/0.7.2/docs/resources/static) |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| data\_bucket\_name | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
+| is\_test | Whether is is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
 | meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
-| name | The name of the stack. | `string` | `"stack-azure-quickstarter"` | no |
+| name | The name of the stack. | `string` | `"stack-azure-quickstarter-delete-me"` | no |
 
 ## Outputs
 
