@@ -61,13 +61,13 @@ No Modules.
 Testing the functionality of this stack requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), and [`terraform`](https://www.terraform.io/). Once installed, run `make test` from the command line.
 
 
-Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *Azure* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
+Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *Azure* that uses environment variables (via [Get started with Azure CLI](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash?tabs=bash)):
 
 ```
-$ export AZURE_SUBSCRIPTION_ID=...
-$ export AZURE_TENANT_ID=...
-$ export AZURE_CLIENT_ID=...
-$ export AZURE_CLIENT_SECRET=...
+$ export ARM_SUBSCRIPTION_ID="<azure_subscription_id>"
+$ export ARM_TENANT_ID="<azure_subscription_tenant_id>"
+$ export ARM_CLIENT_ID="<service_principal_appid>"
+$ export ARM_CLIENT_SECRET="<service_principal_password>"
 $ make test
 ```
 
@@ -75,13 +75,14 @@ $ make test
 
 Extending a stack basically involves adding more blueprints whichever fit, and garnish it with custom infrastructure code if necessary.
 
-Setting up stack development guardrails requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), `python`, [`pre-commit`](https://pre-commit.com/) [`terraform`](https://www.terraform.io/), and [`terraform-docs`](https://github.com/segmentio/terraform-docs). Once installed, run `make install-dev-deps` to install a set of quality improving *pre-commit hooks* into your local Git repository. Upon a `git commit`, these hooks will make sure that your code is both syntactically and functionally correct and that your `README.md` contains up-to-date documentation of your stack's supported set of *inputs* and *outputs*.
+Setting up stack development guardrails requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), `python`, [`pre-commit`](https://pre-commit.com/) [`terraform`](https://www.terraform.io/), and [`terraform-docs`](https://terraform-docs.io/). Once installed, run `make install-dev-deps` to install a set of quality improving *pre-commit hooks* into your local Git repository. Upon a `git commit`, these hooks will make sure that your code is both syntactically and functionally correct and that your `README.md` contains up-to-date documentation of your stack's supported set of *inputs* and *outputs*.
 
 ## Environments
-The stack supports multiple environments (Testing/DEV/QA/PROD) within OpenDevStack. The behaviour of the stack in the environments can be controlled within the **environments** directory.
+The stack supports multiple environments (DEV/TEST/PROD) within OpenDevStack. The behaviour of the stack in the environments can be controlled within the **environments** directory.
 The *.yml files define the Jenkins secrets to read and are used to deploy into the right environments.
-The *.json files can override variables from **variables.tf** in case different environments request different inputs (e.g. deploy a smaller version of the stack in DEV).
+The *.json files can override variables from **variables.tf** in case different environments request different inputs (e.g. deploy a different sized version of the stack in DEV).
 
 ## Problems? Questions? Suggestions?
 
 In case of problems, questions or suggestions, feel free to file an issue with the respective project's repository. Thanks!
+
