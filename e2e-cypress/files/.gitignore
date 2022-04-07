@@ -39,7 +39,8 @@ testem.log
 # e2e
 /build/
 /cypress/
-secrets.json
+cypress.env.json
+/test-results
 
 # System Files
 .DS_Store
