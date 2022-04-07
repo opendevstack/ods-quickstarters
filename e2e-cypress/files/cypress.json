@@ -1,14 +1,10 @@
 {
   "baseUrl": "https://www.w3schools.com",
   "fixturesFolder": "fixtures",
-  "integrationFolder": "tests/acceptance",
+  "integrationFolder": "tests",
   "pluginsFile": "plugins/index.js",
   "supportFile": "support",
   "viewportWidth": 1376,
   "viewportHeight": 660,
-  "video": false,
-  "reporter": "junit",
-  "reporterOptions": {
-    "mochaFile": "test-results/acceptance-junit.xml"
-  }
+  "video": false
 }
