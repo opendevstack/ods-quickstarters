@@ -38,6 +38,7 @@
 - Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 - AWS Quickstarter enable devcontainer support for inf-terraform-aws ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
 - Switch fe-angular, fe-ionic and be-typescript-express to Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Update and improve e2e-cypress quickstarter ([#770](https://github.com/opendevstack/ods-quickstarters/issues/770))
 
 ## [4.0] - 2021-11-05
 

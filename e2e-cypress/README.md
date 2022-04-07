@@ -1,4 +1,4 @@
-# End-to-end tests with cypress (e2e-cypress)
+# End-to-end tests with Cypress (e2e-cypress)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
 

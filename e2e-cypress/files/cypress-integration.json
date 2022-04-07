@@ -1,14 +1,14 @@
 {
-  "baseUrl": "http://www.example.com",
+  "baseUrl": "https://www.w3schools.com",
   "fixturesFolder": "fixtures",
-  "integrationFolder": "build/tests/integration",
+  "integrationFolder": "tests/integration",
   "pluginsFile": "plugins/index.js",
-  "supportFile": "build/support",
+  "supportFile": "support",
   "viewportWidth": 1376,
   "viewportHeight": 660,
   "video": false,
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "build/test-results/integration-junit.xml"
+    "mochaFile": "test-results/integration-junit.xml"
   }
 }
