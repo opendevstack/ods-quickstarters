@@ -22,9 +22,6 @@ control 'stack' do
   tag tfo.first['inputs2outputs'].first['name']
 
   tfo.each do |tfoelement|
-    puts "tfoelement"
-    puts tfoelement
-    puts "0-------"
     name = tfoelement['inputs2outputs'].first['name']
     f    = tfoelement['inputs2outputs'].first
     t    = tfoelement
