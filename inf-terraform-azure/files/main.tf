@@ -13,6 +13,8 @@ resource "time_static" "deployment" {}
 resource "azurerm_resource_group" "this" {
   name     = local.unique_name
   location = local.location
+
+  tags = local.tags
 }
 
 resource "azurerm_resource_group_template_deployment" "this" {
@@ -20,4 +22,6 @@ resource "azurerm_resource_group_template_deployment" "this" {
   resource_group_name = azurerm_resource_group.this.name
   deployment_mode     = "Incremental"
   template_content    = file("${path.module}/arm-templates/storage-account.json")
+
+  tags = local.tags
 }

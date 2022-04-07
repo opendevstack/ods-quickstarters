@@ -27,7 +27,7 @@ variable "name" {
 }
 
 variable "is_test" {
-  description = "Whether is is part of a test execution or not. Defaults to false."
+  description = "Whether whether it is part of a test execution or not. Defaults to false."
   type        = bool
   default     = false
 }

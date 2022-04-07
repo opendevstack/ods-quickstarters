@@ -16,7 +16,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | terraform | >= 1.0.0 |
-| azurerm | 2.95.0 |
+| azurerm | 3.0.2 |
 | local | ~> 2.1.0 |
 | random | ~> 3.1.0 |
 | time | 0.7.2 |
@@ -25,7 +25,7 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| azurerm | 2.95.0 |
+| azurerm | 3.0.2 |
 | local | ~> 2.1.0 |
 | random | ~> 3.1.0 |
 | time | 0.7.2 |
@@ -38,8 +38,8 @@ No Modules.
 
 | Name |
 |------|
-| [azurerm_resource_group_template_deployment](https://registry.terraform.io/providers/hashicorp/azurerm/2.95.0/docs/resources/resource_group_template_deployment) |
-| [azurerm_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/2.95.0/docs/resources/resource_group) |
+| [azurerm_resource_group_template_deployment](https://registry.terraform.io/providers/hashicorp/azurerm/3.0.2/docs/resources/resource_group_template_deployment) |
+| [azurerm_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/3.0.2/docs/resources/resource_group) |
 | [local_file](https://registry.terraform.io/providers/hashicorp/local/2.1.0/docs/resources/file) |
 | [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
 | [time_static](https://registry.terraform.io/providers/hashicorp/time/0.7.2/docs/resources/static) |
@@ -48,7 +48,7 @@ No Modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| is\_test | Whether is is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
+| is\_test | Whether whether it is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
 | meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
 | name | The name of the stack. | `string` | `"stack-azure-quickstarter-delete-me"` | no |
 
@@ -56,9 +56,11 @@ No Modules.
 
 | Name | Description |
 |------|-------------|
+| arm\_template\_deployment\_id | The ID of the ARM deployment. |
 | inputs2outputs | all inputs passed to outputs |
 | meta\_environment | The type of the environment. |
 | name | The name of the stack. |
+| resource\_group\_id | The ID of the resource group. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## How to test this Stack?

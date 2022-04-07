@@ -1,5 +1,5 @@
 # This file has been created automatically.
 
-output "module_ods_quickstarters" {
+output "module_stack" {
   value = module.stack-azure-quickstarter-test.*
 }
