@@ -18,7 +18,7 @@ def ionicVersion = "6.13.1"
 def eslintVersion = "7.24.0"
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs16:${agentImageTag}",
 ) { context ->
 
   stage("update ionic cli") {

@@ -15,7 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs12:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs16:${agentImageTag}",
 ) { context ->
 
   stage("init Project") {

@@ -7,7 +7,7 @@
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
-- add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 
 ### Fixed
 
@@ -33,10 +33,11 @@
 - Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
-- upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
 - AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
-- update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
+- Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 - AWS Quickstarter enable devcontainer support for inf-terraform-aws ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
+- Switch fe-angular, fe-ionic and be-typescript-express to Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 
 ## [4.0] - 2021-11-05
 
