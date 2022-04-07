@@ -1,6 +1,6 @@
 ---
 name: Flask
-description: "Flask is a micro web framework written in Python. Technologies: Flask 1.1.2, Python 3.8"
+description: "Flask is a micro web framework written in Python. Technologies: Flask 2.0.3, Python 3.8"
 supplier: https://www.palletsprojects.com/p/flask/
 version: 4.x
 type: ods

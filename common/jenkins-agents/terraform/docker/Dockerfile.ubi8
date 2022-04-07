@@ -15,13 +15,14 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
 ENV TERRAFORM_VERSION 1.0.11
 ENV TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0
 ENV TERRAFORM_DOCS_VERSION v0.16.0
-ENV PYTHON_VERSION 3.7.12
 ENV RUBY_VERSION 2.7.5
 ENV PACKER_VERSION 1.7.10
 ENV CONSUL_VERSION 1.11.2
 ENV TFENV_VERSION 2.2.0
 ENV NODEJS_VERSION 16.13.2
 ENV BUNDLER_VERSION 2.2.23
+ENV SOPS_VERSION=3.7.1
+ENV AGE_VERSION=1.0.0
 ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
@@ -31,6 +32,7 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch read
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
+COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
 COPY python_requirements /tmp/requirements.txt
 
 RUN set -x \
@@ -104,10 +106,11 @@ RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terr
     && chmod +x /usr/local/bin/terraform-docs
 
 # Install jq
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-13.el8.noarch.rpm \
+RUN yum -y install epel-release \
     && yum install -y jq parallel \
     && jq -Version \
-    && yum clean all
+    && yum clean all \
+    && yum-config-manager --disable epel
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
@@ -115,6 +118,12 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/consul && /usr/local/bin/consul -version
     
+# Install mozilla/sops and AGE
+RUN yum install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
+    && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+    && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
+    && rm -f /tmp/age.tar.gz
+
 RUN chown -R 1001:0 $HOME \
     && chmod -R g+rw $HOME \
     && mkdir -p $GEM_HOME \

@@ -2,7 +2,7 @@
 /be-gateway-nginx/ @gerardcl
 /be-golang-plain/ @michaelsauter @henrjk
 /be-java-springboot/ @stitakis @rdupont
-/be-python-flask/ @buegelbeatz @henrjk
+/be-python-flask/ @buegelbeatz @henrjk @gerardcl
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter

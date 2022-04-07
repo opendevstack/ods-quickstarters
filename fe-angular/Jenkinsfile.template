@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs16:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
   // 'release/': 'test'
@@ -35,11 +35,5 @@ def stageBuild(def context) {
 def stageUnitTest(def context) {
   stage('Unit Test') {
     sh 'npm run test'
-  }
-}
-
-def stageLint(def context) {
-  stage('Lint') {
-    sh 'npm run lint'
   }
 }

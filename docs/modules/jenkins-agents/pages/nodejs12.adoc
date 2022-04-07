@@ -1,0 +1,17 @@
+= Node.js 12 - Jenkins agent
+
+== Introduction
+This agent is used to build Node.js-based projects, through `npm` or `yarn`.
+
+The image is built in the global `ods` project and is named `jenkins-agent-nodejs12`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-nodejs12`.
+
+CAUTION: Node.js version 12 reaches end-of-life in 2022-04-30. It is not recommended to start a new project using this agent. Existing projects should be migrated to a newer version, e.g. xref:jenkins-agents:nodejs16.adoc[Node.js 16]. Next releases will remove support for version 12.
+
+== Features
+1. Nexus configuration
+2. HTTP proxy awareness
+3. Yarn & Cypress dependencies pre-installed
+
+== Known limitations
+n/a

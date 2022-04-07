@@ -22,6 +22,8 @@ ENV CONSUL_VERSION 1.11.2
 ENV TFENV_VERSION 2.2.0
 ENV NODEJS_VERSION 16.13.2
 ENV BUNDLER_VERSION 2.2.23
+ENV SOPS_VERSION=3.7.1
+ENV AGE_VERSION=1.0.0
 ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
@@ -140,6 +142,12 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/consul && /usr/local/bin/consul -version
     
+# Install mozilla/sops and AGE
+RUN yum install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
+    && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+    && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
+    && rm -f /tmp/age.tar.gz
+
 RUN chown -R 1001:0 $HOME \
     && chmod -R g+rw $HOME \
     && mkdir -p $GEM_HOME \

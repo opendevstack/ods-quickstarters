@@ -68,6 +68,11 @@ RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum
     yum install -y yarn && \
     yum clean all -y
 
+# Install Python 3 (because node-gyp, an ionic dependency, uses it) and set it as default
+RUN yum install -y python3 py3-pip && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
+    python -V
+
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
     npm config set _auth=$(echo -n $nexusAuth | base64) && \

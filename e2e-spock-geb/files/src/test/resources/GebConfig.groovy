@@ -8,7 +8,7 @@ def properties = new SpecHelper().getApplicationProperties()
 
 // Selenium driver (True in constructor to use JavaScript)
 driver = {
-    HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.CHROME, true) {
+    HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED, true) {
       @Override
       protected WebClient newWebClient(BrowserVersion version) {
           WebClient webClient = super.newWebClient(version);

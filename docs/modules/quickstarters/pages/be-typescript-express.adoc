@@ -2,7 +2,7 @@
 
 == Purpose of this quickstarter (use this when you want to ...)
 
-This is a https://nodejs.org/en/[node] (v10) quickstarter with https://expressjs.com/[express] using http://www.typescriptlang.org/[Typescript].
+This is a https://nodejs.org/en/[Node.js] (v16) quickstarter with https://expressjs.com/[express] using http://www.typescriptlang.org/[Typescript].
 If you are doing non-blocking operation and does not have heavy algorithm/Job which consumes lots of CPU power, this could be an ideal fit.
 It contains a basic setup for https://www.docker.com/[Docker], https://jenkins.io/[Jenkins], https://www.sonarqube.org/[SonarQube] and https://www.openshift.com/[OpenShift].
 
@@ -75,7 +75,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: node
-runtimeVersion: 10.18
+runtimeVersion: 16
 ```
 
 
@@ -88,8 +88,7 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 
 == Builder agent used
 
-This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs12[Nodejs12 builder agent] Jenkins builder agent.
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs16[Node.JS 16 builder agent] for Jenkins.
 
 == Known limitations
 
