@@ -5,6 +5,10 @@ PWD                      := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIS
 GEMS_HOME                ?= $(PWD)/vendor/bundle
 INSTALL_REPORT_HOME      := ./reports/install
 SHELL                    := /usr/bin/env bash
+.SHELLFLAGS              := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS                += --warn-undefined-variables
+MAKEFLAGS                += --no-builtin-rules
 
 TF_WORKSPACE             = default
 
@@ -16,7 +20,7 @@ DEBUG                    := 0
 default: test
 
 .PHONY: all
-all: test plan deploy smoke-test describe
+all: test plan deploy deployment-test describe
 
 .PHONY: init
 # Initialize project.
@@ -81,9 +85,9 @@ deploy: init-terraform plan
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
 
-.PHONY: smoke-test
+.PHONY: deployment-test
 # Run (post-deployment) tests.
-smoke-test: install-test-deps
+deployment-test: install-test-deps
 	$(call check_defined,AWS_ACCESS_KEY_ID)
 	$(call check_defined,AWS_SECRET_ACCESS_KEY)
 	$(call check_defined,AWS_DEFAULT_REGION)
@@ -156,32 +160,3 @@ __check_defined = \
 	$(if $(value $1),, \
 		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
 			required by target `$@')))
-
-# Execute tests in included blueprints.
-test_included_blueprints = \
-	function test_blueprint() { \
-		dir=$$(echo $$1 | jq -r '.Dir'); \
-		source=$$(echo $$1 | jq -r '.Source'); \
-		\
-		source=$$(basename $$source); \
-		if echo "$$source" | grep -q -e '\?ref='; then \
-			source=$$(echo $$source | sed 's/\(\.*\)?ref=.*/$1/'); \
-		fi; \
-		if echo "$$source" | grep -q -e '\.git$$'; then \
-			source=$$(echo $$source | sed 's/\(\.*\).git$$/$1/'); \
-		fi; \
-		\
-		if [ -f "$$dir/Makefile" ] && [ $$(grep -c "^test-report:" "$$dir/Makefile") == 1 ]; then \
-			echo "Running tests for module $$source in $$dir."; \
-			mkdir -p ./reports/install/data/blueprints/reports/test; \
-			GEMS_HOME=$(GEMS_HOME) make test-report -C $$dir || exit 1; \
-			cp "$$dir/reports/test/report.json" "./reports/install/data/blueprints/reports/test/$$source.json"; \
-		else \
-			echo "Module $$source in $$dir does not contain a valid Makefile. No tests executed."; \
-		fi \
-	}; \
-	\
-	if [ -f .terraform/modules/modules.json ]; then \
-		export -f test_blueprint; \
-		jq -c '.Modules | unique_by(.Source) | map(select(.Dir != ".")) | .[]' .terraform/modules/modules.json | parallel --halt soon,fail=1 --line-buffer --keep-order --quote test_blueprint "{}"; \
-	fi

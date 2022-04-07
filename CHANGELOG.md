@@ -11,6 +11,10 @@
 - Jupyter Lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
 - Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
+- terraform agent updated from Jenkins base image changes ([#724](https://github.com/opendevstack/ods-quickstarters/issues/724))
+- inf-terraform-aws: is using the new odsComponentStageInfrastructure concept now ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
+- inf-terraform-aws: enable devcontainer support ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
 - Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 - Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 
@@ -25,6 +29,7 @@
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
+- inf-terraform-aws: Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 
 ## [4.0] - 2021-11-05
 
