@@ -114,8 +114,7 @@ When the code in your git repository is updated the `Jenkinsfile` comes into act
 
 == Builder agent used
 
-This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs12[Nodejs12 builder agent] Jenkins builder agent.
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs16[Node.js 16 builder agent] for Jenkins.
 
 == Known Limitation
 

@@ -17,6 +17,7 @@
 - inf-terraform-aws: enable devcontainer support ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
 - Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 - Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
+- Switch fe-angular, fe-ionic and be-typescript-express to Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
