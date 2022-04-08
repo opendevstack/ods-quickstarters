@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[variables('location')]",
+      "name": "[variables('storageAccountName')]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]",
+        "supportsHttpsTrafficOnly": "true"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    }
+  ],
+  "variables": {
+    "apiVersion": "2015-06-15",
+    "location": "[resourceGroup().location]",
+    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
+    "storageAccountType": "Standard_GRS"
+  }
+}
