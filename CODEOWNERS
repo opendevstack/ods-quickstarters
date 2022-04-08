@@ -8,7 +8,7 @@
 /docker-plain/ @michaelsauter
 /ds-jupyter-lab/ @gerardcl @hugowschneider
 /ds-rshiny/ @gerardcl
-/e2e-cypress/ @tbabik
+/e2e-cypress/ @cschweikert
 /e2e-spock-geb/ @metmajer
 /fe-angular/ @cschweikert
 /fe-ionic/ @rianet @bljubisic
