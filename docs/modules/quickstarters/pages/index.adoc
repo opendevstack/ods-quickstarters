@@ -44,8 +44,8 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 * xref::e2e-spock-geb.adoc[E2E test - Spock / Geb]
 
 === Infrastructure Terraform Quickstarter
-* xref::inf-terraform-aws.adoc(AWS deployments utilizing terraform tooling)
-* xref::inf-terraform-azure.adoc(Azure deployments utilizing terraform tooling)
+* xref::inf-terraform-aws.adoc[AWS deployments utilizing terraform tooling]
+* xref::inf-terraform-azure.adoc[Azure deployments utilizing terraform tooling]
 
 === ODS Contribution Quickstarter
 * xref::ods-document-gen-svc.adoc[ODS Fork - Document Generation Service]
