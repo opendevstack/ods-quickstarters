@@ -9,6 +9,7 @@
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
 - Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
 - Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
+- Add Node.js 18 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/794))
 
 ### Fixed
 
