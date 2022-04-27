@@ -3,6 +3,9 @@ locals {
     id   = local.id
     name = var.name
     tags = local.tags
+
+    resource_group_id          = azurerm_resource_group.this.id
+    arm_template_deployment_id = azurerm_resource_group_template_deployment.this.id
   }
 }
 
