@@ -32,13 +32,13 @@ cd ../$COMPONENT
 # remove empty temp-dir
 rm -r ../start_$COMPONENT
 
-echo "Copy browsers list "
-cp  ../fe-ionic/.browserslistrc .browserslistrc
+echo "add additional task parameters to package.json"
+sed -i "s|\"test\": \"ng test\"|\"test\": \"ng test --watch=false --code-coverage --reporters=junit,coverage\"|" ./package.json
 
-echo "Change test setup to single run in karma.conf.js"
-sed -i "s|\s*singleRun: false|singleRun: true|" ./karma.conf.js
+echo "add required plugins to package.json"
+sed -i "s|\"typescript\"|\"karma-junit-reporter\": \"^2.0.1\",\n    \"typescript\"|" ./package.json
 
-echo "Configure headless chrome in karma.conf.js"
+echo "configure headless chrome in karma.conf.js"
 read -r -d "" CHROME_CONFIG << EOM || true
     browsers: \['ChromeNoSandboxHeadless'\],\\
     customLaunchers: {\\
@@ -55,35 +55,39 @@ read -r -d "" CHROME_CONFIG << EOM || true
       },\\
     },
 EOM
-sed -i "s|\s*browsers: \['Chrome'\],|$CHROME_CONFIG|" ./karma.conf.js
-sed -i "s|\(browsers:\)|    \1|g" ./karma.conf.js
+sed -i "s|\s*browsers: \['Chrome'\],|    $CHROME_CONFIG|" ./karma.conf.js
 
-echo "Add required plugins in karma.conf.js"
+echo "configure required plugins in karma.conf.js"
 sed -i "/plugins: \[/a\     \ require('karma-junit-reporter')," ./karma.conf.js
 
-echo "Configure junit xml reporter in karma.conf.js"
+echo "configure junit xml reporter in karma.conf.js"
 read -r -d "" UNIT_XML_CONFIG << EOM || true
-    reporters: \['progress', 'junit', 'kjhtml'\],\\
-\\
     junitReporter: {\\
       outputDir: './build/test-results/test',\\
       outputFile: 'test-results.xml',\\
-      useBrowserName: false\\
-    },
+      useBrowserName: false,\\
+    },\\
+    reporters: \['progress', 'kjhtml'\],
 EOM
-sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|$UNIT_XML_CONFIG|" ./karma.conf.js
+sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|    $UNIT_XML_CONFIG|" ./karma.conf.js
 
-echo "Fix path for coverage analysis output"
-sed -i "s|\s*__dirname, '\.\./coverage'|__dirname, 'coverage'|" ./karma.conf.js
+echo "configure coverage reporter in karma.conf.js"
+sed -i "s|{ type: 'text-summary' }|{ type: 'lcovonly' },\n        { type: 'text-summary' }|" ./karma.conf.js
 
-echo "Adjust package.json to have the full test"
-sed -i "s|\s*\"test\": \"ng test\"|\"test\": \"ng test --code-coverage --reporters=junit --progress=false\"|" ./package.json
-sed -i "s|\s*\"devDependencies\": {|\"devDependencies\": { \"karma-junit-reporter\": \"^2.0.1\",|" ./package.json
-
-echo "fix nexus repo path"
-repo_path=$(echo "$GROUP" | tr . /)
-sed -i.bak "s|org/opendevstack/projectId|$repo_path|g" $SCRIPT_DIR/files/docker/Dockerfile
-rm $SCRIPT_DIR/files/docker/Dockerfile.bak
+echo "configure headless chrome in protractor.conf.js"
+read -r -d "" PROTRACTOR_CHROME_CONFIG << EOM || true
+    browserName: 'chrome',\\
+    chromeOptions: {\\
+      args: \[\\
+        'headless',\\
+        'no-sandbox',\\
+        'disable-web-security',\\
+        '--disable-gpu',\\
+        '--window-size=1024,768'\\
+      \]\\
+    }
+EOM
+sed -i "s|\s*browserName: 'chrome'|    $PROTRACTOR_CHROME_CONFIG|" ./e2e/protractor.conf.js
 
 echo "copy files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .
