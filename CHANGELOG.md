@@ -19,6 +19,7 @@
 - Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
 - Switch fe-angular, fe-ionic and be-typescript-express to Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
 - Update and improve e2e-cypress quickstarter ([#770](https://github.com/opendevstack/ods-quickstarters/issues/770))
+- Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
 
 ### Fixed
 - inf-terraform-agent: fix pip update and epel installation
