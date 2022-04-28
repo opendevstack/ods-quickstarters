@@ -92,7 +92,10 @@ objects:
       deploymentconfig: "${COMPONENT}"
     strategy:
       activeDeadlineSeconds: 21600
-      resources: {}
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
       rollingParams:
         intervalSeconds: 1
         maxSurge: 25%
