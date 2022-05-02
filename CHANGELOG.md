@@ -22,6 +22,8 @@
 - Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
 
 ### Fixed
+
+- Quickstarters should specify the resources for the rollout process ([#797](https://github.com/opendevstack/ods-quickstarters/issues/797))
 - inf-terraform-agent: fix pip update and epel installation
 - Mavent agent updated from Jenkins base image changes ([#722](https://github.com/opendevstack/ods-quickstarters/issues/722))
 - NodeJS12 agent updated from Jenkins base image changes ([#720](https://github.com/opendevstack/ods-quickstarters/issues/720))
