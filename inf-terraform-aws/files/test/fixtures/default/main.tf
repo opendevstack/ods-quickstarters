@@ -8,6 +8,7 @@ locals {
 data "aws_region" "current" {}
 
 module "stack-aws-quickstarter-test" {
+  # module name and value of name parameter have to be equal
   source = "../../.."
 
   name             = local.name
