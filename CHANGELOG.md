@@ -35,6 +35,7 @@
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
 - inf-terraform-aws: Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
+- Removes jcenter repositories and jdk-17 usage ([#807](https://github.com/opendevstack/ods-quickstarters/pull/807))
 
 ## [4.0] - 2021-11-05
 
