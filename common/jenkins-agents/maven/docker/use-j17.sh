@@ -11,5 +11,9 @@ if [ -x /usr/lib/jvm/${exactVersion}/bin/javac ]; then
 fi
 
 java -version
-javac -version
+if which javac; then
+  javac -version
+else
+  echo "Binary javac is not available."
+fi
 echo "JAVA_HOME: $JAVA_HOME"

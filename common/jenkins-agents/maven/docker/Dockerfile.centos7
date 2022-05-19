@@ -32,7 +32,7 @@ RUN cat /etc/yum.repos.d/* && \
 # Install Maven & java 11 and java 17
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
  RUN yum install -y epel-release && yum repolist && yum install -y java-17-openjdk-devel java-17-openjdk-jmods java-11-openjdk-devel java-11-openjdk-jmods && \
-    sh -c "yum list installed | grep -i '\(java\|jdk\)'" \
+    sh -c "yum list installed | grep -i '\(java\|jdk\)'" && \
     yum clean all -y && rm -rf /var/cache/yum && \
     chmod ug+x /home/jenkins/use-j17.sh && \
     chmod ug+x /home/jenkins/use-j11.sh && \
