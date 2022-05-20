@@ -31,7 +31,7 @@ RUN cat /etc/yum.repos.d/* && \
 
 # Install Maven & java 11 and java 17
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
-RUN yum -y --nobest --skip-broken update && \
+RUN yum -y --skip-broken update && \
     yum install -y epel-release && yum repolist && \
     yum install -y java-11-openjdk-devel java-11-openjdk-jmods && \
     sh -c "yum list installed | grep -i '\(java\|jdk\)'" && \
