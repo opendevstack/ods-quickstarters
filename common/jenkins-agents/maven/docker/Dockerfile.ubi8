@@ -35,7 +35,6 @@ RUN yum -y --nobest --skip-broken update && \
     yum clean all -y && rm -rf /var/cache/yum && \
     chmod ug+x /home/jenkins/use-j17.sh && \
     chmod ug+x /home/jenkins/use-j11.sh && \
-    /home/jenkins/use-j17.sh && \
     /home/jenkins/use-j11.sh && \
     mkdir -p $HOME/.m2 && \
     mkdir -p $GRADLE_USER_HOME && mkdir -p /tmp/gradle/wrapper && \
