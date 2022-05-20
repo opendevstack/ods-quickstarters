@@ -32,7 +32,7 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch read
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 COPY python_requirements /tmp/requirements.txt
 
 RUN set -x \
@@ -106,11 +106,10 @@ RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terr
     && chmod +x /usr/local/bin/terraform-docs
 
 # Install jq
-RUN yum -y install epel-release \
-    && yum install -y jq parallel \
+RUN yum install -y jq parallel \
     && jq -Version \
     && yum clean all \
-    && yum-config-manager --disable epel
+    && yum-config-manager -t --disable epel epel-modular
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
