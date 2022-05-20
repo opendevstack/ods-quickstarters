@@ -30,7 +30,8 @@ COPY use-j*.sh /home/jenkins/
 # Install Maven & java 11 and java 17
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
 COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
-RUN yum install -y java-17-openjdk-devel java-11-openjdk-devel maven-3.5.4 && \
+RUN yum -y update && \
+    yum install -y java-17-openjdk-devel java-11-openjdk-devel maven-3.5.4 && \
     yum install -y java-17-openjdk-jmods java-11-openjdk-jmods && \
     yum clean all -y && rm -rf /var/cache/yum && \
     chmod ug+x /home/jenkins/use-j17.sh && \
