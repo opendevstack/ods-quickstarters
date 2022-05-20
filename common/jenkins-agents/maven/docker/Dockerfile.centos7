@@ -29,9 +29,6 @@ COPY use-j*.sh /home/jenkins/
 RUN cat /etc/yum.repos.d/* && \
     sed -i 's@http://cbs.centos.org/@https://cbs.centos.org/@g' /etc/yum.repos.d/*
 
-# Needed b
-RUN
-
 # Install Maven & java 11 and java 17
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
 RUN yum -y update && \
