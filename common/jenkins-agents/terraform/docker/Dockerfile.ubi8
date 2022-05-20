@@ -27,18 +27,28 @@ ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
 
-ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
-    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel xz"
+ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline \
+    libffi-devel openssl-devel make bzip2 autoconf automake libtool curl sqlite-devel xz"
+ENV INSTALL_CENTOS_PKGS="readline-devel bison"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 COPY python_requirements /tmp/requirements.txt
 
-RUN set -x \
-    && dnf -y install $INSTALL_PKGS
+COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \
+    && sed -i 's@^\s*gpgcheck\s*=.*$@gpgcheck = 0@g' /etc/yum.repos.d/centos8.repo \
+    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
-RUN curl "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
+RUN set -x \
+    && dnf -y repolist \
+    && dnf -y install $INSTALL_PKGS \
+    && dnf -y install --enablerepo centos-base --enablerepo centos-plus --enablerepo centos-extras \
+                      --enablerepo centos-appstream --enablerepo centos-devel $INSTALL_CENTOS_PKGS
+
+RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
 
 # Upgrade PIP
@@ -54,7 +64,7 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 RUN python3 -m pip install -r /tmp/requirements.txt
 
 # Install awscli2
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip -qq awscliv2.zip \
     && ./aws/install \
     && rm -f awscliv2.zip \
