@@ -39,7 +39,6 @@ COPY python_requirements /tmp/requirements.txt
 COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
     && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \
-    && sed -i 's@^\s*gpgcheck\s*=.*$@gpgcheck = 0@g' /etc/yum.repos.d/centos8.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \

@@ -29,7 +29,7 @@ odsQuickstarterPipeline(
             -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
             -d bootVersion=${springBootVersion} \
             -d packaging=jar \
-            -d javaVersion=11 \
+            -d javaVersion=17 \
             -d groupId=${context.projectId} \
             -d artifactId=${context.componentId} \
             -d name=${context.componentId} \
