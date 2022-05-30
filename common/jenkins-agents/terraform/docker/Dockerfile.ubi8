@@ -36,6 +36,11 @@ ENV HOME=/home/jenkins
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 COPY python_requirements /tmp/requirements.txt
 
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
+
 COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
     && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \

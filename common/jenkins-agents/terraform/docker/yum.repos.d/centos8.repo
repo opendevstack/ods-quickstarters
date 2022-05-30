@@ -5,7 +5,7 @@ name=CentOS-8 - Base
 #baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
 baseurl=http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+gpgkey=https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
 enabled=0
 
 #additional packages that may be useful
@@ -15,7 +15,7 @@ name=CentOS-8 - Extras
 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
 baseurl=http://mirror.centos.org/centos/8-stream/extras/x86_64/os/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+gpgkey=https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
 enabled=0
 
 #additional packages that extend functionality of existing packages
@@ -26,7 +26,7 @@ mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo
 baseurl=http://mirror.centos.org/centos/8-stream/centosplus/x86_64/os/
 gpgcheck=1
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+gpgkey=https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
 
 [centos-appstream]
 name=CentOS-8-AppStream
@@ -42,5 +42,5 @@ name=CentOS-8 - Devel
 #baseurl=http://mirror.centos.org/centos/$releasever/updates/$basearch/
 baseurl=http://mirror.centos.org/centos/8-stream/Devel/x86_64/os/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+gpgkey=https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
 enabled=0
