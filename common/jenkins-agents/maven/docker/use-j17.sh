@@ -6,7 +6,7 @@ function msg_and_exit() {
 }
 
 echo "Switching to java 17:"
-exactVersion=$(ls -lah /usr/lib/jvm | grep "java-17-openjdk-17.*\.x86_64" | awk '{print $NF}' | head -1)
+exactVersion=$(ls -lah /usr/lib/jvm | grep "temurin-17" | awk '{print $NF}' | head -1)
 alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java || msg_and_exit "Cannot configure java 17 as the alternative to use for java."
 java -version 2>&1 | grep -q 17 || msg_and_exit "Java version is not 17."
 

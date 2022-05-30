@@ -24,6 +24,19 @@ ENV LANG=en_US.UTF-8 \
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
+
+
+COPY yum.repos.d/* /etc/yum.repos.d/
+RUN grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/* && \
+    sh -c "echo 'rhel' > /etc/yum/vars/osname" && \
+    sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo && \
+    sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo && \
+    sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo
+
 # Copy use java scripts.
 COPY use-j*.sh /home/jenkins/
 
@@ -31,11 +44,17 @@ COPY use-j*.sh /home/jenkins/
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
 RUN yum -y --nobest --skip-broken update && \
     yum install -y java-11-openjdk-devel maven-3.5.4 && \
+    yum install -y --enablerepo Adoptium temurin-17-jdk && \
+    yum updateinfo -y && \
+    yum repolist -y && \
     sh -c "yum list installed | grep -i '\(java\|jdk\)'" && \
     yum clean all -y && rm -rf /var/cache/yum && \
     chmod ug+x /home/jenkins/use-j17.sh && \
     chmod ug+x /home/jenkins/use-j11.sh && \
+    echo "--- STARTS JDK 11/17 TESTS ---" && \
+    /home/jenkins/use-j17.sh && \
     /home/jenkins/use-j11.sh && \
+    echo "--- ENDS JDK 11/17 TESTS ---" && \
     mkdir -p $HOME/.m2 && \
     mkdir -p $GRADLE_USER_HOME && mkdir -p /tmp/gradle/wrapper && \
     mvn -v
