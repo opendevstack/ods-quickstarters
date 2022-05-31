@@ -31,11 +31,11 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryM
 
 
 COPY yum.repos.d/* /etc/yum.repos.d/
-RUN grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/* && \
-    sh -c "echo 'rhel' > /etc/yum/vars/osname" && \
+RUN sh -c "echo 'rhel' > /etc/yum/vars/osname" && \
     sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo && \
     sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo && \
-    sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo
+    sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo && \
+    grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
 
 # Copy use java scripts.
 COPY use-j*.sh /home/jenkins/

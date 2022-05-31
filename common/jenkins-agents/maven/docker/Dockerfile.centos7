@@ -30,12 +30,12 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryM
 
 COPY yum.repos.d/adoptium-temurin.repo /etc/yum.repos.d/
 RUN rm -fv /etc/yum.repos.d/CentOS-Media.repo /etc/yum.repos.d/origin-local-release.repo && \
-    grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/* && \
     sh -c "echo 'centos' > /etc/yum/vars/osname" && \
-    sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo && \
+    sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/CentOS-Sources.repo && \
     sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/CentOS-Vault.repo && \
     sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo && \
-    sed -i 's@http://cbs.centos.org/@https://cbs.centos.org/@g' /etc/yum.repos.d/*
+    sed -i 's@http://cbs.centos.org/@https://cbs.centos.org/@g' /etc/yum.repos.d/* && \
+    grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
 
 # Copy use java scripts.
 COPY use-j*.sh /home/jenkins/
