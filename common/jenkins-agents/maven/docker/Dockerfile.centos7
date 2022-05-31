@@ -37,9 +37,6 @@ RUN rm -fv /etc/yum.repos.d/CentOS-Media.repo /etc/yum.repos.d/origin-local-rele
     sed -i 's@http://cbs.centos.org/@https://cbs.centos.org/@g' /etc/yum.repos.d/* && \
     grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
 
-# Copy use java scripts.
-COPY use-j*.sh /home/jenkins/
-
 # Install Maven & java 11 and java 17
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
 RUN yum -y --skip-broken update && \
@@ -49,14 +46,18 @@ RUN yum -y --skip-broken update && \
     yum updateinfo -t -y && \
     yum repolist -t -y && \
     sh -c "yum list installed | grep -i '\(java\|jdk\)'" && \
-    yum clean all -y && rm -rf /var/cache/yum && \
-    chmod ug+x /home/jenkins/use-j17.sh && \
-    chmod ug+x /home/jenkins/use-j11.sh && \
-    echo "--- STARTS JDK 11/17 TESTS ---" && \
-    /home/jenkins/use-j17.sh && \
-    /home/jenkins/use-j11.sh && \
-    echo "--- ENDS JDK 11/17 TESTS ---"
+    yum clean all -y && rm -rf /var/cache/yum
 
+# Copy use java scripts.
+COPY use-j*.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/use-j*.sh && \
+    chmod ugo+s /usr/local/bin/use-j*.sh && \
+    sh -c 'chmod ugo+s $(which alternatives)' && \
+    ls -la /usr/local/bin/use-j*.sh && \
+    echo "--- STARTS JDK 11/17 TESTS ---" && \
+    use-j17.sh && \
+    use-j11.sh && \
+    echo "--- ENDS JDK 11/17 TESTS ---"
 
 # Install Maven
 ENV MAVEN_VERSION=3.5.4
@@ -71,21 +72,26 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
 ENV MAVEN_HOME=/usr/share/maven
 ENV MAVEN_CONFIG=$HOME/.m2
 
-# set java proxy var
-COPY set_maven_proxy.sh /tmp/set_maven_proxy.sh
-RUN chmod 777 /tmp/set_maven_proxy.sh
-
 ADD ./contrib/settings.xml $HOME/.m2/
-RUN mv $HOME/.m2/settings.xml $HOME/.m2/settings.xml.orig && \
- /tmp/set_maven_proxy.sh && \
- xpr=$(cat /tmp/mvn_proxy) && \
- xpr="${xpr//\//\\/}" && \
- xpr="${xpr//|/\\|}" && \
- cat $HOME/.m2/settings.xml.orig | sed -e "s|<proxies>|<proxies>$xpr|g" > $HOME/.m2/settings.xml && \
- sed -i "s/__NEXUS_USER/$nexusUsername/gi" $HOME/.m2/settings.xml && \
- sed -i "s/__NEXUS_PW/$nexusPassword/gi" $HOME/.m2/settings.xml && \
- sed -i "s|__NEXUS_URL|$nexusUrl|gi" $HOME/.m2/settings.xml && \
- cat $HOME/.m2/settings.xml
+
+COPY set_maven_proxy.sh /tmp/set_maven_proxy.sh
+COPY set_gradle_proxy.sh /tmp/set_gradle_proxy.sh
+
+RUN mkdir -p $HOME/.m2 && \
+    mkdir -p $GRADLE_USER_HOME && mkdir -p /tmp/gradle/wrapper && \
+    mvn -v && \
+    chmod +x /tmp/set_maven_proxy.sh && \
+    chmod +x /tmp/set_gradle_proxy.sh && \
+    mv $HOME/.m2/settings.xml $HOME/.m2/settings.xml.orig && \
+    /tmp/set_maven_proxy.sh && \
+    xpr=$(cat /tmp/mvn_proxy) && \
+    xpr="${xpr//\//\\/}" && \
+    xpr="${xpr//|/\\|}" && \
+    cat $HOME/.m2/settings.xml.orig | sed -e "s|<proxies>|<proxies>$xpr|g" > $HOME/.m2/settings.xml && \
+    sed -i "s/__NEXUS_USER/$nexusUsername/gi" $HOME/.m2/settings.xml && \
+    sed -i "s/__NEXUS_PW/$nexusPassword/gi" $HOME/.m2/settings.xml && \
+    sed -i "s|__NEXUS_URL|$nexusUrl|gi" $HOME/.m2/settings.xml && \
+    cat $HOME/.m2/settings.xml
 
 # install gradle ..
 ADD gradlew /tmp/gradlew
@@ -97,8 +103,8 @@ RUN ls /tmp/gradle/wrapper
 COPY set_gradle_proxy.sh /tmp/set_gradle_proxy.sh
 RUN chmod 777 /tmp/set_gradle_proxy.sh
 
-RUN mkdir $GRADLE_USER_HOME
-RUN /tmp/set_gradle_proxy.sh
+RUN mkdir -pv $GRADLE_USER_HOME && \
+    /tmp/set_gradle_proxy.sh
 
 RUN /tmp/gradlew -version
 
@@ -106,7 +112,6 @@ RUN /tmp/gradlew -version
 RUN bash -l -c 'echo export JAVA_OPTS="$(/tmp/set_java_proxy.sh && echo $JAVA_OPTS)" >> /etc/bash.bashrc'
 
 RUN chown -R 1001:0 $HOME && \
-    chown 1001:0 $HOME/use-j*.sh && \
     chmod -R g+rw $HOME && \
     chmod -c 666 /etc/pki/ca-trust/extracted/java/cacerts && \
     ls -la /etc/pki/ca-trust/extracted/java/cacerts

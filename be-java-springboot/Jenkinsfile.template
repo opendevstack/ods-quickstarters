@@ -26,7 +26,7 @@ def stageBuild(def context) {
   }
   stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}"]) {
-      def status = sh(script: "$HOME/use-j17.sh && ./gradlew clean build --stacktrace --no-daemon && $HOME/use-j11.sh", returnStatus: true)
+      def status = sh(script: "use-j17.sh && ./gradlew clean build --stacktrace --no-daemon && use-j11.sh", returnStatus: true)
       if (status != 0) {
         error "Build failed!"
       }
