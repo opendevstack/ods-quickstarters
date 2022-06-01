@@ -27,43 +27,57 @@ ENV GEM_HOME /opt/bundle
 ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
 
-ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline readline-devel \
-    libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel xz \
-    python39 python39-pip python39-setuptools"
+ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline \
+    libffi-devel openssl-devel make bzip2 autoconf automake libtool curl sqlite-devel xz"
+ENV INSTALL_CENTOS_PKGS="readline-devel bison"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 COPY python_requirements /tmp/requirements.txt
 
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
+
+COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \
+    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
+
 RUN set -x \
-    && dnf clean all \
-    && dnf -y install $INSTALL_PKGS
+    && dnf -y repolist \
+    && dnf -y install $INSTALL_PKGS \
+    && dnf -y install --enablerepo centos-base --enablerepo centos-plus --enablerepo centos-extras \
+                      --enablerepo centos-appstream --enablerepo centos-devel $INSTALL_CENTOS_PKGS
 
-# Upgrade pip
-RUN pip3.9 install --upgrade pip \
-    && pip3.9 -V \
-    && pip3.9 install virtualenv pycodestyle wheel
+RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
+    && python3 get-pip.py
 
-# Configure pip SSL validation
+# Upgrade PIP
+RUN pip3 install --upgrade pip \
+    && pip3 -V \
+    && pip3 install virtualenv pycodestyle
+
+# Configure PIP SSL validation
 RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
     && pip config list
 
 # Install python requirements
-RUN python3.9 -m pip install -r /tmp/requirements.txt
+RUN python3 -m pip install -r /tmp/requirements.txt
 
 # Install awscli2
-RUN curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip -qq awscliv2.zip \
     && ./aws/install \
-    && /usr/local/bin/aws --version \
     && rm -f awscliv2.zip \
     && rm -Rf ./aws
 
 # Install awssamcli
-RUN curl -L -sS "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "awssam.zip" \
+RUN curl -L "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "awssam.zip" \
     && unzip -qq -d awssam awssam.zip \
-    && ./awssam/install && /usr/local/bin/sam --version && rm -f awssam.zip && rm -Rf ./awssam
+    && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
 
 # Install aws cdk
 RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz" \
@@ -106,11 +120,9 @@ RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terr
     && chmod +x /usr/local/bin/terraform-docs
 
 # Install jq
-RUN dnf -y install epel-release \
-    && dnf install -y jq parallel \
+RUN yum install -y jq parallel \
     && jq -Version \
-    && dnf clean all \
-    && dnf config-manager --set-disabled epel
+    && yum clean all
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
@@ -119,7 +131,7 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && chmod +x /usr/local/bin/consul && /usr/local/bin/consul -version
     
 # Install mozilla/sops and AGE
-RUN dnf install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
+RUN yum install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
     && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
     && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
     && rm -f /tmp/age.tar.gz

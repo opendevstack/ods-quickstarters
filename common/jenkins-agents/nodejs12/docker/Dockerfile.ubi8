@@ -19,7 +19,18 @@ ENV NODEJS_VERSION=12 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
+
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
+
+# Install Python 3 (because node-gyp, an ionic dependency, uses it) and set it as default
+RUN yum install -y python3 python3-pip || true
+# update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
+RUN bash -c "python -V 2>&1 | grep -q 'Python 3.*' || update-alternatives --install /usr/bin/python python /usr/bin/python3 1 " && \
+    bash -c "python -V 2>&1 | grep 'Python 3.*' || echo 'ERROR: Invalid python version'"
 
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
