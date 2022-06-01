@@ -106,7 +106,9 @@ RUN chmod 777 /tmp/set_gradle_proxy.sh
 RUN mkdir -pv $GRADLE_USER_HOME && \
     /tmp/set_gradle_proxy.sh
 
-RUN /tmp/gradlew -version
+RUN /tmp/gradlew -version && \
+    sh -c "source use-j17.sh && /tmp/gradlew -version" && \
+    sh -c "source use-j11.sh && /tmp/gradlew -version"
 
 #set java proxy via JAVA_OPTS as src
 RUN bash -l -c 'echo export JAVA_OPTS="$(/tmp/set_java_proxy.sh && echo $JAVA_OPTS)" >> /etc/bash.bashrc'
