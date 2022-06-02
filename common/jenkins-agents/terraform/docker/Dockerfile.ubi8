@@ -28,12 +28,12 @@ ENV RBENV_ROOT /opt/rbenv
 ENV RBENV_SHELL bash
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch readline \
-    libffi-devel openssl-devel make bzip2 autoconf automake libtool curl sqlite-devel xz"
-ENV INSTALL_CENTOS_PKGS="readline-devel bison"
+    libffi-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
+ENV INSTALL_CENTOS_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
-RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true"
 COPY python_requirements /tmp/requirements.txt
 
 # Workaroud we use when running behind proxy

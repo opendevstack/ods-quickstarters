@@ -19,12 +19,21 @@ ENV NODEJS_VERSION=12 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+ENV INSTALL_PKGS="make gcc-c++ GConf2 nss libXScrnSaver alsa-lib "
+ENV INSTALL_CENTOS_PKGS="nodejs nodejs-nodemon xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel"
+
 # Workaroud we use when running behind proxy
 # Basically we put the proxy certificate in certs folder
-# COPY certs/* /etc/pki/ca-trust/source/anchors/
-# RUN update-ca-trust force-enable && update-ca-trust extract
+COPY certs/* /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust force-enable && update-ca-trust extract
 
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
+
+COPY yum.repos.d/*.repo /etc/yum.repos.d/
+RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/google-chrome*.repo \
+    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 # Install Python 3 (because node-gyp, an ionic dependency, uses it) and set it as default
 RUN yum install -y python3 python3-pip || true
@@ -36,23 +45,19 @@ RUN bash -c "python -V 2>&1 | grep -q 'Python 3.*' || update-alternatives --inst
 RUN dbus-uuidgen > /etc/machine-id
 
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
-RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
+RUN yum install -y $INSTALL_PKGS && \
     yum module enable -y nodejs:${NODEJS_VERSION} && \
-    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    yum clean all -y
+    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager --enablerepo centos-appstream $INSTALL_CENTOS_PKGS && \
+    rpm -V $INSTALL_PKGS
 
 # Install Yarn
 # https://classic.yarnpkg.com/en/docs/install
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+RUN curl -o- -sSL https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
 
 # Install Cypress dependencies
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
-COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
 RUN yum repolist \
-    && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
-    && yum install -y --enablerepo google-chrome google-chrome-stable \
+    && yum install -y --enablerepo google-chrome --enablerepo centos-appstream --enablerepo centos-baseos google-chrome-stable \
     && yum clean all -y
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
