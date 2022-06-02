@@ -24,8 +24,8 @@ ENV INSTALL_CENTOS_PKGS="nodejs nodejs-nodemon xorg-x11-server-Xvfb gtk2-devel g
 
 # Workaroud we use when running behind proxy
 # Basically we put the proxy certificate in certs folder
-COPY certs/* /etc/pki/ca-trust/source/anchors/
-RUN update-ca-trust force-enable && update-ca-trust extract
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
 
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 
