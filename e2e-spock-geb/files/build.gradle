@@ -26,19 +26,10 @@ plugins {
 
 repositories {
     if (no_nexus) {
-        println("using repositories 'jcenter' and 'mavenCentral', because property no_nexus=$no_nexus")
-        jcenter()
+        println("using repository 'mavenCentral', because property no_nexus=$no_nexus")
         mavenCentral()
     } else {
         println("using nexus repositories")
-        maven() {
-            url "${nexus_url}/repository/jcenter/"
-            credentials {
-                username = "${nexus_user}"
-                password = "${nexus_pw}"
-            }
-        }
-
         maven() {
             url "${nexus_url}/repository/maven-public/"
             credentials {

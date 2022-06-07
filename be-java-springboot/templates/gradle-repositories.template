@@ -8,10 +8,8 @@
                 url repoUrl
             }
         }
-        nexusMaven("${nexus_url}/repository/jcenter/")
         nexusMaven("${nexus_url}/repository/maven-public/")
         nexusMaven("${nexus_url}/repository/atlassian_public/")
     } else {
         mavenCentral()
-        jcenter()
     }
