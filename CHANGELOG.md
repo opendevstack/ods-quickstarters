@@ -22,8 +22,11 @@
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
-- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874] https://github.com/opendevstack/ods-jenkins-shared-library/issues/874)
+- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874](https://github.com/opendevstack/ods-jenkins-shared-library/issues/874))
 - inf-terraform-azure: fix configuration of testing
+- Remove jcenter repositories from quickstarters (Fixes [#804](https://github.com/opendevstack/ods-quickstarters/issues/804))
+- Fix non-working jdk-17 usage (Fixes [#808](https://github.com/opendevstack/ods-quickstarters/issues/808))
+- Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
 
 ### Modified
 
@@ -44,6 +47,7 @@
 - Update and improve e2e-cypress quickstarter ([#770](https://github.com/opendevstack/ods-quickstarters/issues/770))
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 - Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
+- Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
 
 ## [4.0] - 2021-11-05
 
