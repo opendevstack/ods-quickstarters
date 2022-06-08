@@ -145,7 +145,13 @@ def executeTest(def type, def language) {
         description = "Runs ${type} tests ${language}."
         group = "verification"
 
-        useJUnitPlatform()
+        // Since groovy tests are junit tests and they are run as part of java tests,
+        // we disable here the execution of junit tests if not running for java language.
+        // jenkins to jira integration does not allows to run a test more than once.
+        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
+            // Mandatory to run JUnit 5 test but incompatible with groovy tests
+            useJUnitPlatform()
+        }
 
         ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
         testClassesDirs = sourceSets["${type}"].output.classesDirs
