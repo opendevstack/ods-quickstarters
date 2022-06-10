@@ -93,6 +93,7 @@
 - fix typescript-express junit test location ([#654](https://github.com/opendevstack/ods-quickstarters/issues/654))
 - fix java not in path for python quickstarter ([#685](https://github.com/opendevstack/ods-quickstarters/issues/685))
 - fix gitignore in inf-terraform ([#767](https://github.com/opendevstack/ods-quickstarters/issues/767))
+- fix e2e-spock-geb quickstarter groovy tests runs twice ([#874] https://github.com/opendevstack/ods-jenkins-shared-library/issues/874)
 
 ### Removed
 
