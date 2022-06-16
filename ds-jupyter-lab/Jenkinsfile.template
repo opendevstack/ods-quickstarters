@@ -10,7 +10,7 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentStageImportOpenShiftImageOrElse(context) {
+  odsComponentFindOpenShiftImageOrElse(context) {
     odsComponentStageBuildOpenShiftImage(context, [
       buildArgs: [
         nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
