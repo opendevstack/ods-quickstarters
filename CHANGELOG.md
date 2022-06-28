@@ -28,6 +28,8 @@
 - Fix non-working jdk-17 usage (Fixes [#808](https://github.com/opendevstack/ods-quickstarters/issues/808))
 - Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
 - Groovy junit tests cannot be run twice (Fixes [#814](https://github.com/opendevstack/ods-quickstarters/issues/814))
+- Maven agent docker image does not have the user with id / gid 1001 / 1001. Needed for some tasks. (Fixes [#820](https://github.com/opendevstack/ods-quickstarters/issues/820))
+- Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 
 ### Modified
 
