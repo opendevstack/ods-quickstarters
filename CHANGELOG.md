@@ -21,6 +21,7 @@
 - Update and improve e2e-cypress quickstarter ([#770](https://github.com/opendevstack/ods-quickstarters/issues/770))
 - Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
 - Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
+- inf-terraform-agent: add Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
 
 ### Fixed
 
