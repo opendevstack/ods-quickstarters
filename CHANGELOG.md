@@ -49,6 +49,7 @@
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 - Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
 - Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
+- inf-terraform-agent: bring Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
 
 ## [4.0] - 2021-11-05
 
