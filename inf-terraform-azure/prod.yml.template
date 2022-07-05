@@ -1,0 +1,6 @@
+credentials:
+  azureSubscriptionId: @project_id@-cd-subscription-id-prod
+  azureTenantId: @project_id@-cd-tenant-id-prod
+  azureClientId: @project_id@-cd-client-id-prod
+  azureClientSecret: @project_id@-cd-client-secret-prod
+
