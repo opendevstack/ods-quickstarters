@@ -1,0 +1,71 @@
+exclude: .terraform
+fail_fast: true
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v4.1.0
+    hooks:
+    -   id: check-added-large-files
+        args:
+        - --maxkb=5000
+    -   id: check-byte-order-marker
+    -   id: check-case-conflict
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: check-yaml
+        args:
+        - --allow-multiple-documents
+        - --unsafe
+    -   id: detect-private-key
+    -   id: mixed-line-ending
+        args:
+        - --fix=lf
+    -   id: pretty-format-json
+        args:
+        - --autofix
+        - --indent=2
+        - --no-ensure-ascii
+    -   id: trailing-whitespace
+-   repo: https://github.com/psf/black.git
+    rev: 21.7b0
+    hooks:
+    -   id: black
+        files: (\.py)$
+-   repo: https://github.com/PyCQA/flake8.git
+    rev: 4.0.1
+    hooks:
+    -   id: flake8
+        files: (\.py)$
+-   repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.64.1
+    hooks:
+    -   id: terraform_fmt
+-   repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
+    rev: v0.3.7
+    hooks:
+    -   id: terraformcreatei2o
+        files: (\.tf)$
+    -   id: terraformstackmoduleoutputs
+        files: (\.tf)$
+-   repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.64.1
+    hooks:
+    -   id: terraform_fmt
+    -   id: terraform_docs
+-   repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 2.1.6
+    hooks:
+    -   id: rubocop
+        args:
+        - --fix-layout
+-   repo: local
+    hooks:
+    -   id: test
+        name: make test
+        description: Run integration tests.
+        entry: make test
+        language: system
+        files: (\.tf|\.rb)$
+        pass_filenames: false
+        verbose: true
+

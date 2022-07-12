@@ -13,7 +13,7 @@ The quickstarter uses the spring boot project generator service hosted by Spring
 
 This is implemented in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
 
-When provisioning this quickstarter in the provisioning app a spring boot project based on version `2.6.6` will be generated and pushed to your git repository.
+When provisioning this quickstarter in the provisioning app a spring boot project based on version `2.7.1` will be generated and pushed to your git repository.
 
 The generated project requires `java 17` and includes the required gradle build and wrapper artifact based on gradle version `7.3.2`.
 
@@ -112,7 +112,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: spring-boot
-runtimeVersion: 2.6.6
+runtimeVersion: 2.7.1
 ```
 
 == How this quickstarter is built thru jenkins

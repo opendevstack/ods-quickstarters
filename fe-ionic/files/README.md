@@ -1,5 +1,5 @@
 # Ionic Quickstarter
-Quickstarter created with Ionic CLI 6.13.1
+Quickstarter created with Ionic CLI 6.19.0
 
 ## Running unit tests
 All files with the ending `.spec.ts` in the src folder will be tested with karma

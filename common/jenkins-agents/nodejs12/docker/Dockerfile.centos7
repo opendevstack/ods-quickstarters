@@ -22,29 +22,32 @@ ENV NODEJS_VERSION=12 \
     LC_ALL=en_US.UTF-8 \
     CHROME_VERSION=94.0.4606.81
 
-# install google-chrome (for angular)
-RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
 
-ADD https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-${CHROME_VERSION}-1.x86_64.rpm /root/google-chrome.rpm
-RUN yum -y install redhat-lsb libXScrnSaver
-RUN yum -y install /root/google-chrome.rpm && \
+# RUN yum-config-manager --enable rhel-7-server-extras-rpms && \
+#    yum-config-manager --enable rhel-7-server-optional-rpms && \
+RUN grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
+
+# install google-chrome (for angular)
+RUN curl -sSL --retry 10 --retry-delay 30 -o /root/google-chrome.rpm \
+    https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-stable-${CHROME_VERSION}-1.x86_64.rpm && \
+    yum -y install redhat-lsb libXScrnSaver && \
+    yum -y install /root/google-chrome.rpm && \
     ln -s /usr/lib64/libOSMesa.so.8 /opt/google/chrome/libosmesa.so && \
-    yum clean all && \
+    yum clean all -y && \
     dbus-uuidgen > /etc/machine-id && \
     rm /root/google-chrome.rpm
 
 # Install cypress dependencies
 # Please note: xorg-x11-server-Xvfb is not available on RHEL via yum anymore, so "RUN yum install -y xorg-x11-server-Xvfb" won't work.
 #   Therefore this Dockerfile uses the version from CentOS instead.
-ADD http://mirror.centos.org/centos/7/os/x86_64/Packages/xorg-x11-server-Xvfb-1.20.4-10.el7.x86_64.rpm /root/xorg-x11-server-Xvfb.x86_64.rpm
-RUN yum install -y /root/xorg-x11-server-Xvfb.x86_64.rpm && \
-    yum install -y gtk2-2.24* && \
-    yum install -y libXtst* && \
-    yum install -y libXScrnSaver* && \
-    yum install -y GConf2* && \
-    yum install -y alsa-lib* && \
-    yum install -y nss-devel libnotify-devel gnu-free-sans-fonts && \
+# ADD http://mirror.centos.org/centos/7/os/x86_64/Packages/xorg-x11-server-Xvfb-1.20.4-10.el7.x86_64.rpm /root/xorg-x11-server-Xvfb.x86_64.rpm
+# RUN yum install -y /root/xorg-x11-server-Xvfb.x86_64.rpm && \
+RUN yum install -y xorg-x11-server-Xvfb gtk2-2.24* libXtst* libXScrnSaver* GConf2* alsa-lib* \
+    nss-devel libnotify-devel gnu-free-sans-fonts gcc-c++ make scl-utils && \
     yum clean all -y
 # libXScrnSaver* provides libXss
 # GConf2* provides libgconf-2
@@ -58,20 +61,20 @@ COPY contrib/bin/scl_enable /usr/local/bin/scl_enable
 
 # Install NodeJS
 # https://github.com/nodesource/distributions#installation-instructions-1
-RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
-    yum install -y nodejs && \
-    yum install -y gcc-c++ make
+RUN curl -sSL --retry 10 --retry-delay 30 https://rpm.nodesource.com/setup_12.x | bash - && \
+    yum install -y nodejs
 
 # Install Yarn
 # https://classic.yarnpkg.com/en/docs/install/#centos-stable
-RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
+RUN curl -sSL --retry 10 --retry-delay 30 https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
     yum install -y yarn && \
     yum clean all -y
 
 # Install Python 3 (because node-gyp, an ionic dependency, uses it) and set it as default
-RUN yum install -y python3 py3-pip && \
+RUN yum install -y python3 python3-pip && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
-    python -V
+    python -V && \
+    python3 -m pip --version
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set always-auth=true && \
@@ -80,7 +83,8 @@ RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
     yarn config set registry $nexusUrl/repository/npmjs/ -g && \
-    npm --version
+    npm --version && \
+    node --version
 
 RUN chgrp -R 0 $HOME && \
     chmod -R g=u $HOME

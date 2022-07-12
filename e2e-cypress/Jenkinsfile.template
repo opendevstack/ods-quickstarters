@@ -3,10 +3,10 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs12:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs16:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
-  // 'release/': 'test'
+    // 'release/': 'test'
   ]
 ) { context ->
   stageTest(context)
@@ -15,30 +15,30 @@ odsComponentPipeline(
 
 def stageTest(def context) {
   stage('Integration Test') {
-  // OPTIONAL: load environment variables for Azure SSO with MSALv2; please adapt variable names to your OpenShift config
-  // sh "oc project <project-with-configured-secrets>"
-  // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.USERNAME}' | base64 -d")
-  // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.PASSWORD}' | base64 -d")
-  // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_ID}' | base64 -d")
-  // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_SECRET}' | base64 -d")
-  // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o jsonpath='{.data.AZURE_TENANT}'") // config map values are not base64 encoded
+    // OPTIONAL: load environment variables for Azure SSO with MSALv2; please adapt variable names to your OpenShift config
+    // sh "oc project <project-with-configured-secrets>"
+    // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.USERNAME}' | base64 -d")
+    // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.PASSWORD}' | base64 -d")
+    // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_ID}' | base64 -d")
+    // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_SECRET}' | base64 -d")
+    // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o jsonpath='{.data.AZURE_TENANT}'") // config map values are not base64 encoded
 
-  withEnv(["TAGVERSION=${context.tagversion}",
-           "NEXUS_HOST=${context.nexusHost}",
-           "OPENSHIFT_PROJECT=${context.targetProject}",
-           "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
-           // "CYPRESS_TENANT_ID=${azureTenantId}",
-           // "CYPRESS_CLIENT_ID=${azureClientId}",
-           // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
-           // "CYPRESS_USERNAME=${cypressUser}",
-           // "CYPRESS_PASSWORD=${cypressPassword}"
+    withEnv(["TAGVERSION=${context.tagversion}",
+      "NEXUS_HOST=${context.nexusHost}",
+      "OPENSHIFT_PROJECT=${context.targetProject}",
+      "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
+      // "CYPRESS_TENANT_ID=${azureTenantId}",
+      // "CYPRESS_CLIENT_ID=${azureClientId}",
+      // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
+      // "CYPRESS_USERNAME=${cypressUser}",
+      // "CYPRESS_PASSWORD=${cypressPassword}"
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
-      junit(testResults:'build/test-results/*.xml', allowEmptyResults:true)
-      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
-      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
-      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+      junit(testResults:'test-results/*.xml', allowEmptyResults: true)
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/installation-junit.xml', allowEmpty: true)
+      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/integration-junit.xml', allowEmpty: true)
+      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/acceptance-junit.xml', allowEmpty: true)
       if (status != 0) {
         error 'Executing tests failed!'
       }

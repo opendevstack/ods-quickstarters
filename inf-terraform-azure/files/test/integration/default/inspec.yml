@@ -1,0 +1,10 @@
+# This file has been created automatically.
+
+---
+name: stack
+supports:
+  - platform: azure
+depends:
+  - name: inspec-azure
+    git: https://github.com/inspec/inspec-azure
+    tag: v1.86.0

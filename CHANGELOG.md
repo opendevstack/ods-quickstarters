@@ -7,10 +7,12 @@
 - Use Java 17 (LTS) in maven jenkins-agent and spring boot qs ([#651](https://github.com/opendevstack/ods-quickstarters/pull/651))
 - ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
 - terraform agent sops/age added ([#730](https://github.com/opendevstack/ods-quickstarters/issues/730))
-- add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
+- Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
 
 ### Fixed
 
+- Quickstarters should specify the resources for the rollout process ([#797](https://github.com/opendevstack/ods-quickstarters/issues/797))
 - Mavent agent updated from Jenkins base image changes ([#722](https://github.com/opendevstack/ods-quickstarters/issues/722))
 - NodeJS12 agent updated from Jenkins base image changes ([#720](https://github.com/opendevstack/ods-quickstarters/issues/720))
 - Scala agent updated from Jenkins base image changes ([#721](https://github.com/opendevstack/ods-quickstarters/issues/721))
@@ -20,22 +22,35 @@
 - Python Jenkinsfile use python3.8 ([#682](https://github.com/opendevstack/ods-quickstarters/issues/682))
 - ODS AMI build failing due an E2E test error of ionic quickstarter ([#742](https://github.com/opendevstack/ods-quickstarters/issues/742))
 - ODS AMI build failing due an missing list of supported browsers in ionic quickstarter ([#756](https://github.com/opendevstack/ods-quickstarters/issues/756))
-- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874] https://github.com/opendevstack/ods-jenkins-shared-library/issues/874)
+- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874](https://github.com/opendevstack/ods-jenkins-shared-library/issues/874))
+- inf-terraform-azure: fix configuration of testing
+- Remove jcenter repositories from quickstarters (Fixes [#804](https://github.com/opendevstack/ods-quickstarters/issues/804))
+- Fix non-working jdk-17 usage (Fixes [#808](https://github.com/opendevstack/ods-quickstarters/issues/808))
+- Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
+- Groovy junit tests cannot be run twice (Fixes [#814](https://github.com/opendevstack/ods-quickstarters/issues/814))
+- Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 
 ### Modified
 
 - Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
 - Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
-- Updates maven agent to support only HTTPS proxy ([#689])(https://github.com/opendevstack/ods-quickstarters/issues/689))
+- Updates maven agent to support only HTTPS proxy ([#689](https://github.com/opendevstack/ods-quickstarters/issues/689))
 - Fix error handling of Makefile ([#680](https://github.com/opendevstack/ods-quickstarters/issues/680))
 - Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
 - Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
 - Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - inf-terraform-aws: Update versions for ruby, terraform, kitchen-terraform, Gemfile ([#677](https://github.com/opendevstack/ods-quickstarters/issues/677))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
-- upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
-- update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
-- updated spring boot version to 2.6.6 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
+- Upgrade python flask quickstarter to Flask 2 version and general dependencies upgrades ([#746](https://github.com/opendevstack/ods-quickstarters/issues/746))
+- AWS Quickstarter is using the new odsComponentStageInfrastructure concept now  ([#631](https://github.com/opendevstack/ods-quickstarters/issues/631))
+- Update fe-angular to Angular 13.3.0 ([#765](https://github.com/opendevstack/ods-quickstarters/issues/765))
+- AWS Quickstarter enable devcontainer support for inf-terraform-aws ([#736](https://github.com/opendevstack/ods-quickstarters/issues/736))
+- Switch fe-angular, fe-ionic and be-typescript-express to Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763)
+- Update and improve e2e-cypress quickstarter ([#770](https://github.com/opendevstack/ods-quickstarters/issues/770))
+- inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
+- Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
+- Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
+- Updated spring boot version to 2.7.1 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
 
 ## [4.0] - 2021-11-05
 

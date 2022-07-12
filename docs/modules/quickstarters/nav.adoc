@@ -12,10 +12,13 @@
 ** xref:quickstarters:ds-rshiny.adoc[Data Science RShiny app]
 ** xref:quickstarters:e2e-cypress.adoc[Cypress E2E testing]
 ** xref:quickstarters:e2e-spock-geb.adoc[Spock, Geb and Unirest E2E testing]
+** xref:quickstarters:inf-terraform-aws.adoc[INF Terraform AWS]
+** xref:quickstarters:inf-terraform-azure.adoc[INF Terraform AZURE]
 ** xref:quickstarters:release-manager.adoc[Release Manager]
 ** Jenkins agent Images
 *** xref:jenkins:agent-base.adoc[Base Image]
 *** xref:jenkins-agents:golang.adoc[Go]
+*** xref:jenkins-agents:inf-terraform.adoc[terraform]
 *** xref:jenkins-agents:maven.adoc[Maven]
 *** xref:jenkins-agents:nodejs12.adoc[Node.js 12]
 *** xref:jenkins-agents:nodejs16.adoc[Node.js 16]
