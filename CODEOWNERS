@@ -1,7 +1,7 @@
 /be-fe-mono-repo-plain/ @clemensutschig
 /be-gateway-nginx/ @gerardcl
 /be-golang-plain/ @michaelsauter @henrjk
-/be-java-springboot/ @stitakis @rdupont
+/be-java-springboot/ @stitakis @renedupont
 /be-python-flask/ @buegelbeatz @henrjk @gerardcl
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
