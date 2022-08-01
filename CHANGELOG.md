@@ -41,6 +41,7 @@
 - Remove jcenter repositories from quickstarters (Fixes [#804](https://github.com/opendevstack/ods-quickstarters/issues/804))
 - Fix non-working jdk-17 usage (Fixes [#808](https://github.com/opendevstack/ods-quickstarters/issues/808))
 - Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
+- Stage name not updated in latest version ([#816](https://github.com/opendevstack/ods-quickstarters/issues/816))
 
 ## [4.0] - 2021-11-05
 

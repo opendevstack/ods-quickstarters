@@ -9,7 +9,7 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  odsComponentStageImportOpenShiftImageOrElse(context) {
+  odsComponentFindOpenShiftImageOrElse(context) {
     stageBuild(context)
     odsComponentStageScanWithSonar(context)
     odsComponentStageBuildOpenShiftImage(context)
