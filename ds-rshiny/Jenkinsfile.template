@@ -11,7 +11,7 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentStageImportOpenShiftImageOrElse(context) {
+  odsComponentFindOpenShiftImageOrElse(context) {
     odsComponentStageBuildOpenShiftImage(context)
   }
 

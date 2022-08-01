@@ -29,6 +29,7 @@
 - Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
 - Groovy junit tests cannot be run twice (Fixes [#814](https://github.com/opendevstack/ods-quickstarters/issues/814))
 - Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
+- Stage name not updated in latest version ([#816](https://github.com/opendevstack/ods-quickstarters/issues/816))
 
 ### Modified
 
