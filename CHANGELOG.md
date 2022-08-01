@@ -28,6 +28,7 @@
 - Fix non-working jdk-17 usage (Fixes [#808](https://github.com/opendevstack/ods-quickstarters/issues/808))
 - Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
 - Groovy junit tests cannot be run twice (Fixes [#814](https://github.com/opendevstack/ods-quickstarters/issues/814))
+- Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 - Stage name not updated in latest version ([#816](https://github.com/opendevstack/ods-quickstarters/issues/816))
 
 ### Modified
@@ -50,6 +51,8 @@
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 - Update fe-ionic to Ionic 6.19.0 ([#780](https://github.com/opendevstack/ods-quickstarters/issues/780))
 - Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
+- inf-terraform-agent: bring Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
+- Updated spring boot version to 2.7.1 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
 
 ## [4.0] - 2021-11-05
 
