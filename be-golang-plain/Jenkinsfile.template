@@ -9,7 +9,7 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  odsComponentStageImportOpenShiftImageOrElse(context) {
+  odsComponentFindOpenShiftImageOrElse(context) {
     stageCheckFormat(context)
     stageLint(context)
     stageUnitTest(context)
