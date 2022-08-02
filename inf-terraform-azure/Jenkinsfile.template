@@ -1,0 +1,243 @@
+/* generated jenkins file used for building and deploying AWS-infrastructure in projects */
+
+def stackConfig
+def stackdeploy  = false
+
+def azureSubscriptionId
+def azureTenantId
+def azureClientId
+def azureClientSecret
+
+def azureSubscriptionIdTesting
+def azureTenantIdTesting
+def azureClientIdTesting
+def azureClientSecretTesting
+
+def workspaceKeyPrefix
+
+def tfvarsjsonfile
+def tfvarsjson
+
+
+@Library('ods-jenkins-shared-library@3.x') _
+
+import org.ods.services.ServiceRegistry
+import org.ods.services.BitbucketService
+import org.ods.util.GitCredentialStore
+
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform:3.x',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+  ]
+) { context ->
+    stageGetConfig(context)
+    stageInit(context)
+    stageTest(context)
+    stagePlan(context)
+    stageDeploy(context)
+    stageSmoke(context)
+    stageReport(context)
+}
+
+def getEnvSettings(def tfBackend, def workspace ) {
+  def config = [
+    "TF_BACKEND=${tfBackend}"
+  ]
+
+  if (workspace) {
+    config << "TF_WORKSPACE=${workspace}"
+  }
+  return config
+}
+
+//read and decide stage-environment
+def stageGetConfig(def context) {
+  stage('GetConfig') {
+
+    if (context.environment) {
+      environmentFile         = readYaml file: "./environments/${context.environment}.yml"
+      environmentFileTesting  = readYaml file: "./environments/testing.yml"
+
+      stackdeploy  = true
+
+      azureSubscriptionId = environmentFile.credentials.azureSubscriptionId.toLowerCase()
+      azureTenantId       = environmentFile.credentials.azureTenantId.toLowerCase()
+      azureClientId       = environmentFile.credentials.azureClientId.toLowerCase()
+      azureClientSecret   = environmentFile.credentials.azureClientSecret.toLowerCase()
+
+      azureSubscriptionIdTesting = environmentFileTesting.credentials.azureSubscriptionId.toLowerCase()
+      azureTenantIdTesting       = environmentFileTesting.credentials.azureTenantId.toLowerCase()
+      azureClientIdTesting       = environmentFileTesting.credentials.azureClientId.toLowerCase()
+      azureClientSecretTesting   = environmentFileTesting.credentials.azureClientSecret.toLowerCase()
+
+      echo "Stack Environment ${context.environment} "
+      echo "Azure Subscription ID ${azureSubscriptionId}"
+      echo "Azure Tenant ID ${azureTenantId}"
+      echo "Azure Client ID ${azureClientId}"
+      echo "Azure Client Secret ${azureClientSecret}"
+
+      // handle environment specific variables
+      // copy json from /environments/${context.environment}.auto.tfvars.json to /
+      if (fileExists("./environments/${context.environment}.json")) {
+        withEnv(["VARIABLESFILE=./environments/${context.environment}.json"])
+        {
+          def statusVarEnv = sh(script: '''
+            cp $VARIABLESFILE env.auto.tfvars.json && echo "Variables file $VARIABLESFILE" ''',
+          returnStatus: true)
+          if (statusVarEnv != 0) {
+            error "Can not copy json file!"
+          }
+        }
+      }
+    } else { error "No environment specified!"}
+  }
+}
+
+//initialize pre-requisites
+def stageInit(def context) {
+  if (stackdeploy)
+  {
+    stage('Init')
+    {
+      def bitbucketService = ServiceRegistry.instance.get(BitbucketService)
+
+      bitbucketService.withTokenCredentials { String username, String pw ->
+        GitCredentialStore.configureAndStore(this, context.bitbucketUrl, username, pw)
+      }
+
+      def workspace = env.WORKSPACE
+      def statusTF = sh(script: '''
+            make create-tfvars''',
+            returnStatus: true)
+      if (statusTF != 0) {
+        error "Creation of tfvars failed!"
+      }
+      tfvarsjson = readJSON file: './terraform.tfvars.json'
+    }
+  } else { print "Stage Init has been skipped."}
+}
+
+def stageReport(def context) {
+  if (stackdeploy == true) {
+    stage('Report')
+    {
+      def status = sh(script: '''
+          make install-report ''',
+          returnStatus: true)
+      if (status != 0) {
+        error "Report failed!"
+      }
+
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/test/default.xml' , allowEmpty: true)
+      stash(name: "changes-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_created.log' , allowEmpty: true)
+      stash(name: "target-${context.componentId}-${context.buildNumber}", includes: 'reports/install/azure_deploy_account.log' , allowEmpty: true)
+      stash(name: "state-${context.componentId}-${context.buildNumber}", includes: 'reports/install/tf_show.log' , allowEmpty: true)
+    }
+  } else { print "Stage Report has been skipped."}
+}
+
+def stageSmoke(def context) {
+  if (stackdeploy == true) {
+    stage('Smoke')
+    {
+       withCredentials([
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
+      ])
+      {
+       withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make smoke-test ''',
+            returnStatus: true)
+          if (status != 0) {
+            error "Smoke-Test failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Smoke Test port has been skipped."}
+}
+
+//execute make test of the project
+def stageTest(def context) {
+  if (stackdeploy == true) {
+    stage('Test') {
+      withCredentials([
+        string(credentialsId: azureSubscriptionIdTesting, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantIdTesting, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientIdTesting, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecretTesting, variable: 'AZURE_CLIENT_SECRET')
+      ])
+      {
+        withEnv(getEnvSettings(context.environment, null))
+        {
+          def status = sh(script: '''
+            make test''',
+            returnStatus: true)
+          if (status != 0) {
+            error "Test failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Test has been skipped." }
+}
+
+//execute make plan of the project
+def stagePlan(def context) {
+  if (stackdeploy == true) {
+    stage('Plan')
+    {
+      withCredentials([
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
+       ])
+      {
+        withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make plan''',
+            returnStatus: true)
+          if (status != 0) {
+            error "Plan failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Plan has been skipped." }
+}
+
+//execute make deploy of the stack
+def stageDeploy(def context) {
+  if (stackdeploy == true) {
+    stage('Deploy') {
+      withCredentials([
+        string(credentialsId: azureSubscriptionId, variable: 'AZURE_SUBSCRIPTION_ID'),
+        string(credentialsId: azureTenantId, variable: 'AZURE_TENANT_ID'),
+        string(credentialsId: azureClientId, variable: 'AZURE_CLIENT_ID'),
+        string(credentialsId: azureClientSecret, variable: 'AZURE_CLIENT_SECRET')
+      ])
+      {
+        withEnv(getEnvSettings(context.environment, tfvarsjson['meta_environment']))
+        {
+          def status = sh(script: '''
+            eval \"\$(rbenv init -)\" && \
+            make deploy''',
+            returnStatus: true)
+          if (status != 0) {
+            error "Deploy failed!"
+          }
+        }
+      }
+    }
+  } else { print "Stage Deploy has been skipped." }
+}
