@@ -11,6 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
     PATH=$JAVA_HOME/bin:$PATH
 
 RUN yum module install -y python38:3.8/build && \
+	yum install -y gcc && \
     yum -y clean all && \
     ln -s /usr/bin/pip3.8 /usr/bin/pip
 
