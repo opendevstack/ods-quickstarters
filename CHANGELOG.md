@@ -23,6 +23,7 @@
 - Upgrade atlassian stack (Implements [#1138](https://github.com/opendevstack/ods-core/issues/1138))
 - inf-terraform-agent: add Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
 - Updated spring boot version to 2.7.1 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
+- Add packages for python agent ([#809](https://github.com/opendevstack/ods-quickstarters/issues/809))
 
 ### Fixed
 
