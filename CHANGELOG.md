@@ -55,7 +55,7 @@
 - inf-terraform-agent: bring Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
 - Updated spring boot version to 2.7.1 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
 - Add packages for python agent ([#809](https://github.com/opendevstack/ods-quickstarters/issues/809))
-- AUpdate nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
+- Update nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
 
 ## [4.0] - 2021-11-05
 
