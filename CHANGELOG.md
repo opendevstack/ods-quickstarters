@@ -31,6 +31,7 @@
 - Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 - Stage name not updated in latest version ([#816](https://github.com/opendevstack/ods-quickstarters/issues/816))
 - fix azure jenkinsfile.template ([#832](https://github.com/opendevstack/ods-quickstarters/pull/832))
+- Fixes docgen pod assigned memory issue ([#837](https://github.com/opendevstack/ods-quickstarters/pull/837))
 
 ### Modified
 
