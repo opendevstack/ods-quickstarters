@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Added
+
+- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
+- Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
+
 ### Modified
 
 - Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
@@ -24,6 +30,13 @@
 - inf-terraform-agent: add Python 3.9.x back and add Python 3.8 in addition to ubi8 ([#822](https://github.com/opendevstack/ods-quickstarters/issues/822))
 - Updated spring boot version to 2.7.1 ([#779](https://github.com/opendevstack/ods-quickstarters/issues/779))
 - Add packages for python agent ([#809](https://github.com/opendevstack/ods-quickstarters/issues/809))
+- Added azure-cli to terraform agent ([#628](https://github.com/opendevstack/ods-quickstarters/issues/628))
+- Add JVM parameters on docgen deployment ([#669](https://github.com/opendevstack/ods-quickstarters/pull/669))
+- Add missing directory ([#679](https://github.com/opendevstack/ods-quickstarters/issues/679))
+- Rewrote the Cloud Formation Stack Example ([#683](https://github.com/opendevstack/ods-quickstarters/issues/683))
+- Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
+- jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
+- inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 
 ### Fixed
 
@@ -44,6 +57,11 @@
 - Full revision of Jenkins Pipelines, to make them work again. Increased timeouts for building quickstarters and added the retrieval of the return status for building each quickstarter.
 - Stage name not updated in latest version ([#816](https://github.com/opendevstack/ods-quickstarters/issues/816))
 - fix azure jenkinsfile.template ([#832](https://github.com/opendevstack/ods-quickstarters/pull/832))
+- Fixed e2e-spock-geb quickstarter groovy tests runs twice ([#874](https://github.com/opendevstack/ods-jenkins-shared-library/issues/874))
+- inf-terraform-azure: fix configuration of testing
+- Groovy junit tests cannot be run twice (Fixes [#814](https://github.com/opendevstack/ods-quickstarters/issues/814))
+- Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
+- Fixes docgen pod assigned memory issue ([#837](https://github.com/opendevstack/ods-quickstarters/pull/837))
 
 ## [4.0] - 2021-11-05
 

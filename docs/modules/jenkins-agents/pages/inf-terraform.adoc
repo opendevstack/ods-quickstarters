@@ -1,0 +1,14 @@
+= Terraform Jenkins agent
+
+== Introduction
+This agent is used to deploy (Cloud) resources using terraform code.
+
+The image is built in the global `ods` project and is named `jenkins-agent-terraform`.
+It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-terraform:latest`.
+
+== Features
+1. support of multiple terraform versions using tfenv
+2. integrated test-framework using kitchen-terraform and cinc-auditor
+
+== Known limitations
+n/a

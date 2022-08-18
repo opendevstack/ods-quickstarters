@@ -2,7 +2,7 @@ import geb.Page
 import geb.spock.GebReportingSpec
 import spock.lang.Stepwise
 
-class GitHubcceptanceHomePage extends Page {
+class GitHubAcceptanceHomePage extends Page {
     static url = "/opendevstack/ods-quickstarters"
     static at = { title.contains("quickstarters")}
 }
@@ -12,7 +12,7 @@ class DemoAcceptance extends GebReportingSpec {
 
     def "goes to GH ods-quickstarters"() {
         given: "User goes to ods-quickstarters and checks the content"
-        to GitHubcceptanceHomePage
+        to GitHubAcceptanceHomePage
 
         // print evidence of two fields (the input area and iframe content)
         SpecHelper.printEvidenceForPageElement(this, 1, $("[data-content='Code']"), "code area")
