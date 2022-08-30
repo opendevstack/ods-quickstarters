@@ -63,6 +63,7 @@
 - Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 - Fixes docgen pod assigned memory issue ([#837](https://github.com/opendevstack/ods-quickstarters/pull/837))
 - Update nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
+- Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
 
 ## [4.0] - 2021-11-05
 
