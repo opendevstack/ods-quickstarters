@@ -47,7 +47,7 @@ RUN dbus-uuidgen > /etc/machine-id
 # Install NodeJS (https://rpm.nodesource.com/setup_12.x does NOT work)
 RUN yum install -y $INSTALL_PKGS && \
     yum module enable -y nodejs:${NODEJS_VERSION} && \
-    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager --enablerepo centos-appstream $INSTALL_CENTOS_PKGS && \
+    yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager --enablerepo centos-appstream --enablerepo centos-baseos $INSTALL_CENTOS_PKGS && \
     rpm -V $INSTALL_PKGS
 
 # Install Yarn
