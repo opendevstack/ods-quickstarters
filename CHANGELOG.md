@@ -64,6 +64,7 @@
 - Fixes docgen pod assigned memory issue ([#837](https://github.com/opendevstack/ods-quickstarters/pull/837))
 - Update nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
 - Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
+- Fix nodejs12 build fails with redhat jenkins agent ([#843](https://github.com/opendevstack/ods-quickstarters/issues/843))
 
 ## [4.0] - 2021-11-05
 
