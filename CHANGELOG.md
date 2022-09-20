@@ -65,6 +65,7 @@
 - Update nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
 - Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
 - Fix nodejs12 build fails with redhat jenkins agent ([#843](https://github.com/opendevstack/ods-quickstarters/issues/843))
+- Fix Build Terraform UBI agent fails ([#847](https://github.com/opendevstack/ods-quickstarters/issues/847))
 
 ## [4.0] - 2021-11-05
 
