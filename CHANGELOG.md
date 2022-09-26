@@ -37,7 +37,7 @@
 - Enforce use of secure Log4j version in SpringBoot Quickstarter ([#693](https://github.com/opendevstack/ods-quickstarters/issues/693))
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
-- update AWS QS libraries and Terraform version  ([#849](https://github.com/opendevstack/ods-quickstarters/pull/849))
+- inf-terraform-aws: update AWS QS libraries and Terraform version  ([#849](https://github.com/opendevstack/ods-quickstarters/pull/849))
 
 ### Fixed
 
