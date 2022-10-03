@@ -130,7 +130,7 @@ RUN wget -q -O /tmp/parallel-20160222-1.el7.noarch.rpm   https://download-ib01.f
     && rpm -Uvh /tmp/parallel-20160222-1.el7.noarch.rpm \
     && yum install -y parallel \
     && yum clean all
-    
+
 #Install jq
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm \
     && yum install -y jq \
@@ -142,7 +142,7 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
     && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/consul && /usr/local/bin/consul -version
-    
+
 # Install mozilla/sops and AGE
 RUN yum install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
     && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
@@ -159,15 +159,11 @@ COPY Gemfile Gemfile.lock $GEM_HOME/
 RUN chown -R 1001:0 $GEM_HOME \
     && chmod -R g+rw $GEM_HOME \
     && ls -lisa /home/jenkins $GEM_HOME
-    
-RUN ls $JAVA_HOME/lib/security/cacerts \
-    && chown 1001:0 $JAVA_HOME/lib/security/cacerts \
-    && chmod g+w $JAVA_HOME/lib/security/cacerts
 
 # setup ruby env and bundler gems
 # RUBY https://syslint.com/blog/tutorial/how-to-install-ruby-on-rails-with-rbenv-on-centos-7-or-rhel-7/
 RUN cd /opt \
-    && umask 0002 \ 
+    && umask 0002 \
     && git clone https://github.com/rbenv/rbenv.git /opt/rbenv \
     && echo 'export PATH="/opt/rbenv/shims:/opt/rbenv/bin:$PATH"' >> ~/.bash_profile \
     && echo 'eval "$(rbenv init -)"' >> ~/.bash_profile \
