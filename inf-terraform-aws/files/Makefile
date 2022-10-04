@@ -38,7 +38,7 @@ prep-test:
 
 .PHONY: test
 # Run (pre-deployment) tests.
-test: install-test-deps check-config
+test: install-test-deps
 	@$(call check_aws_credentials)
 
 	# output aws account and user id for testing

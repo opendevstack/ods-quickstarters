@@ -111,19 +111,17 @@ function check_aws_credentials() {
 function check_backend_access() {
   local exitStatus=0
 
-  if [[ -n $BUCKET ]]; then
-  if [[ $HASAWSCONFIGURED = 1 ]]; then
-    echo touch | aws s3 cp - s3://$1/$2/testaccess &> /dev/null || exitStatus=$?
-	  if [ $exitStatus = 0  ]; then
-	    ok "  Check Account can write to bucket"
-	  else
-  	  warn "  Account can not write to bucket"
+  if [[ $BUCKET != $DEFAULTBUCKET ]]; then
+    if [[ $HASAWSCONFIGURED = 1 ]]; then
+      echo touch | aws s3 cp - s3://$1/$2/testaccess &> /dev/null || exitStatus=$?
+	    if [ $exitStatus = 0  ]; then
+	      ok "  Check Account can write to bucket"
+	    else
+    	  warn "  Account can not write to bucket"
+      fi
+    else
+      note "no aws configured"
     fi
-  else
-    note "no aws configured"
-	fi
-  else
-    note "No Bucket configured"
   fi
 }
 
