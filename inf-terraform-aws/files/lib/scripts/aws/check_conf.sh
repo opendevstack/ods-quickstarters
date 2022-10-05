@@ -54,7 +54,7 @@ function check_backend() {
   BUCKET=`grep "bucket =" backend.tf | awk -F '=' '{print $2}'|tr -d '"'|xargs`
   case $BUCKET in
     $DEFAULTBUCKET) nok "TF Backend is not configured. Check your backend.tf file";;
-    $SHAREDBUCKET) ok "Backend configured to \"$BUCKET\"";;
+    $SHAREDBUCKET) ok "TF Backend configured to \"$BUCKET\"";;
     "") nok "There is no backend specified. Update your backend.tf file";;
     *) warn "You don't use the shared Backend. Backend is set to \"$BUCKET\"";;
   esac
@@ -77,12 +77,12 @@ function check_aws_credentials() {
   local longuser
 
   if [ -v  AWS_ACCESS_KEY_ID ] && [ -v  AWS_SECRET_ACCESS_KEY ]; then
-    ok "AWS Account specified using environment variables"
+    ok "AWS account specified using environment variables"
     HASAWSCONFIGURED=1
   else
 	  aws sts get-caller-identity &> /dev/null || exitStatus=$?
 	  if [ $exitStatus = 0  ]; then
-		  ok "AWS Account configured using SSO"
+		  ok "AWS account configured using SSO"
         HASAWSCONFIGURED=1
   	else
 	  	nok "No AWS account information specified for local development"
@@ -115,12 +115,10 @@ function check_backend_access() {
     if [[ $HASAWSCONFIGURED = 1 ]]; then
       echo touch | aws s3 cp - s3://$1/$2/testaccess &> /dev/null || exitStatus=$?
 	    if [ $exitStatus = 0  ]; then
-	      ok "  Check Account can write to bucket"
+	      ok "  Check if current account can write to bucket"
 	    else
     	  warn "  Account can not write to bucket"
       fi
-    else
-      note "no aws configured"
     fi
   fi
 }
