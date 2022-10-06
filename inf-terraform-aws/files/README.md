@@ -60,7 +60,10 @@ No modules.
 
 ## How to test this Stack?
 
-Testing the functionality of this stack requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), and [`terraform`](https://www.terraform.io/). Also note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *AWS* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
+
+Testing the functionality of this stack requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), and [`terraform`](https://www.terraform.io/). Once installed, run `make test` from the command line.
+
+Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *AWS* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
 
 ```
 $ export AWS_ACCESS_KEY_ID=...
@@ -68,8 +71,6 @@ $ export AWS_SECRET_ACCESS_KEY=...
 $ export AWS_DEFAULT_REGION=us-east-1
 $ make test
 ```
-
-Once set, run `make test` from the command line. This will do a test deployment of the included Cloudformation stack
 
 ## How to extend a Stack?
 
