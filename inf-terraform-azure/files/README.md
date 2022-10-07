@@ -16,33 +16,19 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | terraform | >= 1.0.0 |
-| azurerm | 3.0.2 |
-| local | ~> 2.1.0 |
-| random | ~> 3.1.0 |
-| time | 0.7.2 |
+| azurerm | 3.25.0 |
+| local | ~> 2.2.3 |
+| random | ~> 3.4.3 |
+| time | 0.8.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| azurerm | 3.0.2 |
-| local | ~> 2.1.0 |
-| random | ~> 3.1.0 |
-| time | 0.7.2 |
-
-## Modules
-
-No Modules.
-
-## Resources
-
-| Name |
-|------|
-| [azurerm_resource_group_template_deployment](https://registry.terraform.io/providers/hashicorp/azurerm/3.0.2/docs/resources/resource_group_template_deployment) |
-| [azurerm_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/3.0.2/docs/resources/resource_group) |
-| [local_file](https://registry.terraform.io/providers/hashicorp/local/2.1.0/docs/resources/file) |
-| [random_id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) |
-| [time_static](https://registry.terraform.io/providers/hashicorp/time/0.7.2/docs/resources/static) |
+| azurerm | 3.25.0 |
+| local | ~> 2.2.3 |
+| random | ~> 3.4.3 |
+| time | 0.8.0 |
 
 ## Inputs
 
@@ -61,6 +47,7 @@ No Modules.
 | meta\_environment | The type of the environment. |
 | name | The name of the stack. |
 | resource\_group\_id | The ID of the resource group. |
+
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## How to test this Stack?
