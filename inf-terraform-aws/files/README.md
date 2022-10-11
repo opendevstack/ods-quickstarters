@@ -84,7 +84,7 @@ The *.yml files define the Jenkins secrets to read and are used to deploy into t
 The *.json files can override variables from **variables.tf** in case different environments request different inputs (e.g. deploy a smaller version of the stack in DEV).
 
 ## Verify Configuration
-Runing `make check-config` will do a basic verifaction on the stack setup and provides hints what is missing. Once getting a similar output like below you are ready to go with ODS.
+Runing `make check-config` will do a basic verification on the stack setup and provides hints what is missing. Once the output only includes `Passed` or `Warn` results, you are ready to go deploying the Quickstarter within ODS.
 
 ```
 $ make check-config
