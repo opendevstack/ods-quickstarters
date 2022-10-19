@@ -79,9 +79,6 @@ deploy: init-terraform plan
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform apply -auto-approve -input=false -no-color tfplan | tee "$(INSTALL_REPORT_HOME)/tf_apply.log"
 	@TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform show -no-color -json | tee "$(INSTALL_REPORT_HOME)/tf_show.log" 1>/dev/null
 
-# Stay compatible with older versions
-smoke-test: deployment-test
-
 .PHONY: deployment-test
 # Run (post-deployment) tests.
 deployment-test: install-test-deps
@@ -156,18 +153,18 @@ clean:
 .PHONY: check-config
 # Do some basic verification of configuration files and accounts
 check-config:
-	@./lib/scripts/aws/check_conf.sh
+	@sh ./lib/scripts/aws/check_conf.sh
 
 # Checks AWS account
 check_aws_credentials = \
     exitStatus=0; \
 	if [ -v  AWS_ACCESS_KEY_ID ] && [ -v  AWS_SECRET_ACCESS_KEY ]; then \
-		echo "Info: using AWS ENVs ..."; \
+		echo "Info: using AWS environment variables ..."; \
 	else \
 		aws sts get-caller-identity &> /dev/null || exitStatus=$$?; \
 		if [ $$exitStatus = 0  ]; then \
 			echo "Info: using AWS SSO ..."; \
   		else \
-	  		echo "Error: No AWS Keys specified ..."; exit 1; \
+	  		echo "Error: No AWS credentials specified ..."; exit 1; \
 		fi \
 	fi
