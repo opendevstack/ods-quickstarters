@@ -4,7 +4,7 @@
 #         erhard.wais@boehringer-ingelheim.com
 #
 # This script does some basic checks on the AWS QS and reports potential issues.
-# will be triggered via "make check-config"
+# It is triggered via "make check-config"
 
 # TODO:
 # - Return error in case of missconfig
@@ -13,13 +13,10 @@ set -e
 set -o pipefail
 
 #CONST
-SHAREDBUCKET="bitfstate01"
-EDPUSER="edpawsqs"
-EDPPOLICY="BI-EDPAWSQS-Policy"
+
 DEFAULTBUCKET="<your_bucket_name>"
 DEFAULTACCOUNT="<your_aws_account_id>"
 DOTS="........................................................................."
-GITROOT=`git rev-parse --show-toplevel`
 
 BUCKET=
 ACCOUNT=
@@ -51,17 +48,20 @@ function note() {
 }
 
 function check_backend() {
-  BUCKET=`grep "bucket =" backend.tf | awk -F '=' '{print $2}'|tr -d '"'|xargs`
-  case $BUCKET in
-    $DEFAULTBUCKET) nok "TF Backend is not configured. Check your backend.tf file";;
-    $SHAREDBUCKET) ok "TF Backend configured to \"$BUCKET\"";;
-    "") nok "There is no backend specified. Update your backend.tf file";;
-    *) warn "You don't use the shared Backend. Backend is set to \"$BUCKET\"";;
-  esac
+  BUCKET=$(grep "bucket =" backend.tf | awk -F '=' '{print $2}'|tr -d '"'|xargs)
+  if [ -n "$BUCKET" ]; then
+    if [ "$BUCKET" = "$DEFAULTBUCKET" ]; then
+      nok "TF Backend is not configured. Check your backend.tf file"
+    else
+      ok "TF Backend is set to \"$BUCKET\""
+    fi
+  else
+    nok "TF Backend is not specified. Update your backend.tf file"
+  fi
 }
 
 function check_env() {
-  local envaccount=`grep "account" environments/$1.yml | awk -F ':' '{print $2}'|tr -d '"'|xargs`
+  local envaccount=$(grep "account" environments/"$1".yml | awk -F ':' '{print $2}'|tr -d '"'|xargs)
   if [ "$envaccount" = "$DEFAULTACCOUNT" ]; then
     warn "There is no account configured for the \"$1\" environment"
   else
@@ -71,10 +71,8 @@ function check_env() {
 
 function check_aws_credentials() {
   local exitStatus=0
-  local foundKeys=0
   local arn
   local user
-  local longuser
 
   if [ -v  AWS_ACCESS_KEY_ID ] && [ -v  AWS_SECRET_ACCESS_KEY ]; then
     ok "AWS account specified using environment variables"
@@ -91,33 +89,25 @@ function check_aws_credentials() {
 
   # Check IAM user, Group and Policy
   if [[ $HASAWSCONFIGURED = 1 ]]; then
-    arn=`aws sts get-caller-identity --query "Arn" --output text`
+    arn=$(aws sts get-caller-identity --query "Arn" --output text)
     arn=${arn:13}
     ACCOUNT=${arn%:*}
-    longuser=${arn##*:}
     user=${arn##*/}
 
-    ok "  Using \"$ACCOUNT:$user\""
-    if [ "$user" = "$EDPUSER" ]; then
-      # can there be more ?
-      policy=`aws iam list-group-policies --group-name $user --query "PolicyNames" --output text`
-      if [ "$policy" = "$EDPPOLICY" ]; then
-        ok "  User \"$user\" has \"$policy\"assigned"
-      fi
-    fi
+    ok "Using \"$ACCOUNT:$user\""
   fi
 }
 
 function check_backend_access() {
   local exitStatus=0
 
-  if [[ $BUCKET != $DEFAULTBUCKET ]]; then
-    if [[ $HASAWSCONFIGURED = 1 ]]; then
-      echo touch | aws s3 cp - s3://$1/$2/testaccess &> /dev/null || exitStatus=$?
+  if [ -n "$BUCKET" ] && [ "$BUCKET" != "$DEFAULTBUCKET" ]; then
+    if [[ "$HASAWSCONFIGURED" = 1 ]]; then
+      echo touch | aws s3 cp - s3://"$1"/"$2"/testaccess &> /dev/null || exitStatus=$?
 	    if [ $exitStatus = 0  ]; then
-	      ok "  Check if current account can write to bucket"
+	      ok "Configured AWS credentials have write access to TF Bucket"
 	    else
-    	  warn "  Account can not write to bucket"
+        warn "AWS credentials have no write access to TF Bucket"
       fi
     fi
   fi
