@@ -22,7 +22,7 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
-      sh "sbt clean scalafmtSbtCheck scalafmtCheckAll coverage test coverageReport copyDockerFiles"
+      sh "sbt -v clean scalafmtSbtCheck scalafmtCheckAll coverage test coverageReport coverageOff compile:clean copyDockerFiles"
     }
   }
 }

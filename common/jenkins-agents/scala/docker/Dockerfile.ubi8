@@ -1,4 +1,4 @@
-FROM opendevstackorg/ods-jenkins-agent-base-ubi8
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 LABEL maintainer="Jan Frank <jan.frank@boehringer-ingelheim.com>"
 
@@ -19,8 +19,9 @@ ENV JAVA_HOME=/usr/lib/jvm/jre
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
+
 # Install sbt
-ENV SBT_VERSION=1.5.4
+ENV SBT_VERSION=1.8.2
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
     curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
@@ -46,7 +47,6 @@ RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/
     cd /tmp && \
     /tmp/set_sbt_proxy.sh && \
     if [ ! -f "/usr/bin/sbt" ]; then echo "sbt path /usr/bin/sbt could not be found"; exit 1 ; fi
-
 
 RUN chgrp -R 0 $HOME && \
     chmod -R g=u $HOME
