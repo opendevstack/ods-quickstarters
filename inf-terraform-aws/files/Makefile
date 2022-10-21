@@ -159,11 +159,11 @@ check-config:
 check_aws_credentials = \
     exitStatus=0; \
 	if [ -v  AWS_ACCESS_KEY_ID ] && [ -v  AWS_SECRET_ACCESS_KEY ]; then \
-		echo "Info: using AWS environment variables  ..."; \
+		echo "Info: using AWS environment variables AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY ..."; \
 	else \
 		aws sts get-caller-identity &> /dev/null || exitStatus=$$?; \
 		if [ $$exitStatus = 0  ]; then \
-			echo "Info: using AWS SSO ..."; \
+			echo "Info: using alternate credentials (e.g. AWS SSO) ..."; \
   		else \
 			echo "Error: No AWS credentials specified ..."; exit 1; \
 		fi \
