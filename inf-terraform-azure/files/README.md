@@ -15,39 +15,52 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| terraform | >= 1.0.0 |
-| azurerm | 3.25.0 |
-| local | ~> 2.2.3 |
-| random | ~> 3.4.3 |
-| time | 0.8.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | 3.25.0 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.2.3 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.4.3 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | 0.8.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| azurerm | 3.25.0 |
-| local | ~> 2.2.3 |
-| random | ~> 3.4.3 |
-| time | 0.8.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.25.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.2.3 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4.3 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.8.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.25.0/docs/resources/resource_group) | resource |
+| [azurerm_resource_group_template_deployment.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.25.0/docs/resources/resource_group_template_deployment) | resource |
+| [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/0.8.0/docs/resources/static) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| is\_test | Whether whether it is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
-| meta\_environment | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
-| name | The name of the stack. | `string` | `"stack-azure-quickstarter-delete-me"` | no |
+| <a name="input_is_test"></a> [is\_test](#input\_is\_test) | Whether whether it is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
+| <a name="input_meta_environment"></a> [meta\_environment](#input\_meta\_environment) | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name of the stack. | `string` | `"stack-azure-quickstarter"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| arm\_template\_deployment\_id | The ID of the ARM deployment. |
-| inputs2outputs | all inputs passed to outputs |
-| meta\_environment | The type of the environment. |
-| name | The name of the stack. |
-| resource\_group\_id | The ID of the resource group. |
-
+| <a name="output_arm_template_deployment_id"></a> [arm\_template\_deployment\_id](#output\_arm\_template\_deployment\_id) | The ID of the ARM deployment. |
+| <a name="output_inputs2outputs"></a> [inputs2outputs](#output\_inputs2outputs) | all inputs passed to outputs |
+| <a name="output_meta_environment"></a> [meta\_environment](#output\_meta\_environment) | The type of the environment. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the stack. |
+| <a name="output_resource_group_id"></a> [resource\_group\_id](#output\_resource\_group\_id) | The ID of the resource group. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## How to test this Stack?
