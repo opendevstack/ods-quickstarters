@@ -1738,6 +1738,7 @@ GEM
     wisper (2.0.1)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
