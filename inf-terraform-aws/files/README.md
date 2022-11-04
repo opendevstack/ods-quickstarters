@@ -16,16 +16,16 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 3.74.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | 3.1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.31.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | 3.4.3 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.31.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
 | <a name="provider_time"></a> [time](#provider\_time) | n/a |
 
 ## Modules
@@ -36,9 +36,9 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudformation_stack.cft-s3](https://registry.terraform.io/providers/hashicorp/aws/3.74.0/docs/resources/cloudformation_stack) | resource |
+| [aws_cloudformation_stack.cft-s3](https://registry.terraform.io/providers/hashicorp/aws/4.31.0/docs/resources/cloudformation_stack) | resource |
 | [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.1.0/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.4.3/docs/resources/id) | resource |
 | [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 
 ## Inputs
@@ -63,7 +63,6 @@ No modules.
 
 Testing the functionality of this stack requires the following dependencies: `make`, `tee`, `ruby`, [`bundler`](https://bundler.io/), and [`terraform`](https://www.terraform.io/). Once installed, run `make test` from the command line.
 
-
 Note that, when running tests, stacks will interact with some cloud provider, such as *AWS*, *Azure* or *VMware*. It is up to you to provide sufficient configuration to enable these interactions, which differs between vendors. Here is an example for *AWS* that uses environment variables (via [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)):
 
 ```
@@ -84,6 +83,19 @@ The stack supports multiple environments (Testing/DEV/QA/PROD) within OpenDevSta
 The *.yml files define the Jenkins secrets to read and are used to deploy into the right environments.
 The *.json files can override variables from **variables.tf** in case different environments request different inputs (e.g. deploy a smaller version of the stack in DEV).
 
+## Verify Configuration
+Runing `make check-config` will do a basic verification on the stack setup and provides hints what is missing. Once the output only includes `Passed` or `Warn` results, you are ready to go deploying the Quickstarter within ODS.
+
+```
+$ make check-config
+Account "XXXXXXXXXXXX" is configured for the "dev" environment...........Passed
+There is no account configured for the "test" environment................ Warn
+There is no account configured for the "prod" environment................ Warn
+AWS account configured using SSO.........................................Passed
+  Using "YYYYYYYYYYYYYY:ZZZZZZZZ@MyOrganization.com".....................Passed
+Backend configured to "MyStateFileLocation"..............................Passed
+  Check account can write to bucket......................................Passed
+```
 ## Problems? Questions? Suggestions?
 
 In case of problems, questions or suggestions, feel free to file an issue with the respective project's repository. Thanks!

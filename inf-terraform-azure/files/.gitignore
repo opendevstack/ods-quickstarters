@@ -4,6 +4,7 @@
 .terraform.lock.hcl
 .terraform-data.json
 .vscode
+.devcontainer/devcontainer.json
 *.auto.tfvars*
 inspec.lock
 outputs.json
