@@ -41,6 +41,7 @@
 - inf-terraform-aws: update AWS QS and agent libraries, Terraform version  ([#849](https://github.com/opendevstack/ods-quickstarters/pull/849))
 - inf-terraform-aws: add feature clean & check-config  ([#784](https://github.com/opendevstack/ods-quickstarters/issues/784))
 - inf-terraform-azure: update Azure QS and agent libraries, Terraform version  ([#856](https://github.com/opendevstack/ods-quickstarters/pull/856))
+- be-python-flask, ds-jupyter-lab: upgrade to python3.9 ([#865](https://github.com/opendevstack/ods-quickstarters/issues/865))
 
 ### Fixed
 
