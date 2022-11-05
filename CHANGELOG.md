@@ -38,6 +38,7 @@
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 - e2e-cypress: use Node.js 16 for deployment ([#853](https://github.com/opendevstack/ods-quickstarters/issues/853))
+- be-python-flask, ds-jupyter-lab: upgrade to python3.9 ([#865](https://github.com/opendevstack/ods-quickstarters/issues/865))
 
 ### Fixed
 

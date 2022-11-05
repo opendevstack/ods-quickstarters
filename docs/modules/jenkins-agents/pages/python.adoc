@@ -7,7 +7,7 @@ The image is built in the global `ods` project and is named `jenkins-agent-pytho
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-python`
 
 == Features
-1. https://docs.python.org/3.8[Python 3.8]
+1. https://docs.python.org/3.9[Python 3.9]
 2. https://pip.pypa.io/en/stable[pip]
 3. https://virtualenv.pypa.io/en/stable/[virtualenv]
 

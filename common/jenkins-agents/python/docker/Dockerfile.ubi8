@@ -10,10 +10,10 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=off \
     PATH=$JAVA_HOME/bin:$PATH
 
-RUN yum module install -y python38:3.8/build && \
-    yum install -y gcc && \
+RUN yum module install -y python39:3.9/build && \
+    yum install -y autoconf automake gcc-c++ openssl-devel libffi-devel && \
     yum -y clean all && \
-    ln -s /usr/bin/pip3.8 /usr/bin/pip
+    ln -s /usr/bin/pip3.9 /usr/bin/pip
 
 RUN if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
     then pip config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
@@ -22,7 +22,7 @@ RUN if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
     fi; \
     pip config set global.cert /etc/ssl/certs/ca-bundle.crt && \
     pip install --upgrade pip --user && \
-    pip install virtualenv==20.4.6 setuptools==56.1.0 Cython==0.29.23 pypandoc==1.5
+    pip install virtualenv==20.16.6 setuptools==65.5.1 Cython==0.29.32 pypandoc==1.10
 
 # Enables default user to access $HOME folder
 RUN chown -R 1001:0 $HOME && \
