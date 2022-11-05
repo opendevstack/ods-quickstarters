@@ -70,6 +70,7 @@
 - Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
 - Fix nodejs12 build fails with redhat jenkins agent ([#843](https://github.com/opendevstack/ods-quickstarters/issues/843))
 - Fix Build Terraform UBI agent fails ([#847](https://github.com/opendevstack/ods-quickstarters/issues/847))
+- Fix oauth-proxy sidecar container image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 
 ## [4.0] - 2021-11-05
 
