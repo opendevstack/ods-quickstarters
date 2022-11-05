@@ -25,7 +25,7 @@ Provision a shared Jupyter Lab within OpenShift for rapid prototyping of data sc
 
 == Usage - how do you start after you provisioned this quickstarter
 
-The quickstarter sets up two pods in OpenShift. The `ds-jupyter-lab` instance is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
+The quickstarter sets up two pods in OpenShift. The `ds-jupyter-lab` instance is routed through the https://catalog.redhat.com/software/containers/openshift4/ose-oauth-proxy/5cdb2133bed8bd5717d5ae64[OpenShift OAuth proxy] instance.
 
 The directory `/opt/app-root/src/work` is created where code can be organized using installed git. +
 Please consider mounting a persistent volume claim for this path. +

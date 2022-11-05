@@ -23,7 +23,7 @@ Provisions a R Shiny application within OpenShift using OpenShift OAuth.
 
 == Usage - how do you start after you provisioned this quickstarter
 
-The quickstarter sets up two pods in OpenShift. The `ds-rshiny` application is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
+The quickstarter sets up two pods in OpenShift. The `ds-rshiny` application is routed through the https://catalog.redhat.com/software/containers/openshift4/ose-oauth-proxy/5cdb2133bed8bd5717d5ae64[OpenShift OAuth proxy] instance.
 
 === Metadata
 
