@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Remove support for the url repository field in metadata.yml ([#868](https://github.com/opendevstack/ods-quickstarters/pull/868))
 
 ### Added
 
