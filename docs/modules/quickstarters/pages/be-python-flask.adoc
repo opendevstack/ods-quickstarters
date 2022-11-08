@@ -115,6 +115,19 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 
 This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/python[Python] builder agent Jenkins builder agent.
 
+**NOTE**: The ODS Jenkins Pytnon Agent supports Python versions 3.9, 3.8 and 3.6. See next chapter for further information.
+
+
+== Multiple Python versions support
+
+Build and run environment defaults to python3.9, but older python3.8 and python3.6 versions are also supported.
+
+If you need older versions support in your project, change:
+
+* in the provided `Jenkinsfile`, the mentions of `python3.9` binary to, for example, `python3.8` binary,
+
+* and switch the `FROM` statement in your `Dockerfile` to the python version required, for example, `registry.access.redhat.com/ubi8/python-38`.
+
 == Known limitations
 
 Let us know if you find any, thanks!
