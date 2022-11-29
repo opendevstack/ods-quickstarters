@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Modified
+
+- Increase default resources for DocGen ([#873](https://github.com/opendevstack/ods-quickstarters/pull/873))
+
 ## [4.1] - 2022-11-17
 
 ### Added
