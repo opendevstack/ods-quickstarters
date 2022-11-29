@@ -18,13 +18,13 @@ parameters:
     value: 100m
   - name: MEMORY_LIMIT
     description: Maximum amount of memory available for the container.
-    value: 1024Mi
+    value: 2048Mi
   - name: MEMORY_REQUEST
     description: Minimum amount of memory requested for the container.
-    value: 512Mi
+    value: 1024Mi
   - name: SERVICE_JVM_MEM_LIMIT
     description: Maximum amount of memory available for the DocGen Service, render process memory needs to be handled by MEMORY_LIMIT parameter
-    value: 512m
+    value: 1024m
   - name: SERVICE_JVM_ARGS
     description: JVM Tunning parameters for DocGen Service
     value: "-XX:+UseCompressedOops -XX:+UseG1GC -XX:MaxGCPauseMillis=1000"    
