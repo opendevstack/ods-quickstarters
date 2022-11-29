@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- Remove support for the url repository field in metadata.yml ([#868](https://github.com/opendevstack/ods-quickstarters/pull/868))
+
+## [4.1] - 2022-11-17
 
 ### Added
 
@@ -43,6 +44,7 @@
 - inf-terraform-aws: add feature clean & check-config  ([#784](https://github.com/opendevstack/ods-quickstarters/issues/784))
 - inf-terraform-azure: update Azure QS and agent libraries, Terraform version  ([#856](https://github.com/opendevstack/ods-quickstarters/pull/856))
 - be-python-flask, ds-jupyter-lab: upgrade to python3.9, and keep support of python3.8([#865](https://github.com/opendevstack/ods-quickstarters/issues/865))
+- Remove support for the url repository field in metadata.yml ([#868](https://github.com/opendevstack/ods-quickstarters/pull/868))
 
 ### Fixed
 
@@ -69,9 +71,9 @@
 - Nodejs12 agent docker image sometimes fails to reach pkgs it needs to download for installation. (Fixes [#819](https://github.com/opendevstack/ods-quickstarters/issues/819))
 - Fixes docgen pod assigned memory issue ([#837](https://github.com/opendevstack/ods-quickstarters/pull/837))
 - Update nodejs version in TypeScript Quickstarter ([#834](https://github.com/opendevstack/ods-quickstarters/issues/834))
-- Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
 - Fix nodejs12 build fails with redhat jenkins agent ([#843](https://github.com/opendevstack/ods-quickstarters/issues/843))
 - Fix Build Terraform UBI agent fails ([#847](https://github.com/opendevstack/ods-quickstarters/issues/847))
+- Fix failing acceptance test in cypress quickstarter ([#840](https://github.com/opendevstack/ods-quickstarters/issues/840))
 
 ## [4.0] - 2021-11-05
 
