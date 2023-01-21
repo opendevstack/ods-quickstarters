@@ -58,7 +58,7 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7)
+    activesupport (6.1.7.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -436,7 +436,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.16.3)
+    minitest (5.17.0)
     mixlib-config (3.0.27)
       tomlrb
     mixlib-log (3.0.9)
@@ -692,7 +692,7 @@ GEM
       rubyzip (~> 2.0)
       winrm (~> 2.0)
     wisper (2.0.1)
-    zeitwerk (2.6.1)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
