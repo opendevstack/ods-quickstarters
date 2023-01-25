@@ -29,7 +29,7 @@ parameters:
   - name: CPU_LIMIT
     displayName: CPU Limit
     description: Maximum amount of CPU available for the container.
-    value: 250m
+    value: 100m
     required: true
   - name: CPU_REQUEST
     displayName: CPU Request
@@ -128,7 +128,7 @@ objects:
         spec:
           containers:
             - name: oauth-proxy
-              image: openshift/oauth-proxy:latest
+              image: registry.redhat.io/openshift4/ose-oauth-proxy:latest
               imagePullPolicy: IfNotPresent
               resources:
                 limits:
@@ -149,7 +149,7 @@ objects:
                 - --tls-cert=/etc/tls/private/tls.crt
                 - --tls-key=/etc/tls/private/tls.key
                 - --cookie-secret=${SESSION_SECRET}
-                - --request-logging=true
+
                 - >-
                   --openshift-sar={"namespace":"${PROJECT}-${ENV}","resource":"services","name":"${COMPONENT}-auth-proxy","verb":"get"}
               terminationMessagePath: /dev/termination-log

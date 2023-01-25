@@ -1,0 +1,5 @@
+streamlit==1.17.*
+plotly==5.12.*
+pandas==1.5.*
+pytest==7.2.*
+pytest-cov==4.0.*

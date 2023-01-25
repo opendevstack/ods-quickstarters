@@ -1,0 +1,26 @@
+def odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+def odsGitRef = env.ODS_GIT_REF ?: 'master'
+def odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+
+library("ods-jenkins-shared-library@${odsGitRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-base:${odsImageTag}",
+) { context ->
+
+  odsQuickstarterStageCopyFiles(context)
+
+  stage('Setup OpenShift resources') {
+    sh """sh common/scripts/create-ds-component.sh \
+      --project ${context.projectId} \
+      --component ${context.componentId} \
+      --nexus-url ${context.nexusUrl} \
+      --nexus-username ${context.nexusUsername} \
+      --nexus-password ${context.nexusPassword} \
+      --non-interactive"""
+  }
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+  odsQuickstarterStageRenderSonarProperties(context)
+
+}

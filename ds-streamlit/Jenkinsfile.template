@@ -1,0 +1,73 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-python:@ods_image_tag@',
+  branchToEnvironmentMapping: [
+    '*': 'dev',
+  ]
+) { context ->
+  createTestVirtualenv(context)
+  stageLinter(context)
+  stageUnitTest(context)
+  odsComponentStageScanWithSonar(context)
+  odsComponentStageBuildOpenShiftImage(context, [
+    buildArgs: [
+      NEXUS_URL_WITH_AUTH: context.nexusHostWithBasicAuth,
+      NEXUS_HOST: context.nexusHostWithoutScheme
+    ],
+    resourceName: "${context.componentId}",
+    dockerDir: "."
+  ])
+  odsComponentStageRolloutOpenShiftDeployment(context)
+}
+
+// ${context.buildUrl} get and set build url in mlflow
+def createTestVirtualenv(def context) {
+  stage('Create virtualenv for tests') {
+    sh(
+      script: """
+        virtualenv testvenv
+        . ./testvenv/bin/activate
+        pip install --upgrade pip
+        pip install pycodestyle
+        pip install -r requirements.txt
+      """
+    )
+  }
+}
+
+def stageLinter(def context) {
+  stage('Linter') {
+    // PEP8
+    sh(
+      script: """
+        virtualenv testvenv
+        . ./testvenv/bin/activate
+        pycodestyle --show-source --show-pep8 --max-line-length 100 ${WORKSPACE}/src/*
+        pycodestyle --statistics -qq --max-line-length 100 ${WORKSPACE}/src/*
+      """,
+      label: "Running linting"
+    )
+  }
+}
+
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+  sh(
+    script: """
+      virtualenv testvenv
+      . ./testvenv/bin/activate
+      cd ${WORKSPACE}
+      export PYTHONPATH=${WORKSPACE}/src:\$PYTHONPATH
+      python -m pytest tests/ --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+      mkdir -p build/test-results/coverage/
+      mv coverage.xml build/test-results/coverage/
+      mkdir -p build/test-results/test/
+      mv tests.xml build/test-results/test/
+    """,
+    label: "Running unit tests",
+  )
+  }
+}

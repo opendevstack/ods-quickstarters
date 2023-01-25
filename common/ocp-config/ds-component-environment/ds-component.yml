@@ -19,17 +19,17 @@ parameters:
   - name: MEMORY_LIMIT
     displayName: Memory Limit
     description: Maximum amount of memory available for the container.
-    value: 1Gi
+    value: 512Mi
     required: true
   - name: MEMORY_REQUEST
     displayName: Memory Request
     description: Minimum amount of memory requested for the container.
-    value: 512Mi
+    value: 256Mi
     required: true
   - name: CPU_LIMIT
     displayName: CPU Limit
     description: Maximum amount of CPU available for the container.
-    value: 500m
+    value: 250m
     required: true
   - name: CPU_REQUEST
     displayName: CPU Request
