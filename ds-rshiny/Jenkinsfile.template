@@ -11,9 +11,10 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentFindOpenShiftImageOrElse(context) {
-    odsComponentStageBuildOpenShiftImage(context)
-  }
+  odsComponentStageBuildOpenShiftImage(
+    context, [resourceName: "${context.componentId}-rshiny", dockerDir: "docker_rshiny"])
+  odsComponentStageBuildOpenShiftImage(
+    context, [resourceName: "${context.componentId}-oauth", dockerDir: "docker_oauth"])
 
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
 }
