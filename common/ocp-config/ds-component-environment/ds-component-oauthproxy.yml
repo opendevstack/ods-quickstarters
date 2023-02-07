@@ -19,6 +19,8 @@ parameters:
   - name: TAGVERSION
     displayName: tag version
     description: The version to be used.
+    value: latest
+    required: true
   - name: MEMORY_LIMIT
     displayName: Memory Limit
     description: Maximum amount of memory available for the container.
