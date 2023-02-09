@@ -33,7 +33,7 @@ parameters:
     required: true
   - name: CPU_LIMIT
     displayName: CPU Limit
-    description: Maximum amount of CPU available for the container.
+    description: Maximum Vamount of CPU available for the container.
     value: 250m
     required: true
   - name: CPU_REQUEST

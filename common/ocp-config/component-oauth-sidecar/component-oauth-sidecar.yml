@@ -222,6 +222,11 @@ objects:
           schedulerName: default-scheduler
           securityContext: {}
           terminationGracePeriodSeconds: 30
+          volumes:
+            - name: ${COMPONENT}-oauth-tls
+              secret:
+                defaultMode: 420
+                secretName: ${COMPONENT}-oauth-tls
       test: false
       triggers:
         - type: ConfigChange
