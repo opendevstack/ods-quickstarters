@@ -1,0 +1,246 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: component-oauth-sidecar
+  app: "${PROJECT}-${COMPONENT}"
+parameters:
+  - description: The name of the application project.
+    displayName: Project
+    name: PROJECT
+    required: true
+  - description: The name of the component
+    displayName: Component
+    name: COMPONENT
+    required: true
+  - description: The environment stage.
+    displayName: Environment
+    name: ENV
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 512Mi
+    required: true
+  - name: MEMORY_REQUEST
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 256Mi
+    required: true
+  - name: CPU_LIMIT
+    displayName: CPU Limit
+    description: Maximum amount of CPU available for the container.
+    value: 250m
+    required: true
+  - name: CPU_REQUEST
+    displayName: CPU Request
+    description: Minimum amount of CPU requested for the container.
+    value: 50m
+    required: true
+  - name: MEMORY_LIMIT_OAUTH
+    displayName: Memory Limit
+    description: Maximum amount of memory available for the container.
+    value: 256Mi
+    required: true
+  - name: MEMORY_REQUEST_OAUTH
+    displayName: Memory Request
+    description: Minimum amount of memory requested for the container.
+    value: 128Mi
+    required: true
+  - name: CPU_LIMIT_OAUTH
+    displayName: CPU Limit
+    description: Maximum amount of CPU available for the container.
+    value: 250m
+    required: true
+  - name: CPU_REQUEST_OAUTH
+    displayName: CPU Request
+    description: Minimum amount of CPU requested for the container.
+    value: 50m
+    required: true
+  - name: TAGVERSION
+    displayName: tag version
+    description: The version to be used.
+    value: latest
+    required: true
+  - name: SESSION_SECRET
+    description: Session secret.
+    displayName: Session secret
+    from: "[a-zA-Z0-9]{16}"
+    generate: expression
+    required: true    
+  - name: NEXUS_URL
+    required: true
+  - name: NEXUS_USERNAME
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${COMPONENT}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
+      sessionAffinity: None
+      type: ClusterIP
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${COMPONENT}-oauth
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: ${COMPONENT}-oauth-tls
+    spec:
+      ports:
+        - name: ${COMPONENT}-oauth
+          port: 443
+          protocol: TCP
+          targetPort: 8443
+      selector:
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: ${COMPONENT}
+      sessionAffinity: None
+      type: ClusterIP
+
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${COMPONENT}
+    spec:
+      tls:
+        termination: reencrypt
+      to:
+        kind: Service
+        name: ${COMPONENT}-oauth
+        weight: 100
+      wildcardPolicy: None
+
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: ${COMPONENT}-oauth
+      annotations:
+        serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${COMPONENT}"}}'
+
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      creationTimestamp: null
+      generation: 1
+      name: ${COMPONENT}
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        app: "${PROJECT}-${COMPONENT}"
+        deploymentconfig: "${COMPONENT}"
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: "${PROJECT}-${COMPONENT}"
+            deploymentconfig: "${COMPONENT}"
+            env: "${ENV}"
+        spec:
+          containers:
+            - name: ${COMPONENT}
+              env:
+                - name: NEXUS_URL
+                  value: "${NEXUS_URL}"
+                - name: NEXUS_USERNAME
+                  value: "${NEXUS_USERNAME}"
+                - name: NEXUS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: nexus
+              imagePullPolicy: IfNotPresent
+              image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
+                requests:
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            - name: ${COMPONENT}-oauth
+              image: "${PROJECT}-${ENV}/${COMPONENT}-oauth:${TAGVERSION}"
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: "${CPU_LIMIT_OAUTH}"
+                  memory: "${MEMORY_LIMIT_OAUTH}"
+                requests:
+                  cpu: "${CPU_REQUEST_OAUTH}"
+                  memory: "${MEMORY_REQUEST_OAUTH}"
+              ports:
+                - containerPort: 8443
+                  protocol: TCP
+                  name: public
+              args:
+                - --https-address=:8443
+                - --provider=openshift
+                - --openshift-service-account=${COMPONENT}-oauth
+                - --upstream=http://${COMPONENT}.${PROJECT}-${ENV}.svc.cluster.local:8080
+                - --tls-cert=/etc/tls/private/tls.crt
+                - --tls-key=/etc/tls/private/tls.key
+                - --cookie-secret=${SESSION_SECRET}
+                - >-
+                  --openshift-sar={"namespace":"${PROJECT}-${ENV}","resource":"services","name":"${COMPONENT}-oauth","verb":"get"}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /etc/tls/private
+                  name: ${COMPONENT}-oauth-tls
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${COMPONENT}
+            from:
+              kind: ImageStreamTag
+              name: ${COMPONENT}:latest
+              namespace: ${PROJECT}-${ENV}
+          type: ImageChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${COMPONENT}-oauth
+            from:
+              kind: ImageStreamTag
+              name: ${COMPONENT}-oauth:latest
+              namespace: ${PROJECT}-${ENV}
+          type: ImageChange
+    status: {}
