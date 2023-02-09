@@ -26,7 +26,6 @@ odsQuickstarterPipeline(
       --component ${context.componentId} \
       --nexus-url ${context.nexusUrl} \
       --nexus-username ${context.nexusUsername} \
-      --nexus-password ${context.nexusPassword} \
       --non-interactive"""
   }
 
