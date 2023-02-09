@@ -3,7 +3,7 @@ on: [ push, pull_request ]
 jobs:
   jenkins-agent-golang-centos7:
     name: Jenkins agent Go (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -18,7 +18,7 @@ jobs:
 
   jenkins-agent-golang-ubi8:
     name: Jenkins agent Go (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -33,7 +33,7 @@ jobs:
 
   jenkins-agent-maven-ubi8:
     name: Jenkins agent Maven (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -50,7 +50,7 @@ jobs:
 
   jenkins-agent-maven-centos7:
     name: Jenkins agent Maven (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -67,7 +67,7 @@ jobs:
 
   jenkins-agent-nodejs12-centos7:
     name: Jenkins agent NodeJS 12 (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -83,7 +83,7 @@ jobs:
 
   jenkins-agent-nodejs12-ubi8:
     name: Jenkins agent NodeJS 12 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -99,7 +99,7 @@ jobs:
 
   jenkins-agent-nodejs16-centos7:
     name: Jenkins agent NodeJS 16 (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -115,7 +115,7 @@ jobs:
 
   jenkins-agent-nodejs16-ubi8:
     name: Jenkins agent NodeJS 16 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -131,7 +131,7 @@ jobs:
 
   jenkins-agent-python-centos7:
     name: Jenkins agent Python (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -144,7 +144,7 @@ jobs:
 
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -158,7 +158,7 @@ jobs:
 
   jenkins-agent-terraform-centos7:
     name: Jenkins agent Terraform (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -171,7 +171,7 @@ jobs:
 
   jenkins-agent-terraform-ubi8:
     name: Jenkins agent Terraform (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -184,7 +184,7 @@ jobs:
 
   jenkins-agent-scala-centos7:
     name: Jenkins agent Scala (CENTOS7)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -201,7 +201,7 @@ jobs:
 
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
