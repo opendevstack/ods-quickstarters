@@ -12,7 +12,7 @@ odsComponentPipeline(
 ) { context ->
 
   odsComponentStageBuildOpenShiftImage(
-    context, [resourceName: "${context.componentId}-rshiny", dockerDir: "docker_rshiny"])
+    context, [resourceName: "${context.componentId}", dockerDir: "docker_rshiny"])
   odsComponentStageBuildOpenShiftImage(
     context, [resourceName: "${context.componentId}-oauth", dockerDir: "docker_oauth"])
 
