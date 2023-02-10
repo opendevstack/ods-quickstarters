@@ -4,7 +4,7 @@ jobs:
 
   jenkins-agent-golang-ubi8:
     name: Jenkins agent Go (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -19,7 +19,7 @@ jobs:
 
   jenkins-agent-maven-ubi8:
     name: Jenkins agent Maven (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -36,7 +36,7 @@ jobs:
 
   jenkins-agent-nodejs12-ubi8:
     name: Jenkins agent NodeJS 12 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -52,7 +52,7 @@ jobs:
 
   jenkins-agent-nodejs16-ubi8:
     name: Jenkins agent NodeJS 16 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -68,7 +68,7 @@ jobs:
 
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -81,7 +81,7 @@ jobs:
 
   jenkins-agent-terraform-ubi8:
     name: Jenkins agent Terraform (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -94,7 +94,7 @@ jobs:
 
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
