@@ -66,28 +66,12 @@ parameters:
     displayName: Session secret
     from: "[a-zA-Z0-9]{16}"
     generate: expression
-    required: true    
+    required: true
   - name: NEXUS_URL
     required: true
   - name: NEXUS_USERNAME
     required: true
 objects:
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      name: ${COMPONENT}
-    spec:
-      ports:
-        - name: 8080-tcp
-          port: 8080
-          protocol: TCP
-          targetPort: 8080
-      selector:
-        app: "${PROJECT}-${COMPONENT}"
-        deploymentconfig: "${COMPONENT}"
-      sessionAffinity: None
-      type: ClusterIP
-
   - apiVersion: v1
     kind: Service
     metadata:
@@ -162,6 +146,7 @@ objects:
             deploymentconfig: "${COMPONENT}"
             env: "${ENV}"
         spec:
+          serviceAccount: ${COMPONENT}-oauth
           containers:
             - name: ${COMPONENT}
               env:
@@ -206,7 +191,7 @@ objects:
                 - --https-address=:8443
                 - --provider=openshift
                 - --openshift-service-account=${COMPONENT}-oauth
-                - --upstream=http://${COMPONENT}.${PROJECT}-${ENV}.svc.cluster.local:8080
+                - --upstream=http://localhost:8080
                 - --tls-cert=/etc/tls/private/tls.crt
                 - --tls-key=/etc/tls/private/tls.key
                 - --cookie-secret=${SESSION_SECRET}
