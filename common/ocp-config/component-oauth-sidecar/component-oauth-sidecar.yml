@@ -67,10 +67,6 @@ parameters:
     from: "[a-zA-Z0-9]{16}"
     generate: expression
     required: true
-  - name: NEXUS_URL
-    required: true
-  - name: NEXUS_USERNAME
-    required: true
 objects:
   - apiVersion: v1
     kind: Service
@@ -149,16 +145,6 @@ objects:
           serviceAccount: ${COMPONENT}-oauth
           containers:
             - name: ${COMPONENT}
-              env:
-                - name: NEXUS_URL
-                  value: "${NEXUS_URL}"
-                - name: NEXUS_USERNAME
-                  value: "${NEXUS_USERNAME}"
-                - name: NEXUS_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: password
-                      name: nexus
               imagePullPolicy: IfNotPresent
               image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
               ports:

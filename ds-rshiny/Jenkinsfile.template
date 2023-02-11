@@ -4,7 +4,7 @@
 
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-base:@agent_image_tag@',
-  openshiftBuildTimeout: 30,  
+  openshiftBuildTimeout: 30,
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
