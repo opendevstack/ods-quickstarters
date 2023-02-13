@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
+
 ## [4.1] - 2022-11-17
 
 ### Added
