@@ -9,7 +9,7 @@ odsComponentPipeline(
   // 'release/': 'test'
   ]
 ) { context ->
-  odsComponentStageImportOpenShiftImageOrElse(context) {
+  odsComponentFindOpenShiftImageOrElse(context) {
     stageBuild(context)
     stageUnitTest(context)
     stageLint(context)
@@ -22,7 +22,7 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh 'npm i -g @ionic/cli@6.13.1'
+      sh 'npm i -g @ionic/cli@6.19.0'
       sh 'npm install'
       if ('master'.equals(context.gitBranch)) {
         sh 'ionic build --prod'

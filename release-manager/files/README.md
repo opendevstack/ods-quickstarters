@@ -24,7 +24,6 @@ name: Project Phoenix
 
 repositories:
   - id: A
-    url: https://github.com/my-org/my-repo-A.git
     branch: master
   - id: B
     name: my-repo-B
@@ -47,7 +46,6 @@ name: Project Phoenix
 
 repositories:
   - id: A
-    url: https://github.com/my-org/my-repo-A.git
     branch: master
     type: ods
   - id: B

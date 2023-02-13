@@ -20,6 +20,7 @@ repos:
   - id: mixed-line-ending
     args: [--fix=lf]
   - id: pretty-format-json
+    exclude: ^.devcontainer/.*$
     args: [--autofix, --indent=2, --no-ensure-ascii]
   - id: trailing-whitespace
 

@@ -39,9 +39,7 @@ prep-test:
 .PHONY: test
 # Run (pre-deployment) tests.
 test: install-test-deps
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	@$(call check_aws_credentials)
 
 	# output aws account and user id for testing
 	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_testing_account.log
@@ -66,18 +64,14 @@ test: install-test-deps
 .PHONY: plan
 # Plan infrastructure deployment.
 plan: init-terraform
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	@$(call check_aws_credentials)
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform plan -input=false -out=tfplan
 
 .PHONY: deploy
 # Deploy infrastructure.
 deploy: init-terraform plan
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	@$(call check_aws_credentials)
 
 	# output aws account and user id for testing
 	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_deploy_account.log
@@ -88,9 +82,7 @@ deploy: init-terraform plan
 .PHONY: deployment-test
 # Run (post-deployment) tests.
 deployment-test: install-test-deps
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	@$(call check_aws_credentials)
 
 	sh ./lib/scripts/createstackoutputs2yml.sh
 	inspec_profiles=$$(ls -1 ./test/integration); \
@@ -110,9 +102,7 @@ describe: init-terraform
 .PHONY: destroy
 # Destroy infrastructure.
 destroy: init-terraform
-	$(call check_defined,AWS_ACCESS_KEY_ID)
-	$(call check_defined,AWS_SECRET_ACCESS_KEY)
-	$(call check_defined,AWS_DEFAULT_REGION)
+	@$(call check_aws_credentials)
 
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform destroy -auto-approve
 
@@ -152,11 +142,29 @@ cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
 	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
 
-# Checks if a variable is defined and produces a fatal error if not.
-check_defined = \
-	$(strip $(foreach 1,$1, \
-		$(call __check_defined,$1,$(strip $(value 2)))))
-__check_defined = \
-	$(if $(value $1),, \
-		$(error Undefined $1$(if $2, ($2))$(if $(value @), \
-			required by target `$@')))
+.PHONY: clean
+# Reset Working directory (take care if something has deployed upfront)
+clean:
+	@rm -rf .kitchen/
+	@rm -rf test/fixtures/default/terraform.tfstate.d/
+	@rm -rf test/fixtures/default/.terraform/
+	@rm -f test/fixtures/default/.terraform.lock.hcl
+
+.PHONY: check-config
+# Do some basic verification of configuration files and accounts
+check-config:
+	@sh ./lib/scripts/aws/check_conf.sh
+
+# Checks AWS account
+check_aws_credentials = \
+    exitStatus=0; \
+	if [ -v  AWS_ACCESS_KEY_ID ] && [ -v  AWS_SECRET_ACCESS_KEY ]; then \
+		echo "Info: using AWS environment variables AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY ..."; \
+	else \
+		aws sts get-caller-identity &> /dev/null || exitStatus=$$?; \
+		if [ $$exitStatus = 0  ]; then \
+			echo "Info: using alternate credentials (e.g. AWS SSO) ..."; \
+  		else \
+			echo "Error: No AWS credentials specified ..."; exit 1; \
+		fi \
+	fi

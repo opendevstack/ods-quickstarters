@@ -35,15 +35,6 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   -c=*|--component=*) COMPONENT="${1#*=}";;
   -c|--component)     COMPONENT="$2"; shift;;
 
-  --nexus-url=*) NEXUS_URL="${1#*=}";;
-  --nexus-url)   NEXUS_URL="$2"; shift;;
-
-  --nexus-username=*) NEXUS_USERNAME="${1#*=}";;
-  --nexus-username)   NEXUS_USERNAME="$2"; shift;;
-
-  --nexus-password=*) NEXUS_PASSWORD="${1#*=}";;
-  --nexus-password)   NEXUS_PASSWORD="$2"; shift;;
-
    *) echo "Unknown parameter passed: $1"; usage; exit 1;;
 esac; shift; done
 
@@ -55,18 +46,6 @@ if [ -z ${COMPONENT+x} ]; then
     echo "COMPONENT is unset, but required";
     exit 1;
 else echo "COMPONENT=${COMPONENT}"; fi
-if [ -z ${NEXUS_URL+x} ]; then
-    echo "NEXUS_URL is unset, but required";
-    exit 1;
-else echo "NEXUS_URL=${NEXUS_URL}"; fi
-if [ -z ${NEXUS_USERNAME+x} ]; then
-    echo "NEXUS_USERNAME is unset, but required";
-    exit 1;
-else echo "NEXUS_USERNAME=${NEXUS_USERNAME}"; fi
-if [ -z ${NEXUS_PASSWORD+x} ]; then
-    echo "NEXUS_PASSWORD is unset, but required";
-    exit 1;
-fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -83,24 +62,13 @@ for devenv in dev test ; do
         "--namespace=${PROJECT}-${devenv}" \
         "--param=PROJECT=${PROJECT}" \
         "--param=COMPONENT=${COMPONENT}" \
-        "--param=ENV=${devenv}" \
-        "--param=NEXUS_URL=${NEXUS_URL}" \
-        "--param=NEXUS_USERNAME=${NEXUS_USERNAME}" \
-        "--param=NEXUS_PASSWORD=$(echo ${NEXUS_PASSWORD} | base64)"
+        "--param=ENV=${devenv}"
         )
 
     echo "Creating component ${COMPONENT} in environment ${PROJECT}-${devenv}:"
 
-    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
+    tailor_apply_in_dir "${OCP_CONFIG}/component-oauth-sidecar" \
         "${TAILOR_BASE_ARGS[@]}" \
-        secret/nexus
-
-    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
-        "${TAILOR_BASE_ARGS[@]}" \
-        --selector app="${PROJECT}-${COMPONENT}",template=ds-component
-
-    tailor_apply_in_dir "${OCP_CONFIG}/ds-component-environment" \
-        "${TAILOR_BASE_ARGS[@]}" \
-        --selector app="${PROJECT}-${COMPONENT}",template=ds-component-oauthproxy
+        --selector app="${PROJECT}-${COMPONENT}",template=component-oauth-sidecar
 
 done

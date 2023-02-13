@@ -26,19 +26,10 @@ plugins {
 
 repositories {
     if (no_nexus) {
-        println("using repositories 'jcenter' and 'mavenCentral', because property no_nexus=$no_nexus")
-        jcenter()
+        println("using repository 'mavenCentral', because property no_nexus=$no_nexus")
         mavenCentral()
     } else {
         println("using nexus repositories")
-        maven() {
-            url "${nexus_url}/repository/jcenter/"
-            credentials {
-                username = "${nexus_user}"
-                password = "${nexus_pw}"
-            }
-        }
-
         maven() {
             url "${nexus_url}/repository/maven-public/"
             credentials {
@@ -154,6 +145,9 @@ def executeTest(def type, def language) {
         description = "Runs ${type} tests ${language}."
         group = "verification"
 
+        // Since groovy tests are junit tests and they are run as part of java tests,
+        // we disable here the execution of junit tests if not running for java language.
+        // jenkins to jira integration does not allows to run a test more than once.
         if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
             // Mandatory to run JUnit 5 test but incompatible with groovy tests
             useJUnitPlatform()

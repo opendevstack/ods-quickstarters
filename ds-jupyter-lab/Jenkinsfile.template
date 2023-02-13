@@ -10,14 +10,16 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  odsComponentStageImportOpenShiftImageOrElse(context) {
-    odsComponentStageBuildOpenShiftImage(context, [
+  odsComponentStageBuildOpenShiftImage(
+    context, [
+      resourceName: "${context.componentId}",
+      dockerDir: "docker_jupyterlab",
       buildArgs: [
         nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
         nexusHostWithoutScheme: context.nexusHostWithoutScheme
-      ]
-    ])
-  }
+      ]])
+  odsComponentStageBuildOpenShiftImage(
+    context, [resourceName: "${context.componentId}-oauth", dockerDir: "docker_oauth"])
 
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
 }
