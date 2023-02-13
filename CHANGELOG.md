@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
+- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
 
 ## [4.1] - 2022-11-17
