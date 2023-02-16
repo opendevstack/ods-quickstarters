@@ -41,7 +41,7 @@ Provisions a streamlit based dashboard with authentication.
 
 == Usage - how do you start after you provisioned this quickstarter
 
-The quickstarter sets up two pods in OpenShift. The `ds-streamlit` instance is routed through the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] instance.
+The quickstarter sets up in OpenShift a pod with two containers. The main `ds-streamlit` container is  behind and protected by the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] container (i.e.: it is a sidecar container).
 
 It is strongly recommended when you are developing a Python project to use separated environments.
 For this purpose usually one can use Python's
@@ -93,7 +93,7 @@ In order to be sure that your code passes the linting stage execute or add it as
 
 * *Test* - Runs pytest and generates xUnit and code coverage reports:
 
-* *Build* - Builds the application: copies src folder into docker/dist folder.
+* *Build* - Builds the application: copies src folder into docker_streamlit/dist folder.
 
 == Builder agent used
 

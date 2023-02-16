@@ -5,7 +5,8 @@
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-python:@ods_image_tag@',
   branchToEnvironmentMapping: [
-    '*': 'dev',
+    'master': 'dev',
+    // 'release/': 'test'
   ]
 ) { context ->
   createTestVirtualenv(context)
@@ -35,7 +36,6 @@ def createTestVirtualenv(def context) {
         python3.9 -m venv testvenv
         . ./testvenv/bin/activate
         pip install --upgrade pip
-        # pip install pycodestyle
         pip install -r test_requirements.txt
       """
     )
@@ -47,7 +47,6 @@ def stageLinter(def context) {
     // PEP8
     sh(
       script: """
-        virtualenv testvenv
         . ./testvenv/bin/activate
         mypy src
         flake8 --max-line-length=120 src
@@ -61,7 +60,6 @@ def stageUnitTest(def context) {
   stage('Unit Test') {
   sh(
     script: """
-      virtualenv testvenv
       . ./testvenv/bin/activate
       cd ${WORKSPACE}
       export PYTHONPATH=${WORKSPACE}/src:\$PYTHONPATH
