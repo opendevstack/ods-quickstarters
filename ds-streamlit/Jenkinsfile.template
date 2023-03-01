@@ -1,0 +1,84 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+@Library('ods-jenkins-shared-library@@ods_git_ref@') _
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-python:@ods_image_tag@',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    // 'release/': 'test'
+  ]
+) { context ->
+  createTestVirtualenv(context)
+  stageLinter(context)
+  stageUnitTest(context)
+  stageBuild(context)
+  odsComponentStageScanWithSonar(context)
+  odsComponentStageBuildOpenShiftImage(
+    context, [
+      resourceName: "${context.componentId}",
+      dockerDir: "docker_streamlit",
+      buildArgs: [
+        nexusHostWithBasicAuth: context.nexusHostWithBasicAuth,
+        nexusHostWithoutScheme: context.nexusHostWithoutScheme
+      ]])
+  odsComponentStageBuildOpenShiftImage(
+    context, [resourceName: "${context.componentId}-oauth", dockerDir: "docker_oauth"])
+
+  def deploymentInfo = odsComponentStageRolloutOpenShiftDeployment(context)
+}
+
+// ${context.buildUrl} get and set build url in mlflow
+def createTestVirtualenv(def context) {
+  stage('Create virtualenv for tests') {
+    sh(
+      script: """
+        python3.9 -m venv testvenv
+        . ./testvenv/bin/activate
+        pip install --upgrade pip
+        pip install -r test_requirements.txt
+      """
+    )
+  }
+}
+
+def stageLinter(def context) {
+  stage('Linter') {
+    // PEP8
+    sh(
+      script: """
+        . ./testvenv/bin/activate
+        mypy src
+        flake8 --max-line-length=120 src
+      """,
+      label: "Running linting"
+    )
+  }
+}
+
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+  sh(
+    script: """
+      . ./testvenv/bin/activate
+      cd ${WORKSPACE}
+      export PYTHONPATH=${WORKSPACE}/src:\$PYTHONPATH
+      python -m pytest tests/ --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+      mkdir -p build/test-results/coverage/
+      mv coverage.xml build/test-results/coverage/
+      mkdir -p build/test-results/test/
+      mv tests.xml build/test-results/test/
+    """,
+    label: "Running unit tests",
+  )
+  }
+}
+
+def stageBuild(def context) {
+  stage('Build') {
+    sh """
+      cp -rv src docker_streamlit/src
+      cp -rv requirements.txt docker_streamlit/requirements.txt
+    """
+  }
+}

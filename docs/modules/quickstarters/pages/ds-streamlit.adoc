@@ -1,0 +1,104 @@
+= Data Science Streamlit
+
+== Purpose of this quickstarter
+
+Provisions a streamlit based dashboard with authentication.
+
+== What files / architecture is generated?
+
+----
+.
+├── Jenkinsfile
+├── docker_streamlit
+│   └── Dockerfile
+├── docker_oauth
+│   └── Dockerfile - Dockerfile for the oauth, please don't change this for proper promotion
+├── src - Example code structure based on individual python modules
+│   ├── calculation
+│   │  │── __init__.py
+│   │  └── sample.py
+│   ├── plots
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── histogram.py
+│   └── main.py
+├── tests
+│   └── calculation
+│       └── sample_test.py
+│── .gitignore
+│── requirements.txt - requirements for running the application
+│── test_requirements.txt - adds additional requirements for the test frameworks
+│── metadata.yml - Component metadata
+└── release-manager.yml - Configuration file for the Release Manager
+----
+
+== Frameworks used
+
+* https://docs.python.org/3.9[Python 3.9]
+* https://docs.streamlit.io/library/changelog[streamlit]
+* https://pandas.pydata.org/[pandas]
+* https://plotly.com/python/[plotly]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+The quickstarter sets up in OpenShift a pod with two containers. The main `ds-streamlit` container is  behind and protected by the https://github.com/openshift/oauth-proxy/[OpenShift OAuth proxy] container (i.e.: it is a sidecar container).
+
+It is strongly recommended when you are developing a Python project to use separated environments.
+For this purpose usually one can use Python's
+https://docs.python.org/3.9/library/venv.html[venv] core package (check how to use it in the next steps).
+
+NOTE: since the version of Python is 3.9, ensure your system's python executable is also in version 3.9
+
+[source,bash]
+----
+# Create virtual environment 'mylocaldevelopment' (will be located in the folder mylocaldevelopment) (run only once)
+python -m venv mylocaldevelopment
+
+# Initiate virtual environment for the project (every time)
+source mylocaldevelopment/bin/activate
+
+# Runs installation of required modules in the virtual environment (run only once)
+pip install -r requirements.txt
+
+# Start your application
+PYTHONPATH=src python src/main.py
+----
+
+=== Metadata
+
+```yaml
+name: <the component id (this is the default, if omitted)>
+description: "Some dashboard based on Streamlit"
+supplier: https://example.com
+version: 1.0.1
+type: ods
+role: dashboard
+runtime: streamlit
+runtimeVersion: 0.18
+```
+
+== How this quickstarter is built through Jenkins
+
+The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages:
+
+* *Prepare Test Suite* - Prepares the virtual environment for testing and linting:
+
+* *Lint* - Runs mypy and flake8 for increasing code quality:
+In order to be sure that your code passes the linting stage execute or add it as a pre-commit hook to your git.
++
+[source,bash]
+----
+  black src
+----
+
+* *Test* - Runs pytest and generates xUnit and code coverage reports:
+
+* *Build* - Builds the application: copies src folder into docker_streamlit/dist folder.
+
+== Builder agent used
+
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/python[Python] builder agent Jenkins builder agent.
+
+== Known limitations
+
+Let us know if you find any, thanks!

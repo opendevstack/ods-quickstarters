@@ -2,8 +2,8 @@
 
 ## Unreleased
 
+- Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
-- Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
 
 ## [4.1] - 2022-11-17
 

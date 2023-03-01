@@ -1,0 +1,6 @@
+---
+name: Streamlit
+description: "Streamlit is an open-source web dashboard application that allows you to create a dashboard in python with very little overhead."
+supplier: https://www.streamlit.io/
+version: 4.x
+type: ods
