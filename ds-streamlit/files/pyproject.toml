@@ -1,0 +1,26 @@
+# Project Configuration
+
+# mypy configuration. See
+# https://mypy.readthedocs.io/en/stable/config_file.html#using-a-pyproject-toml-file
+
+[tool.mypy]
+python_version = 3.9
+warn_unused_configs = true
+disallow_untyped_calls = true       # Disallow calling functions without type annotations from functions with type annotations (inverse: __allow_untyped_calls)
+disallow_untyped_defs=true          # Disallow defining functions without type annotations or with incomplete type annotations (inverse: __allow_untyped_defs)
+disallow_incomplete_defs = true     # Disallow defining functions with incomplete type annotations (inverse: __allow_incomplete_defs)
+check_untyped_defs = true           # Type check the interior of functions without type annotations (inverse: __no_check_untyped_defs)
+disallow_untyped_decorators = true  # Disallow decorating typed functions with untyped decorators (inverse: __allow_untyped_decorators)
+no_implicit_optional = true         # Don't assume arguments with default values of None are Optional (inverse: __implicit_optional)
+warn_redundant_casts = true         # Warn about casting an expression to its inferred type (inverse: __no_warn_redundant_casts)
+warn_unused_ignores = true          # Warn about unneeded '# type: ignore' comments (inverse: __no_warn_unused_ignores)
+no_warn_no_return = true            # Do not warn about functions that end without returning (inverse: __warn_no_return)
+warn_return_any = true              # Warn about returning values of type Any from non_Any typed functions (inverse: __no_warn_return_any)
+warn_unreachable = true             # Warn about statements or expressions inferred to be unreachable (inverse: __no_warn_unreachable)
+
+[[tool.mypy.overrides]]
+module = ["pandas.*", "streamlit.*", "plotly.*"]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 120
