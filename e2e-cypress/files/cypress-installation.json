@@ -9,6 +9,6 @@
   "video": false,
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "test-results/installation-junit.xml"
+    "mochaFile": "test-results/installation/junit-[hash].xml"
   }
 }

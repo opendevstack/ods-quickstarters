@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
 - Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
