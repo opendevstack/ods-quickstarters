@@ -17,9 +17,9 @@ Run `npm run e2e` to execute all end-to-end tests via [Cypress](https://www.cypr
 Run `npm start` to develop the e2e tests. The tests will automatically rebuild and run, if you change any of the source files. Ideally the test will run against a local instance of the front end, e.g. `http://localhost:4200` for an Angular app. This destination is configurable in the `cypress.json` file.
 
 ## Reports
-From [Merging reports across spec files](https://docs.cypress.io/guides/tooling/reporters#Merging-reports-across-spec-files): each spec file is processed completely separately during each cypress run execution. Thus each spec run overwrites the previous report file. To preserve unique reports for each specfile, use the [hash] in the mochaFile filename.
+From [Merging reports across spec files](https://docs.cypress.io/guides/tooling/reporters#Merging-reports-across-spec-files): each spec file is processed completely separately during each cypress run execution. Thus each spec run overwrites the previous report file. To preserve unique reports for each spec file, use the `[hash]` in the `mochaFile` filename.
 
-In order to generate one xml report per test type (installation, integration and acceptance) we use the junit-report-merger tool. See _junit-*-report_ in package.json.
+In order to generate one xml report per test type (installation, integration and acceptance) we use the junit-report-merger tool. See also the `junit-...-report` tasks in `package.json`.
 
 ## E2e test user authentication
 
