@@ -20,16 +20,16 @@ odsQuickstarterPipeline(
 
   stage('Build spring project') {
     dir(context.targetDir) {
-      def springBootVersion = '2.7.1'
+      def springBootVersion = '3.0.5'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
       sh "curl https://start.spring.io/starter.tgz \
             -d type=gradle-project \
             -d language=java \
             -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
-            -d bootVersion=${springBootVersion} \
+            -d platformVersion=${springBootVersion} \
             -d packaging=jar \
-            -d javaVersion=17 \
+            -d jvmVersion=17 \
             -d groupId=${context.projectId} \
             -d artifactId=${context.componentId} \
             -d name=${context.componentId} \
