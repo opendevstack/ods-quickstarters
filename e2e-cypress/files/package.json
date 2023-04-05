@@ -6,9 +6,11 @@
     "start": "npm run cypress:open",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser=chrome",
-    "cypress:run-installation": "npm run cypress:run -- --config-file cypress-installation.json",
-    "cypress:run-integration": "npm run cypress:run -- --config-file cypress-integration.json",
-    "cypress:run-acceptance": "npm run cypress:run -- --config-file cypress-acceptance.json",
+    //If you want to use Cypress cloud dashboard, use this Cypress run and add 'record key' to Cypress config
+    //"cypress:run": "cypress run --record --browser=chrome",
+    "cypress:run-installation": "npm run cypress:run -- --config-file cypress-installation.config.ts",
+    "cypress:run-integration": "npm run cypress:run -- --config-file cypress-integration.config.ts",
+    "cypress:run-acceptance": "npm run cypress:run -- --config-file cypress-acceptance.config.ts",
     "junit-installation-report": "jrm ./test-results/installation-junit.xml './test-results/installation/*.xml'",
     "junit-integration-report": "jrm ./test-results/integration-junit.xml './test-results/integration/*.xml'",
     "junit-acceptance-report": "jrm ./test-results/acceptance-junit.xml './test-results/acceptance/*.xml'",
@@ -18,7 +20,7 @@
   "private": true,
   "devDependencies": {
     "@types/node": "^17.0.23",
-    "cypress": "^9.5.3",
+    "cypress": "^12.9.0",
     "junit-report-merger": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
