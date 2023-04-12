@@ -7,6 +7,10 @@
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
 
+### Modified
+
+- Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
+
 ## [4.1] - 2022-11-17
 
 ### Added
