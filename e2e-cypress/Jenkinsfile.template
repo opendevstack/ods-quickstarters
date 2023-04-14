@@ -2,16 +2,50 @@
 
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
+node {
+  dockerRegistry = env.DOCKER_REGISTRY
+  cypressRecordKey = env.CYPRESS_RECORD_KEY
+}
+
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs16:@agent_image_tag@',
+  podContainers: [
+      containerTemplate(
+        name: 'jnlp',
+        image: "${dockerRegistry}/ods/jenkins-agent-nodejs16:@shared_library_ref@",
+        workingDir: '/tmp',
+        envVars: [
+          envVar(key: 'CYPRESS_RECORD_KEY', value: cypressRecordKey)
+        ],
+        resourceRequestCpu: '1000m',
+        resourceLimitCpu: '5000m',
+        resourceRequestMemory: '4Gi',
+        resourceLimitMemory: '8Gi',
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'
+      )
+    ],
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
   ]
 ) { context ->
+  
   stageTest(context)
   odsComponentStageScanWithSonar(context)
-}
+  
+  //How to: upload images or videos to Nexus. Screenshots are only taken when test fails.
+  //1. Remove stageTest(context)
+  //2. Uncomment the following lines
+  //def status = stageTest(context)
+  //if (status != 0) {
+  //  odsComponentStageUploadToNexus(context,
+  //  [
+  //    distributionFile: 'tests/screenshots.zip',
+  //    repository: 'leva-documentation',
+  //    repositoryType: 'raw',
+  //    targetDirectory: "${targetDirectory}"])
+  //}
+  }
 
 def stageTest(def context) {
   stage('Integration Test') {
@@ -35,13 +69,18 @@ def stageTest(def context) {
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
-      junit(testResults:'test-results/*.xml', allowEmptyResults: true)
+      junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/installation-junit.xml', allowEmpty: true)
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/integration-junit.xml', allowEmpty: true)
       stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/acceptance-junit.xml', allowEmpty: true)
+      zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+      stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
       if (status != 0) {
+        zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
+        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
         error 'Executing tests failed!'
       }
+      return status
     }
   }
 }

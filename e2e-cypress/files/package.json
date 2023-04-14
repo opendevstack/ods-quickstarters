@@ -15,7 +15,8 @@
     "junit-integration-report": "jrm ./test-results/integration-junit.xml './test-results/integration/*.xml'",
     "junit-acceptance-report": "jrm ./test-results/acceptance-junit.xml './test-results/acceptance/*.xml'",
     "delete-junit-results": "rimraf build/test-results",
-    "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance junit-installation-report junit-integration-report junit-acceptance-report"
+    "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance junit-installation-report junit-integration-report junit-acceptance-report combine:reports",
+    "combine:reports": "jrm build/test-results/acceptance-junit.xml \"build/test-results/*.xml\""
   },
   "private": true,
   "devDependencies": {
