@@ -6,6 +6,7 @@
 
 ### Added
 
+- Removed protractor related configuartion from ini.sh in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 - ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
 - Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
 - Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
