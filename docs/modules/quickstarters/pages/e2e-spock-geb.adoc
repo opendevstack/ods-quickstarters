@@ -135,8 +135,8 @@ All the results are stashed and published through Jenkins jUnit publisher.
 
 == Builder agent used
 
-This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent] Jenkins builder agent.
+This quickstarter uses the
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven] Jenkins builder agent.
 
 == Known limitations
 

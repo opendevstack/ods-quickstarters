@@ -8,14 +8,13 @@ It will provide a java 17 project with preconfigured gradle build and CI/CD inte
 
 == What files / architecture is generated?
 
-Under the hook this quickstarter runs the https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#cli-init[spring boot cli init command].
 The quickstarter uses the spring boot project generator service hosted by Spring (https://start.spring.io) to generate the spring boot project.
 
 This is implemented in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
 
-When provisioning this quickstarter in the provisioning app a spring boot project based on version `2.7.1` will be generated and pushed to your git repository.
+When provisioning this quickstarter in the provisioning app a spring boot project based on version `3.0.5` will be generated and pushed to your git repository.
 
-The generated project requires `java 17` and includes the required gradle build and wrapper artifact based on gradle version `7.3.2`.
+The generated project requires `java 17` and includes the required gradle build and wrapper artifact based on gradle version `8.0.2`.
 
 == Project Structure
 
@@ -81,7 +80,7 @@ NOTE: Upload to nexus is prepared in Jenkinsfile, but disabled per default. See 
 == Dependencies and Frameworks used
 
 The generated spring boot project is preconfigured with some third party dependencies (i.e.
- `--dependencies="web,data-rest,restdocs,data-jpa,h2,security,devtools"`), which are defined in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
+ `--dependencies="web,data-rest,data-jpa,h2,security,devtools"`), which are defined in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
 
 Look in method ```dependencies``` in the file ```build.gradle``` to review the defined dependencies.
 
@@ -112,7 +111,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: spring-boot
-runtimeVersion: 2.7.1
+runtimeVersion: 3.0.5
 ```
 
 == How this quickstarter is built thru jenkins
@@ -137,8 +136,8 @@ This file is copied to the `docker` folder to be included in the docker image wh
 
 == Builder agent used
 
-This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent] Jenkins builder agent.
+This quickstarter uses the
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven] Jenkins builder agent.
 
 == Migration to Java 17
 
@@ -148,9 +147,9 @@ The default version is `java 11`. This makes the agent backwards compatible.
 If you are migrating an ODS-based spring boot project to `java 17` following instructions provide a some guidance about the typical steps to achieve this:
 
 - change the agent version as indicated in https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent]
-- upgrade the gradle wrapper to version `7.3.2` running this gradle command at the root folder of your spring project:
+- upgrade the gradle wrapper to version `8.0.2` running this gradle command at the root folder of your spring project:
 ```
-gradle wrapper --gradle-version 7.3.2 --distribution-type bin
+gradle wrapper --gradle-version 8.0.2 --distribution-type bin
 ```
 NOTE: this command use just `gradle` instead of the wrapper.
 
