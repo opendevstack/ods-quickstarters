@@ -26,7 +26,7 @@ odsQuickstarterPipeline(
       sh "curl https://start.spring.io/starter.tgz \
             -d type=gradle-project \
             -d language=java \
-            -d dependencies='web,data-rest,restdocs,data-jpa,h2,security,devtools' \
+            -d dependencies='web,data-rest,data-jpa,h2,security,devtools' \
             -d platformVersion=${springBootVersion} \
             -d packaging=jar \
             -d jvmVersion=17 \
