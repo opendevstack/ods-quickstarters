@@ -14,7 +14,6 @@ export default defineConfig({
     supportFile: "support/e2e.ts",
     viewportWidth: 1376,
     viewportHeight: 660,
-    pageLoadTimeout: 60000,
     experimentalModifyObstructiveThirdPartyCode:true,
     video: true,
     setupNodeEvents(on, config) {
