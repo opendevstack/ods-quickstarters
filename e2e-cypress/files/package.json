@@ -6,8 +6,6 @@
     "start": "npm run cypress:open",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --browser=chrome",
-    //If you want to use Cypress cloud dashboard, use this Cypress run and add 'record key' to Cypress config
-    //"cypress:run": "cypress run --record --browser=chrome",
     "cypress:run-installation": "npm run cypress:run -- --config-file cypress-installation.config.ts",
     "cypress:run-integration": "npm run cypress:run -- --config-file cypress-integration.config.ts",
     "cypress:run-acceptance": "npm run cypress:run -- --config-file cypress-acceptance.config.ts",

@@ -4,7 +4,6 @@
 
 node {
   dockerRegistry = env.DOCKER_REGISTRY
-  cypressRecordKey = env.CYPRESS_RECORD_KEY
 }
 
 odsComponentPipeline(
@@ -13,9 +12,6 @@ odsComponentPipeline(
         name: 'jnlp',
         image: "${dockerRegistry}/ods/jenkins-agent-nodejs16:@shared_library_ref@",
         workingDir: '/tmp',
-        envVars: [
-          envVar(key: 'CYPRESS_RECORD_KEY', value: cypressRecordKey)
-        ],
         resourceRequestCpu: '1000m',
         resourceLimitCpu: '5000m',
         resourceRequestMemory: '4Gi',
@@ -33,18 +29,6 @@ odsComponentPipeline(
   stageTest(context)
   odsComponentStageScanWithSonar(context)
   
-  //How to: upload images or videos to Nexus. Screenshots are only taken when test fails.
-  //1. Remove stageTest(context)
-  //2. Uncomment the following lines
-  //def status = stageTest(context)
-  //if (status != 0) {
-  //  odsComponentStageUploadToNexus(context,
-  //  [
-  //    distributionFile: 'tests/screenshots.zip',
-  //    repository: 'leva-documentation',
-  //    repositoryType: 'raw',
-  //    targetDirectory: "${targetDirectory}"])
-  //}
   }
 
 def stageTest(def context) {
