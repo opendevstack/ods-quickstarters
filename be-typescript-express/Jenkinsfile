@@ -24,17 +24,17 @@ odsQuickstarterPipeline(
       sh "npm init -y"
 
       print "Install dependencies"
-      def typescriptVersion = "3.9.5"
-      def nodeTypeVersion = "14.0.13"
-      def expressVersion = "4.17.1"
-      def jestVersion = "26.0.0"
-      def jestJunitVersion = "10.0.0"
+      def typescriptVersion = "5.0.2"
+      def nodeTypeVersion = "18.15.10"
+      def expressVersion = "4.18.2"
+      def jestVersion = "29.5.0"
+      def jestJunitVersion = "15.0.0"
 
       sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestVersion"
       sh "npm i jest-junit@$jestJunitVersion --save-dev"
 
       print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
-      print "Target 10.0.0 and newer versions. Tell the compiler its okay to output JS syntax features from ES2018."
+      print "Target 15.0.0 and newer versions. Tell the compiler its okay to output JS syntax features from ES2018."
       sh "npx tsc --init --lib 'es2018' --target 'es2018' --skipLibCheck --outDir './dist'"
 
       print "Modify script commands in package json file"
