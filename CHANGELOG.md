@@ -9,6 +9,7 @@
 - Fix inf-terraform-agent bundler complaining about /tmp permissions ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
 - Fix nodejs 18 build by removing option always-auth ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
 - Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
+- Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 
 ## [4.1] - 2022-11-17
 
