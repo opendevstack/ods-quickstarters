@@ -45,7 +45,9 @@ RUN yum repolist \
     && yum clean all -y
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
-    npm config set _auth=$(echo -n $nexusAuth | base64) && \
+    #npm config set _auth=$(echo -n $nexusAuth | base64) && \
+    npm config set _auth=//$nexusUrl/repository/npmjs/:$(echo -n $nexusAuth | base64) && \
+    #npm config set _auth=//$nexusUrl/repository/npmjs/:_authToken=$(echo -n $nexusAuth | base64) && \
     npm config set email=no-reply@opendevstack.org && \
     npm config set ca=null && \
     npm config set strict-ssl=false && \
