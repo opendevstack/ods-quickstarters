@@ -11,6 +11,10 @@
 - Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 - Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 
+### Modified
+
+- Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
+
 ## [4.1] - 2022-11-17
 
 ### Added

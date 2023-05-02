@@ -8,7 +8,7 @@ Inside your `jenkinsfile` you can configure which agent is used by changing the 
 
 ```groovy
 odsPipeline(
-  image: "<dockerRegistry>/<namespace>/jenkins-agent-maven:<tag>"
+  image: "<dockerRegistry>/<namespace>/jenkins-agent-jdk:<tag>"
 ```
 
 The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-shared-library) takes care about starting the `jenkins agent` during the build as pod in your `project`s `cd` namespace with the `jenkins` service account.
@@ -16,7 +16,7 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 ## Currently Available agents
 
 1. [GoLang](golang)
-2. [Maven / Gradle](maven)
+2. [Jdk](jdk)
 3. [Node.js 12](nodejs12)
 4. [Node.js 16](nodejs16)
 4. [Node.js 18](nodejs18)
