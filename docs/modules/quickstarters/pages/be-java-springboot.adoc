@@ -20,7 +20,7 @@ The generated project requires `java 17` and includes the required gradle build 
 
 The generated spring boot project contains following folders:
 
-* `src` (maven based java project structure)
+* `src` (java project structure)
 * `gradle` (gradle wrapper portable distribution)
 * `docker` (include the `Dockerfile` used to build the image to be deployed during CI/CD to openshift)
 
@@ -137,16 +137,16 @@ This file is copied to the `docker` folder to be included in the docker image wh
 == Builder agent used
 
 This quickstarter uses the
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven] Jenkins builder agent.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk] Jenkins builder agent.
 
 == Migration to Java 17
 
-The https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent] Jenkins builder agent has installed 2 JDK: `java 11` and `java 17`.
+The https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent] Jenkins builder agent has installed 2 JDK: `java 11` and `java 17`.
 The default version is `java 11`. This makes the agent backwards compatible.
 
 If you are migrating an ODS-based spring boot project to `java 17` following instructions provide a some guidance about the typical steps to achieve this:
 
-- change the agent version as indicated in https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/maven[Maven builder agent]
+- change the agent version as indicated in https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent]
 - upgrade the gradle wrapper to version `8.0.2` running this gradle command at the root folder of your spring project:
 ```
 gradle wrapper --gradle-version 8.0.2 --distribution-type bin

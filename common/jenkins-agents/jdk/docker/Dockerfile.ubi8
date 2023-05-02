@@ -1,12 +1,12 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-maven-35-rhel7-container" \
-      name="openshift4/jenkins-agent-maven-35-rhel7" \
+LABEL com.redhat.component="jenkins-agent-jdk-35-rhel7-container" \
+      name="openshift4/jenkins-agent-jdk-35-rhel7" \
       architecture="x86_64" \
-      io.k8s.display-name="Jenkins Agent Maven" \
-      io.k8s.description="The jenkins agent maven image has java 11 and 17 installed on top of the jenkins slave base image." \
-      io.openshift.tags="openshift,jenkins,agent,maven" \
+      io.k8s.display-name="Jenkins Agent JDK" \
+      io.k8s.description="The jenkins agent jdk image has java 11 and 17 installed on top of the jenkins agent base image." \
+      io.openshift.tags="openshift,jenkins,agent,jdk" \
       maintainer="openshift-dev-services+jenkins@redhat.com"
 
 ARG nexusUrl

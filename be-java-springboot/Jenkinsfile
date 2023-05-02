@@ -15,7 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-maven:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-jdk:${agentImageTag}",
 ) { context ->
 
   stage('Build spring project') {

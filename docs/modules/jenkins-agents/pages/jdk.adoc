@@ -1,10 +1,10 @@
-= Maven / Gradle Jenkins agent
+= Jdk Jenkins agent
 
 == Introduction
-This agent is used to build Java code, through Maven or Gradle.
+This agent is used to build Java code.
 
-The image is built in the global `ods` project and is named `jenkins-agent-maven`.
-It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-maven`.
+The image is built in the global `ods` project and is named `jenkins-agent-jdk`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-jdk`.
 
 == Features
 . Nexus and HTTP proxy configuration for Maven & Gradle
@@ -19,7 +19,7 @@ Following command shows how the jenkins build script from the springboot quickst
 ```
 def status = sh(script: "$HOME/use-j17.sh && ./gradlew clean build --stacktrace --no-daemon && $HOME/use-j11.sh", returnStatus: true)
 ```
-NOTE: like this example, you will need to switch back to `java 11` after running the gradlew build. This is required because the maven agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the latest java version.
+NOTE: like this example, you will need to switch back to `java 11` after running the gradlew build. This is required because the jdk agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the latest java version.
 
 == Installed packages
 
