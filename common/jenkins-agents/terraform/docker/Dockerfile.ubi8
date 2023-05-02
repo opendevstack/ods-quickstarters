@@ -8,9 +8,9 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       version="0.1" \
       architecture="x86_64" \
       release="1" \
-      io.k8s.display-name="Jenkins Agent AWS Terraform" \
+      io.k8s.display-name="Jenkins Agent Terraform" \
       io.k8s.description="The jenkins Agent image has terraform and other tools on top of the jenkins agent base image." \
-      io.openshift.tags="openshift,jenkins,agent,terraform,aws"
+      io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
 ENV TERRAFORM_VERSION 1.2.9
 ENV TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0
