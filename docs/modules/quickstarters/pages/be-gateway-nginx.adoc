@@ -110,7 +110,7 @@ Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources wil
 name: nginx
 description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.19.3.2"
 supplier: https://openresty.org
-version: 1.19.3
+version: 1.21.4.1
 type: ods-service
 role: integration
 ```
