@@ -12,10 +12,10 @@ odsComponentPipeline(
         name: 'jnlp',
         image: "${dockerRegistry}/ods/jenkins-agent-nodejs16:@shared_library_ref@",
         workingDir: '/tmp',
-        resourceRequestCpu: '1000m',
-        resourceLimitCpu: '5000m',
-        resourceRequestMemory: '4Gi',
-        resourceLimitMemory: '8Gi',
+        resourceRequestCpu: '10mi',
+        resourceLimitCpu: '300mi',
+        resourceRequestMemory: '1Gi',
+        resourceLimitMemory: '2Gi',
         alwaysPullImage: true,
         args: '${computer.jnlpmac} ${computer.name}'
       )
