@@ -3,7 +3,7 @@
 function loginViaAAD(username: string, password: string) {
 
   //Go to your application URL and trigger the login.
-  cy.visit(Cypress.env('your_app_url'))
+  cy.visit('')
 
   //If needed, navigate and click on the login button. 
   //As an example:
@@ -57,7 +57,7 @@ function loginViaAAD(username: string, password: string) {
 Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
   const log = Cypress.log({
     displayName: 'Azure Active Directory Login',
-    message: [`🔐 Authenticating | ${username}  ${password}`],
+    message: [`🔐 Authenticating | ${username}`],
     autoEnd: false,
   })
   log.snapshot('before')
