@@ -14,8 +14,6 @@ export default defineConfig({
     viewportWidth: 1376,
     viewportHeight: 660,
     experimentalModifyObstructiveThirdPartyCode: true,
-    //https://github.com/cypress-io/cypress/issues/25806
-    // experimentalSkipDomainInjection: ["*.apps.eu-dev.ocp.aws.boehringer.com"],
     video: true,
     setupNodeEvents(on, config) {
       return require('./plugins/index.js')(on, config)
