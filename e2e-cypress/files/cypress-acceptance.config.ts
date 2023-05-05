@@ -4,7 +4,7 @@ export default defineConfig({
   //projectId: '[Define your project id for Cypress cloud]',
   reporter: 'junit',
   reporterOptions: {
-    mochaFile: 'build/test-results/acceptance/junit-[hash].xml',
+    mochaFile: 'build/test-results/acceptance-junit-[hash].xml',
     toConsole: true,
   },
   e2e: {

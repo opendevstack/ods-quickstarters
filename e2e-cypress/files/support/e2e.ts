@@ -49,7 +49,7 @@ function loginViaAAD(username: string, password: string) {
   //)
 
   // Ensure Microsoft has redirected us back to the sample app with our logged in user.
-  cy.url().should('equal', Cypress.env('your_app_url'))
+  cy.url().should('equal', 'Insert here your app URL')
 }
 
 //See how to use it at:

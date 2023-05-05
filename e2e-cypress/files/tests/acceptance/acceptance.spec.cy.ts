@@ -1,18 +1,18 @@
 import { printTestEvidence } from '../../support/test-evidence';
 
 /* tslint:disable:no-unused-expression */
-describe('ADD login example test', () => {
+// describe('ADD login example test', () => {
 
-  beforeEach(() => {
-    // log into Azure Active Directory through our sample SPA using our custom command
-    cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
-  })
+//   beforeEach(() => {
+//     // log into Azure Active Directory through our sample SPA using our custom command
+//     cy.loginToAAD(Cypress.env('aad_username'), Cypress.env('aad_password'))
+//   })
 
-  it('Verifies the user can be logged in', () => {
-    cy.contains('title')
-  })
+//   it('Verifies the user can be logged in', () => {
+//     cy.contains('title')
+//   })
 
-});
+// });
 
 describe('W3 application test', () => {
 

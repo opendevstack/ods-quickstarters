@@ -3,11 +3,11 @@ import setupNodeEvents from './plugins/index.js'
 export default defineConfig({
   reporter: 'junit',
   reporterOptions: {
-    mochaFile: 'build/test-results/tests.xml',
+    mochaFile: 'build/test-results/tests-[hash].xml',
     toConsole: true,
   },
   e2e: {
-    baseUrl: 'Introduce your app URL',
+    baseUrl: 'https://www.w3schools.com',
     fixturesFolder: "fixtures",
     specPattern: 'tests/**/*.cy.ts',
     supportFile: "support/e2e.ts",
