@@ -13,7 +13,7 @@ export default defineConfig({
     supportFile: "support/e2e.ts",
     viewportWidth: 1376,
     viewportHeight: 660,
-    experimentalModifyObstructiveThirdPartyCode:true,
+    experimentalModifyObstructiveThirdPartyCode: true,
     //https://github.com/cypress-io/cypress/issues/25806
     // experimentalSkipDomainInjection: ["*.apps.eu-dev.ocp.aws.boehringer.com"],
     video: true,
