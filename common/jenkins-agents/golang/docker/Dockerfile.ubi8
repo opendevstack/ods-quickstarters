@@ -11,7 +11,8 @@ RUN cd /tmp && \
     tar -C /usr/local -xzf go.tar.gz && \
     rm -f /tmp/go.tar.gz && \
     cd - && \
-    mkdir /go
+    mkdir /go && \
+    /usr/local/go/bin/go version
 
 ENV PATH $PATH:/usr/local/go/bin
 ENV GOBIN /usr/local/bin
