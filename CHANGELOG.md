@@ -12,6 +12,7 @@
 - Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 - Update Go quickstarter to Go 1.20 and align version of golangci-lint and go-junit-report ([#877](https://github.com/opendevstack/ods-quickstarters/issues/877))
 - Fix mismatch on java versions in base agent and jdk agent ([#916](https://github.com/opendevstack/ods-quickstarters/pull/916))
+- Scala maintenance ([#879](https://github.com/opendevstack/ods-quickstarters/issues/879))
 
 ### Modified
 
