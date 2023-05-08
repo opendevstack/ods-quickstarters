@@ -10,7 +10,6 @@ function msg_and_exit() {
 
 echo "Switching to java ${JAVA_VERSION}:"
 JAVA_HOME="/usr/lib/jvm/${JAVA_HOME_FOLDER}"
-USE_JAVA_VERSION
 
 alternatives --set java ${JAVA_HOME}/bin/java || \
   msg_and_exit "Cannot configure java ${JAVA_VERSION} as the alternative to use for java."
