@@ -13,14 +13,19 @@ RUN yum install -y java-11-openjdk-devel && \
     alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
     alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
     java -version && \
-    javac -version
+    javac -version && \
+## Needed in case base and scala agents has a mismatch in java versions
+    rm -fv /etc/profile.d/set-default-java.sh && \
+    echo "export JAVA_HOME=/usr/lib/jvm/${exactVersion}" >> /etc/profile.d/set-default-java.sh && \
+    echo "export USE_JAVA_VERSION=java-11" >> /etc/profile.d/set-default-java.sh && \
+    chmod +x /etc/profile.d/set-default-java.sh
 ENV JAVA_HOME=/usr/lib/jvm/jre
 
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
 # Install sbt
-ENV SBT_VERSION=1.5.4
+ENV SBT_VERSION=1.8.2
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
     curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
