@@ -50,7 +50,12 @@ RUN chmod +x /usr/local/bin/use-j*.sh && \
     echo "--- STARTS JDK 11/17 TESTS ---" && \
     use-j17.sh && \
     use-j11.sh && \
-    echo "--- ENDS JDK 11/17 TESTS ---"
+    echo "--- ENDS JDK 11/17 TESTS ---" && \
+## Needed in case base and jdk agents has a mismatch in java versions
+    rm -fv /etc/profile.d/set-default-java.sh && \
+    echo "export JAVA_HOME=/usr/lib/jvm/$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1)" >> /etc/profile.d/set-default-java.sh && \
+    echo "export USE_JAVA_VERSION=java-11" >> /etc/profile.d/set-default-java.sh && \
+    chmod +x /etc/profile.d/set-default-java.sh
 
 # Set maven (nexus+proxy) and gradle (proxy) settings
 ENV MAVEN_OPTS="-Duser.home=$HOME" \
