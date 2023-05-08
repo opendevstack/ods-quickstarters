@@ -36,4 +36,3 @@ else
   msg_and_exit "Cannot configure JAVA_HOME environment variable to ${JAVA_HOME}"
 fi
 echo "JAVA_HOME: $JAVA_HOME"
-export JAVA_HOME=${JAVA_HOME}
