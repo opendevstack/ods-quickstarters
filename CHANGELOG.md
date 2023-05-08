@@ -10,6 +10,7 @@
 - Fix nodejs 18 build by removing option always-auth ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
 - Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
 - Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
+- Update Go quickstarter to Go 1.20 and align version of golangci-lint and go-junit-report ([#877](https://github.com/opendevstack/ods-quickstarters/issues/877))
 
 ### Modified
 
