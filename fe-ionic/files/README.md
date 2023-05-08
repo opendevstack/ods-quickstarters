@@ -31,6 +31,3 @@ Steps to enable Ionic Pro builds:
 - Add the app id to the `ionic.config.json`
 - Open the `Jenkinsfile` and add the username and repo name in Line 73 --> `{{ionic-user}}/{{ionic-project-name}}` (most likely `your-organisation-name/your-project-name-in-lower-case-with-minus-chars-as-spaces.git`)
 - Switch the condition in line 62 of the `Jenkinsfile` from `false` to `true` --> it has to be deactivated initially because without the correct setup the initial build would fail
-
-## Openshift Builds
-Openshift builds are enabled per default. To disable the builds, set the `openshiftUpload` in the Jenkinsfile to false
