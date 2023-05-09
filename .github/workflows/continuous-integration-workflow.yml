@@ -14,11 +14,11 @@ jobs:
         working-directory: common/jenkins-agents/golang/docker
         run: |
           docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg goDistributionUrl=https://golang.org/dl/go1.14.2.linux-amd64.tar.gz \
+            --build-arg goDistributionUrl=https://go.dev/dl/go1.20.4.linux-amd64.tar.gz \
             .
 
-  jenkins-agent-maven-ubi8:
-    name: Jenkins agent Maven (UBI8)
+  jenkins-agent-jdk-ubi8:
+    name: Jenkins agent JDK (UBI8)
     runs-on: ubuntu-22.04
     steps:
       -
@@ -26,9 +26,9 @@ jobs:
         uses: actions/checkout@v2.0.0
       -
         name: Build docker image
-        working-directory: common/jenkins-agents/maven/docker
+        working-directory: common/jenkins-agents/jdk/docker
         run: |
-            docker build --tag agent-maven-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-jdk-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusUsername=developer \
               --build-arg nexusPassword=s3cr3t \

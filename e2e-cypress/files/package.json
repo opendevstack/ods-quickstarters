@@ -9,13 +9,17 @@
     "cypress:run-installation": "npm run cypress:run -- --config-file cypress-installation.json",
     "cypress:run-integration": "npm run cypress:run -- --config-file cypress-integration.json",
     "cypress:run-acceptance": "npm run cypress:run -- --config-file cypress-acceptance.json",
+    "junit-installation-report": "jrm ./test-results/installation-junit.xml './test-results/installation/*.xml'",
+    "junit-integration-report": "jrm ./test-results/integration-junit.xml './test-results/integration/*.xml'",
+    "junit-acceptance-report": "jrm ./test-results/acceptance-junit.xml './test-results/acceptance/*.xml'",
     "delete-junit-results": "rimraf build/test-results",
-    "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance"
+    "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance junit-installation-report junit-integration-report junit-acceptance-report"
   },
   "private": true,
   "devDependencies": {
     "@types/node": "^17.0.23",
     "cypress": "^9.5.3",
+    "junit-report-merger": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.3"
