@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/openjdk-11:1.14
+FROM registry.access.redhat.com/ubi8/openjdk-11-runtime:1.15
 
 WORKDIR /app
 COPY lib/* /app/lib/
