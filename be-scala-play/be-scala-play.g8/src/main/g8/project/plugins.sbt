@@ -1,6 +1,8 @@
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 
-addSbtPlugin("com.typesafe.play"        % "sbt-plugin"          % "2.8.2")
-addSbtPlugin("org.scalameta"            % "sbt-scalafmt"        % "2.4.0")
-addSbtPlugin("org.scoverage"            % "sbt-scoverage"       % "1.6.1")
-addSbtPlugin("org.foundweekends.giter8" % "sbt-giter8-scaffold" % "0.11.0")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin"    % "2.8.19")
+addSbtPlugin("org.scalameta"     % "sbt-scalafmt"  % "2.4.6")
+addSbtPlugin("org.scoverage"     % "sbt-scoverage" % "2.0.7")
+
+// this fixes the problem with different versions of scala-xml in twirl and the scoverage sbt plugin :F
+libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
