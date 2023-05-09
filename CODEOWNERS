@@ -8,8 +8,9 @@
 /docker-plain/ @michaelsauter
 /ds-jupyter-lab/ @gerardcl @hugowschneider
 /ds-rshiny/ @gerardcl
-/e2e-cypress/ @cschweikert
-/e2e-spock-geb/ @metmajer
+/ds-streamlit/ @sklingel
+/e2e-cypress/ @cschweikert @garcanam @roicarrera
+/e2e-spock-geb/ @metmajer @garcanam @roicarrera
 /fe-angular/ @cschweikert
 /fe-ionic/ @rianet @bljubisic
 /inf-terraform-aws/ @frankjoas @metmajer @nichtraunzer @tbugfinder

@@ -5,7 +5,7 @@ LABEL com.redhat.component="jenkins-agent-nodejs-16-rhel7-container" \
       name="openshift4/jenkins-agent-nodejs-16-rhel7" \
       architecture="x86_64" \
       io.k8s.display-name="Jenkins Agent Nodejs" \
-      io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins slave base image." \
+      io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,nodejs" \
       maintainer="openshift-dev-services+jenkins@redhat.com"
 
