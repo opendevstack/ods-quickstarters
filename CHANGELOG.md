@@ -1,10 +1,22 @@
 # Changelog
 
 ## Unreleased
+- Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
 - Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
+- Fix inf-terraform-agent bundler complaining about /tmp permissions ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
+- Fix nodejs 18 build by removing option always-auth ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
+- Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
+- Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
+- Update Go quickstarter to Go 1.20 and align version of golangci-lint and go-junit-report ([#877](https://github.com/opendevstack/ods-quickstarters/issues/877))
+- Fix mismatch on java versions in base agent and jdk agent ([#916](https://github.com/opendevstack/ods-quickstarters/pull/916))
+- Scala maintenance ([#879](https://github.com/opendevstack/ods-quickstarters/issues/879))
+- Ionic maintenance ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
+
+### Modified
+- Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
 
 ## [4.1] - 2022-11-17
 
