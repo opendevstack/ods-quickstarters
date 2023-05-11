@@ -1,11 +1,5 @@
-<!--
- for more information on logging see:
- https://www.playframework.com/documentation/2.8.x/ScalaLogging
- https://www.playframework.com/documentation/latest/SettingsLogger
--->
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
 <configuration>
-
-<!--  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />-->
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="net.logstash.logback.encoder.LogstashEncoder" />

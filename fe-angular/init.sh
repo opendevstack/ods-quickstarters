@@ -29,6 +29,7 @@ echo "add required plugins to package.json"
 sed -i "s|\"typescript\"|\"karma-junit-reporter\": \"^2.0.1\",\n    \"typescript\"|" ./package.json
 
 echo "configure headless chrome in karma.conf.js"
+ng generate config karma
 read -r -d "" CHROME_CONFIG << EOM || true
     browsers: \['ChromeNoSandboxHeadless'\],\\
     customLaunchers: {\\

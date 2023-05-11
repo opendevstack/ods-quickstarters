@@ -19,7 +19,6 @@ The files are generated using https://ionicframework.com/docs/cli/[Ionic CLI].
 │   └── nginx.vh.default.conf.nginx
 ├── e2e
 │   ├── test.e2e-specs.ts
-│   ├── protractor.conf.js
 │   └── tsconfig.json
 ├── src
 │   ├── app
