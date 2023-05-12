@@ -6,6 +6,7 @@
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
+- Upgraded to Cypress 12, improve login support, add video support ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
 - Fix inf-terraform-agent bundler complaining about /tmp permissions ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
 - Fix nodejs 18 build by removing option always-auth ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
 - Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))

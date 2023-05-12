@@ -2,16 +2,34 @@
 
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
+node {
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs16:@agent_image_tag@',
+  podContainers: [
+      containerTemplate(
+        name: 'jnlp',
+        image: "${dockerRegistry}/ods/jenkins-agent-nodejs16:@shared_library_ref@",
+        workingDir: '/tmp',
+        resourceRequestCpu: '10m',
+        resourceLimitCpu: '300m',
+        resourceRequestMemory: '1Gi',
+        resourceLimitMemory: '2Gi',
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'
+      )
+    ],
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
   ]
 ) { context ->
+  
   stageTest(context)
   odsComponentStageScanWithSonar(context)
-}
+  
+  }
 
 def stageTest(def context) {
   stage('Integration Test') {
@@ -35,13 +53,20 @@ def stageTest(def context) {
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
-      junit(testResults:'test-results/*.xml', allowEmptyResults: true)
-      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/installation-junit.xml', allowEmpty: true)
-      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/integration-junit.xml', allowEmpty: true)
-      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'test-results/acceptance-junit.xml', allowEmpty: true)
+      sh 'npm run combine:reports'
+      junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
+      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
+      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+      zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+      stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
+      archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       if (status != 0) {
-        error 'Executing tests failed!'
+        zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
+        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
+        archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
+      return status
     }
   }
 }
