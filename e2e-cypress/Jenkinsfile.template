@@ -4,6 +4,7 @@
 
 node {
   dockerRegistry = env.DOCKER_REGISTRY
+  cypressRecordKey = env.CYPRESS_RECORD_KEY
 }
 
 odsComponentPipeline(
@@ -12,6 +13,9 @@ odsComponentPipeline(
         name: 'jnlp',
         image: "${dockerRegistry}/ods/jenkins-agent-nodejs16:@shared_library_ref@",
         workingDir: '/tmp',
+        envVars: [
+          envVar(key: 'CYPRESS_RECORD_KEY', value: cypressRecordKey)
+        ],
         resourceRequestCpu: '10m',
         resourceLimitCpu: '300m',
         resourceRequestMemory: '1Gi',
