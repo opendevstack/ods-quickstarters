@@ -1,13 +1,12 @@
 {
-  "key": "unitt-springboot",
-  "organization": "default-organization",
-  "name": "unitt-springboot",
+  "key": "{{.ProjectID}}-{{.ComponentID}}",
+  "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
-      "name": "Sonar way",
+      "name": "{{.SonarQualityProfile}}",
       "language": "java",
       "deleted": false
     }
@@ -18,8 +17,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-springboot",
-      "name": "unitt-springboot",
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
       "qualifier": "TRK"
     }
   ]
