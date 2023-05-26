@@ -22,7 +22,7 @@ control 'stack' do
   # Test if Cloudformation Stack has been succesfully deployed
   # ###########################################################
   describe "CloudFormation Stack #{cfStackName}" do
-    cfStack = cfClient.describe_stacks({stack_name: cfStackName}).stacks[0]
+    cfStack = cfClient.describe_stacks({ stack_name: cfStackName }).stacks[0]
 
     context 'status' do
       it { expect(cfStack.stack_status).to eq("CREATE_COMPLETE").or eq("UPDATE_COMPLETE") }

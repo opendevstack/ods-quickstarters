@@ -108,6 +108,19 @@ jobs:
         run: |
           docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
 
+  jenkins-agent-terraform-2306-ubi8:
+    name: Jenkins agent Terraform 2306 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v3.5.2
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/terraform-2306/docker
+        run: |
+          docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 .
+
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
     runs-on: ubuntu-22.04
