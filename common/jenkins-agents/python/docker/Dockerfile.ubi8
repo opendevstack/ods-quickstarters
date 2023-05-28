@@ -12,10 +12,11 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN yum module install -y python38:3.8/build && \
     yum module install -y python39:3.9/build --allowerasing && \
+    yum install -y python3.11 python3.11-pip && \
     yum install -y autoconf automake gcc-c++ openssl-devel libffi-devel && \
     yum -y clean all
 
-RUN pipVersions=( pip3.8 pip3.9 ); \
+RUN pipVersions=( pip3.8 pip3.9 pip3.11 ); \
     for pipV in "${pipVersions[@]}"; \
     do \
         if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
