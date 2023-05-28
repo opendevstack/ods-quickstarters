@@ -31,6 +31,7 @@ ENV TERRAFORM_VERSION=1.4.6 \
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python38 python38-pip python38-setuptools \
     python39 python39-pip python39-setuptools \
+    python3.11 python3.11-pip python3.11-setuptools \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
 ENV INSTALL_CENTOS_PKGS="readline-devel bison automake libtool"
@@ -65,8 +66,9 @@ RUN pip3 install --upgrade pip \
     && pip3 install virtualenv pycodestyle \
     && pip3.8 install virtualenv pycodestyle \
     && pip3.9 install virtualenv pycodestyle \
-    && alternatives --set python /usr/bin/python3.9 \
-    && alternatives --set python3 /usr/bin/python3.9
+    && pip3.11 install virtualenv pycodestyle \
+    && alternatives --set python /usr/bin/python3.11 \
+    && alternatives --set python3 /usr/bin/python3.11
 
 # Configure pip SSL validation
 RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
@@ -74,7 +76,8 @@ RUN pip config set global.cert /etc/ssl/certs/ca-bundle.crt \
 
 # Install python requirements
 RUN python3.8 -m pip install -r /tmp/requirements.txt \
-    && python3.9 -m pip install -r /tmp/requirements.txt
+    && python3.9 -m pip install -r /tmp/requirements.txt \
+    && python3.11 -m pip install -r /tmp/requirements.txt 
 
 # Install awscli2
 RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \

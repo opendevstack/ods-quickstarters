@@ -16,7 +16,7 @@
 - Scala maintenance ([#879](https://github.com/opendevstack/ods-quickstarters/issues/879))
 - Ionic maintenance ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
 - Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
-- inf-terraform-[aws|azure], add new jenkins-agent-terraform-2306 with updated tools (ruby 3.2.2, python 3.9, etc.) and dependencies, add tflint, mark other jenkins-agent-terraform as deprecated([#914](https://github.com/opendevstack/ods-quickstarters/issues/914))
+- inf-terraform-[aws|azure], add new jenkins-agent-terraform-2306 with updated tools (ruby 3.2.2, python 3.11, etc.) and dependencies, add tflint, mark other jenkins-agent-terraform as deprecated([#914](https://github.com/opendevstack/ods-quickstarters/issues/914))
 
 ## [4.1] - 2022-11-17
 
