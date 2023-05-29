@@ -131,6 +131,22 @@ start-jenkins-agent-terraform-build:
 .PHONY: start-jenkins-agent-terraform-build
 
 
+# JENKINS AGENT TERRAFORM-2306
+## Install or update Jenkins Terraform agent resources.
+install-jenkins-agent-terraform-2306: apply-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2306
+.PHONY: install-jenkins-agent-terraform-2306
+
+## Update OpenShift resources related to Jenkins Terraform agent image 2306.
+apply-jenkins-agent-terraform-build-2306:
+	cd common/jenkins-agents/terraform-2306/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-terraform-build-2306
+
+## Start build of BuildConfig "jenkins-agent-terraform-2306".
+start-jenkins-agent-terraform-build-2306:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-terraform-2306 --follow
+.PHONY: start-jenkins-agent-terraform-build-2306
+
+
 # HELP
 # Based on https://gist.github.com/prwhite/8168133#gistcomment-2278355.
 help:
