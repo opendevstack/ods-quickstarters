@@ -12,7 +12,8 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN yum module install -y python38:3.8/build && \
     yum module install -y python39:3.9/build --allowerasing && \
-    yum install -y python3.11 python3.11-pip python3.11-venv && \
+    yum install -y python3.11 python3.11-pip python3.11-devel python3.11-setuptools && \
+#    yum install -y python3.11 python3.11-pip python3.11-venv python3.11-devel python3.11-setuptools && \
     yum install -y autoconf automake gcc-c++ openssl-devel libffi-devel && \
     yum -y clean all
 
