@@ -20,7 +20,7 @@ Provision a shared Jupyter Lab within OpenShift for rapid prototyping of data sc
 
 == Frameworks used
 
-* https://docs.python.org/3.9[Python 3.9]
+* https://docs.python.org/3.11[Python 3.11]
 * https://jupyterlab.readthedocs.io/en/stable/[JupyterLab]
 
 == Usage - how do you start after you provisioned this quickstarter
