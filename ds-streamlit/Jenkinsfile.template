@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@ods_git_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-python:3.11',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-python:@ods_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
