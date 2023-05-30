@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-39
+FROM registry.access.redhat.com/ubi9/python-311
 
 ARG nexusHostWithBasicAuth
 ARG nexusHostWithoutScheme

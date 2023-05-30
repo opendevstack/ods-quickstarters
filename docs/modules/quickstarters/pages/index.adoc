@@ -37,6 +37,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 === Data Science Quickstarter
 * xref::ds-jupyter-lab.adoc[Data Science - Jupyter Lab]
 * xref::ds-rshiny.adoc[Data Science - R-Shiny]
+* xref::ds-streamlit.adoc[Data Science Streamlit app]
 
 === E2E Test Quickstarter
 * xref::e2e-cypress.adoc[E2E test - Cypress]
