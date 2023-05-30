@@ -34,7 +34,7 @@ Provisions a streamlit based dashboard with authentication.
 
 == Frameworks used
 
-* https://docs.python.org/3.9[Python 3.9]
+* https://docs.python.org/3.11[Python 3.11]
 * https://docs.streamlit.io/library/changelog[streamlit]
 * https://pandas.pydata.org/[pandas]
 * https://plotly.com/python/[plotly]
@@ -45,9 +45,9 @@ The quickstarter sets up in OpenShift a pod with two containers. The main `ds-st
 
 It is strongly recommended when you are developing a Python project to use separated environments.
 For this purpose usually one can use Python's
-https://docs.python.org/3.9/library/venv.html[venv] core package (check how to use it in the next steps).
+https://docs.python.org/3.11/library/venv.html[venv] core package (check how to use it in the next steps).
 
-NOTE: since the version of Python is 3.9, ensure your system's python executable is also in version 3.9
+NOTE: since the version of Python is 3.11, ensure your system's python executable is also in version 3.11
 
 [source,bash]
 ----

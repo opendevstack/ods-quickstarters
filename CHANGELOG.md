@@ -16,6 +16,7 @@
 - Scala maintenance ([#879](https://github.com/opendevstack/ods-quickstarters/issues/879))
 - Ionic maintenance ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
 - Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
+- Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
 
 ## [4.1] - 2022-11-17
 
