@@ -2,7 +2,7 @@ exclude: .terraform
 fail_fast: true
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
     -   id: check-added-large-files
         args:
@@ -26,38 +26,47 @@ repos:
         - --indent=2
         - --no-ensure-ascii
     -   id: trailing-whitespace
+
 -   repo: https://github.com/psf/black.git
-    rev: 21.7b0
+    rev: 23.3.0
     hooks:
     -   id: black
+        args: [--line-length=90]
         files: (\.py)$
+
 -   repo: https://github.com/PyCQA/flake8.git
-    rev: 4.0.1
+    rev: 6.0.0
     hooks:
     -   id: flake8
+        args: [--max-line-length=90]
         files: (\.py)$
+
 -   repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.64.1
+    rev: v1.79.1
     hooks:
     -   id: terraform_fmt
+
 -   repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-    rev: v0.3.7
+    rev: v0.4.1
     hooks:
     -   id: terraformcreatei2o
         files: (\.tf)$
     -   id: terraformstackmoduleoutputs
         files: (\.tf)$
+
 -   repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.64.1
+    rev: v1.79.1
     hooks:
     -   id: terraform_fmt
     -   id: terraform_docs
+
 -   repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.6
+    rev: 3.0.0
     hooks:
     -   id: rubocop
         args:
         - --fix-layout
+
 -   repo: local
     hooks:
     -   id: test
