@@ -88,7 +88,7 @@ objects:
         spec:
           containers:
             - image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: "${COMPONENT}"
               ports:
                 - containerPort: 8080

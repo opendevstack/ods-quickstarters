@@ -114,7 +114,7 @@ objects:
       spec:
         containers:
           - image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
               httpGet:

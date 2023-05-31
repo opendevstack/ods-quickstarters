@@ -145,7 +145,7 @@ objects:
           serviceAccount: ${COMPONENT}-oauth
           containers:
             - name: ${COMPONENT}
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               image: "${PROJECT}-${ENV}/${COMPONENT}:${TAGVERSION}"
               ports:
                 - containerPort: 8080
@@ -161,7 +161,7 @@ objects:
               terminationMessagePolicy: File
             - name: ${COMPONENT}-oauth
               image: "${PROJECT}-${ENV}/${COMPONENT}-oauth:${TAGVERSION}"
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               resources:
                 limits:
                   cpu: "${CPU_LIMIT_OAUTH}"
