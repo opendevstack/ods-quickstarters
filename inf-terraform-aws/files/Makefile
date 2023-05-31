@@ -140,7 +140,7 @@ install-test-deps: install-ruby-gems install-python-env
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/default/files/inputs-from-tfo-stack.yml --target aws://
 
 .PHONY: clean
 # Reset Working directory (take care if something has deployed upfront)
