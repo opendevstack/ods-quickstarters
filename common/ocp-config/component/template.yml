@@ -92,6 +92,8 @@ objects:
       deploymentconfig: "${COMPONENT}"
     strategy:
       activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
       resources:
         limits:
           cpu: 200m
@@ -99,13 +101,7 @@ objects:
         requests:
           cpu: 100m
           memory: 128Mi
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
+      type: Recreate
     template:
       metadata:
         labels:
