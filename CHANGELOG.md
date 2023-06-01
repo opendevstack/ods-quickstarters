@@ -18,6 +18,7 @@
 - Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
 - inf-terraform-[aws|azure], add new jenkins-agent-terraform-2306 with updated tools (ruby 3.2.2, python 3.11, etc.) and dependencies, add tflint, mark other jenkins-agent-terraform as deprecated([#914](https://github.com/opendevstack/ods-quickstarters/issues/914))
 - Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
+- inf-terraform-[aws|azure], bump inspec-aws (v1.83.60) & inspec-azure (v1.118.41) library versions, drop use of symbolized keys in helper yaml files ([#927](https://github.com/opendevstack/ods-quickstarters/issues/927))
 - Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
 
