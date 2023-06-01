@@ -19,6 +19,7 @@
 - inf-terraform-[aws|azure], add new jenkins-agent-terraform-2306 with updated tools (ruby 3.2.2, python 3.11, etc.) and dependencies, add tflint, mark other jenkins-agent-terraform as deprecated([#914](https://github.com/opendevstack/ods-quickstarters/issues/914))
 - Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
 - Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
+- Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
 
 ## [4.1] - 2022-11-17
 
