@@ -28,9 +28,9 @@ pushd .
 terraform output -json > "${TOJFILE}"
 
 # Convert terraform json outputs to yaml.
-# Use symbolize_names for keys ("id" -> :id)
-# Symbolize_names is required, as kitchen-terraform outputs are created as inspec inputs using this type for keys.
+# Do not use symbolize_names for keys ("id" -> :id).
+# Symbolize_names is no longer required, as kitchen-terraform outputs are created as inspec inputs using this type for keys.
 jq 'with_entries(.value |= .value)|with_entries(.key = "output_" + .key)' "${TOJFILE}" | \
-  ruby -ryaml -rjson -e 'puts YAML.dump(JSON.parse(STDIN.read, :symbolize_names => true))' > "${TOYFILE}"
+  ruby -ryaml -rjson -e 'puts YAML.dump(JSON.parse(STDIN.read, :symbolize_names => false))' > "${TOYFILE}"
 
 popd

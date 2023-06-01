@@ -23,7 +23,7 @@
 variable "name" {
   description = "The name of the stack."
   type        = string
-  default     = "stack-azure-quickstarter-delete-me"
+  default     = "stack-azure-quickstarter"
 }
 
 variable "is_test" {
