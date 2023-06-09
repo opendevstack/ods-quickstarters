@@ -21,6 +21,7 @@
 - inf-terraform-[aws|azure], bump inspec-aws (v1.83.60) & inspec-azure (v1.118.41) library versions, drop use of symbolized keys in helper yaml files ([#927](https://github.com/opendevstack/ods-quickstarters/issues/927))
 - Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
+- Add binutils to jdk agent ([929](https://github.com/opendevstack/ods-quickstarters/issues/929))
 
 ## [4.1] - 2022-11-17
 
