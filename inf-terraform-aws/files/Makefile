@@ -64,8 +64,6 @@ test: install-test-deps
 		./.venv/bin/python3 ./.venv/bin/hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
 	done \
 
-	exit 0
-
 	# See https://github.com/test-kitchen/test-kitchen/issues/1436 for why a simple `bundle exec kitchen test` is not an option.
 	for suite in $$(bundle exec kitchen list --bare); do \
 		bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
@@ -156,7 +154,7 @@ install-test-deps: install-ruby-gems install-python-env
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/default/files/inputs-from-tfo-stack.yml --target aws://
 
 .PHONY: clean
 # Reset Working directory (take care if something has deployed upfront)
