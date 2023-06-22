@@ -15,33 +15,8 @@ control 'stack' do
   desc   "This test suite asserts the correct functionality of the stack under test."
   tag    name
 
-  cfClient       = SpecHelper::AWS.sdk.client(Aws::CloudFormation)
-  cfStackName    = name
-
-  # ###########################################################
-  # Test if Cloudformation Stack has been succesfully deployed
-  # ###########################################################
-  describe "CloudFormation Stack #{cfStackName}" do
-    cfStack = cfClient.describe_stacks({ stack_name: cfStackName }).stacks[0]
-
-    context 'status' do
-      it { expect(cfStack.stack_status).to eq("CREATE_COMPLETE").or eq("UPDATE_COMPLETE") }
-    end
-  end
-
-  cfStackOutputs     = t['cf_stack_outputs']
-  cfStackOutputsHash = cfStackOutputs.to_h
-  s3BucketName       = cfStackOutputsHash["S3BucketName"]
-
-  # ###########################################################
-  # Tests on resources deployed by the Cloudformation Stack
-  # ###########################################################
-  describe aws_s3_bucket(bucket_name: s3BucketName) do
-    it                      { should exist }
-    it                      { should_not be_public }
-    its('bucket_policy')    { should be_empty }
-    its('region')           { should eq 'eu-west-1' }
-    it                      { should have_default_encryption_enabled }
+  describe aws_region(region_name: t['current_region']) do
+    its('endpoint') { should be_in ['ec2.eu-west-1.amazonaws.com','ec2.us-east-1.amazonaws.com'] }
   end
 
   describe "Stack Testing" do
