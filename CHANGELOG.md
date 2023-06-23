@@ -23,6 +23,7 @@
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
 - Add binutils to jdk agent ([929](https://github.com/opendevstack/ods-quickstarters/issues/929))
 - Change golden tests to be able to execute them in other namespaces ([933](https://github.com/opendevstack/ods-quickstarters/pull/933))
+- inf-terraform-[aws], switch from shared statefile location to dedicated bucket ([#900](https://github.com/opendevstack/ods-quickstarters/issues/900))
 
 ## [4.1] - 2022-11-17
 

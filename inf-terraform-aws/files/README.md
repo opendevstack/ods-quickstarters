@@ -88,9 +88,9 @@ Runing `make check-config` will do a basic verification on the stack setup and p
 
 ```
 $ make check-config
-Account "XXXXXXXXXXXX" is configured for the "dev" environment...........Passed
-There is no account configured for the "test" environment................ Warn
-There is no account configured for the "prod" environment................ Warn
+Account "XXXXXXXXXXXX" is configured for the dev environment.............Passed
+There is no account configured for the test environment.................. Warn
+There is no account configured for the prod environment.................. Warn
 AWS account configured using SSO.........................................Passed
   Using "YYYYYYYYYYYYYY:ZZZZZZZZ@MyOrganization.com".....................Passed
 Backend configured to "MyStateFileLocation"..............................Passed
