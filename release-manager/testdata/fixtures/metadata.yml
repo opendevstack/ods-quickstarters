@@ -1,11 +1,11 @@
-id: unitt
-name: Project unitt
-description: Description of unitt.
+id: {{.ProjectID}}
+name: Project {{.ProjectID}}
+description: Description of {{.ProjectID}}.
 
 services:
   bitbucket:
     credentials:
-      id: unitt-cd-cd-user-with-password
+      id: {{.ProjectID}}-cd-cd-user-with-password
 
   nexus:
     repository:
