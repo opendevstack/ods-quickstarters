@@ -22,6 +22,7 @@
 - Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
 - Add binutils to jdk agent ([929](https://github.com/opendevstack/ods-quickstarters/issues/929))
+- inf-terraform-[aws], switch from shared statefile location to dedicated bucket ([#900](https://github.com/opendevstack/ods-quickstarters/issues/900))
 
 ## [4.1] - 2022-11-17
 
