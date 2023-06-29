@@ -45,11 +45,11 @@ See `./support/e2e.ts` for a generic login example.
 
 ## Cypress Cloud
 
-Cypress Cloud has been enabled as a functionality and can be used by the quickstarter users. Some configuration needs to be done in the quickstarter for the dashboard to start recording executions. For more information on this, please contact the support team.
-    
-**Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
+Cypress Cloud has been enabled as a functionality and can be used by the quickstarter users. Some configuration needs to be done in the quickstarter for the dashboard to start recording executions. 
 
-You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
+The steps for configuring this functionality are defined in (https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/e2e-cypress.html).
+
+For more information on this, please contact the support team.
 
 #### *Obsolete*
 
