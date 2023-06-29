@@ -4,7 +4,7 @@
 # https://mypy.readthedocs.io/en/stable/config_file.html#using-a-pyproject-toml-file
 
 [tool.mypy]
-python_version = 3.9
+python_version = 3.11
 warn_unused_configs = true
 disallow_untyped_calls = true       # Disallow calling functions without type annotations from functions with type annotations (inverse: __allow_untyped_calls)
 disallow_untyped_defs=true          # Disallow defining functions without type annotations or with incomplete type annotations (inverse: __allow_untyped_defs)

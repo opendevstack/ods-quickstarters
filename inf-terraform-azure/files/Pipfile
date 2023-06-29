@@ -6,8 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-python-hcl2 = "==2.0.3"
-azure-mgmt-compute = "==25.0.0"
+python-hcl2 = "~=2.0"
+azure-mgmt-compute = "~=29.1"
 yq = ">2"
 
 [requires]

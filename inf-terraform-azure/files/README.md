@@ -16,19 +16,19 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | 3.25.0 |
-| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.2.3 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.4.3 |
-| <a name="requirement_time"></a> [time](#requirement\_time) | 0.8.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | 3.56.0 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.4.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.5.1 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | 0.9.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.25.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.2.3 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4.3 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.8.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.56.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.4.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.5.1 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.9.1 |
 
 ## Modules
 
@@ -38,11 +38,11 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.25.0/docs/resources/resource_group) | resource |
-| [azurerm_resource_group_template_deployment.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.25.0/docs/resources/resource_group_template_deployment) | resource |
+| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.56.0/docs/resources/resource_group) | resource |
+| [azurerm_resource_group_template_deployment.this](https://registry.terraform.io/providers/hashicorp/azurerm/3.56.0/docs/resources/resource_group_template_deployment) | resource |
 | [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/0.8.0/docs/resources/static) | resource |
+| [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/static) | resource |
 
 ## Inputs
 

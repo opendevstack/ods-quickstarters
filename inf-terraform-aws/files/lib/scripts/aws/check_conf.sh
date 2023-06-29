@@ -48,7 +48,7 @@ function note() {
 }
 
 function check_backend() {
-  BUCKET=$(grep "bucket =" backend.tf | awk -F '=' '{print $2}'|tr -d '"'|xargs)
+  BUCKET="$ACCOUNT-terraform-state-bucket"
   if [ -n "$BUCKET" ]; then
     if [ "$BUCKET" = "$DEFAULTBUCKET" ]; then
       nok "TF Backend is not configured. Check your backend.tf file"
