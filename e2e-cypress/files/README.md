@@ -43,6 +43,14 @@ In order to generate one xml report per test type (installation, integration and
 With Cypress 12 version is now available `cy.origin()` that allows you to handle redirections. This funcionality eases the login handling.
 See `./support/e2e.ts` for a generic login example.
 
+## Cypress Cloud
+
+Cypress Cloud has been enabled as a functionality and can be used by the quickstarter users. Some configuration needs to be done in the quickstarter for the dashboard to start recording executions. 
+
+The steps for configuring this functionality are defined in (https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/e2e-cypress.html).
+
+For more information on this, please contact the support team.
+
 #### *Obsolete*
 
 This quickstarter provides a login command for Azure SSO with MSALv2 (`./support/msalv2-login.ts`) as well as sample code for a generic login (`./support/generic-login.ts`). 
