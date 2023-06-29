@@ -43,6 +43,34 @@ In order to generate one xml report per test type (installation, integration and
 With Cypress 12 version is now available `cy.origin()` that allows you to handle redirections. This funcionality eases the login handling.
 See `./support/e2e.ts` for a generic login example.
 
+## Cypress Cloud
+
+To use Cypress Cloud, follow these steps:
+1. **Request access to BI-dCYPRESS-DASHBOARDS-DEVSTACK AAD group.** In order to access Cypress Cloud, you will need to request access to BI-dCYPRESS-DASHBOARDS-DEVSTACK AAD group. This can be done through MyServices using the Active Directory Group - Administration Request form (following this link https://boehringer.service-now.com/bi?id=sc_cat_item&sys_id=2ddb1fa01bf0f050f7daed7f7b4bcb82). Once access has been granted, you will be able to log into https://cloud.cypress.io/login using your BI mail.
+
+2. **Create a project in Cypress Cloud.** Once you have access to the AAD group, you can create a project in Cypress Cloud. This project will be used to store your Cypress tests and results. 
+
+3. **Change the project ID as indicated in Cypress Cloud.** After creating the project, you will need to change the project ID in the four config files, to the one indicated in Cypress Cloud. This ID is used to identify your project and ensure that your tests are associated with the correct project.
+
+4. **Set the Cypress Record Key as an environment variable in Openshift.** To enable recording of your tests in Cypress Cloud, you will need to set the Cypress Record Key as an environment variable named CYPRESS_RECORD_KEY in Openshift. This key is provided by Cypress and is used to authenticate your tests and results. By setting it in Openshift, we ensure that the record functionality will only be used in official runs and not for local development.
+
+5. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change line 59 
+    ```
+    def status = sh(script: 'npm run e2e', returnStatus: true)
+    ```
+    for the following block of code, which will run the record script only when in master or in a release branch:
+    ```
+    if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
+      def status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+    } else {
+      def status = sh(script: 'npm run e2e', returnStatus: true)
+    }
+    ```
+    
+**Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
+
+You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
+
 #### *Obsolete*
 
 This quickstarter provides a login command for Azure SSO with MSALv2 (`./support/msalv2-login.ts`) as well as sample code for a generic login (`./support/generic-login.ts`). 
