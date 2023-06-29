@@ -46,7 +46,7 @@ See `./support/e2e.ts` for a generic login example.
 ## Cypress Cloud
 
 To use Cypress Cloud, follow these steps:
-1. **Request access to BI-dCYPRESS-DASHBOARDS-DEVSTACK AAD group.** In order to access Cypress Cloud, you will need to request access to BI-dCYPRESS-DASHBOARDS-DEVSTACK AAD group. This can be done through MyServices using the Active Directory Group - Administration Request form (following this link https://boehringer.service-now.com/bi?id=sc_cat_item&sys_id=2ddb1fa01bf0f050f7daed7f7b4bcb82). Once access has been granted, you will be able to log into https://cloud.cypress.io/login using your BI mail.
+1. **Request access.** In order to access Cypress Cloud, you will need to request access to the AAD group. This can be done through MyServices using the Active Directory Group - Administration Request form. Once access has been granted, you will be able to log into https://cloud.cypress.io/login using your mail.
 
 2. **Create a project in Cypress Cloud.** Once you have access to the AAD group, you can create a project in Cypress Cloud. This project will be used to store your Cypress tests and results. 
 
