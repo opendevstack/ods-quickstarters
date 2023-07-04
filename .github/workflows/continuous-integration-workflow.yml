@@ -1,24 +1,10 @@
 name: Continous Integration Tests
 on: [ push, pull_request ]
 jobs:
-  jenkins-agent-golang-centos7:
-    name: Jenkins agent Go (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/golang/docker
-        run: |
-          docker build --tag agent-go-test-centos7 --file Dockerfile.centos7 \
-            --build-arg goDistributionUrl=https://golang.org/dl/go1.14.2.linux-amd64.tar.gz \
-            .
 
   jenkins-agent-golang-ubi8:
     name: Jenkins agent Go (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -33,7 +19,7 @@ jobs:
 
   jenkins-agent-maven-ubi8:
     name: Jenkins agent Maven (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -48,42 +34,9 @@ jobs:
               --build-arg nexusPassword=s3cr3t \
               .
 
-  jenkins-agent-maven-centos7:
-    name: Jenkins agent Maven (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/maven/docker
-        run: |
-          docker build --tag agent-maven-test-centos7 --file Dockerfile.centos7 \
-            --build-arg nexusUrl=https://nexus.example.com \
-            --build-arg nexusUsername=developer \
-            --build-arg nexusPassword=s3cr3t \
-            .
-
-  jenkins-agent-nodejs12-centos7:
-    name: Jenkins agent NodeJS 12 (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs12/docker
-        run: |
-            docker build --tag agent-nodejs12-test-centos7 --file Dockerfile.centos7 \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
-
   jenkins-agent-nodejs12-ubi8:
     name: Jenkins agent NodeJS 12 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -97,25 +50,9 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-nodejs16-centos7:
-    name: Jenkins agent NodeJS 16 (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs16/docker
-        run: |
-            docker build --tag agent-nodejs16-test-centos7 --file Dockerfile.centos7 \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
-
   jenkins-agent-nodejs16-ubi8:
     name: Jenkins agent NodeJS 16 (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -129,22 +66,9 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-python-centos7:
-    name: Jenkins agent Python (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/python/docker
-        run: |
-          docker build --tag agent-python-test-centos7 --file Dockerfile.centos7 .
-
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -155,23 +79,9 @@ jobs:
         run: |
           docker build --tag agent-python-test-ubi8 --file Dockerfile.ubi8 .
 
-
-  jenkins-agent-terraform-centos7:
-    name: Jenkins agent Terraform (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/terraform/docker
-        run: |
-          docker build --tag agent-terraform-test-centos7 --file Dockerfile.centos7 .
-
   jenkins-agent-terraform-ubi8:
     name: Jenkins agent Terraform (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -182,26 +92,9 @@ jobs:
         run: |
           docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
 
-  jenkins-agent-scala-centos7:
-    name: Jenkins agent Scala (CENTOS7)
-    runs-on: ubuntu-18.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v2.0.0
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/scala/docker
-        run: |
-          docker build --tag agent-scala-test-centos7 --file Dockerfile.centos7 \
-             --build-arg nexusUrl=https://nexus.example.com \
-             --build-arg nexusUsername=developer \
-             --build-arg nexusPassword=s3cr3t \
-             .
-
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
@@ -210,7 +103,7 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker
         run: |
-          docker build --tag agent-scala-test-centos7 --file Dockerfile.ubi8 \
+          docker build --tag agent-scala-test-ubi8 --file Dockerfile.ubi8 \
              --build-arg nexusUrl=https://nexus.example.com \
              --build-arg nexusUsername=developer \
              --build-arg nexusPassword=s3cr3t \

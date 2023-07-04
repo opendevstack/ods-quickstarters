@@ -15,7 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-base:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-python:${agentImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
@@ -28,4 +28,6 @@ odsQuickstarterPipeline(
   }
 
   odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderSonarProperties(context)
 }

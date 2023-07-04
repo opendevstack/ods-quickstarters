@@ -21,12 +21,9 @@ odsQuickstarterPipeline(
   odsQuickstarterStageCopyFiles(context)
 
   stage('Setup OpenShift resources') {
-    sh """sh common/scripts/create-ds-component.sh \
+    sh """sh common/scripts/create-component-with-oauth.sh \
       --project ${context.projectId} \
       --component ${context.componentId} \
-      --nexus-url ${context.nexusUrl} \
-      --nexus-username ${context.nexusUsername} \
-      --nexus-password ${context.nexusPassword} \
       --non-interactive"""
   }
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
+- Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
+- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
+- Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
+
 ## [4.1] - 2022-11-17
 
 ### Added
