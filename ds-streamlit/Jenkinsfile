@@ -12,10 +12,10 @@ node {
   agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
 }
 
-library("ods-jenkins-shared-library@${agentImageTag}")
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-python:${odsImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-python:${agentImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
