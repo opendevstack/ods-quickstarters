@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fixed Angular build for error "Unknown argument: sourceMap" ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
 - Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
 - Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
