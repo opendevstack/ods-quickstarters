@@ -1,32 +1,50 @@
 # Changelog
 
-## Unreleased
-- Fixed Angular build for error "Unknown argument: sourceMap" ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
-- Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
+### Added
+
+### Modified
+
+### Fixed
+
+## [4.3.0] - 2023-07-13
+
+### Added
 - Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
+- Cypress Cloud integration and switch to nodejs 18 ([#935](https://github.com/opendevstack/ods-quickstarters/pull/935))
+- Provide build agent for Node.js 18 ([#794](https://github.com/opendevstack/ods-quickstarters/issues/794))
+
+### Modified
+- Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
-- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
-- Upgrade be-gateway-nginx from fedora-rpm to rocky and from version 1.19 to 1.21 ([#880](https://github.com/opendevstack/ods-quickstarters/issues/880))
-- Upgraded to Cypress 12, improve login support, add video support ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
-- Added Cypress Cloud integration to cypress QS and changed agent node version to node 18 ([#935](https://github.com/opendevstack/ods-quickstarters/pull/935))
-- Fix inf-terraform-agent bundler complaining about /tmp permissions ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
-- Fix nodejs 18 build by removing option always-auth ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
-- Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
-- Upgrade packages in Angular and TypeScript quickstarters, fix nodejs18 agent error with auth in npm9 ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
-- Update Go quickstarter to Go 1.20 and align version of golangci-lint and go-junit-report ([#877](https://github.com/opendevstack/ods-quickstarters/issues/877))
-- Fix mismatch on java versions in base agent and jdk agent ([#916](https://github.com/opendevstack/ods-quickstarters/pull/916))
-- Scala maintenance ([#879](https://github.com/opendevstack/ods-quickstarters/issues/879))
-- Ionic maintenance ([#899](https://github.com/opendevstack/ods-quickstarters/issues/899))
-- Update of Maven agent, Java and Spock/Geb quickstarter ([#878](https://github.com/opendevstack/ods-quickstarters/issues/878))
-- inf-terraform-[aws|azure], add new jenkins-agent-terraform-2306 with updated tools (ruby 3.2.2, python 3.11, etc.) and dependencies, add tflint, mark other jenkins-agent-terraform as deprecated([#914](https://github.com/opendevstack/ods-quickstarters/issues/914))
 - Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
-- inf-terraform-[aws|azure], bump inspec-aws (v1.83.60) & inspec-azure (v1.118.41) library versions, drop use of symbolized keys in helper yaml files ([#927](https://github.com/opendevstack/ods-quickstarters/issues/927))
-- Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
+- inf-terraform-aws: remove cloudformation stack from default quickstarter ([#934](https://github.com/opendevstack/ods-quickstarters/pull/934))
+- inf-terraform-aws: switch from shared statefile location to dedicated ([#932](https://github.com/opendevstack/ods-quickstarters/pull/932))
+- Change sonar-scan.json and release manager template to use any project ([#933](https://github.com/opendevstack/ods-quickstarters/pull/933))
+- Add binutils package to jdk-17 agent ([#929](https://github.com/opendevstack/ods-core/issues/929))
+- inf-terraform-[aws|azure], bump inspec-aws (v1.83.60) & inspec-azure (v1.118.41) library versions, drop use of symbolized keys in helper yaml files ([#927](https://github.com/opendevstack/ods-quickstarters/pull/927))
+- inf-terraform-[aws|azure], jenkins-agent-terraform-2306 with tooling update (ruby 3.2.2, python 3.11) ([#923](https://github.com/opendevstack/ods-quickstarters/pull/923))
+- Update python agent, pyhon, streamlit and jupyter quickstarters to 3.11 ([#924](https://github.com/opendevstack/ods-quickstarters/pull/924))
+- Upgrade to Cypress 12 ([#908](https://github.com/opendevstack/ods-quickstarters/pull/908))
+- Update scala agent and be-scala-play quickstarter ([#919](https://github.com/opendevstack/ods-quickstarters/pull/919))
+- Update Ionic Quickstarter ([#917](https://github.com/opendevstack/ods-quickstarters/pull/917))
+- Update Go quickstarter to Go 1.20 and align version of golangci-lint and go-junit-report ([#915](https://github.com/opendevstack/ods-quickstarters/pull/915))
+- Rename maven-agent to jdk-agent, update springboot & spock-geb quickstarters ([#901](https://github.com/opendevstack/ods-quickstarters/pull/901))
+- Update Angular and TypeScript quickstarters ([#910](https://github.com/opendevstack/ods-quickstarters/pull/910))
+- Upgrade be-gateway-nginx to rocky 1.21 openresty/nginx ([#883](https://github.com/opendevstack/ods-quickstarters/pull/883))
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
-- Add binutils to jdk agent ([929](https://github.com/opendevstack/ods-quickstarters/issues/929))
-- Change golden tests to be able to execute them in other namespaces ([933](https://github.com/opendevstack/ods-quickstarters/pull/933))
-- inf-terraform-[aws], switch from shared statefile location to dedicated bucket ([#900](https://github.com/opendevstack/ods-quickstarters/issues/900))
-- inf-terraform-[aws], remove Cloudformation exampe from quickstarter ([#934](https://github.com/opendevstack/ods-quickstarters/pull/934))
+
+### Fixed
+- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
+- Fix Jenkinsfile params in StreamLit ([#941](https://github.com/opendevstack/ods-quickstarters/pull/941)) ([#939](https://github.com/opendevstack/ods-quickstarters/pull/939))
+- Fixed Angular build for error "Unknown argument: sourceMap" ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
+- Fix mismatch on java version in base and jdk agents ([#916](https://github.com/opendevstack/ods-quickstarters/pull/916))
+- TypeScript QS fails to build ([#897](https://github.com/opendevstack/ods-quickstarters/issues/897))
+- Issues with agent permision in new OCP version ([#901](https://github.com/opendevstack/ods-quickstarters/pull/901))
+- Removed protractor-related configuration from `ini.sh` in Ionic quickstarter ([#885](https://github.com/opendevstack/ods-quickstarters/issues/885))
+- change /tmp permissions in inf-terraform-agent ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
+- nodejs 18 agent builds fail ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
+- Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
+- Fix Release manager Jenkinsfile ([#943](https://github.com/opendevstack/ods-quickstarters/pull/943))
 
 ## [4.1] - 2022-11-17
 

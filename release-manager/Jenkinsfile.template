@@ -4,5 +4,5 @@
 
 odsOrchestrationPipeline(
   debug: true,
-  odsImageTag: '@ods_image_tag@'
+  odsImageTag: '@agent_image_tag@'
 )
