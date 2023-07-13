@@ -36,7 +36,7 @@
 ### Fixed
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Fix Jenkinsfile params in StreamLit ([#941](https://github.com/opendevstack/ods-quickstarters/pull/941)) ([#939](https://github.com/opendevstack/ods-quickstarters/pull/939))
-- Fix Angular Build ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
+- Fixed Angular build for error "Unknown argument: sourceMap" ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
 - Fix mismatch on java version in base and jdk agents ([#916](https://github.com/opendevstack/ods-quickstarters/pull/916))
 - TypeScript QS fails to build ([#897](https://github.com/opendevstack/ods-quickstarters/issues/897))
 - Issues with agent permision in new OCP version ([#901](https://github.com/opendevstack/ods-quickstarters/pull/901))
@@ -44,6 +44,7 @@
 - change /tmp permissions in inf-terraform-agent ([#903](https://github.com/opendevstack/ods-quickstarters/pull/903))
 - nodejs 18 agent builds fail ([#905](https://github.com/opendevstack/ods-quickstarters/issues/905))
 - Fix imagePullPolicy issue when verifying the image ([#874](https://github.com/opendevstack/ods-quickstarters/issues/874))
+- Fix Release manager Jenkinsfile ([#943](https://github.com/opendevstack/ods-quickstarters/pull/943))
 
 ## [4.1] - 2022-11-17
 

@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 import setupNodeEvents from './plugins/index.js'
 export default defineConfig({
-  //projectId: '[Define your project id for Cypress cloud]',
+  //projectId: '[Your project ID from Cypress cloud]',
   reporter: 'junit',
   reporterOptions: {
     mochaFile: 'build/test-results/integration-junit-[hash].xml',
