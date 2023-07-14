@@ -55,6 +55,19 @@
 - Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
 - Add Node.js 18 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/794))
 
+- Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
+- Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
+- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
+- Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
+
+## [4.1] - 2022-11-17
+
+### Added
+
+- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
+- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
+- Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
+
 ### Modified
 
 - Add JVM parameters on docgen deployment 4x ([#671](https://github.com/opendevstack/ods-quickstarters/pull/671))
