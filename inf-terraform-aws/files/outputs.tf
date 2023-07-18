@@ -13,3 +13,8 @@ output "meta_environment" {
   description = "The type of the environment."
   value       = var.meta_environment
 }
+
+output "aws_region" {
+  description = "The current region."
+  value       = data.aws_region.current.name
+}

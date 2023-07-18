@@ -74,20 +74,5 @@ sed -i "s|\s*reporters: \['progress', 'kjhtml'\],|    $UNIT_XML_CONFIG|" ./karma
 echo "configure coverage reporter in karma.conf.js"
 sed -i "s|{ type: 'text-summary' }|{ type: 'lcovonly' },\n        { type: 'text-summary' }|" ./karma.conf.js
 
-echo "configure headless chrome in protractor.conf.js"
-read -r -d "" PROTRACTOR_CHROME_CONFIG << EOM || true
-    browserName: 'chrome',\\
-    chromeOptions: {\\
-      args: \[\\
-        'headless',\\
-        'no-sandbox',\\
-        'disable-web-security',\\
-        '--disable-gpu',\\
-        '--window-size=1024,768'\\
-      \]\\
-    }
-EOM
-sed -i "s|\s*browserName: 'chrome'|    $PROTRACTOR_CHROME_CONFIG|" ./e2e/protractor.conf.js
-
 echo "copy files from quickstart to generated project"
 cp -rv $SCRIPT_DIR/files/. .

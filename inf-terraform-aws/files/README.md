@@ -16,16 +16,16 @@ The behavior of a stack is determined by its purpose and the set of input parame
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.31.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | 3.4.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.67.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | 3.5.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.31.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.67.0 |
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
 | <a name="provider_time"></a> [time](#provider\_time) | n/a |
 
 ## Modules
@@ -36,9 +36,9 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudformation_stack.cft-s3](https://registry.terraform.io/providers/hashicorp/aws/4.31.0/docs/resources/cloudformation_stack) | resource |
+| [aws_cloudformation_stack.cft-s3](https://registry.terraform.io/providers/hashicorp/aws/4.67.0/docs/resources/cloudformation_stack) | resource |
 | [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.4.3/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.5.1/docs/resources/id) | resource |
 | [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 
 ## Inputs
@@ -88,9 +88,9 @@ Runing `make check-config` will do a basic verification on the stack setup and p
 
 ```
 $ make check-config
-Account "XXXXXXXXXXXX" is configured for the "dev" environment...........Passed
-There is no account configured for the "test" environment................ Warn
-There is no account configured for the "prod" environment................ Warn
+Account "XXXXXXXXXXXX" is configured for the dev environment.............Passed
+There is no account configured for the test environment.................. Warn
+There is no account configured for the prod environment.................. Warn
 AWS account configured using SSO.........................................Passed
   Using "YYYYYYYYYYYYYY:ZZZZZZZZ@MyOrganization.com".....................Passed
 Backend configured to "MyStateFileLocation"..............................Passed

@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs16:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs18:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
   // 'release/': 'test'
@@ -25,7 +25,7 @@ def stageBuild(def context) {
       if ('master'.equals(context.gitBranch)) {
         sh 'npm run build'
       } else {
-        sh 'npm run build -- --sourceMap=true'
+        sh 'npm run build -- --source-map=true'
       }
     }
     sh "cp -r dist/${context.componentId} docker/dist"

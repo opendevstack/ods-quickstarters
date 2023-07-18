@@ -1,0 +1,14 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-jdk
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-jdk
+    labels:
+      app: jenkins-agent-jdk
+  spec:
+    lookupPolicy:
+      local: false

@@ -1,18 +1,17 @@
 {
-  "key": "unitt-spock",
-  "organization": "default-organization",
-  "name": "unitt-spock",
+  "key": "{{.ProjectID}}-{{.ComponentID}}",
+  "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
-      "name": "Sonar way",
+      "name": "{{.SonarQualityProfile}}",
       "language": "grvy",
       "deleted": false
     },
     {
-      "name": "Sonar way",
+      "name": "{{.SonarQualityProfile}}",
       "language": "java",
       "deleted": false
     }
@@ -23,8 +22,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-spock",
-      "name": "unitt-spock",
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
       "qualifier": "TRK"
     }
   ]

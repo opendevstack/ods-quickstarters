@@ -7,7 +7,7 @@ The image is built in the global `ods` project and is named `jenkins-agent-scala
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-scala`.
 
 == Features
-. SBT 1.1.6
+. SBT 1.8.2
 . HTTP proxy aware
 . Nexus aware
 

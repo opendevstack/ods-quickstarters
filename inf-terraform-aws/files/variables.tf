@@ -31,13 +31,3 @@ variable "meta_environment" {
   default     = "DEVELOPMENT"
 }
 
-# ---------------------------------------------
-# S3 Bucket Variables
-# ---------------------------------------------
-
-variable "data_bucket_name" {
-  description = "The name of the S3 data bucket."
-  type        = string
-  default     = "quickstarter"
-}
-
