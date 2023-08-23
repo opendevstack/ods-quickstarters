@@ -159,7 +159,7 @@ RUN dnf install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VER
 
 RUN chmod +t /tmp \
     && chown -R 1001:0 $HOME \
-    && chmod -R g+rw $HOME \
+    && chmod -R g+rwX $HOME \
     && mkdir -p $GEM_HOME \
     && chmod 2770 $GEM_HOME
 
