@@ -1,0 +1,30 @@
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
+
+node {
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+}
+
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-terraform2:${agentImageTag}",
+) { context ->
+
+  // Create a new AWS CDK project by invoking cdk init.
+  sh("""
+  mkdir ${context.componentId}/src && cd ${context.componentId}/src
+  cdk init app --language python
+  """)
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+}
