@@ -5,6 +5,7 @@
 ### Modified
 
 ### Fixed
+- jenkins agents can not import private keys into gpg keyring to use with helm secrets ([#945](https://github.com/opendevstack/ods-quickstarters/issues/945))
 
 ## [4.3.0] - 2023-07-13
 
