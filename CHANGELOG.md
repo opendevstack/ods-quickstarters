@@ -5,6 +5,7 @@
 ### Modified
 
 ### Fixed
+- Streamlit quickstarter build fails to import nexus host certificates into truststore ([#951](https://github.com/opendevstack/ods-quickstarters/issues/951))
 
 ## [4.3.0] - 2023-07-13
 
