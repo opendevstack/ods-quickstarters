@@ -23,7 +23,7 @@ RUN chown -R 1001:0 /app && \
 WORKDIR /app
 
 # Install OS dependencies and update certs
-RUN openssl s_client -showcerts -host ${NEXUS_HOST} -port 443  </dev/null| \
+RUN openssl s_client -showcerts -host ${nexusHostWithoutScheme} -port 443  </dev/null| \
     sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /etc/pki/ca-trust/source/anchors/oc_app.crt && \
     update-ca-trust
  
