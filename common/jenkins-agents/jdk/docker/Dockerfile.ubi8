@@ -85,7 +85,7 @@ RUN mkdir -p $GRADLE_USER_HOME && \
 RUN bash -l -c 'echo export JAVA_OPTS="$(/tmp/set_java_proxy.sh && echo $JAVA_OPTS)" >> /etc/bash.bashrc'
 
 RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME && \
+    chmod -R g+rwX $HOME && \
     chmod -c 666 /etc/pki/ca-trust/extracted/java/cacerts && \
     ls -la /etc/pki/ca-trust/extracted/java/cacerts
 
