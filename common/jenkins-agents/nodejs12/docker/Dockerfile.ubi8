@@ -73,6 +73,6 @@ RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     echo yarn version: $(yarn --version)
 
 RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME
+    chmod -R g+rwX $HOME
 
 USER 1001

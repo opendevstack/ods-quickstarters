@@ -5,6 +5,8 @@
 ### Modified
 
 ### Fixed
+- jenkins agents can not import private keys into gpg keyring to use with helm secrets ([#945](https://github.com/opendevstack/ods-quickstarters/issues/945))
+- Streamlit quickstarter build fails to import nexus host certificates into truststore ([#951](https://github.com/opendevstack/ods-quickstarters/issues/951))
 
 ## [4.3.0] - 2023-07-13
 
