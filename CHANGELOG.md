@@ -2,6 +2,8 @@
 
 ### Added
 
+- inf-cdk-python-aws, provide first iteration of the AWS CDK Quickstarter ([#956](https://github.com/opendevstack/ods-quickstarters/pull/956))
+
 ### Modified
 
 ### Fixed
