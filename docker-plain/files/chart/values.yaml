@@ -5,10 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  imagePullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
@@ -16,7 +13,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -38,32 +35,59 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
+# BUG(serverhorror): FIXME
 ingress:
   enabled: false
   className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  annotations:
+    # Please see: https://confluence.biscrum.com/x/YxU_FQ
+    # the cluster-issuer that cert-manager should use
+    cert-manager.io/cluster-issuer: "bi-acme-issuer"
+    # Add your CN (e.g. your main domain)
+    cert-manager.io/common-name: your-app.apps.eu-dev.ocp.aws.boehringer.com
+    # Add your mail
+    cert-manager.io/email-sans: your-mail@boehringer-ingelheim.com
+     # configure your Org
+    cert-manager.io/subject-organizations: Boehringer Ingelheim GmbH
+     # configure your Org Unit
+    cert-manager.io/subject-organizationalunits: IT
+     # configure your Org country
+    cert-manager.io/subject-countries: DE
+    # You can also add your province, etc here (see cert-manager docs)
+
+     # try to renew your certificate 30 days before it will expire (default is 15 days)
+    cert-manager.io/renew-before: 720h
+     # limit the number of CertificateRequests to keep to the last 5 (by default it will keep all CertificateRequests)
+    cert-manager.io/revision-history-limit: '5'
+     # set the encoding of your private key (default is PKCS1)
+    cert-manager.io/private-key-encoding: PKCS8
+     # the key size to use for the RSA private key algorithm
+     # (default is 2048; you can also go up to 8192).
+     # You could also switch to other private key alogrithms,
+     # which are not supported by the BI ACME server as far as I know.
+    cert-manager.io/private-key-size: '4096'
   hosts:
-    - host: chart-example.local
+    # BUG(serverhorror): FIXME
+    - host: chart-example.eu.example.invalid
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: chart-example-tls
+      hosts:
+        # BUG(serverhorror): FIXME
+        - chart-example.eu.example.invalid
 
-resources: {}
+resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
   # requests:
   #   cpu: 100m
   #   memory: 128Mi

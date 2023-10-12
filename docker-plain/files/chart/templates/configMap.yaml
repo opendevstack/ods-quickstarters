@@ -1,0 +1,15 @@
+{{- if false -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-configmap"
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  capabilities: |
+    {{- range $capability := .Capabilities.APIVersions }}
+    - {{ $capability }}
+    {{- end }}
+  kubeVersion: {{ printf "%#v" .Capabilities.KubeVersion }}
+  kubeVersion.gitVersion: {{ printf "%#v" .Capabilities.KubeVersion.GitVersion }}
+{{- end }}

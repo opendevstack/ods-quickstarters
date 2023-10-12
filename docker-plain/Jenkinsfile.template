@@ -20,7 +20,10 @@ odsComponentPipeline(
     */
     odsComponentStageBuildOpenShiftImage(context)
   }
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  odsComponentStageRolloutOpenShiftDeployment(context,[
+    'selector': "app.kubernetes.io/instance=${context.componentId}",
+    'helmEnvBasedValuesFiles': ['values.env.yaml']
+  ])
 }
 
 def stageBuild(def context) {
@@ -36,4 +39,3 @@ def stageUnitTest(def context) {
     // add your unit tests here, if needed
   }
 }
-

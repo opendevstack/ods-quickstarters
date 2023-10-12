@@ -1,0 +1,21 @@
+{{- if .Capabilities.APIVersions.Has "route.openshift.io/v1/Route" }}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  # BUG(serverhorror): FIXME
+  host: {{ include "chart.fullname" . }}
+  to:
+    kind: Service
+    name: {{ include "chart.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+{{- end }}
