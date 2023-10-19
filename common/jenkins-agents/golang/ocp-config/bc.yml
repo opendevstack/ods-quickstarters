@@ -17,7 +17,7 @@ parameters:
   value: Dockerfile.ubi8
   description: Dockerfile variant to use
 - name: GO_DISTRIBUTION_URL
-  value: https://go.dev/dl/go1.20.4.linux-amd64.tar.gz
+  value: https://go.dev/dl/go1.21.3.linux-amd64.tar.gz
   description: URL pointing to go binary
 objects:
 - apiVersion: v1
