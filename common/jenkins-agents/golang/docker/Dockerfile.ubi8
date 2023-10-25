@@ -1,7 +1,5 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
-LABEL maintainer="Michael Sauter <michael.sauter@boehringer-ingelheim.com>"
-
 ARG goDistributionUrl=https://go.dev/dl/go1.21.3.linux-amd64.tar.gz
 ARG golangciVersion=v1.54.2
 
