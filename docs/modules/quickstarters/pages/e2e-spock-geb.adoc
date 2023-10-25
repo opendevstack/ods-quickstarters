@@ -11,6 +11,7 @@ This is a spock, geb and unirest e2e testing project quickstarter with basic set
 ----
 .
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── README.md
 ├── sonar-project.properties
 ├── src
@@ -132,6 +133,8 @@ In Jenkinsfile.template, there is the following stage:
 ** acceptance-groovy
 
 All the results are stashed and published through Jenkins jUnit publisher.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
