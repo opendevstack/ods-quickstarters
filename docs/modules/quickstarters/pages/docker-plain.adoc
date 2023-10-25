@@ -76,19 +76,7 @@ Assuming your component contains source code you want to have delivered by the _
 
 Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
 
-== Secret scanning with gitleaks
-
-This repository has a pre-commit hook that runs gitleaks on every commit.
-To install the hook, run:
-
-```
-pip install pre-commit
-pre-commit
-```
-
-After this every commit will inform you about any secrets that are committed.
-
-If you want to skip this check, use the `--no-verify` flag when committing.
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
