@@ -13,6 +13,7 @@ An example Play Web Application is generated with a Controller and some tests.
 ----
 .
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── app
 │   ├── controllers
 │   │   └── HomeController.scala
@@ -82,6 +83,8 @@ The Jenkinsfile is provisioned with this quickstarter to ease CI/CD process.
 In Jenkinsfile, there are various stages
 
 * stageBuild - checks source files formatting, runs the tests and builds and copies the artifacts for creating the docker image to the `docker` directory.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
