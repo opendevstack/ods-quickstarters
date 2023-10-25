@@ -10,8 +10,8 @@ or that you need to "OpenShiftify", by setting an (non-root) execution user, etc
 
 ----
 ├── Jenkinsfile - Contains Jenkins build configuration
-├── README.md
 ├── .pre-commit-config.yaml
+├── README.md
 ├── docker - Contains Dockerfile for the build
 │   └── Dockerfile
 ├── metadata.yml - Component metadata
