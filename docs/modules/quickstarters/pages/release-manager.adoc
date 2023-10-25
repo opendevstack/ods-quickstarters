@@ -8,6 +8,7 @@ The release manager supports the orchestration of multiple repositories into a l
 .
 ├── docs         # Fall-back document chapter templates for (LeVA) compliance reports.
 ├── Jenkinsfile  # The release manager pipeline.
+├── .pre-commit-config.yaml
 ├── README.md
 └── metadata.yml # Configuration of the release manager pipeline and its repositories.
 ----
@@ -133,3 +134,5 @@ In this case, the release manager will fall back to the document chapter templat
 === Automated Cloning of Environments
 
 If you want your _target environment_ to be created from an existing _source environment_ such as `dev` or `test` on the fly, you need to provide the `environment` and `sourceEnvironmentToClone` parameters to your pipeline, respectively. Their values will be combined with your project ID in the form `${project-id}-${environment}` to create the project (namespace) name in your OpenShift cluster.
+
+include::partial$secret-scanning-with-gitleaks.adoc
