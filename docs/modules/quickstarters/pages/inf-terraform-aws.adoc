@@ -14,6 +14,7 @@ The quickstarter includes kitchen-terraform with InSpec / cinc-auditor for testi
 
 ----
 ├── Jenkinsfile - This file contains Jenkins stages.
+├── .pre-commit-config.yaml
 ├── README.md
 ├── environments
 │   ├── dev.json - This file describes parameters for the development AWS environment.
@@ -42,7 +43,9 @@ Inject preferred tags into common-tags.tf, add/remove resources needed to main.t
 
 The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages.
 
-== Jenkins agent used
+include::partial$secret-scanning-with-gitleaks.adoc
+
+== Builder agent used
 
 This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/terraform[terraform] Jenkins agent.
 
