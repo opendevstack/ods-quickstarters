@@ -1,6 +1,7 @@
 # Changelog
 
 ### Added
+- Added scret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 
 ### Modified
 
