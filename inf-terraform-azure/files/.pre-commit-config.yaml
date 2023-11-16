@@ -1,6 +1,10 @@
 exclude: .terraform
 fail_fast: true
 repos:
+-   repo: https://github.com/gitleaks/gitleaks
+    rev: v8.16.1
+    hooks:
+    -   id: gitleaks
 -   repo: https://github.com/pre-commit/pre-commit-hooks.git
     rev: v4.4.0
     hooks:
@@ -77,4 +81,3 @@ repos:
         files: (\.tf|\.rb)$
         pass_filenames: false
         verbose: true
-

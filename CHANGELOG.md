@@ -1,6 +1,7 @@
 # Changelog
 
 ### Added
+- Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 
 ### Modified
 

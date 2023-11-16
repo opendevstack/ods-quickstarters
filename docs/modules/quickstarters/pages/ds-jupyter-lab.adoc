@@ -9,6 +9,7 @@ Provision a shared Jupyter Lab within OpenShift for rapid prototyping of data sc
 ----
 .
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── docker
 │   ├── Dockerfile
 │   ├── jupyter_lab_config.json
@@ -67,6 +68,8 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 
 . Start OpenShift build
 . Deploy image to OpenShift
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

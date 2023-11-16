@@ -33,6 +33,7 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 ├── cypress.env.json.template
 ├── cypress.json
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── metadata.yml - Component metadata
 │── package.json
 ├── README.md
@@ -122,6 +123,8 @@ if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
 **Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
 
 You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
