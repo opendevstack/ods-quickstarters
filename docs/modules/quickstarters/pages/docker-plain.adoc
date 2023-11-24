@@ -10,6 +10,7 @@ or that you need to "OpenShiftify", by setting an (non-root) execution user, etc
 
 ----
 ├── Jenkinsfile - Contains Jenkins build configuration
+├── .pre-commit-config.yaml
 ├── README.md
 ├── docker - Contains Dockerfile for the build
 │   └── Dockerfile
@@ -74,6 +75,8 @@ Assuming your component contains source code you want to have delivered by the _
 - provide these test results to the link:https://plugins.jenkins.io/junit[Jenkins JUnit plugin] via its `junit` step function.
 
 Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

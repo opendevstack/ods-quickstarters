@@ -1,13 +1,12 @@
 {
-  "key": "unitt-docgen",
-  "organization": "default-organization",
-  "name": "unitt-docgen",
+  "key": "{{.ProjectID}}-{{.ComponentID}}",
+  "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
-      "name": "Sonar way",
+      "name": "{{.SonarQualityProfile}}",
       "language": "grvy",
       "deleted": false
     }
@@ -18,8 +17,8 @@
   },
   "breadcrumbs": [
     {
-      "key": "unitt-docgen",
-      "name": "unitt-docgen",
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
       "qualifier": "TRK"
     }
   ]

@@ -11,6 +11,7 @@ User this is a Angular project quickstarter if you want to build a frontend. It 
 ----
 .
 ├── Jenkinsfile - This file contains Jenkins build configuration settings
+├── .pre-commit-config.yaml
 ├── README.md
 ├── angular.json - This file contains Angular project configuration settings
 ├── browserslist - This file is used by the build system to adjust CSS and JS output to support the specified browsers
@@ -85,6 +86,8 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 Please note: By default the applciation is always build as full production build including all sorts of optimizations. In addition source maps will be added except for builds that are triggered from `master`. This can be changed by configuring (additional) build configurations within `angular.json` and by using them via stageBuild or `package.json`.
 
 Please note: The support for *TSLint* has been removed from this quickstarter. Also Angular is not shipping a linter by default anymore. Please consider adding *ESLint* support or a formatter like *Prettier*. For adding ESLint simply type `ng add @angular-eslint/schematics`. For setting up Prettier please see https://prettier.io/docs/en/install.html.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

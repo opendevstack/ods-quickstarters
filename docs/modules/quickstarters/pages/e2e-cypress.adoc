@@ -33,6 +33,7 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 ├── cypress.env.json.template
 ├── cypress.json
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── metadata.yml - Component metadata
 │── package.json
 ├── README.md
@@ -66,9 +67,9 @@ A more advanced solution could be the use of a custom builder agent, where Cypre
 [source,docker]
 ----
 # The following FROM tag is informational. It is overwritten by OpenShift.
-FROM ods/jenkins-agent-nodejs16:4.x
+FROM ods/jenkins-agent-nodejs18:4.x
 
-ARG cypressVersion=9.5.3
+ARG cypressVersion=12.9.0
 ARG cypressHash=...
 
 USER root
@@ -94,10 +95,41 @@ RUN chgrp -R 0 $HOME && \
 USER 1001
 ----
 
+== Cypress Cloud
+
+To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
+
+1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results. 
+
+2. **Change the project ID as indicated in Cypress Cloud.** After creating the project, you will need to change the project ID in the four config files, to the one indicated in Cypress Cloud. This ID is used to identify your project and ensure that your tests are associated with the correct project.
+
+3. **Set the Cypress Record Key as an environment variable in Openshift.** To enable recording of your tests in Cypress Cloud, you will need to set the Cypress Record Key as an environment variable named CYPRESS_RECORD_KEY in Openshift. This key is provided by Cypress and is used to authenticate your tests and results. By setting it in Openshift, we ensure that the record functionality will only be used in official runs and not for local development.
+
+4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction line:
+[source,Jenkinsfile]
+----
+def status = sh(script: 'npm run e2e', returnStatus: true)
+----
+for the following block of code, which will run the record script only when in master or in a release branch:
+[source,Jenkinsfile]
+----
+if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
+    def status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+} else {
+    def status = sh(script: 'npm run e2e', returnStatus: true)
+}
+----
+
+**Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
+
+You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
+
+include::partial$secret-scanning-with-gitleaks.adoc
+
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs16[Node.js 16 builder agent] for Jenkins.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs18[Node.js 18 builder agent] for Jenkins.
 
 == Known limitations
 

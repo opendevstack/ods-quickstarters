@@ -15,6 +15,15 @@ TF_WORKSPACE             = default
 # tfenv hack
 DEBUG                    := 0
 
+# Statefile Parameters
+ACCOUNT_ID               := $(shell aws sts get-caller-identity --query 'Account' --output text)
+TF_BACKEND_S3KEY_MOD     := $(shell echo "$(TF_BACKEND_S3KEY)" | sed "s/\//-/g")
+TF_BACKEND_S3KEY_MOD     := $(shell echo "$(TF_BACKEND_S3KEY_MOD)" | sed "s/-/\//")
+
+TFSTATE_BUCKET           := $(ACCOUNT_ID)-terraform-state-bucket
+TFSTATE_KEY              := $(TF_BACKEND_S3KEY_MOD)-terraform-state
+TFSTATE_TABLE            := $(ACCOUNT_ID)-terraform-state-lock-table
+
 
 .PHONY: default
 default: test
@@ -130,7 +139,12 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
-	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="workspace_key_prefix=$(TF_BACKEND_PREFIX)" -backend-config="key=$(TF_BACKEND_S3KEY)/terraform.tfstate"
+
+	@echo "Bucket: ${TFSTATE_BUCKET}"
+	@echo "Key   : ${TFSTATE_KEY}"
+	@echo "Table : ${TFSTATE_TABLE}"
+
+	echo 1 | terraform init -backend-config="bucket=$(TFSTATE_BUCKET)" -backend-config="key=$(TFSTATE_KEY)" -backend-config="dynamodb_table=$(TFSTATE_TABLE)" -force-copy -input=false
 
 .PHONY: install-test-deps
 # Install testing dependencies.
@@ -140,7 +154,7 @@ install-test-deps: install-ruby-gems install-python-env
 # run cinc-auditor without use of kitchen-terraform and create yaml for mapping terraform outputs to inspec inputs.
 cinc-auditor-test:
 	sh ./lib/scripts/createstackfixtureoutputs2yml.sh
-	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --target aws://
+	bundle exec cinc-auditor exec test/integration/default --no-create-lockfile --no-distinct-exit --input-file ./test/integration/default/files/inputs-from-tfo-stack.yml --target aws://
 
 .PHONY: clean
 # Reset Working directory (take care if something has deployed upfront)
