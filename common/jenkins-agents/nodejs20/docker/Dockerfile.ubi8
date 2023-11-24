@@ -13,7 +13,7 @@ ARG nexusUrl
 ARG nexusAuth
 
 ENV NODEJS_VERSION=20 \
-    YARN_VERSION=1.22.19 \
+    YARN_VERSION=1.22.21 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     LANG=en_US.UTF-8 \
