@@ -24,4 +24,4 @@ steps:
         deploymentConfigs:
         - "{{.ComponentID}}"
         services:
-        - "{{.ComponentID}}-auth-proxy"
+        - "{{.ComponentID}}-auth"
