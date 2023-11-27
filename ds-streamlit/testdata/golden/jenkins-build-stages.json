@@ -16,11 +16,11 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "SonarQube Analysis",
+    "stage": "Build",
     "status": "SUCCESS"
   },
   {
-    "stage": "Build",
+    "stage": "SonarQube Analysis",
     "status": "SUCCESS"
   },
   {
