@@ -28,6 +28,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Build OpenShift Image (streamlit-oauth)",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Deploy to OpenShift",
     "status": "SUCCESS"
   },
