@@ -16,11 +16,12 @@ steps:
         imageTags:
         - name: "{{.ComponentID}}"
           tag: latest
+        - name: "{{.ComponentID}}-oauth"
+          tag: latest
         imageStreams:
         - "{{.ComponentID}}"
+        - "{{.ComponentID}}-oauth"
         deploymentConfigs:
         - "{{.ComponentID}}"
-        - "{{.ComponentID}}-auth-proxy"
         services:
-        - "{{.ComponentID}}"
         - "{{.ComponentID}}-auth-proxy"
