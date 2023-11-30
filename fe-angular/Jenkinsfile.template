@@ -28,7 +28,7 @@ def stageBuild(def context) {
         sh 'npm run build -- --source-map=true'
       }
     }
-    sh "cp -r dist/angular docker/dist"
+    sh "cp -r dist/${context.componentId} docker/dist"
   }
 }
 
