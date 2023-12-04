@@ -15,7 +15,6 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 def angularCliVersion = "17.0.3"
-//def angularCliVersion = "16.2.10"
 
 odsQuickstarterPipeline(
   imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs20:${agentImageTag}",
