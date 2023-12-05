@@ -31,8 +31,8 @@ RUN sh -c "echo 'rhel' > /etc/yum/vars/osname" && \
     sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo && \
     grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
 
-# Install Java 11, 17 and binutils
-# Note: use java scripts are executed to test the scripts but also use-j11.sh in called 2nd place to set is as default version
+# Install Java 11, 17, 21 and binutils
+# Note: use java scripts are executed to test the scripts but also use-j11.sh in called 3nd place to set is as default version
 RUN yum -y --nobest --skip-broken update && \
     yum install -y java-11-openjdk-devel && \
     yum install -y --enablerepo Adoptium temurin-17-jdk && \
