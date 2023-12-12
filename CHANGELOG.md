@@ -6,6 +6,7 @@
 - Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
 
 ### Modified
+- Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
 
 ### Fixed
 - Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
