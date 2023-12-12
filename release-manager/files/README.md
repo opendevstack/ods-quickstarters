@@ -304,7 +304,7 @@ As outlined above, a release bundle is essentially a state of all involved Git r
 
 You cannot modify the image SHA (it is the result of what the component pipeline builds), but you can influence the OpenShift template. One reason to do so is that e.g. routes or `ConfigMap` values will need to differ between environments, and you need to tell the orchestration pipeline to parametrize the templates, and to supply the right values when the templates are applied in the target environment.
 
-When the orchestration pipeline exports configuration, it has no way to tell which values should actually be parameters. For example, you might have a route `x.foo-dev.dev-cluster.com` in DEV, and want this to be `x.foo-test.dev-cluster.com` in QA and `x.foo-prod.prod-cluster.com` in PROD. In the exported template, the value `x.foo-dev.dev-cluster.com` will be hardcoded. To fix this, you can create three files in the release manager repository, `dev.env`, `qa.env` and `prod.env`. These files may contain `PARAM=value` lines, like this:
+When the orchestration pipeline exports configuration, it has no way to tell which values should actually be parameters. For example, you might have a route `x.foo-dev.dev-cluster.com` in DEV, and want this to be `x.foo-test.dev-cluster.com` in QA and `x.foo-prod.prod-cluster.com` in PROD. In the exported template, the value `x.foo-dev.dev-cluster.com` will be hardcoded. To fix this, you can create three files in the component openshift folder, `dev.env`, `qa.env` and `prod.env`. These files may contain `PARAM=value` lines, like this:
 
 dev.env
 ```
