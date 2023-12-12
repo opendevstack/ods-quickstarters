@@ -4,6 +4,7 @@
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
 - Added java 21 to jdk agent, updated Springboot and Spock quickstarters ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
+- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
 
 ### Modified
 
