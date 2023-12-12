@@ -60,11 +60,11 @@ repositories:
 
 This type designates ODS components designed for _code development_. Such repositories are based on quickstarters whose names start with `be-`, `ds-`, or `fe-`, for _backend_, _data science_, and _frontend_, respectively. This is the default type.
 
-If you use this type ODS expects to find JUnit XML test results. If you do not have any test results the pipeline will fail. If you are deploying something where JUnit XML test results are not available consider using <<Repository Type: ods-service>>.
+If you use this type ODS expects to find JUnit XML test results. If you do not have any test results the pipeline will fail. If you are deploying something where JUnit XML test results are not available consider using [Repository Type: ods-service](#repository-type-ods-service). The test results are stored by default in `build/test-results/test` and the location can be modifed using the pipeline option `testResults`.
 
 #### Repository Type: ods-infra
 
-This type designates ODS components designed for _consuming on-prem or cloud services_ of arbitrary type using infrastructure as code. Such components are based on quickstarters whose names start with `infra-`.
+This type designates ODS components designed for _consuming on-prem or cloud services_ of arbitrary type using infrastructure as code. Such components are based on quickstarters whose names start with `inf-`.
 
 #### Repository Type: ods-saas-service
 
@@ -80,7 +80,7 @@ This type designates ODS components designed for _running automated tests agains
 
 #### Repository Type: ods-library (EXPERIMENTAL feature)
 
-This type designates ODS components designed for _library components_. Such components are only build in dev (WIP and assemble mode), and are needed for other components to be built.
+This type designates ODS components designed for _library components_. Such components are only build in dev (WIP and assemble mode), and not promoted to qa nor prod.
 
 ### Automated Resolution of Repository Git URL
 
@@ -199,7 +199,6 @@ The Zephyr for Jira capability currently supports:
 ## Environment Promotion
 
 This section will guide you through the "environment promotion" feature of the orchestration pipeline.
-It is assumed have the release manager quickstarter already provisioned and configured in your project.
 
 ### What is the "environment promotion" feature?
 
