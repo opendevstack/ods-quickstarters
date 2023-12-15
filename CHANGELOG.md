@@ -1,14 +1,21 @@
 # Changelog
 
+## Unreleased
+
+- Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
+
 ### Added
+
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
 - Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
 
 ### Modified
+
 - Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
 
 ### Fixed
+
 - Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
 - jenkins agents can not import private keys into gpg keyring to use with helm secrets ([#945](https://github.com/opendevstack/ods-quickstarters/issues/945))
 - Streamlit quickstarter build fails to import nexus host certificates into truststore ([#951](https://github.com/opendevstack/ods-quickstarters/issues/951))
@@ -16,11 +23,13 @@
 ## [4.3.0] - 2023-07-13
 
 ### Added
+
 - Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
 - Cypress Cloud integration and switch to nodejs 18 ([#935](https://github.com/opendevstack/ods-quickstarters/pull/935))
 - Provide build agent for Node.js 18 ([#794](https://github.com/opendevstack/ods-quickstarters/issues/794))
 
 ### Modified
+
 - Generate one xml report per spec and merge them later ([#898](https://github.com/opendevstack/ods-quickstarters/pull/898))
 - Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
 - Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
@@ -41,6 +50,7 @@
 - Set default rollout strategy to recreate ([#926](https://github.com/opendevstack/ods-quickstarters/issues/926))
 
 ### Fixed
+
 - Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
 - Fix Jenkinsfile params in StreamLit ([#941](https://github.com/opendevstack/ods-quickstarters/pull/941)) ([#939](https://github.com/opendevstack/ods-quickstarters/pull/939))
 - Fixed Angular build for error "Unknown argument: sourceMap" ([#940](https://github.com/opendevstack/ods-quickstarters/pull/940))
@@ -92,9 +102,9 @@
 - jupyter lab: reduction to a minimal initial env ([#710](https://github.com/opendevstack/ods-quickstarters/issues/710))
 - inf-terraform-agent: consistent use of Python 3.9.x ([#793](https://github.com/opendevstack/ods-quickstarters/pull/793))
 - e2e-cypress: use Node.js 16 for deployment ([#853](https://github.com/opendevstack/ods-quickstarters/issues/853))
-- inf-terraform-aws: update AWS QS and agent libraries, Terraform version  ([#849](https://github.com/opendevstack/ods-quickstarters/pull/849))
-- inf-terraform-aws: add feature clean & check-config  ([#784](https://github.com/opendevstack/ods-quickstarters/issues/784))
-- inf-terraform-azure: update Azure QS and agent libraries, Terraform version  ([#856](https://github.com/opendevstack/ods-quickstarters/pull/856))
+- inf-terraform-aws: update AWS QS and agent libraries, Terraform version ([#849](https://github.com/opendevstack/ods-quickstarters/pull/849))
+- inf-terraform-aws: add feature clean & check-config ([#784](https://github.com/opendevstack/ods-quickstarters/issues/784))
+- inf-terraform-azure: update Azure QS and agent libraries, Terraform version ([#856](https://github.com/opendevstack/ods-quickstarters/pull/856))
 - be-python-flask, ds-jupyter-lab: upgrade to python3.9, and keep support of python3.8([#865](https://github.com/opendevstack/ods-quickstarters/issues/865))
 - Remove support for the url repository field in metadata.yml ([#868](https://github.com/opendevstack/ods-quickstarters/pull/868))
 
@@ -190,6 +200,7 @@
 ## [3.0] - 2020-08-11
 
 ### Added
+
 - Feature/add complex RM test features, and use doc downloading tests ([#404](https://github.com/opendevstack/ods-quickstarters/pull/404))
 - Quickstarters need to generate code coverage (and report to SQ) ([#213](https://github.com/opendevstack/ods-quickstarters/issues/213))
 - set nexus as default pip repo index for jenkins python agent ([#396](https://github.com/opendevstack/ods-quickstarters/issues/396))
@@ -211,6 +222,7 @@
 - Add AWS Terraform agent into makefile ([#570](https://github.com/opendevstack/ods-quickstarters/pull/570))
 
 ### Changed
+
 - Upgrade to the latest python 3.8 ([#415](https://github.com/opendevstack/ods-quickstarters/issues/415))
 - get build name dynamically from webhook proxy response ([#364](https://github.com/opendevstack/ods-quickstarters/pull/364))
 - airflow-cluster moved to extra-quickstarters ([#351](https://github.com/opendevstack/ods-quickstarters/pull/351))
@@ -237,6 +249,7 @@
 - Bump urllib by bot ([#566](https://github.com/opendevstack/ods-quickstarters/issues/566))
 
 ### Fixed
+
 - fix issue with too long names on be-typescript-express ([#378](https://github.com/opendevstack/ods-quickstarters/pull/378))
 - Latest jenkins-slave-base:v3.11 breaks jenkins-agent-maven ([#354](https://github.com/opendevstack/ods-quickstarters/issues/354))
 - fix ds components templates ([#344](https://github.com/opendevstack/ods-quickstarters/pull/344))
@@ -262,6 +275,7 @@
 - MRO / monorepo quickstarter fixes ([#233](https://github.com/opendevstack/ods-quickstarters/pull/233))
 
 ### Removed
+
 - Remove deprecated dockerImageRepository field ([#369](https://github.com/opendevstack/ods-quickstarters/pull/369))
 - Remove --watch option from npm run build command ([#341](https://github.com/opendevstack/ods-quickstarters/issues/341))
 - Remove deprecated sonar.language property ([#325](https://github.com/opendevstack/ods-quickstarters/pull/325))
@@ -271,6 +285,7 @@
 ## [2.0] - 2019-12-13
 
 ### Added
+
 - Quickstarter-specific memory quotas ([#12](https://github.com/opendevstack/ods-quickstarters/issues/12))
 - Quickstarter-specific CPU quotas ([#74](https://github.com/opendevstack/ods-quickstarters/issues/74))
 - Add 'release-manager.yml' to each quickstarter ([#53](https://github.com/opendevstack/ods-quickstarters/issues/53))
@@ -278,6 +293,7 @@
 - Add central Tailorfile to easily compare resources ([#44](https://github.com/opendevstack/ods-quickstarters/issues/44))
 
 ### Changed
+
 - Quickstarters have been renamed for more consistency when they were moved from `ods-project-quickstarters`
 - Switch to OAuth proxy in jupyter-notebook and r-shiny quickstarters ([#46](https://github.com/opendevstack/ods-quickstarters/issues/46))
 - Airflow Quickstarter fully provisioned in user's ODS project ([#60](https://github.com/opendevstack/ods-quickstarters/issues/60))
@@ -291,11 +307,13 @@
 - be-spring-boot: added springCliVersion, updated springframework to 2.2.1 ([#40](https://github.com/opendevstack/ods-quickstarters/pull/40))
 
 ### Fixed
+
 - Wrong file permission stops Snyk cli from running in Python agent ([#67](https://github.com/opendevstack/ods-quickstarters/issues/67))
 - Spring Boot quickstarter ignores property `no_nexus` ([#61](https://github.com/opendevstack/ods-quickstarters/issues/61))
 - be-typescript-express: node version in deployment image doesn't match build image ([#8](https://github.com/opendevstack/ods-quickstarters/issues/8))
 
 ### Removed
+
 - `NEXUS_HOST` param for component creation ([#70](https://github.com/opendevstack/ods-quickstarters/issues/70))
 - Remove nodejs8 agent image ([#54](https://github.com/opendevstack/ods-quickstarters/issues/54))
 
@@ -341,6 +359,7 @@
 ## [1.1.0 ods-project-quickstarters] - 2019-05-28
 
 ### Added
+
 - Rundeck `prepare-continous integration` job can now be used to upgrade an existing git repository ([#110](https://github.com/opendevstack/ods-project-quickstarters/pull/110))
 - New quickstarter `be-docker-plain`: useful for starting with a plain `Dockerfile` and no BE/FE framework on top ([#97](https://github.com/opendevstack/ods-project-quickstarters/issues/97))
 - Maven/Gradle Jenkins agent `jenkins-agent-maven` now gets Nexus credentials injected as server into `settings.xml` ([#127](https://github.com/opendevstack/ods-project-quickstarters/issues/127))
@@ -350,11 +369,13 @@
 - Documentation of all quickstarters and agents added
 
 ### Changed
+
 - Python quickstarter should use nexus as artifact repo ([#27](https://github.com/opendevstack/ods-project-quickstarters/issues/27))
 - Jupyter & R-Shiny quickstarters are now based on new Openresty-based WAF image ([#103](https://github.com/opendevstack/ods-project-quickstarters/pull/103))
 - NodeJS 10 Angular Jenkins agent `nodejs10-angular` replaces `nodejs8-angular` and supports nodeJS 10, Angular CLI 8.0.1 and cypress 3.3.1
 
 ### Fixed
+
 - Rshiny quickstarter broken - due to refactoring and webhook proxy introduction ([#200](https://github.com/opendevstack/ods-project-quickstarters/issues/200)) & ([#184](https://github.com/opendevstack/ods-project-quickstarters/issues/184))
 - Create-projects.sh seeds wrong jenkins SA rights & misses default SA for webhook proxy bug ([#189](https://github.com/opendevstack/ods-project-quickstarters/issus/189))
 - import metadata: docker pull secrets are not created in an existing project - breaks oc import-image ([#202](https://github.com/opendevstack/ods-project-quickstarters/issues/202))
@@ -363,6 +384,7 @@
 ## [1.0.2 ods-project-quickstarters] - 2019-04-02
 
 ### Fixed
+
 - Angular quickstarter `fe-angular-frontend` compilation failed due to changed dependency ([#129](https://github.com/opendevstack/ods-project-quickstarters/issues/129))
 - Spring boot quickstarter `be-springboot` gradle build failed due to dependency update to gradle 4.10 ([#131](https://github.com/opendevstack/ods-project-quickstarters/issues/131))
 - Upgrade of repo, thru rundeck job `prepare-continous integration` fails with invalid device ([#124](https://github.com/opendevstack/ods-project-quickstarters/issues/124))
@@ -371,19 +393,21 @@
 ## [1.0.1 ods-project-quickstarters] - 2019-01-25
 
 ### Fixed
+
 - Exclude images in `openshift` and `rhscl` namespace on import ([#102](https://github.com/opendevstack/ods-project-quickstarters/pull/102))
 - Maven agent fails when proxy is configured due to invalid XML ([#108](https://github.com/opendevstack/ods-project-quickstarters/pull/108))
-
 
 ## [1.0.0 ods-project-quickstarters] - 2018-12-03
 
 ### Added
+
 - Spring Boot Jenkins pipeline surfaces test results (#34)
 - Jenkins webhook proxy templates (#81, #82)
 
 ### Changed
+
 - Quickstarter build containers (located in the subdirs of https://github.com/opendevstack/ods-project-quickstarters/tree/master/boilerplates) inherit from corresponding Jenkins build agents now rather than replicating the setup
-- Rundeck's OC container inherits from `jenkins-agent-base` now. The pull and tag is triggered thru *verify-rundeck-settings* rundeck job (#32)
+- Rundeck's OC container inherits from `jenkins-agent-base` now. The pull and tag is triggered thru _verify-rundeck-settings_ rundeck job (#32)
 - The build of a quickstarter component does not upload the tarball to Nexus anymore - instead it uses binary build configs (#9)
 - The containers used to connect to openshift now pull the root ca during build, to ensure SSL trust (#12, #54)
 - agents now support HTTP/S proxy - inject as ENV - with HTTP_PROXY, HTTPS_PROXY & NO_PROXY (#50)
@@ -394,14 +418,15 @@
 - Build Jupyter/Rshiny via Jenkins (#92)
 
 ### Fixed
+
 - Nodejs 8 quickstarter failed on npm run coverage (#22)
 - Rundeck containers not cleaned up (#16, #17)
 - Disable inclusion of Nginx server version in HTTP headers (#79)
 - Jupyter: install from Nexus (#65)
 
 ### Removed
-- Remove broken be-database quickstarter (#87)
 
+- Remove broken be-database quickstarter (#87)
 
 ## [0.1.0 ods-project-quickstarters] - 2018-07-27
 
