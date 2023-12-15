@@ -1,6 +1,8 @@
 [theme]
-primaryColor="#003265"
-backgroundColor="#FFFFFF"
-secondaryBackgroundColor="#F4F8FD"
-textColor="#0C2C59"
-font="ibm plex"
+base = "dark"
+primaryColor = "#00E47C"
+backgroundColor = "#08312A"
+secondaryBackgroundColor = "#E5E3DE"
+textColor = "#F6F5F3"
+font = "sans serif"
+
