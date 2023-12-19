@@ -1,0 +1,22 @@
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+
+LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>"
+
+ARG rustVersion
+ARG rustToolchain
+
+ENV PATH="$HOME/.cargo/bin:$PATH"
+
+RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config openssl-devel
+
+RUN cd /tmp && \
+    curl -LfSsO https://static.rust-lang.org/dist/rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    tar -xzf rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    rm -f rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    cd rust-${rustVersion}-${rustToolchain} && \
+    ./install.sh && \
+    cargo -V && \
+    cargo install cargo-nextest cargo-llvm-cov cargo-generate
+
+RUN chgrp -R 0 $HOME/.cargo && \
+    chmod -R g=u $HOME/.cargo
