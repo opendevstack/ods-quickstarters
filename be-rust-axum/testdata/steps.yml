@@ -1,4 +1,4 @@
-componentID: python-flask-iq-test
+componentID: rust-axum-iq-test
 steps:
 - type: provision
   provisionParams:
