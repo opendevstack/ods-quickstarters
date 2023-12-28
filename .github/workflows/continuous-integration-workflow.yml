@@ -107,7 +107,7 @@ jobs:
         working-directory: common/jenkins-agents/rust/docker
         run: |
           docker build --tag agent-rust-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg rustVersion=1.74.1 \
+            --build-arg rustVersion=1.75.0 \
             --build-arg rustToolchain=x86_64-unknown-linux-gnu \
             .
 

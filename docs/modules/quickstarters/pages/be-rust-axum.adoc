@@ -63,7 +63,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://blog.rust-lang.org/2023/12/07/Rust-1.74.1.html[Rust 1.74.1]
+* https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html[Rust 1.75.0]
 * https://github.com/tokio-rs/axum[Axum 0.7.x]
 
 == Usage - how do you start after you provisioned this quickstarter
@@ -127,7 +127,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: rust
-runtimeVersion: 1.74.1
+runtimeVersion: 1.75.0
 ```
 
 == How this quickstarter is built through Jenkins
@@ -176,7 +176,7 @@ include::partial$secret-scanning-with-gitleaks.adoc
 
 This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[Rust] Jenkins builder agent.
 
-**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.74.x and above.
+**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.75.x and above.
 
 
 == Technologies in use

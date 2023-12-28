@@ -19,7 +19,7 @@ parameters:
 - name: RUST_VERSION
   description: "The Rust version"
   required: true
-  value: "1.74.1"
+  value: "1.75.0"
 - name: RUST_TOOLCHAIN
   description: "The Rust target toolchain"
   required: true
