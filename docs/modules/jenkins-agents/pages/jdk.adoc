@@ -10,7 +10,7 @@ It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-jdk`.
 . Nexus and HTTP proxy configuration for Maven & Gradle
 
 == Supported Java Versions
-This agent provides 2 JDKs: `java 11`, `java 17` and `java 21`.
+This agent provides 3 JDKs: `java 11`, `java 17` and `java 21`.
 
 For backwards compatibility `java 11` is the default version. Java projects migrating from previous ODS version will not require any change. A migration to `java 17` and `java 21` can be done afterwards.
 
