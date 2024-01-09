@@ -45,7 +45,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: "/status"
+              path: "/v1/status"
               port: {{ .Values.service.port }}
               scheme: HTTP
             initialDelaySeconds: 5
@@ -55,7 +55,7 @@ spec:
           readinessProbe:
             failureThreshold: 1
             httpGet:
-              path: "/status"
+              path: "/v1/status"
               port: {{ .Values.service.port }}
               scheme: HTTP
             initialDelaySeconds: 3
