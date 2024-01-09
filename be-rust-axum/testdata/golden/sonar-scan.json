@@ -6,8 +6,8 @@
   "extensions": [],
   "qualityProfiles": [
     {
-      "name": "{{.SonarQualityProfile}}",
-      "language": "rs",
+      "name": "Community Rust",
+      "language": "rust",
       "deleted": false
     }
   ],
