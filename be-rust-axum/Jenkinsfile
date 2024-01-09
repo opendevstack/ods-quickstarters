@@ -25,7 +25,7 @@ odsQuickstarterPipeline(
       label: "Process Rust template"
     )
     sh(
-      script: "mv ${context.sourceDir}/${context.projectId}-${context.componentId} ${context.sourceDir}/files",
+      script: "mv ${context.projectId}-${context.componentId} ${context.sourceDir}/files",
       label: "Create files folder"
     )
   }

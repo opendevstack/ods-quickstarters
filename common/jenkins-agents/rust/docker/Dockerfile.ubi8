@@ -6,6 +6,7 @@ ARG rustVersion
 ARG rustToolchain
 
 ENV PATH="$HOME/.cargo/bin:$PATH"
+ENV USER="rust-agent"
 
 RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config openssl-devel
 
