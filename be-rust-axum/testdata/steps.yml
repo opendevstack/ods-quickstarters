@@ -14,12 +14,7 @@ steps:
       - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
       testResults: 1
       openShiftResources:
-        imageTags:
-        - name: "{{.ComponentID}}"
-          tag: latest
         imageStreams:
-        - "{{.ComponentID}}"
-        deploymentConfigs:
         - "{{.ComponentID}}"
         services:
         - "{{.ComponentID}}"
