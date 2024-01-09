@@ -24,8 +24,8 @@ pub async fn serve(address: SocketAddr) {
 
   info!("Server listening on {}", &address);
   axum::serve(listener, app().into_make_service())
-		.with_graceful_shutdown(shutdown_signal())
-		.await
+    .with_graceful_shutdown(shutdown_signal())
+    .await
     .expect("Failed to start server");
 }
 
@@ -42,16 +42,16 @@ async fn fallback() -> (StatusCode, Json<Status>) {
 /// Setup example of the OS signal handlers to catch for proper server graceful shutdown.
 async fn shutdown_signal() {
   let interrupt = async {
-      signal(SignalKind::interrupt())
-          .expect("failed to install signal handler")
-          .recv()
-          .await;
+    signal(SignalKind::interrupt())
+      .expect("failed to install signal handler")
+      .recv()
+      .await;
   };
   let terminate = async {
-      signal(SignalKind::terminate())
-          .expect("failed to install signal handler")
-          .recv()
-          .await;
+    signal(SignalKind::terminate())
+      .expect("failed to install signal handler")
+      .recv()
+      .await;
   };
   tokio::select! {
       _ = interrupt => {},
