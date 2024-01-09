@@ -17,8 +17,9 @@ odsComponentPipeline(
   }
   odsComponentStageRolloutOpenShiftDeployment(
     context, [
-      'selector': "app.kubernetes.io/instance=${context.componentId}",
-      'helmEnvBasedValuesFiles': ["values.env.yaml"],
+      'selector': "app=${context.componentId}",
+      // uncomment this to use values.<ENV>.yaml files to override defaults on values.yaml
+      // 'helmEnvBasedValuesFiles': ["values.env.yaml"],
     ]
   )
 }
