@@ -25,11 +25,8 @@ impl Settings {
   /// Creates/loads the `Settings` with the configuration parameters required for the app
   pub fn load() -> Self {
     Settings {
-      port: std::env::var("PORT")
-        .unwrap_or("8080".to_owned())
-        .parse::<u16>()
-        .unwrap(),
-      log_level: std::env::var("LOG_LEVEL").unwrap_or("DEBUG".to_owned()),
+      port: app_port(),
+      log_level: std::env::var("LOG_LEVEL").unwrap_or("INFO".to_owned()),
     }
   }
 
@@ -44,4 +41,22 @@ impl Settings {
       _ => Level::DEBUG,
     }
   }
+}
+
+fn app_port() -> u16 {
+  std::env::var("PORT").map_or_else(
+    |e| {
+      println!("No PORT provided ({}), setting 8080", e);
+      8080
+    },
+    |v| {
+      v.parse::<u16>().map_or_else(
+        |e| {
+          println!("PORT value is not u16 parseable ({}), setting 8080", e);
+          8080
+        },
+        |v| v,
+      )
+    },
+  )
 }
