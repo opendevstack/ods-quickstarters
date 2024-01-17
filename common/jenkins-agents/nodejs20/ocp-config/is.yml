@@ -1,14 +1,14 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: jenkins-agent-nodejs12
+  name: jenkins-agent-nodejs20
 objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: jenkins-agent-nodejs12
+    name: jenkins-agent-nodejs20
     labels:
-      app: jenkins-agent-nodejs12
+      app: jenkins-agent-nodejs20
   spec:
     lookupPolicy:
       local: false

@@ -14,6 +14,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 ----
 ├── Jenkinsfile - This file contains Jenkins build configuration settings
+├── .pre-commit-config.yaml
 ├── README.md
 ├── docker - This folder contains Docker configuration settings
 │   ├── Dockerfile
@@ -79,7 +80,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: flask
-runtimeVersion: 2.2.2
+runtimeVersion: 3.0.0
 ```
 
 
@@ -110,6 +111,8 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 ----
 
 * *Build* - Builds the application: copies src folder into docker/dist folder.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

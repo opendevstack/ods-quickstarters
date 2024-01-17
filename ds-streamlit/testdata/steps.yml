@@ -1,0 +1,27 @@
+componentID: streamlit
+steps:
+- type: provision
+  provisionParams:
+    verify:
+      jenkinsStages: golden/jenkins-provision-stages.json
+- type: build
+  buildParams:
+    verify:
+      jenkinsStages: golden/jenkins-build-stages.json
+      sonarScan: golden/sonar-scan.json
+      runAttachments:
+      - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
+      - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
+      openShiftResources:
+        imageTags:
+        - name: "{{.ComponentID}}"
+          tag: latest
+        - name: "{{.ComponentID}}-oauth"
+          tag: latest
+        imageStreams:
+        - "{{.ComponentID}}"
+        - "{{.ComponentID}}-oauth"
+        deploymentConfigs:
+        - "{{.ComponentID}}"
+        services:
+        - "{{.ComponentID}}-oauth"

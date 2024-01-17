@@ -9,6 +9,7 @@ Provisions a streamlit based dashboard with authentication.
 ----
 .
 ├── Jenkinsfile
+├── .pre-commit-config.yaml
 ├── docker_streamlit
 │   └── Dockerfile
 ├── docker_oauth
@@ -74,7 +75,7 @@ version: 1.0.1
 type: ods
 role: dashboard
 runtime: streamlit
-runtimeVersion: 0.18
+runtimeVersion: 1.29.0
 ```
 
 == How this quickstarter is built through Jenkins
@@ -94,6 +95,8 @@ In order to be sure that your code passes the linting stage execute or add it as
 * *Test* - Runs pytest and generates xUnit and code coverage reports:
 
 * *Build* - Builds the application: copies src folder into docker_streamlit/dist folder.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

@@ -8,7 +8,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/golang/docker
@@ -23,7 +23,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/jdk/docker
@@ -34,29 +34,13 @@ jobs:
               --build-arg nexusPassword=s3cr3t \
               .
 
-  jenkins-agent-nodejs12-ubi8:
-    name: Jenkins agent NodeJS 12 (UBI8)
-    runs-on: ubuntu-22.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v3.5.3
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs12/docker
-        run: |
-            docker build --tag agent-nodejs12-test-ubi8 --file Dockerfile.ubi8 \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
-
   jenkins-agent-nodejs16-ubi8:
     name: Jenkins agent NodeJS 16 (UBI8)
     runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs16/docker
@@ -72,12 +56,28 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs18/docker
         run: |
             docker build --tag agent-nodejs18-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
+  jenkins-agent-nodejs20-ubi8:
+    name: Jenkins agent NodeJS 20 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4.1.1
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs20/docker
+        run: |
+            docker build --tag agent-nodejs20-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
@@ -88,7 +88,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
@@ -101,7 +101,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform/docker
@@ -114,7 +114,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
@@ -127,7 +127,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker

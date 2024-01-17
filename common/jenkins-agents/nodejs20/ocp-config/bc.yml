@@ -1,7 +1,7 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: jenkins-agent-nodejs12
+  name: jenkins-agent-nodejs20
 parameters:
 - name: ODS_BITBUCKET_PROJECT
   description: Bitbucket project name.
@@ -24,16 +24,16 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: jenkins-agent-nodejs12
+    name: jenkins-agent-nodejs20
     labels:
-      app: jenkins-agent-nodejs12
+      app: jenkins-agent-nodejs20
   spec:
     failedBuildsHistoryLimit: 5
     nodeSelector: null
     output:
       to:
         kind: ImageStreamTag
-        name: jenkins-agent-nodejs12:${ODS_IMAGE_TAG}
+        name: jenkins-agent-nodejs20:${ODS_IMAGE_TAG}
     postCommit: {}
     resources:
       limits:
@@ -44,7 +44,7 @@ objects:
         memory: "1Gi"
     runPolicy: Serial
     source:
-      contextDir: common/jenkins-agents/nodejs12/docker
+      contextDir: common/jenkins-agents/nodejs20/docker
       git:
         ref: ${ODS_GIT_REF}
         uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git

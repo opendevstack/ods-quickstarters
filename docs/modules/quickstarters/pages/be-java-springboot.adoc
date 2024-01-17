@@ -134,6 +134,8 @@ comment on line `stageUploadToNexus` in  `Jenkinsfile`
 NOTE: The 2nd step executes `gradlew build` to compile your project and create a distribution as `jar` file.
 This file is copied to the `docker` folder to be included in the docker image when the image is built in step 5.
 
+include::partial$secret-scanning-with-gitleaks.adoc
+
 == Builder agent used
 
 This quickstarter uses the

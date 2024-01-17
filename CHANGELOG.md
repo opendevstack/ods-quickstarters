@@ -1,10 +1,17 @@
 # Changelog
 
 ### Added
+- Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
+- Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
+- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
 
 ### Modified
+- Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
 
 ### Fixed
+- Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
+- jenkins agents can not import private keys into gpg keyring to use with helm secrets ([#945](https://github.com/opendevstack/ods-quickstarters/issues/945))
+- Streamlit quickstarter build fails to import nexus host certificates into truststore ([#951](https://github.com/opendevstack/ods-quickstarters/issues/951))
 
 ## [4.3.0] - 2023-07-13
 
