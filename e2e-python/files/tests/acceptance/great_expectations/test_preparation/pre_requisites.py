@@ -20,7 +20,7 @@ def setup_test_database():
 
 def create_database(client):
 
-    query = "CREATE DATABASE greatexpectationsdbtest"
+    query = "CREATE DATABASE greatexpectationsdb"
     response = client.start_query_execution(
         QueryString=query,
         ResultConfiguration={
@@ -127,7 +127,7 @@ def execute_query(client, query):
     response = client.start_query_execution(
         QueryString=query,
         QueryExecutionContext={
-            'Database': 'greatexpectationsdbtest'
+            'Database': 'greatexpectationsdb'
         },
         ResultConfiguration={
             'OutputLocation': 's3://gxdbtests3/db_test_outputs/',
