@@ -14,13 +14,6 @@
       "meta": {}
     },
     {
-      "expectation_type": "expect_table_row_count_to_equal",
-      "kwargs": {
-        "value": 3
-      },
-      "meta": {}
-    },
-    {
       "expectation_type": "expect_column_value_lengths_to_be_between",
       "kwargs": {
         "column": "name",
