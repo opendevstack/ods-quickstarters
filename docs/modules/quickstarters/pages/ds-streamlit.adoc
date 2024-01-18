@@ -75,7 +75,7 @@ version: 1.0.1
 type: ods
 role: dashboard
 runtime: streamlit
-runtimeVersion: 0.18
+runtimeVersion: 1.29.0
 ```
 
 == How this quickstarter is built through Jenkins
