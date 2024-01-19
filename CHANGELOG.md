@@ -3,7 +3,7 @@
 ### Added
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
-- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
+- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968)) & ([#982](https://github.com/opendevstack/ods-quickstarters/pull/982))
 
 ### Modified
 - Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
