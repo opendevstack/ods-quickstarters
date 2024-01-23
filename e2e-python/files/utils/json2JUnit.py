@@ -1,10 +1,8 @@
 import json
 import glob
 import xml.etree.ElementTree as ET
-import xml.dom.minidom as minidom
 import datetime
-import os
-
+import xml.sax.saxutils as saxutils
 
 folder_name = "tests/acceptance/great_expectations"
 output_path = folder_name + "/uncommitted/validations/junit.xml"
@@ -16,6 +14,10 @@ root = ET.Element("testsuites", name="GreatExpectations")
 
 total_tests = 0
 total_failures = 0
+
+def escape_string(data):
+  json_str = json.dumps(data)
+  return saxutils.escape(json_str)
 
 for json_file_path in json_files:
 
@@ -46,20 +48,20 @@ for json_file_path in json_files:
   testcase = ET.SubElement(
     testsuite,
     "testcase",
-    name=data["meta"]["checkpoint_name"],
-    evaluated_expectations=str(data['statistics']['evaluated_expectations']),
-    successful_expectations=str(data['statistics']['successful_expectations']),
-    unsuccessful_expectations=str(data['statistics']['unsuccessful_expectations']),
-    log=data["results"]
+    name=escape_string(data["meta"]["checkpoint_name"]),
+    evaluated_expectations=escape_string(data['statistics']['evaluated_expectations']),
+    successful_expectations=escape_string(data['statistics']['successful_expectations']),
+    unsuccessful_expectations=escape_string(data['statistics']['unsuccessful_expectations']),
+    log=escape_string(data["results"])
   )
 
   for idx, result in enumerate(data["results"], start=1):
 
     if not result["success"]:
-      exception_message = str(result["exception_info"]["exception_message"] if result["exception_info"][
+      exception_message = str(escape_string(result["exception_info"]["exception_message"]) if result["exception_info"][
         "raised_exception"] else None)
-      expectation_config = str(result["expectation_config"])
-      observed_vaue = str(result["result"])
+      expectation_config = escape_string(result["expectation_config"])
+      observed_vaue = escape_string(result["result"])
       failure = ET.SubElement(
         testcase,
         "failure",
@@ -72,4 +74,4 @@ root.set("failures", str(total_failures))
 tree = ET.ElementTree(root)
 
 with open(output_path, 'wb') as f:
-  f.write(minidom.parseString(ET.tostring(root)).toprettyxml(encoding="utf-8"))
+  tree.write(f, encoding="utf-8", xml_declaration=True)

@@ -1,6 +1,14 @@
 import boto3
 import json
 
+"""
+
+This is an example of what you could do as a post-requisite. In the pre_requistie.py we deployed the athena dabase that would be tested.
+Now, in this post_requisite.py we delete the database and the tables inside of it.
+
+"""
+
+
 def get_terraform_outputs():
     with open('terraform_outputs.json') as file:
       output_json = json.load(file)
@@ -19,20 +27,35 @@ def delete_test_database():
     execute_query(client, q_delete_db)
 
 def execute_query(client, query):
+    tf_outputs = get_terraform_outputs()
+    bucket_name = tf_outputs["bitbucket_s3bucket_name"]["value"]
     response = client.start_query_execution(
         QueryString=query,
         QueryExecutionContext={
             'Database': 'greatexpectationsdb'
         },
         ResultConfiguration={
-            'OutputLocation': 's3://gxdbtests3/db_test_outputs/',
+            'OutputLocation': f's3://{bucket_name}/db_test_outputs/',
         }
     )
     print("Query execution ID: ", response['QueryExecutionId'])
 
 
+def remove_unnecesarry_objects_s3src():
+  tf_outputs = get_terraform_outputs()
+  bucket_name = tf_outputs["bitbucket_s3bucket_name"]["value"]
+  s3 = boto3.resource('s3')
+  bucket = s3.Bucket(bucket_name)
+  for obj in bucket.objects.all():
+    if not obj.key.endswith('.zip'):
+      obj.delete()
+
+
+
+
 def main():
   delete_test_database()
+  remove_unnecesarry_objects_s3src()
 
 
 if __name__ == "__main__":
