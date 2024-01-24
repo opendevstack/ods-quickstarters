@@ -5,10 +5,15 @@ from pathlib import Path
 
 """
 
-This is an example of what you could do as a pre-requisite before executing your great expectations tests, in this example we deploy an athena database
-with two tables: person and address.
+This is an example of what you could do as a pre-requisite before executing your great expectations tests.
+This is intended to prepare your data sets or even trigger your ETL pipelines.
 
-In the post_requisite.py we will delete this athena database
+
+In this specific example we deploy a sample athena database
+with two tables: person and address taht will be used on the Demo test cases.
+
+In the post_requisite.py we will delete this athena database.
+
 
 """
 

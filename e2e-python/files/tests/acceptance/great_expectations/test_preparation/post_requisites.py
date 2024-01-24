@@ -3,7 +3,10 @@ import json
 
 """
 
-This is an example of what you could do as a post-requisite. In the pre_requistie.py we deployed the athena dabase that would be tested.
+This is an example of what you could do as a post-requisite. In the pre_requistie.py. It is intended to be used as a clean up step
+to remove any data set, or reset your system to its initial state.
+
+In this scenario we deployed on the prerequisites an athena dabase that would be tested.
 Now, in this post_requisite.py we delete the database and the tables inside of it.
 
 """
