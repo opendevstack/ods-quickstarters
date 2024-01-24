@@ -48,7 +48,7 @@ for json_file_path in json_files:
   testcase = ET.SubElement(
     testsuite,
     "testcase",
-    name=escape_string(data["meta"]["checkpoint_name"]),
+    name=data["meta"]["checkpoint_name"],
     evaluated_expectations=escape_string(data['statistics']['evaluated_expectations']),
     successful_expectations=escape_string(data['statistics']['successful_expectations']),
     unsuccessful_expectations=escape_string(data['statistics']['unsuccessful_expectations']),
