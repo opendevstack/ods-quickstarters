@@ -1,0 +1,7 @@
+---
+name: e2e-python
+# yamllint disable-line rule:line-length
+description: "This end-to-end testing project was generated from the e2e-python ODS quickstarter."
+supplier: https://es.python.org/
+version: 1.0
+type: ods-test
