@@ -54,7 +54,7 @@ variable "bitbucket_source_bucket_name" {}
 variable "projectId" {
   description = "EDP project name"
   type        = string
-  default     = "testpg"
+  default     = "projectId"
 }
 
 variable "environment" {
