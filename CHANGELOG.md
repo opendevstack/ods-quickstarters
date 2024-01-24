@@ -2,8 +2,10 @@
 
 ### Added
 - Added ETL pipeline testing QS (e2e-python) ([#985](https://github.com/opendevstack/ods-quickstarters/pull/985))
+- Update gateway-Nginx quickstarter ([#983](https://github.com/opendevstack/ods-quickstarters/pull/983))
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
+- Update release manager readme ([#969](https://github.com/opendevstack/ods-quickstarters/issues/969))
 - Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
 
 ### Modified
