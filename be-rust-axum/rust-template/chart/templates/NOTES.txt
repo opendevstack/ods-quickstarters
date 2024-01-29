@@ -1,0 +1,1 @@
+Component {{ .Values.componentId }} on version {{ .Values.imageTag }} released with Helm!

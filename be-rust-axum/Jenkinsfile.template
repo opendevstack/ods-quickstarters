@@ -1,0 +1,73 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-rust:@agent_image_tag@',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    // 'release/': 'test'
+  ]
+) { context ->
+  odsComponentFindOpenShiftImageOrElse(context) {
+    stageTest(context)
+    odsComponentStageScanWithSonar(context)
+    stageBuild(context)
+    odsComponentStageBuildOpenShiftImage(context)
+  }
+  odsComponentStageRolloutOpenShiftDeployment(
+    context, [
+      'selector': "app=${context.componentId}",
+      // uncomment this to use values.<ENV>.yaml files to override defaults on values.yaml
+      // 'helmEnvBasedValuesFiles': ["values.env.yaml"],
+    ]
+  )
+}
+
+def stageBuild(def context) {
+  stage('Cargo Build') {
+    sh "cargo build --release"
+    sh "cp -r target/release/${context.projectId}-${context.componentId} docker/app"
+  }
+}
+
+def stageTest(def context) {
+  stage('Cargo Check') {
+    sh """
+        cargo check --all-targets
+      """
+  }
+  stage('Cargo Format') {
+    sh """
+        cargo fmt --all -- --check
+      """
+  }
+  stage('Cargo Clippy') {
+    sh """
+        cargo clippy --all-features
+
+        # Clippy reports for SonarQube
+        mkdir -p build/test-results/clippy
+        cargo clippy --message-format=json &> build/test-results/clippy/report.json
+      """
+  }
+  stage('Cargo Test') {
+    sh """
+      # create report folders
+      mkdir -p build/test-results/test
+      mkdir -p build/test-results/coverage
+
+      # Tests with JUnit XML report as defined in .config/nextest.toml
+      cargo nextest run --profile ci
+
+      # Coverage with LLVM lcov report from tests
+      # generate the lcov.info report
+      cargo llvm-cov --lcov --output-path ./build/test-results/coverage/lcov.info
+      # generate the html report
+      cargo llvm-cov report --html
+
+      cp -r target/nextest/ci/results.xml build/test-results/test
+      cp -r target/llvm-cov/html/ build/test-results/coverage
+      """
+  }
+}

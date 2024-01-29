@@ -1,0 +1,38 @@
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
+
+node {
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+}
+
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
+
+odsQuickstarterPipeline(
+  imageStreamTag: "${odsNamespace}/jenkins-agent-rust:${agentImageTag}",
+) { context ->
+
+  // https://cargo-generate.github.io/cargo-generate/index.html
+  stage('Cargo Generate project') {
+    sh(
+      script: "cargo generate --path ${context.sourceDir}/rust-template --name ${context.projectId}-${context.componentId}",
+      label: "Process Rust template"
+    )
+    sh(
+      script: "mv ${context.projectId}-${context.componentId} ${context.sourceDir}/files",
+      label: "Create files folder"
+    )
+  }
+
+  odsQuickstarterStageCopyFiles(context)
+
+  odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderSonarProperties(context)
+}
