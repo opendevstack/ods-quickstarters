@@ -5,7 +5,7 @@ In order to do that it uses two testing technologies: Great Expectations and Pyt
 
 This quickstarter project was generated from the *inf-terraform-aws* ODS quickstarter.
 
-How does it work:
+How it works:
    1. The ODS Jenkins pipeline starts.
    2. It compresses the bitbucket repository containing the tests, and it places it in an S3 bucket into the AWS account specified.
    3. In AWS it creates and trigger a code pipeline that will execute the tests.
