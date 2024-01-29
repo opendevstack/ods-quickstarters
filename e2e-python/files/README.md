@@ -20,7 +20,7 @@ With the introduction of the release manager concept in OpenDevStack 3, e2e test
 
 Make sure to keep `junit` as reporter and to not change the output path for the JUnit results files as they will be stashed by Jenkins and reused by the release manager.
 
-## How to prepare data:
+## How to prepare data
 In case that you need to prepare data before the execution of your Great Expecations tests you could use the test_preparation folder, that contains the pre_requisites.py and post_requisites.py, these scripts
 will be executed before and after the execution of your Great Expectations tests.
 
@@ -43,7 +43,7 @@ To execute all end-to-end tests:
 2. Customize json files with the desired identification namings for the AWS resources that will be created with the quickestarters execution.
 3. Modify the great_expectations and pytes folder to execute your tests located in the 'tests/acceptance/' directory.
 
-# Pipeline execution options:
+# Pipeline execution options
 - By a commit with a change in the code the pipeline in jenkins will be automatically executed
 - From jenkins manually
 - Automatic from a test (create a function to automatize the trigger of the pipeline)
