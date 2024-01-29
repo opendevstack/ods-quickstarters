@@ -1,4 +1,4 @@
-# e2e-python Quickstarter (inf-terraform-aws)
+# e2e-python Quickstarter (e2e-python)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/opendevstack/latest/getting-started/index.html)
 
