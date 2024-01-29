@@ -1,0 +1,193 @@
+= Backend Rust Axum Quickstarter (be-rust-axum)
+
+The project supports generation of https://www.rust-lang.org/[Rust] programming language based projects, with the https://github.com/tokio-rs/axum/[Axum] web framework by default,
+and quick installation and integration within OpenShift Jenkins CICD pipelines.
+
+For Database/Postgres integration it is recommended to use https://github.com/launchbadge/sqlx/[SQLx]. Check the https://github.com/launchbadge/sqlx/tree/main/examples/postgres/axum-social-with-tests/[Axum with SQLx] example. Enjoy a full async, safe and high performant setup!
+
+== Purpose of this quickstarter
+
+This is a Rust project with a common Rust project folder and files structure, with its `main.rs` file for the final binary to be built, and that makes use of the `lib.rs` file, which exposes the crates (AKA modules or packages) of the project (where the business logic happens). Similar to Python project structures.
+
+The quickstarter comes with a simple API-server example written in https://www.rust-lang.org/[Rust] and using the https://github.com/tokio-rs/axum/[Axum] web framework.
+The package allows to easily build a Rust project, using different Rust crates (packages).
+It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
+
+**NOTE** The project can be also extended to build other types of solutions with, for example, https://www.rust-lang.org/what/wasm/[WASM] or https://esp-rs.github.io/book/introduction.html[IoT].
+
+== What files / architecture is generated?
+
+----
+├── 📂 .config - The local Rust project config folder
+│   └──  nextest.toml - The local Nextest config file (required for Jenkins CICD)
+├──  .pre-commit-config.yaml - The pre-commit config file one can extend, and providing gitleaks tool by default.
+├── 📂 chart - The Helm chart folder
+│   ├── 📂 templates - The resource files to define in your project (i.e.: deployment.yml, service.yml,...)
+│   │   ├── 📂 tests - Helm tests folder
+│   │   │   └──  test-connection.yaml - Helm test connection to app service after a new release
+│   │   ├── 📄 _helpers.tpl - Helm helpers template
+│   │   ├──  deployment.yaml - The k8s Deployment template for the app to release
+│   │   ├──  NOTES.txt - The release notes processed on each release
+│   │   └──  service.yaml - The k8s Service template for the app to release
+│   ├──  Chart.yaml - The Helm Chart main config file
+│   └──  values.yaml - The values to process on your Helm chart
+├── 📂 docker - The docker context to build
+│   └──  Dockerfile - The docker file to deploy and run
+├── Jenkinsfile - This file contains Jenkins build configuration settings
+├── 📂 src
+│   ├── 📂 api
+│   │   ├── 📂 routes
+│   │   │   ├── 🦀 mod.rs - The routes module file
+│   │   │   └── 🦀 status.rs
+│   │   ├── 🦀 mod.rs - The api module file
+│   │   └── 🦀 router.rs - The router API routes file
+│   ├── 📂 config
+│   │   ├── 🦀 mod.rs - The config module file
+│   │   └── 🦀 settings.rs - The settings file
+│   ├── 📂 models
+│   │   ├── 🦀 mod.rs - The models module file
+│   │   └── 🦀 status.rs - The status model example file
+│   └── 🦀 main.rs
+├── 📂 target - The target folder where all builds (debug, release, ...) are stored (do not commit to git!)
+├── 📂 tests
+│   ├── 🦀 common.rs - Common util implementations and functions
+│   └── 🦀 status_test.rs - Testing the status endpoint example
+├──  Cargo.lock - The Rust dependency hash tree of this project
+├──  Cargo.toml - The Rust project config file
+├──  metadata.yml - Component metadata
+├──  README.md - This README file
+├──  release-manager.yml - Configuration file for the Release Manager
+├──  rustfmt.toml
+└──  sonar-project.properties - This file contains SonarQube configuration settings
+----
+
+== Frameworks used
+
+* https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html[Rust 1.75.0]
+* https://github.com/tokio-rs/axum[Axum 0.7.x]
+
+== Usage - how do you start after you provisioned this quickstarter
+
+The project is production ready when deployed in OpenShift.
+
+Rust community and official resources are great to get to it, see
+https://www.rust-lang.org/learn[learn Rust].
+
+To get Rust ready on your local environment you just require installing `rustup` (see https://www.rust-lang.org/tools/install[install Rust])
+
+[source,bash]
+----
+# Get the Rustup CLI and already install target computer toolchain and latest stable Rust version
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# If you are new to Rust (also check the rustlings TUI)
+rustup doc --book
+
+# Run Unit, Integration and Documentation tests
+cargo test
+
+# Cargo format source code
+cargo fmt
+
+# Cargo run locally
+cargo run
+
+# Cargo run Rust linters
+cargo clippy
+
+# Cargo generate documentation
+cargo doc [--document-private-items] --open
+----
+
+One can also extend the `cargo` features by installing `cargo` extensions like:
+[source,bash]
+----
+# Live reload locally
+cargo install cargo-watch  # https://github.com/watchexec/cargo-watch
+# Then you can live reload by:
+cargo watch -x run
+
+# Nextest, with enhanced usage from default Rust cargo test
+cargo install cargo-nextest
+# ...
+----
+
+**NOTE** For an extended list of awesome `cargo` extensions and Rust tools check https://blessed.rs/crates/[here] and https://github.com/rust-unofficial/awesome-rust/[here].
+
+=== Metadata
+
+The following are typical xref:quickstarters:metadata.adoc[metadata] values that can be used for components based on this quickstarter:
+Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources will be labeled] based on this metadata.
+
+```yaml
+name: <the component id (this is the default, if omitted)>
+description: "Some microservice implemented in Rust with Axum web framework"
+supplier: https://example.com
+version: 1.0.1
+type: ods
+role: backend
+runtime: rust
+runtimeVersion: 1.75.0
+```
+
+== How this quickstarter is built through Jenkins
+
+The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages:
+
+* *Cargo Check* - Checks we can compile:
++
+[source,bash]
+----
+  cargo check --all-targets
+----
+
+* *Cargo Format* - Checks code is properly formatted:
++
+[source,bash]
+----
+  cargo fmt --all -- --check
+----
+
+* *Cargo Clippy* - Collection of lints to catch common mistakes and improve your Rust code (output is also used on SonarQube reports):
++
+[source,bash]
+----
+  cargo clippy --all-features
+----
+
+* *Cargo Test* - Runs nextest (instead of `cargo test`) with xUnit test report generation (see .config/nextest.toml) and code coverage reports with LLVM coverage tool:
++
+[source,bash]
+----
+  cargo nextest run --profile ci
+  cargo llvm-cov --lcov
+----
+
+* *Build* - Builds the release target binary and moves it to the docker folder:
++
+[source,bash]
+----
+  cargo build --release
+----
+
+include::partial$secret-scanning-with-gitleaks.adoc
+
+== Builder agent used
+
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[Rust] Jenkins builder agent.
+
+**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.75.x and above.
+
+
+== Technologies in use
+
+The following Rust technologies are in use when running this boilerplate:
+
+- https://github.com/tokio-rs/axum[Axum]: Web application framework that focuses on ergonomics and modularity.
+- https://github.com/tokio-rs/tokio[Tokio]: Runtime for writing reliable, asynchronous, and slim applications.
+- https://github.com/tower-rs/tower[Tower]: Library of modular and reusable components for building robust networking clients and servers.
+- https://github.com/hyperium/hyper[Hyper]: A fast and correct HTTP implementation for Rust.
+
+== Known limitations
+
+Let us know if you find any, thanks!

@@ -3,6 +3,7 @@
 /be-golang-plain/ @michaelsauter @henrjk
 /be-java-springboot/ @stitakis @renedupont
 /be-python-flask/ @buegelbeatz @henrjk @gerardcl
+/be-rust-axum/ @gerardcl @flightlama
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter
