@@ -109,9 +109,9 @@ Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources wil
 
 ```yaml
 name: nginx
-description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.19.3.2"
+description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.25.3.1-1"
 supplier: https://openresty.org
-version: 1.21.4.1
+version: 1.25.3.1-1
 type: ods-service
 role: integration
 ```
