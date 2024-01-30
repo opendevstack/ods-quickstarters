@@ -78,7 +78,6 @@ def generateTerraformOutputsFile() {
 def stageGetNamesFromOutputs() {
     def outputNames = [:]
     def terraformOutputJson = readJSON file: 'terraform_outputs.json'
-    //def environmentVarsJson = readJSON file: env.auto.tfvars.json
 
     outputNames.aws_codepipeline_name = terraformOutputJson.codepipeline_name.value
     outputNames.bitbuckets3_name = terraformOutputJson.bitbucket_s3bucket_name.value
