@@ -57,28 +57,32 @@ start-jenkins-agent-jdk-build:
 install-jenkins-agent-nodejs: apply-jenkins-agent-nodejs16-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build start-jenkins-agent-nodejs16-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build
 .PHONY: install-jenkins-agent-nodejs
 
-## Update OpenShift resources related to Jenkins Node agent image.
+## Update OpenShift resources related to Jenkins Node 16 agent image.
 apply-jenkins-agent-nodejs16-build:
 	cd common/jenkins-agents/nodejs16/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
 .PHONY: apply-jenkins-agent-nodejs16-build
 
+## Update OpenShift resources related to Jenkins Node 18 agent image.
 apply-jenkins-agent-nodejs18-build:
 	cd common/jenkins-agents/nodejs18/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
 .PHONY: apply-jenkins-agent-nodejs18-build
 
+## Update OpenShift resources related to Jenkins Node 20 agent image.
 apply-jenkins-agent-nodejs20-build:
 	cd common/jenkins-agents/nodejs20/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
 .PHONY: apply-jenkins-agent-nodejs20-build
 
-## Start build of BuildConfig "jenkins-agent-nodejs*".
+## Start build of BuildConfig "jenkins-agent-nodejs16".
 start-jenkins-agent-nodejs16-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs16 --follow
 .PHONY: start-jenkins-agent-nodejs16-build
 
+## Start build of BuildConfig "jenkins-agent-nodejs18".
 start-jenkins-agent-nodejs18-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs18 --follow
 .PHONY: start-jenkins-agent-nodejs18-build
 
+## Start build of BuildConfig "jenkins-agent-nodejs20".
 start-jenkins-agent-nodejs20-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs20 --follow
 .PHONY: start-jenkins-agent-nodejs20-build
@@ -97,6 +101,22 @@ apply-jenkins-agent-python-build:
 start-jenkins-agent-python-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-python --follow
 .PHONY: start-jenkins-agent-python-build
+
+
+# JENKINS AGENT RUST
+## Install or update Jenkins Rust agent resources.
+install-jenkins-agent-rust: apply-jenkins-agent-rust-build start-jenkins-agent-rust-build
+.PHONY: install-jenkins-agent-rust
+
+## Update OpenShift resources related to Jenkins Rust agent image.
+apply-jenkins-agent-rust-build:
+	cd common/jenkins-agents/rust/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-rust-build
+
+## Start build of BuildConfig "jenkins-agent-rust".
+start-jenkins-agent-rust-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-rust --follow
+.PHONY: start-jenkins-agent-rust-build
 
 
 # JENKINS AGENT SCALA
