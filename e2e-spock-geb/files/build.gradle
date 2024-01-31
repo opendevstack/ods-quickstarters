@@ -49,12 +49,12 @@ repositories {
 }
 
 ext {
-    junitVersion = "5.9.2"
+    junitVersion = "5.10.1"
     spockVersion = "2.3-groovy-4.0"
     gebVersion = "7.0"
-    seleniumVersion = "4.8.3"
-    htmlunitVersion = "4.8.1.1"
-    unirestVersion = "3.14.2"
+    seleniumVersion = "4.15.0"
+    htmlunitVersion = "4.13.0"
+    unirestVersion = "3.14.5"
     // When a test fail we can continue or fail the stage
     CONTINUE_WHEN_TEST_FAIL = true
 }
