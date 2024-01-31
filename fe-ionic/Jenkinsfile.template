@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs18:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-nodejs20:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
   // 'release/': 'test'
@@ -22,7 +22,7 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build') {
     withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}"]) {
-      sh 'npm i -g @ionic/cli@7.1.1'
+      sh 'npm i -g @ionic/cli@7.1.5'
       sh 'npm install'
       if ('master'.equals(context.gitBranch)) {
         sh 'ionic build --prod'

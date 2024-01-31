@@ -4,7 +4,7 @@ Ionic quickstarter project
 
 == Purpose of this quickstarter
 
-This quickstarter generates an *Ionic 6.19.0* project, you can use it when you want to develop a cross platform mobile app (iOS, android and PWA) in one codebase using Web technologies like CSS, HTML and JavaScript/TypeScript.
+This quickstarter generates an *Ionic 7.1.5* project, you can use it when you want to develop a cross platform mobile app (iOS, android and PWA) in one codebase using Web technologies like CSS, HTML and JavaScript/TypeScript.
 
 It contains the basic setup for https://www.docker.com/[Docker], https://jenkins.io/[Jenkins], https://www.sonarqube.org/[SonarQube] and https://www.openshift.com/[OpenShift], so you have your CI/CD process out of the box.
 
@@ -97,10 +97,10 @@ Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources wil
 name: Ionic
 component: frontend
 instance: <the component id (this is the default, if omitted)>
-description: "Ionic Framework is the free, open source mobile UI toolkit for developing high-quality cross-platform apps for native iOS, Android, and the web—all from a single codebase. Technologies: Ionic 6.19.x"
+description: "Ionic Framework is the free, open source mobile UI toolkit for developing high-quality cross-platform apps for native iOS, Android, and the web—all from a single codebase. Technologies: Ionic 7.1.5"
 supplier: https://ionicframework.com
 type: ods
-version: 6.19.x
+version: 7.1.5
 ```
 
 == How this quickstarter is built thru Jenkins
@@ -116,7 +116,7 @@ SonarQube Analysis:: Triggers a code quality analysis by transfering code and te
 
 == Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs16[Node.js 16 builder agent] for Jenkins.
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
 
 == Known Limitation
 

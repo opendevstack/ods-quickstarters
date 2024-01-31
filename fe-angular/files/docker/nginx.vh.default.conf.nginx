@@ -30,7 +30,7 @@ server {
     server_tokens off;
 
     location / {
-      root /docroot;
+      root /docroot/browser;
       index  index.html;
       # this is for angular
       try_files $uri$args $uri$args/ $uri $uri/ /index.html =404;
