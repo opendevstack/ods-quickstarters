@@ -1,0 +1,27 @@
+# Project Key (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Name (optional)
+sonar.projectName=@project_id@-@component_id@
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+
+# Comma-separated paths to directories containing test source files.
+sonar.tests=tests
+sonar.test.inclusions=**/*_test.rs
+
+# Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8
+
+# Exclude test files from coverage analysis
+sonar.coverage.exclusions=tests/**
+
+# Rust Clippy reports leverages Clippy lints to raise issues against coding rules
+community.rust.clippy.reportPaths=build/test-results/clippy/report.json
+
+# Define unit test information inside the Rust project
+community.rust.test.reportPath=build/test-results/test/results.xml
+
+# Define coverage information inside the Rust project
+community.rust.lcov.reportPaths=build/test-results/coverage/lcov.info

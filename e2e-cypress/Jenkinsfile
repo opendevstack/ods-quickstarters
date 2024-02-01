@@ -15,7 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs18:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs20:${agentImageTag}",
 ) { context ->
 
   odsQuickstarterStageCopyFiles(context)
