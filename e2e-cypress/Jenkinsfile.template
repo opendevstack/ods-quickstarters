@@ -11,7 +11,7 @@ odsComponentPipeline(
   podContainers: [
       containerTemplate(
         name: 'jnlp',
-        image: "${dockerRegistry}/ods/jenkins-agent-nodejs18:@shared_library_ref@",
+        image: "${dockerRegistry}/ods/jenkins-agent-nodejs20:@agent_image_tag@",
         workingDir: '/tmp',
         envVars: [
           envVar(key: 'CYPRESS_RECORD_KEY', value: cypressRecordKey)
