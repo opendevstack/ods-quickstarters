@@ -11,6 +11,7 @@
 
 ### Modified
 - Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
+- Rust Quickstarter Jenkins Agent CICD tools with fixed versions ([#988](https://github.com/opendevstack/ods-quickstarters/issues/988))
 
 ### Fixed
 - Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
