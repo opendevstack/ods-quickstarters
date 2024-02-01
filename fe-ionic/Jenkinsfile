@@ -14,10 +14,10 @@ node {
 
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
-def ionicVersion = "7.1.1"
+def ionicVersion = "7.1.5"
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs18:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs20:${agentImageTag}",
   resourceRequestMemory: '1Gi',
   resourceLimitMemory: '2Gi',
 ) { context ->

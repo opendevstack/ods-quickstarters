@@ -15,7 +15,7 @@ node {
 library("ods-jenkins-shared-library@${sharedLibraryRef}")
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs18:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs20:${agentImageTag}",
 ) { context ->
 
   stage("init Project") {
@@ -24,13 +24,14 @@ odsQuickstarterPipeline(
       sh "npm init -y"
 
       print "Install dependencies"
-      def typescriptVersion = "5.0.2"
-      def nodeTypeVersion = "18.15.10"
+      def typescriptVersion = "5.3.2"
+      def nodeTypeVersion = "20.10.0"
       def expressVersion = "4.18.2"
-      def jestVersion = "29.5.0"
-      def jestJunitVersion = "15.0.0"
+      def jestVersion = "29.7.0"
+      def jestTypeVersion = "29.5.10"
+      def jestJunitVersion = "16.0.0"
 
-      sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestVersion"
+      sh "npm i typescript@$typescriptVersion express@$expressVersion @types/node@$nodeTypeVersion jest@$jestVersion @types/jest@$jestTypeVersion"
       sh "npm i jest-junit@$jestJunitVersion --save-dev"
 
       print "Generate ts config file. Skip library check and redirect transpiled ts files to dist folder."
