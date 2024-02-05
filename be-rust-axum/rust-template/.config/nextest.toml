@@ -1,0 +1,4 @@
+[profile.ci.junit]
+path = "results.xml"
+store-success-output = true
+store-failure-output = true

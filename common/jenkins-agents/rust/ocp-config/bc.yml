@@ -1,0 +1,70 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-rust
+parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.ubi8
+  description: Dockerfile variant to use
+- name: RUST_VERSION
+  description: "The Rust version"
+  required: true
+  value: "1.75.0"
+- name: RUST_TOOLCHAIN
+  description: "The Rust target toolchain"
+  required: true
+  value: "x86_64-unknown-linux-gnu"
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-agent-rust
+    labels:
+      app: jenkins-agent-rust
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-agent-python:${ODS_IMAGE_TAG}
+    postCommit: {}
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1Gi"
+      requests:
+        cpu: "200m"
+        memory: "0.5Gi"
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-agents/rust/docker
+      git:
+        ref: ${ODS_GIT_REF}
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
+        buildArgs:
+          - name: rustVersion
+            value: ${RUST_VERSION}
+          - name: rustToolchain
+            value: ${RUST_TOOLCHAIN}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-agent-base:${ODS_IMAGE_TAG}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
