@@ -3,7 +3,7 @@
 This is a python based quicktarter intended to develop end-to-end tests for data pipelines.
 In order to do that it uses two testing technologies: 
   1. Great Expectations, meant for data transformation testing data within relational tables.
-     e.g.: You could test the shema of a database, the number of rows, that a specific column has no null values, etc
+     e.g.: You could test the schema of a database, the number of rows, that a specific column has no null values, etc
 
   2. Pytest together with Boto it allows for testing etl triggers, notification system, content of S3 buckets, etc
 
