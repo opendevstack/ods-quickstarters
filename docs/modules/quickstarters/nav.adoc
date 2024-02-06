@@ -13,6 +13,7 @@
 ** xref:quickstarters:ds-rshiny.adoc[Data Science RShiny app]
 ** xref:quickstarters:ds-streamlit.adoc[Data Science Streamlit app]
 ** xref:quickstarters:e2e-cypress.adoc[Cypress E2E testing]
+** xref:quickstarters:e2e-etl-python.adoc[ETL Python E2E testing]
 ** xref:quickstarters:e2e-spock-geb.adoc[Spock, Geb and Unirest E2E testing]
 ** xref:quickstarters:inf-terraform-aws.adoc[INF Terraform AWS]
 ** xref:quickstarters:inf-terraform-azure.adoc[INF Terraform AZURE]
