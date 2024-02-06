@@ -42,6 +42,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 === E2E Test Quickstarter
 * xref::e2e-cypress.adoc[E2E test - Cypress]
 * xref::e2e-spock-geb.adoc[E2E test - Spock / Geb]
+* xref::e2e-etl-python.adoc[E2E test - ETL Python]
 
 === Infrastructure Terraform Quickstarter
 * xref::inf-terraform-aws.adoc[AWS deployments utilizing terraform tooling]
