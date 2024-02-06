@@ -63,5 +63,5 @@ variable "aws_region" {
 variable "repository" {
   description = "QS bitbucket repository"
   type        = string
-  default     = "e2e-python"
+  default     = "e2e-etl-python"
 }
