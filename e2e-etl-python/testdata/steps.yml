@@ -1,4 +1,4 @@
-componentID: e2e-python
+componentID: e2e-etl-python
 steps:
 - type: provision
   provisionParams:

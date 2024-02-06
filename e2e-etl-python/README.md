@@ -1,4 +1,4 @@
-# e2e-python Quickstarter (e2e-python)
+# e2e-etl-python Quickstarter (e2e-etl-python)
 
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/opendevstack/latest/getting-started/index.html)
 

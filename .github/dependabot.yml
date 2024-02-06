@@ -11,3 +11,6 @@ updates:
     labels:
       - "dependencies"
       - "skip changelog"
+    labels:
+      - "dependencies"
+      - "skip changelog"
