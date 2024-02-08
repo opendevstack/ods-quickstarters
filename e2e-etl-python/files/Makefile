@@ -48,7 +48,7 @@ prep-test:
 .PHONY: test
 # Run (pre-deployment) tests.
 test: install-test-deps
-	#Removed for the e2e-etl-python QS
+	#Needed for "Infrastructure as Code (IaC)" stage
 
 .PHONY: plan
 # Plan infrastructure deployment.
@@ -71,7 +71,7 @@ deploy: init-terraform plan
 .PHONY: deployment-test
 # Run (post-deployment) tests.
 deployment-test: install-test-deps
-	#Removed for the e2e-etl-python QS
+	#Needed for "Infrastructure as Code (IaC)" stage
 
 .PHONY: install-report
 install-report:
