@@ -154,7 +154,6 @@ def retrieveReportsFromAWS(def context, results3_name) {
     sh "aws s3 cp s3://${results3_name}/pytest_results/integration/integration_allure_report_complete.html ./build/test-results/test/artifacts/integration/integration_pytest_report.html"
 
     sh "ls build/test-results/test"
-    sh "rm build/test-results/test/default.xml"
 }
 
 def addVars2envJsonFile(def context) {

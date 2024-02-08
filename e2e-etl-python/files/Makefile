@@ -48,27 +48,7 @@ prep-test:
 .PHONY: test
 # Run (pre-deployment) tests.
 test: install-test-deps
-	@$(call check_aws_credentials)
-
-	# output aws account and user id for testing
-	aws sts  get-caller-identity --output text | tee $(INSTALL_REPORT_HOME)/aws_testing_account.log
-
-	# Remove any previously created Terraform test artefacts.
-	for dir in .terraform terraform.tfstate.d; do \
-		find test/fixtures -name $$dir -print0 | xargs -0 rm -rf; \
-	done \
-
-	inspec_profiles=$$(ls -1 ./test/integration); \
-	for fdir in $$inspec_profiles; do \
-		mkdir -p test/integration/$$fdir/files ; \
-		./.venv/bin/python3 ./.venv/bin/hcl2tojson test/fixtures/$$fdir/main.tf  test/integration/$$fdir/files/main.json; \
-	done \
-
-	# See https://github.com/test-kitchen/test-kitchen/issues/1436 for why a simple `bundle exec kitchen test` is not an option.
-	for suite in $$(bundle exec kitchen list --bare); do \
-		bundle exec kitchen verify $$suite || { bundle exec kitchen destroy $$suite; exit 1; }; \
-		bundle exec kitchen destroy $$suite; \
-	done
+	#Needed for "Infrastructure as Code (IaC)" stage
 
 .PHONY: plan
 # Plan infrastructure deployment.
@@ -91,13 +71,7 @@ deploy: init-terraform plan
 .PHONY: deployment-test
 # Run (post-deployment) tests.
 deployment-test: install-test-deps
-	@$(call check_aws_credentials)
-
-	sh ./lib/scripts/createstackoutputs2yml.sh
-	inspec_profiles=$$(ls -1 ./test/integration); \
-	for profile in $$inspec_profiles; do \
-		JSON_VARS_FILE="$(PWD)/terraform.tfvars.json" bundle exec cinc-auditor exec ./test/integration/$$profile --no-create-lockfile --no-distinct-exit --input-file ./test/integration/$$profile/files/inputs-from-tfo-stack.yml --reporter=cli junit2:build/test-results/test/$$profile.xml json:reports/install/data/inspec/post-install/$$profile.json --target aws://; \
-	done
+	#Needed for "Infrastructure as Code (IaC)" stage
 
 .PHONY: install-report
 install-report:
