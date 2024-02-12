@@ -3,7 +3,7 @@
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
 node {
-  aws_region = env.AWS_REGION
+  aws_region = env.AWS_REGION ?: 'eu-west-1'
   dockerRegistry = env.DOCKER_REGISTRY
 }
 
