@@ -1,0 +1,29 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation template of an S3 bucket for the AWS Quickstarter.",
+  "Outputs": {
+    "S3BucketName": {
+      "Description": "Bucket Created using this template.",
+      "Value": {
+        "Ref": "S3Bucket"
+      }
+    }
+  },
+  "Resources": {
+    "S3Bucket": {
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      },
+      "Type": "AWS::S3::Bucket"
+    }
+  }
+}
