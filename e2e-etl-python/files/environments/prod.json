@@ -1,0 +1,13 @@
+{
+  "meta_environment"                    : "PRODUCTIVE",
+
+  "codebuild_project_name"              : "codebuild-project",
+  "codepipeline_name"                   : "test-codepipeline",
+  "codepipeline_bucket_name"            : "cpplartifacts",
+  "bitbucket_source_bucket_name"        : "src-bitbucket",
+  "e2e_results_bucket_name"             : "test-results",
+  "pipeline_role_name"                  : "test-codePipelineRole",
+  "codebuild_role_name"                 : "test-codeBuildRole",
+  "codepipeline_policy_name"            : "codepipeline_policy",
+  "codebuild_policy_name"               : "codebuild_policy"
+}

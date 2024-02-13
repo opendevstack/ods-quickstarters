@@ -2,6 +2,7 @@
 
 ### Added
 - Rust Quickstarter with Axum web framework simple boilerplate ([#980](https://github.com/opendevstack/ods-quickstarters/issues/980))
+- Added ETL pipeline testing QS (e2e-python) ([#985](https://github.com/opendevstack/ods-quickstarters/pull/985))
 - Update gateway-Nginx quickstarter ([#983](https://github.com/opendevstack/ods-quickstarters/pull/983))
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
