@@ -1,0 +1,183 @@
+/* generated jenkins file used for building and deploying AWS-infrastructure in projects */
+
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
+
+node {
+  aws_region = env.AWS_REGION ?: 'eu-west-1'
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+odsComponentPipeline(
+  podContainers: [
+      containerTemplate(
+        name: 'jnlp',
+        image: "${dockerRegistry}/ods/jenkins-agent-terraform-2306:@shared_library_ref@",
+        envVars: [
+          envVar(key: 'AWS_REGION', value: aws_region)
+        ],
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'
+      )
+    ],
+  branchToEnvironmentMapping: [
+    '*': 'dev',
+    // 'release/': 'test'
+  ]
+) { context ->
+    getEnvironment(context)
+    addVars2envJsonFile(context)
+    odsComponentStageInfrastructure(context, [cloudProvider: 'AWS'])
+
+    withEnv(["AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}",
+             "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+   ])
+   {
+      stage ("AWS Testing Preparation"){
+        generateTerraformOutputsFile()
+      }
+
+      def outputNames = stageGetNamesFromOutputs()
+      def aws_pipelineName = outputNames.aws_codepipeline_name
+      def bitbuckets3_name = outputNames.bitbuckets3_name
+      def results3_name = outputNames.results3_name
+
+      stage ("Publish Bitbucket Code To AWS"){
+        publishBitbucketCodeToAWS(context, bitbuckets3_name)
+      }
+
+      stage ("Run Tests"){
+        awsCodePipelineTrigger(context, aws_pipelineName)
+        awsCodePipelineWaitForExecution(context, aws_pipelineName)
+      }
+
+      stage ("Test Results"){
+        retrieveReportsFromAWS(context, results3_name)
+        archiveArtifacts artifacts: "build/test-results/test/**", allowEmptyArchive: true
+        junit(testResults:'build/test-results/test/*.xml', allowEmptyResults: true)
+        stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: "build/test-results/test/acceptance*junit.xml", allowEmpty: true)
+        stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: "build/test-results/test/installation*junit.xml", allowEmpty: true)
+        stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: "build/test-results/test/integration*junit.xml", allowEmpty: true)
+      }
+    }
+
+}
+
+def getEnvironment(def context){
+    sh "echo Get Environment Variables"
+    AWS_ACCESS_KEY_ID = sh(returnStdout: true, script:"oc get secret aws-access-key-id-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
+    AWS_SECRET_ACCESS_KEY = sh(returnStdout: true, script:"oc get secret aws-secret-access-key-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
+
+}
+
+
+def generateTerraformOutputsFile() {
+    sh 'terraform output -json > terraform_outputs.json'
+    sh 'cat terraform_outputs.json'
+}
+
+def stageGetNamesFromOutputs() {
+    def outputNames = [:]
+    def terraformOutputJson = readJSON file: 'terraform_outputs.json'
+
+    outputNames.aws_codepipeline_name = terraformOutputJson.codepipeline_name.value
+    outputNames.bitbuckets3_name = terraformOutputJson.bitbucket_s3bucket_name.value
+    outputNames.results3_name = terraformOutputJson.e2e_results_bucket_name.value
+
+    return outputNames
+}
+
+def awsCodePipelineTrigger(def context, pipelineName) {
+   sh "aws codepipeline start-pipeline-execution --name ${pipelineName}"
+}
+
+
+def awsCodePipelineWaitForExecution(def context, pipelineName) {
+    def pipelineExecutionStatus = ''
+
+    while (true) {
+        pipelineExecutionStatus = ''
+        sleep(time: 40, unit: 'SECONDS')
+        def pipelineState = sh(
+            script: "aws codepipeline get-pipeline-state --name ${pipelineName} --query 'stageStates[*]' --output json",
+            returnStdout: true
+        ).trim()
+
+        def pipelineStages = readJSON(text: pipelineState)
+
+        pipelineStages.each { stage ->
+            def stageName = stage.stageName
+            def stageStatus = stage.latestExecution.status
+            echo "Stage: ${stageName}, Status: ${stageStatus}"
+
+            if (stageStatus == 'InProgress') {
+                pipelineExecutionStatus = 'InProgress'
+                return
+            } else if (stageStatus == 'Failed') {
+                pipelineExecutionStatus = 'Failed'
+                echo "Pipeline execution failed at stage ${stageName}"
+                error("Pipeline execution failed at stage ${stageName}")
+                return
+            }
+        }
+
+        if (pipelineExecutionStatus == 'InProgress') {
+            continue
+        } else if (pipelineExecutionStatus == 'Failed') {
+            echo "Pipeline execution failed at stage ${stageName}"
+            break
+        } else {
+            echo 'Pipeline execution completed successfully.'
+            break
+        }
+    }
+}
+
+
+
+def publishBitbucketCodeToAWS(def context, bitbuckets3_name) {
+    def branch = context.gitBranch
+    def repository = context.componentId
+    zip zipFile: "${repository}-${branch}.zip", archive: false, dir: '.'
+    sh " aws s3 cp ${repository}-${branch}.zip s3://${bitbuckets3_name}/${repository}-${branch}.zip"
+}
+
+def retrieveReportsFromAWS(def context, results3_name) {
+    sh "aws s3 cp s3://${results3_name}/junit/acceptance_GX_junit.xml ./build/test-results/test/acceptance_GX_junit.xml"
+    sh "aws s3 cp s3://${results3_name}/junit/acceptance_pytest_junit.xml ./build/test-results/test/acceptance_pytest_junit.xml"
+    sh "aws s3 cp s3://${results3_name}/junit/installation_pytest_junit.xml ./build/test-results/test/installation_pytest_junit.xml"
+    sh "aws s3 cp s3://${results3_name}/junit/integration_pytest_junit.xml ./build/test-results/test/integration_pytest_junit.xml"
+
+    sh "aws s3 cp s3://${results3_name}/GX_test_results ./build/test-results/test/artifacts/acceptance/acceptance_GX_report --recursive"
+    sh "aws s3 cp s3://${results3_name}/GX_jsons ./build/test-results/test/artifacts/acceptance/GX_jsons --recursive"
+    sh "aws s3 cp s3://${results3_name}/pytest_results/acceptance/acceptance_allure_report_complete.html ./build/test-results/test/artifacts/acceptance/acceptance_pytest_report.html"
+    sh "aws s3 cp s3://${results3_name}/pytest_results/installation/installation_allure_report_complete.html ./build/test-results/test/artifacts/installation/installation_pytest_report.html"
+    sh "aws s3 cp s3://${results3_name}/pytest_results/integration/integration_allure_report_complete.html ./build/test-results/test/artifacts/integration/integration_pytest_report.html"
+
+    sh "ls build/test-results/test"
+}
+
+def addVars2envJsonFile(def context) {
+    echo "Starting addVars2envJsonFile"
+    def environment = context.environment
+    def projectId = context.projectId
+    def branch_name = context.gitBranch
+    def repository = context.componentId
+    def filePath = "./environments/${environment}.json"
+
+    def existingJson = readFile file: filePath
+    def existingData = readJSON text: existingJson
+
+    existingData.environment = environment
+    existingData.projectId = projectId
+    existingData.aws_region = aws_region
+    existingData.repository = repository
+    existingData.branch_name = branch_name
+
+    echo "Environment: ${existingData}"
+
+    def updatedJson = groovy.json.JsonOutput.toJson(existingData)
+    writeFile file: filePath, text: updatedJson
+
+    echo "Finishing addVars2envJsonFile"
+}
+

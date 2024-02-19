@@ -1,6 +1,6 @@
 ---
 name: e2e-spock-geb
-description: "Spock is a highly expressive testing and specification framework for Java and Groovy. Geb is a browser automation solution for functional/web/acceptance testing. Technologies: Spock 1.3, Geb 3.2, Selenium 3.141"
+description: "Spock is a highly expressive testing and specification framework for Java and Groovy. Geb is a browser automation solution for functional/web/acceptance testing. Technologies: Spock 2.3-groovy-4.0, Geb 7.0, Selenium 4.15.0"
 supplier: http://spockframework.org
 version: 4.x
 type: ods-test

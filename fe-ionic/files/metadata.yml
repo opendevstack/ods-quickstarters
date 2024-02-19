@@ -1,6 +1,6 @@
 ---
 name: Ionic
-description: "Ionic Framework is the free, open source mobile UI toolkit for developing high-quality cross-platform apps for native iOS, Android, and the web—all from a single codebase. Technologies: Ionic 6.19.x"
+description: "Ionic Framework is the free, open source mobile UI toolkit for developing high-quality cross-platform apps for native iOS, Android, and the web—all from a single codebase. Technologies: Ionic 7.1.5"
 supplier: https://ionicframework.com
+version: 4.x
 type: ods
-version: 7.1.x

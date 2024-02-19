@@ -1,0 +1,42 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Cargo Check",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Cargo Format",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Cargo Clippy",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Cargo Test",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Cargo Build",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Deploy to OpenShift (app=rust-axum-iq-test)",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]

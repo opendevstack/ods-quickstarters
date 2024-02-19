@@ -71,7 +71,7 @@ version: 1.0.1
 type: ods
 role: frontend
 runtime: angular-cli
-runtimeVersion: 15.2.7
+runtimeVersion: 17.0.3
 ```
 
 == How this quickstarter is built through Jenkins
@@ -88,7 +88,7 @@ Please note: The support for *TSLint* has been removed from this quickstarter. A
 
 == Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs18[Node.js 18 builder agent] for Jenkins.
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
 
 == Known limitations
 

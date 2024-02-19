@@ -66,9 +66,9 @@ A more advanced solution could be the use of a custom builder agent, where Cypre
 [source,docker]
 ----
 # The following FROM tag is informational. It is overwritten by OpenShift.
-FROM ods/jenkins-agent-nodejs18:4.x
+FROM ods/jenkins-agent-nodejs20:4.x
 
-ARG cypressVersion=12.9.0
+ARG cypressVersion=13.6.0
 ARG cypressHash=...
 
 USER root
@@ -126,7 +126,7 @@ You can find more information about using the Cypress Cloud in the official docu
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs18[Node.js 18 builder agent] for Jenkins.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
 
 == Known limitations
 

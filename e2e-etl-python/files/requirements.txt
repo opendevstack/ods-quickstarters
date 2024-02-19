@@ -1,0 +1,19 @@
+great_expectations == 0.18.3
+sqlalchemy == 2.0.23
+pyathena[SQLAlchemy] == 3.0.10
+pytest == 7.4.3
+allure-pytest == 2.13.2
+allure-combine == 1.0.11
+boto3 == 1.29.6
+pandas == 2.1.3
+numpy == 1.26.2
+pytest-timeout == 2.2.0
+pytest-ordering == 0.6
+pytest-repeat == 0.9.3
+pyspark == 3.5.0
+pytz == 2023.3.post1
+snowflake-connector-python == 3.6.0
+cryptography == 41.0.7
+psycopg2-binary == 2.9.1
+snowflake-snowpark-python == 1.11.1
+

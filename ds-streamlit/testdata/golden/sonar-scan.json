@@ -1,0 +1,25 @@
+{
+  "key": "{{.ProjectID}}-{{.ComponentID}}",
+  "name": "{{.ProjectID}}-{{.ComponentID}}",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "{{.SonarQualityProfile}}",
+      "language": "py",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
+      "qualifier": "TRK"
+    }
+  ]
+}

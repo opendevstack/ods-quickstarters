@@ -1,0 +1,35 @@
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+
+LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>"
+
+ARG rustVersion
+ARG rustToolchain
+
+ENV PATH="$HOME/.cargo/bin:$PATH"
+ENV USER="rust-agent"
+ENV CARGO_NEXTEST_VERSION=0.9.67 \
+    CARGO_LLVM_COV_VERSION=0.6.4 \
+    CARGO_GENERATE_VERSION=0.19.0
+
+RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config openssl-devel
+
+RUN cd /tmp && \
+    curl -LfSsO https://static.rust-lang.org/dist/rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    tar -xzf rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    rm -f rust-${rustVersion}-${rustToolchain}.tar.gz && \
+    cd rust-${rustVersion}-${rustToolchain} && \
+    ./install.sh && \
+    cargo -V && \
+    mkdir -p $HOME/.cargo/bin && \
+    # Download binaries and install to $HOME/.cargo/bin
+    curl --proto '=https' --tlsv1.2 -fsSL https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-$CARGO_NEXTEST_VERSION/cargo-nextest-$CARGO_NEXTEST_VERSION-$rustToolchain.tar.gz | tar xzf - -C "$HOME/.cargo/bin" && \
+    curl --proto '=https' --tlsv1.2 -fsSL https://github.com/cargo-generate/cargo-generate/releases/download/v$CARGO_GENERATE_VERSION/cargo-generate-v$CARGO_GENERATE_VERSION-$rustToolchain.tar.gz | tar xzf - -C "$HOME/.cargo/bin" && \
+    # curl --proto '=https' --tlsv1.2 -fsSL https://github.com/taiki-e/cargo-llvm-cov/releases/download/v$CARGO_LLVM_COV_VERSION/cargo-llvm-cov-$rustToolchain.tar.gz | tar xzf - -C "$HOME/.cargo/bin" && \
+    # cargo LLVM coverage crate is recommended to be compiled as it takes care to add the OS lib dependencies the proper way
+    cargo install cargo-llvm-cov --version $CARGO_LLVM_COV_VERSION && \
+    cargo nextest --version && \
+    cargo llvm-cov --version && \
+    cargo generate --version
+
+RUN chgrp -R 0 $HOME/.cargo && \
+    chmod -R g=u $HOME/.cargo

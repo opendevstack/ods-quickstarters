@@ -1,0 +1,68 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "athena_validation_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "_hoodie_commit_time",
+          "_hoodie_commit_seqno",
+          "_hoodie_record_key",
+          "_hoodie_partition_path",
+          "_hoodie_file_name",
+          "address_id",
+          "address_line_1",
+          "address_line_2",
+          "address_line_3",
+          "address_line_4",
+          "address_owner_key_1",
+          "address_owner_key_2",
+          "address_owner_key_3",
+          "address_owner_key_4",
+          "address_owner_key_5",
+          "address_type_code",
+          "country_code",
+          "last_updated_date",
+          "owner",
+          "post_zip_code",
+          "primary_address_flag",
+          "province_county",
+          "province_county_code",
+          "table_short_name",
+          "town_city",
+          "updated_during_mon_visit_by",
+          "update_count",
+          "aud_action_flag",
+          "aud_date_changed",
+          "aud_personnel_no",
+          "time_zone_offset",
+          "transaction_no",
+          "ingestion_timestamp",
+          "pr_tab_hist_hkey",
+          "pr_tab_hkey",
+          "audit_id",
+          "audit_task_id",
+          "int_tec_from_dt",
+          "int_tec_to_dt",
+          "curr_flg",
+          "del_flg",
+          "modulekey"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_equal",
+      "kwargs": {
+        "value": 0
+      },
+      "meta": {}
+    }
+  ],
+
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.17.9"
+  }
+}
