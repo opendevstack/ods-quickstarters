@@ -23,7 +23,7 @@ parameters:
   value: Dockerfile.ubi8
   description: Dockerfile variant to use
 objects:
-- apiVersion: v1
+- apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
     name: jenkins-agent-jdk
