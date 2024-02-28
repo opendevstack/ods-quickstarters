@@ -8,15 +8,15 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 
 # JENKINS AGENT
 ## Install or update Jenkins agent resources.
-install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform
+install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform install-jenkins-agent-terraform-2306 install-jenkins-agent-rust
 .PHONY: install-jenkins-agent
 
 ## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs16-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs16-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-rust-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs16-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs16-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build start-jenkins-agent-terraform-build-2306 start-jenkins-agent-rust-build
 .PHONY: start-jenkins-agent-build
 
 
