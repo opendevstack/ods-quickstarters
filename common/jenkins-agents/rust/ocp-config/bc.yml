@@ -37,7 +37,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: jenkins-agent-python:${ODS_IMAGE_TAG}
+        name: jenkins-agent-rust:${ODS_IMAGE_TAG}
     postCommit: {}
     resources:
       limits:
