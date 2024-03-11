@@ -1,5 +1,5 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+FROM docker-group-@ods_namespace@.@app_domain@/alpine:latest
 
 RUN echo "building simple container"
 
