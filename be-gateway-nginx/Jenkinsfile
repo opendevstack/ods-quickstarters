@@ -26,4 +26,10 @@ odsQuickstarterPipeline(
   )
 
   odsQuickstarterStageRenderJenkinsfile(context)
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'Dockerfile.template',
+     target: 'docker/Dockerfile']
+  )
 }
