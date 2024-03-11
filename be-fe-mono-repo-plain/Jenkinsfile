@@ -30,7 +30,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageRenderJenkinsfile(
     context,
-    [source: 'Dockerfile_fe.template',
+    [source: 'docker_fe/Dockerfile.template',
      target: 'docker_fe/Dockerfile']
   )
 
@@ -40,7 +40,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageRenderJenkinsfile(
     context,
-    [source: 'Dockerfile_be.template',
+    [source: 'docker_be/Dockerfile.template',
      target: 'docker_be/Dockerfile']
   )
 
