@@ -27,7 +27,7 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageRenderJenkinsfile(context)
 
-  stage("Create folder") {
+  stage("Create docker folder") {
     sh "mkdir -p ${context.componentId}/docker"
   }
 
