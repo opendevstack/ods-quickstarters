@@ -1,4 +1,4 @@
-FROM alpine
+FROM docker-group-@ods_namespace@.@app_domain@/alpine
 
 # Uncomment this section if you need to use glibc in your container, f.e. when you enable CGO_ENABLED=1
 # Set locale
