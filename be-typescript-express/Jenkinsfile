@@ -51,6 +51,16 @@ odsQuickstarterPipeline(
   )
   odsQuickstarterStageRenderJenkinsfile(context)
 
+  stage("Create docker folder") {
+    sh "mkdir -p ${context.componentId}/docker"
+  }
+
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'Dockerfile.template',
+     target: 'docker/Dockerfile']
+  )
+
   odsQuickstarterStageRenderSonarProperties(context)
 }
 

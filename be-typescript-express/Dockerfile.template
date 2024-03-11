@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM docker-group-@ods_namespace@.@app_domain@/node:20-alpine
 
 COPY dist /node
 
