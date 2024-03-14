@@ -5,6 +5,7 @@
 - Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
 - Update api version in ocp templates for image, buildconfig, route and deploymentconfig ([#1072](https://github.com/opendevstack/ods-jenkins-shared-library/issues/1072))
 - Update Makefile adding all missing agents ([#999](https://github.com/opendevstack/ods-quickstarters/pull/999))
+- jenkins agent nodejs20 can not import private keys into gpg keyring to use with helm secrets ([#1001](https://github.com/opendevstack/ods-quickstarters/issues/1001))
 
 ## [4.3.1] - 2024-02-19
 
