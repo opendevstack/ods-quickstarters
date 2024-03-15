@@ -1,0 +1,7 @@
+---
+name: AWS CDK (Python)
+# yamllint disable-line rule:line-length
+description: "The AWS CDK lets you build reliable, scalable, cost-effective applications in the cloud with the considerable expressive power of a programming language."
+supplier: https://docs.aws.amazon.com/cdk/v2/guide/home.html
+version: 4.x
+type: ods-infra

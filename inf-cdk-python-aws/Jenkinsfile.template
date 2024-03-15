@@ -1,0 +1,150 @@
+/* generated jenkins file used for building and deploying AWS-infrastructure in projects */
+
+@Library('ods-jenkins-shared-library@@shared_library_ref@') _
+
+odsComponentPipeline(
+  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform-2306:@agent_image_tag@',
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+    'feature/': 'dev'
+  ]
+) { context ->
+
+  /* Account credentials are provided via OpenShift, see AWS Terraform Quickstarter also */
+  awsAccountIds = [
+    'dev':  '<your_dev_aws_account_id>',
+    'test': '<your_test_aws_account_id>',
+    'prod': '<your_prod_aws_account_id>'
+  ]
+  awsRegions = [
+    'dev': 'eu-west-1',
+    'test': 'eu-west-1',
+    'prod': 'eu-west-1'
+  ]
+
+  withEnv([
+    "CDK_DEFAULT_REGION=${awsRegions[context.environment]}",
+    "AWS_DEFAULT_REGION=${awsRegions[context.environment]}",
+  ]){
+    dir('src/') { // directory where your CDK stack is located
+      stagePrepareVirtualEnv(context)
+      stageAwsAccountInformation(context, awsAccountIds[context.environment], awsRegions[context.environment])
+
+      stageBootstrap(context, awsAccountIds[context.environment], awsRegions[context.environment])
+      stageUnitTest(context)
+      stageDiff(context)
+      stageDeploy(context)
+    }
+  }
+}
+
+def stagePrepareVirtualEnv(def context){
+  stage('Prepare Python Virtual Environment') {
+    sh "python --version"
+    sh "python -mvenv .venv"
+    sh "source .venv/bin/activate && pip install -r requirements.txt -r requirements-dev.txt"
+  }
+}
+
+def stageAwsAccountInformation(context, String awsAccountId, String awsRegion) {
+  stage('AWS account information') {
+    echo "awsAccountId: ${awsAccountId}"
+    echo "awsRegion: ${awsRegion}"
+    echo "Reading credentialsId: ${context.projectId}-cd-aws-access-key-id-${context.environment}"
+    echo "Reading credentialsId: ${context.projectId}-cd-aws-secret-access-key-${context.environment}"
+    withCredentials([
+      string(
+          credentialsId: "${context.projectId}-cd-aws-access-key-id-${context.environment}",
+          variable: 'AWS_ACCESS_KEY_ID'),
+      string(
+        credentialsId: "${context.projectId}-cd-aws-secret-access-key-${context.environment}",
+        variable: 'AWS_SECRET_ACCESS_KEY'),
+    ]) {
+      sh 'env | sort'
+      sh "aws sts get-caller-identity"
+    }
+  }
+}
+
+def stageBootstrap(def context, String awsAccountId, String awsRegion) {
+  stage('Bootstrap') {
+    withCredentials([
+      string(
+          credentialsId: "${context.projectId}-cd-aws-access-key-id-${context.environment}",
+          variable: 'AWS_ACCESS_KEY_ID'),
+      string(
+        credentialsId: "${context.projectId}-cd-aws-secret-access-key-${context.environment}",
+        variable: 'AWS_SECRET_ACCESS_KEY'),
+    ]) {
+      def success = sh(script: """
+        #!/bin/bash -e
+        source .venv/bin/activate && \
+        cdk bootstrap aws://${awsAccountId}/${awsRegion}
+      """, returnStatus: true)
+      if (success!=0){
+        error("CDK bootstrap failed")
+      }
+    }
+  }
+}
+
+def stageUnitTest(def context) {
+  stage('Unit Test') {
+    withCredentials([
+      string(
+          credentialsId: "${context.projectId}-cd-aws-access-key-id-${context.environment}",
+          variable: 'AWS_ACCESS_KEY_ID'),
+      string(
+        credentialsId: "${context.projectId}-cd-aws-secret-access-key-${context.environment}",
+        variable: 'AWS_SECRET_ACCESS_KEY'),
+    ]) {
+      sh """
+        #!/bin/bash -e
+        source .venv/bin/activate
+        pytest --verbose --junitxml=../build/test-results/test/junit.xml
+
+      """
+    }
+  }
+}
+
+def stageDiff(def context) {
+  stage('Diff') {
+    withCredentials([
+      string(
+          credentialsId: "${context.projectId}-cd-aws-access-key-id-${context.environment}",
+          variable: 'AWS_ACCESS_KEY_ID'),
+      string(
+        credentialsId: "${context.projectId}-cd-aws-secret-access-key-${context.environment}",
+        variable: 'AWS_SECRET_ACCESS_KEY'),
+    ]) {
+      sh """
+        #!/bin/bash -e
+        source .venv/bin/activate
+        cdk diff
+      """
+    }
+  }
+}
+
+def stageDeploy(def context) {
+  stage('Deploy') {
+    withCredentials([
+      string(
+          credentialsId: "${context.projectId}-cd-aws-access-key-id-${context.environment}",
+          variable: 'AWS_ACCESS_KEY_ID'),
+      string(
+        credentialsId: "${context.projectId}-cd-aws-secret-access-key-${context.environment}",
+        variable: 'AWS_SECRET_ACCESS_KEY'),
+    ]) {
+      sh """
+        #!/bin/bash -e
+        source .venv/bin/activate
+        cdk deploy --ci --require-approval never \\
+          --context env=${context.environment} \\
+          --context project=${context.projectId} \\
+          --context anotherContextKey=anotherContextValue
+      """
+    }
+  }
+}
