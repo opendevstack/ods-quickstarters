@@ -86,7 +86,7 @@ objects:
       sessionAffinity: None
       type: ClusterIP
 
-  - apiVersion: v1
+  - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
       name: ${COMPONENT}
@@ -106,7 +106,7 @@ objects:
       annotations:
         serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${COMPONENT}"}}'
 
-  - apiVersion: v1
+  - apiVersion: apps.openshift.io/v1
     kind: DeploymentConfig
     metadata:
       creationTimestamp: null

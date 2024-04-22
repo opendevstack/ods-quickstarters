@@ -20,7 +20,7 @@ parameters:
   value: https://go.dev/dl/go1.21.3.linux-amd64.tar.gz
   description: URL pointing to go binary
 objects:
-- apiVersion: v1
+- apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
     name: jenkins-agent-golang

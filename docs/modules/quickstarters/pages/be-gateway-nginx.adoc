@@ -14,6 +14,7 @@ Use this quickstarter when you want to use https://www.nginx.org[nginx] server w
 │   ├── entrypoint.sh - Enables runtime configurations and runs openresty
 │   └── nginx.conf - The nginx configuration
 ├── Jenkinsfile - Contains Jenkins build configuration
+├── .pre-commit-config.yaml
 ├── metadata.yml - Component metadata
 └── release-manager.yml - Configuration file for the Release Manager
 ----
@@ -121,6 +122,8 @@ There are two steps:
 
 * Build the container image.
 * Deploy.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

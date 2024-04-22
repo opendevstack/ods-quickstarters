@@ -9,6 +9,7 @@ Provisions a R Shiny application within OpenShift using OpenShift OAuth.
 ----
 .
 ├── Jenkinsfile - This file contains Jenkins build configuration settings
+├── .pre-commit-config.yaml
 ├── docker - This folder contains Docker configuration settings and main R Shiny app
 │   ├── Dockerfile
 │   └── app.R
@@ -46,6 +47,8 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 
 . Start OpenShift build
 . Deploy image to OpenShift
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

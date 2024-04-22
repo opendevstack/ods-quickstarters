@@ -25,7 +25,7 @@ parameters:
   required: true
   value: "x86_64-unknown-linux-gnu"
 objects:
-- apiVersion: v1
+- apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
     name: jenkins-agent-rust
@@ -37,7 +37,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: jenkins-agent-python:${ODS_IMAGE_TAG}
+        name: jenkins-agent-rust:${ODS_IMAGE_TAG}
     postCommit: {}
     resources:
       limits:

@@ -2,7 +2,23 @@
 
 ## Unreleased
 
-- Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
+### Fixed
+
+### Added
+
+### Changed
+
+## [4.4.0] - 2024-04-22
+
+### Added
+- Added secret scanning (gitleaks) in all quickstarters ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
+
+### Changed
+- Update api version in ocp templates for image, buildconfig, route and deploymentconfig ([#1072](https://github.com/opendevstack/ods-jenkins-shared-library/issues/1072))
+- Update Makefile adding all missing agents ([#999](https://github.com/opendevstack/ods-quickstarters/pull/999))
+
+### Fixed
+- jenkins agent nodejs20 can not import private keys into gpg keyring to use with helm secrets ([#1001](https://github.com/opendevstack/ods-quickstarters/issues/1001))
 
 ## [4.3.1] - 2024-02-19
 
@@ -73,19 +89,6 @@
 - Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
 - Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
 - Add Node.js 18 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/794))
-
-- Addition of streamlit quickstarter ([#891](https://github.com/opendevstack/ods-quickstarters/issues/891))
-- Removal of Centos agents ([#1209](https://github.com/opendevstack/ods-core/issues/1209))
-- Fix oauth-proxy sidecar image ([#862](https://github.com/opendevstack/ods-quickstarters/issues/862))
-- Update of Python agent, Python, Streamlit and Jupyter quickstarters ([#902](https://github.com/opendevstack/ods-quickstarters/issues/902))
-
-## [4.1] - 2022-11-17
-
-### Added
-
-- ODS AMI build fails due to failing jacoco report generation in springboot quickstarter ([#700](https://github.com/opendevstack/ods-quickstarters/pull/700))
-- Add Node.js 16 builder agent ([#763](https://github.com/opendevstack/ods-quickstarters/issues/763))
-- Add Azure Quickstarter ([#788](https://github.com/opendevstack/ods-quickstarters/issues/788))
 
 ### Modified
 

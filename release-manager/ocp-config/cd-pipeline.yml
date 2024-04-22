@@ -18,7 +18,7 @@ parameters:
     description: The trigger secret for the pipeline.
     required: true
 objects:
-  - apiVersion: v1
+  - apiVersion: build.openshift.io/v1
     kind: BuildConfig
     metadata:
       labels:

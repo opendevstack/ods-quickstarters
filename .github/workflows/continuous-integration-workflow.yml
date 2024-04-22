@@ -8,7 +8,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/golang/docker
@@ -23,7 +23,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/jdk/docker
@@ -40,7 +40,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs16/docker
@@ -56,7 +56,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs18/docker
@@ -72,7 +72,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs20/docker
@@ -88,7 +88,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
@@ -101,7 +101,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/rust/docker
@@ -117,7 +117,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform/docker
@@ -130,7 +130,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
@@ -143,7 +143,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker

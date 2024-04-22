@@ -9,6 +9,7 @@ suited for CLI tools, network/operational related things and microservices.
 
 ----
 ├── Jenkinsfile - Contains Jenkins build configuration
+├── .pre-commit-config.yaml
 ├── README.md
 ├── docker - Contains Dockerfile for the build
 │   └── Dockerfile
@@ -55,6 +56,8 @@ There are six steps:
 * Build the binary (placing it into the `docker` directory).
 * Build the container image.
 * Deploy.
+
+include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
