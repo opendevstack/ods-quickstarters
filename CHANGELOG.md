@@ -5,6 +5,7 @@
 ### Fixed
 
 ### Added
+- Added nodejs22 agent and switch install of node to nodesource ([#1011](https://github.com/opendevstack/ods-quickstarters/pull/1011))
 
 ### Changed
 

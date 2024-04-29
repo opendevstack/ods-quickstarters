@@ -1,0 +1,14 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-nodejs22
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-nodejs22
+    labels:
+      app: jenkins-agent-nodejs22
+  spec:
+    lookupPolicy:
+      local: false
