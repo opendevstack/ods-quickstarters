@@ -24,9 +24,9 @@ COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
 
-# Install NodeJS (https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x does NOT work)
+# Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
-    yum module enable -y nodejs:${NODEJS_VERSION} && \
+    curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - && \
     yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
