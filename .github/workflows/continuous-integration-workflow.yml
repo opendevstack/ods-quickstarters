@@ -82,6 +82,22 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
+  jenkins-agent-nodejs22-ubi8:
+    name: Jenkins agent NodeJS 22 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4.1.2
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs22/docker
+        run: |
+            docker build --tag agent-nodejs22-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
     runs-on: ubuntu-22.04
