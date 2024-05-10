@@ -13,7 +13,7 @@ Can we adapt NOTES.txt to display some deployed resources and other important in
     - rolling update strategy?
 - remove provisioning resources creation -> get rid odsQuickstarterStageCreateOpenShiftResources
 - jenkinsfile with values.env.yaml ready, so we will provide all the env values too
-- update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
+- [X] update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
 - golden tests do not check anymore imagetags nor deploymentconfigs
 - start defining howtos/FAQS we detect on the way (goal to keep simple the chart but to show how to improve it and have good practises) bitnami examples (more elaborated affinity, ...)
 

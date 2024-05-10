@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: public.ecr.aws/docker/library/busybox
       command: ['wget']
       args: ['{{ include "chart.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
