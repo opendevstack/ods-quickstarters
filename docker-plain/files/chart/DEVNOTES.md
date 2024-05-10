@@ -11,7 +11,7 @@ Can we adapt NOTES.txt to display some deployed resources and other important in
     - the affinity (missing labels now and some additions required)
     - the route (with timeout values and example for ACME usage)
     - rolling update strategy?
-- remove provisioning resources creation -> get rid odsQuickstarterStageCreateOpenShiftResources
+- [X] remove provisioning resources creation -> get rid odsQuickstarterStageCreateOpenShiftResources
 - jenkinsfile with values.env.yaml ready, so we will provide all the env values too
 - [X] update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
 - [X] golden tests do not check anymore imagetags nor deploymentconfigs
