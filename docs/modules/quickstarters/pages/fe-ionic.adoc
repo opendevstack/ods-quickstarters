@@ -119,7 +119,7 @@ include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
+This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs22[Node.js 22 builder agent] for Jenkins.
 
 == Known Limitation
 
