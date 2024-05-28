@@ -17,7 +17,7 @@ library("ods-jenkins-shared-library@${sharedLibraryRef}")
 def angularCliVersion = "18.0.1"
 
 odsQuickstarterPipeline(
-  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs20:${agentImageTag}",
+  imageStreamTag: "${odsNamespace}/jenkins-agent-nodejs22:${agentImageTag}",
 ) { context ->
 
   stage("update angular cli") {
