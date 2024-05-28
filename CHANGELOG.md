@@ -8,6 +8,8 @@
 - Added nodejs22 agent and switch install of node to nodesource ([#1011](https://github.com/opendevstack/ods-quickstarters/pull/1011))
 
 ### Changed
+- Update Ionic Quickstarter ([#1009](https://github.com/opendevstack/ods-quickstarters/pull/1009))
+- Update Angular Quickstarter ([#1019](https://github.com/opendevstack/ods-quickstarters/pull/1019))
 
 ## [4.4.0] - 2024-04-22
 
@@ -20,7 +22,6 @@
 
 ### Fixed
 - jenkins agent nodejs20 can not import private keys into gpg keyring to use with helm secrets ([#1001](https://github.com/opendevstack/ods-quickstarters/issues/1001))
-- Update ionic quick starter ([#1009](https://github.com/opendevstack/ods-quickstarters/pull/1009))
 
 ## [4.3.1] - 2024-02-19
 
