@@ -31,6 +31,8 @@
 - Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
 - Added java 21 to jdk agent, updated Springboot and Spock quickstarters ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
 
+- inf-cdk-python-aws, provide first iteration of the AWS CDK Quickstarter ([#956](https://github.com/opendevstack/ods-quickstarters/pull/956))
+
 ### Modified
 - Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968)) & ([#982](https://github.com/opendevstack/ods-quickstarters/pull/982))
 - Update gateway-Nginx quickstarter ([#983](https://github.com/opendevstack/ods-quickstarters/pull/983))
