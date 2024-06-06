@@ -2,7 +2,13 @@
 
 ## Unreleased
 
+### Added
+
+### Changed
+
 ### Fixed
+
+## [4.5.0] - 2024-06-06
 
 ### Added
 - Added nodejs22 agent and switch install of node to nodesource ([#1011](https://github.com/opendevstack/ods-quickstarters/pull/1011))
