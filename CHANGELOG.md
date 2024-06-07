@@ -2,11 +2,23 @@
 
 ## Unreleased
 
-### Fixed
-
 ### Added
 
 ### Changed
+
+### Fixed
+
+## [4.5.0] - 2024-06-06
+
+### Added
+- Added nodejs22 agent and switch install of node to nodesource ([#1011](https://github.com/opendevstack/ods-quickstarters/pull/1011))
+
+### Changed
+- Update Ionic Quickstarter ([#1009](https://github.com/opendevstack/ods-quickstarters/pull/1009))
+- Update Angular Quickstarter ([#1019](https://github.com/opendevstack/ods-quickstarters/pull/1019))
+
+### Fixed
+- Workaround for centos 8 stream repository deprecation ([#1021](https://github.com/opendevstack/ods-quickstarters/issues/1021))
 
 ## [4.4.0] - 2024-04-22
 
