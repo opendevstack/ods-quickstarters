@@ -17,6 +17,9 @@
 - Update Ionic Quickstarter ([#1009](https://github.com/opendevstack/ods-quickstarters/pull/1009))
 - Update Angular Quickstarter ([#1019](https://github.com/opendevstack/ods-quickstarters/pull/1019))
 
+### Fixed
+- Workaround for centos 8 stream repository deprecation ([#1021](https://github.com/opendevstack/ods-quickstarters/issues/1021))
+
 ## [4.4.0] - 2024-04-22
 
 ### Added
