@@ -8,6 +8,11 @@
 
 ### Fixed
 
+## [4.5.1] - 2024-06-07
+
+### Fixed
+- Workaround for centos 8 stream repository deprecation ([#1021](https://github.com/opendevstack/ods-quickstarters/issues/1021))
+
 ## [4.5.0] - 2024-06-06
 
 ### Added
