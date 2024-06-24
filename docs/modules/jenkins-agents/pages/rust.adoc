@@ -6,7 +6,7 @@ This agent is used to build / execute Rust code and tools.
 The image is built in the global `ods` project and is named `jenkins-agent-rust`.
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-rust`.
 
-Minimum Supported Rust Version (MSRV) **1.75**. It can build **Rust** versions **1.75.x or higher**.
+Minimum Supported Rust Version (MSRV) **1.79**. It can build **Rust** versions **1.79.x or higher**.
 
 **NOTE**: Current Rust edition in use is **2021**. See https://doc.rust-lang.org/edition-guide/introduction.html[Rust Edition Guide] for further information.
 

@@ -7,9 +7,9 @@ ARG rustToolchain
 
 ENV PATH="$HOME/.cargo/bin:$PATH"
 ENV USER="rust-agent"
-ENV CARGO_NEXTEST_VERSION=0.9.67 \
-    CARGO_LLVM_COV_VERSION=0.6.4 \
-    CARGO_GENERATE_VERSION=0.19.0
+ENV CARGO_NEXTEST_VERSION=0.9.72 \
+    CARGO_LLVM_COV_VERSION=0.6.10 \
+    CARGO_GENERATE_VERSION=0.21.1
 
 RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config openssl-devel
 
