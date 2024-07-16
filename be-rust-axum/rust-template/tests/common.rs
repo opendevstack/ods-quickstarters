@@ -6,17 +6,17 @@ use axum::response::Response;
 use http_body_util::BodyExt; // for `collect`
 
 pub trait RequestBuilderExt {
-  fn json(self, json: serde_json::Value) -> Request<Body>;
+  // fn json(self, json: serde_json::Value) -> Request<Body>;
   fn empty_body(self) -> Request<Body>;
 }
 
 impl RequestBuilderExt for request::Builder {
-  fn json(self, json: serde_json::Value) -> Request<Body> {
-    self
-      .header("Content-Type", "application/json")
-      .body(Body::from(json.to_string()))
-      .expect("Failed to build request")
-  }
+  // fn json(self, json: serde_json::Value) -> Request<Body> {
+  //   self
+  //     .header("Content-Type", "application/json")
+  //     .body(Body::from(json.to_string()))
+  //     .expect("Failed to build request")
+  // }
   fn empty_body(self) -> Request<Body> {
     self.body(Body::empty()).expect("Failed to build request")
   }
