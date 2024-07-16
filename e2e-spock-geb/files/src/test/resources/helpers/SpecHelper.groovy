@@ -1,6 +1,8 @@
-import geb.Page
+package helpers
+
 import geb.navigator.Navigator
 import geb.spock.GebReportingSpec
+import org.openqa.selenium.By
 
 import java.util.regex.Pattern
 
@@ -85,5 +87,26 @@ class SpecHelper {
                 printEvidenceRecursive(child, (level + 1), desiredLevel)
             }
         }
+    }
+
+    public static void printEvidenceForMobileElement(GebReportingSpec spec, int testStepNumber, By fragment, String description = '', int desiredLevel = -1) {
+        printEvidenceForMobileElements(spec, testStepNumber, [ [ 'fragment' : fragment, 'description' :  description] ], desiredLevel)
+    }
+
+    public static void printEvidenceForMobileElements(GebReportingSpec spec, int testStepNumber, List<Map> fragmentsAndDiscriptions, int desiredLevel = -1) {
+        println '====================================='
+        println "Test Case: ${spec.specificationContext.currentIteration.name}"
+        println "Test Step: ${testStepNumber}"
+
+        if (!fragmentsAndDiscriptions || fragmentsAndDiscriptions.isEmpty()) {
+            throw new IllegalArgumentException("Error: evidence fragment is empty!")
+        }
+
+        println "----- Test Evidence STARTS Here -----"
+        fragmentsAndDiscriptions.each { fragmentAndDescription ->
+            println "Description: ${fragmentAndDescription.description}"
+            println "Fragment: ${fragmentAndDescription.fragment}"
+        }
+        println "----- Test Evidence ENDS Here -----"
     }
 }
