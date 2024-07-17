@@ -1,6 +1,6 @@
 apiVersion: v2
 # Here you can replace this for your project name
-name: docker-plain <- replace this for <component-id>?
+name: @component_id@
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
