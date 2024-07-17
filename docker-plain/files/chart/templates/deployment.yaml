@@ -36,7 +36,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.registry }}{{- if .Values.image.path }}/{{ .Values.image.path }}{{end}}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.imageNamespace }}/{{ .Values.componentId }}:{{ .Values.imageTag }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -48,8 +48,8 @@ spec:
             {{- toYaml .Values.probes.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      
-      affinity: 
+
+      affinity:
       {{- with .Values.affinity }}
         {{- toYaml .Values.affinity | nindent 8 }}
       {{- end }}

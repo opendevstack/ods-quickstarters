@@ -3,7 +3,7 @@
 ## Comments are prefixed with two hashes (##), examples are commented with one hash (#)
 ## Declare variables to be passed into your templates.
 
-## The number of replicas to deploy. 
+## The number of replicas to deploy.
 ## For high availability use more than 1 replica
 replicaCount: 1
 
@@ -11,12 +11,13 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# TODO: Values are injected from Jenkins pipeline, needs to be discussed
-image:
-  registry: "docker.io"
-  path: "nginxinc"
-  name: "nginx-unprivileged"
-  tag: "latest"
+# NOTE: By default image Values are injected from Jenkins pipeline, one can change that default to use values defined here
+# and, one can also make dinamically change (e.g. tag value) via the `helmValues` argument in the `odsComponentStageRolloutOpenShiftDeployment`
+# image:
+#   registry: "docker.io"
+#   path: "nginxinc"
+#   name: "nginx-unprivileged"
+#   tag: "latest"
 
 ## Prefer using ingress over openshift routes
 ingress:
@@ -29,16 +30,16 @@ ingress:
     haproxy.router.openshift.io/timeout-tunnel: 300s
     ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
     ## ask in your company for good defaults
-    
+
   hosts: []
-    # - host: yourapp.yourdomain.com
-    #   paths:
-    #     - path: /
-    #       pathType: Prefix
+  # - host: yourapp.yourdomain.com
+  #   paths:
+  #     - path: /
+  #       pathType: Prefix
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - yourapp.yourdomain.com
+  # - secretName: chart-example-tls
+  #   hosts:
+  #     - yourapp.yourdomain.com
 
 service:
   enabled: true
@@ -92,7 +93,7 @@ securityContext: {}
 
 resources:
   limits:
-    cpu: 1000m
+    cpu: 100m
     memory: 128Mi
   requests:
     cpu: 50m
