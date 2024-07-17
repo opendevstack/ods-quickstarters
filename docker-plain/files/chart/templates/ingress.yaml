@@ -27,7 +27,7 @@ spec:
         {{- end }}
       secretName: {{ .secretName  }}
     {{- end }}
-	{{- else }}
+  {{- else }}
   tls:
   - {}
   {{- end }}

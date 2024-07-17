@@ -15,7 +15,7 @@ Can we adapt NOTES.txt to display some deployed resources and other important in
 - jenkinsfile with values.env.yaml ready, so we will provide all the env values too: Different replicaCount + ingress hosts
 - [X] update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
 - [X] golden tests do not check anymore imagetags nor deploymentconfigs
-- [] Test ingress on Openshift without hostname -> is there a generated one? -> Gerard
+- [X] Test ingress on Openshift without hostname -> is there a generated one? NO -> host value is required but tls can be left empty now with default OpenShift TLS (See ingress.yaml and values.yaml). host value is required as ingress approach is a rules based system.
 - [] Make ingress more standard helm (e.g. list of hosts) -> Sebastian
 - start defining howtos/FAQS we detect on the way (goal to keep simple the chart but to show how to improve it and have good practises) bitnami examples (more elaborated affinity, ...)
 
@@ -37,3 +37,4 @@ Shared library ToDo's:
 - Match required labels (app)
 - Review helm install command
 - Release manager image checks
+- Agree if helm install requires overwritting values on image (see helm notes and deployment, and values.yaml)
