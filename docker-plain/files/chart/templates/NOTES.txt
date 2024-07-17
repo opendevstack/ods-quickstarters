@@ -1,4 +1,4 @@
-Component '{{ include "chart.fullname" . }}' on version '{{ .Values.image.tag }}' released with Helm!
+Component '{{ include "chart.fullname" . }}' on version '{{ .Values.imageTag }}' released with Helm!
 {{- if .Values.ingress.enabled }}
 The component is exposed via the following routes:
 {{- $appUrl := .Values.appUrl -}}

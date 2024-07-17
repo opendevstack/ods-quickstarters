@@ -31,12 +31,12 @@ ingress:
     ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
     ## ask in your company for good defaults
 
-  hosts: []
+  hosts: [] # When defining a host you must define also a path
   # - host: yourapp.yourdomain.com
   #   paths:
   #     - path: /
   #       pathType: Prefix
-  tls: []
+  tls: [] # If `tls` is left empty then the default OpenShift TLS config will be loaded (i.e.: TLS edge termination with HTTP redirect to HTTPS)
   # - secretName: chart-example-tls
   #   hosts:
   #     - yourapp.yourdomain.com
