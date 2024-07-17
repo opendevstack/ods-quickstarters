@@ -8,13 +8,15 @@ Can we adapt NOTES.txt to display some deployed resources and other important in
         - make use of it on the github actions when PRs on quickstarters (reuse max as possible)
 - we will move to values.yaml
     - [X] the probes
-    - the affinity (missing labels now and some additions required)
-    - the route (with timeout values and example for ACME usage)
-    - rolling update strategy?
+    - [x] the affinity (missing labels now and some additions required)
+    - [x] the route (with timeout values and example for ACME usage)
+    - [x] rolling update strategy?
 - [X] remove provisioning resources creation -> get rid odsQuickstarterStageCreateOpenShiftResources
-- jenkinsfile with values.env.yaml ready, so we will provide all the env values too
+- jenkinsfile with values.env.yaml ready, so we will provide all the env values too: Different replicaCount + ingress hosts
 - [X] update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
 - [X] golden tests do not check anymore imagetags nor deploymentconfigs
+- [] Test ingress on Openshift without hostname -> is there a generated one? -> Gerard
+- [] Make ingress more standard helm (e.g. list of hosts) -> Sebastian
 - start defining howtos/FAQS we detect on the way (goal to keep simple the chart but to show how to improve it and have good practises) bitnami examples (more elaborated affinity, ...)
 
 
@@ -30,3 +32,8 @@ Later
 
 Decisions:
 - To stay close to default helm templates: Remove the Values.componentId and use chart.fullname instead -> Otherwise breaks DEV + PREVIEW. Chart.Name should be the source for componentId. If we want to automate -> template the Chart.yaml on provisioning
+
+Shared library ToDo's:
+- Match required labels (app)
+- Review helm install command
+- Release manager image checks
