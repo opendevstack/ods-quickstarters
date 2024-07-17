@@ -1,7 +1,10 @@
-# Default values for chart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## Default values for chart.
+## This is a YAML-formatted file. Intendation matters!
+## Comments are prefixed with two hashes (##), examples are commented with one hash (#)
+## Declare variables to be passed into your templates.
 
+## The number of replicas to deploy. 
+## For high availability use more than 1 replica
 replicaCount: 1
 
 imagePullSecrets: []
@@ -9,12 +12,33 @@ nameOverride: ""
 fullnameOverride: ""
 
 # TODO: Values are injected from Jenkins pipeline, needs to be discussed
-# TODO: Adapt deployment.yaml
 image:
-  registry: "ab"
-  path: "cd"
-  name: "ef"
-  tag: "gh"
+  registry: "docker.io"
+  path: "nginxinc"
+  name: "nginx-unprivileged"
+  tag: "latest"
+
+## Prefer using ingress over openshift routes
+ingress:
+  enabled: false
+  className: 'openshift-default'
+  # router: external
+  annotations:
+    ## adjust openshift timeouts (default is 60s)
+    haproxy.router.openshift.io/timeout: 300s
+    haproxy.router.openshift.io/timeout-tunnel: 300s
+    ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
+    ## ask in your company for good defaults
+    
+  hosts: []
+    # - host: yourapp.yourdomain.com
+    #   paths:
+    #     - path: /
+    #       pathType: Prefix
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - yourapp.yourdomain.com
 
 service:
   enabled: true
@@ -25,7 +49,7 @@ probes:
   livenessProbe:
     failureThreshold: 3
     httpGet:
-      path: "/v1/status"
+      path: "/"
       port: 8080
       scheme: HTTP
     initialDelaySeconds: 5
@@ -36,7 +60,7 @@ probes:
   readinessProbe:
     failureThreshold: 1
     httpGet:
-      path: "/v1/status"
+      path: "/"
       port: 8080
       scheme: HTTP
     initialDelaySeconds: 3
@@ -88,5 +112,7 @@ tolerations: []
 affinity: {}
   # bugmenot: "true"
 
-# possible values: soft, hard
-podAntiAffinity: "soft"
+## PodAntiAffinity is a way to control that not all of your pods are scheduled
+## onto the same node.
+## possible values: soft, hard, null
+podAntiAffinity: soft
