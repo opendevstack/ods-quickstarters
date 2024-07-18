@@ -31,7 +31,7 @@ Later
 - creation of template files folder in common, so we try to centralise the chart creation and maintenance from one place (as it is done already with openshift templates/tailor)
 
 Decisions:
-- To stay close to default helm templates: Remove the Values.componentId and use chart.fullname instead -> Otherwise breaks DEV + PREVIEW. Chart.Name should be the source for componentId. If we want to automate -> template the Chart.yaml on provisioning
+- To stay close to default helm templates: Remove the Values.componentId and use chart.fullname instead -> Otherwise breaks DEV + PREVIEW. Chart.Name should be the source for componentId. If we want to automate -> template the Chart.yaml on provisioning <- DONE
 
 Shared library ToDo's:
 - Match required labels (app)
