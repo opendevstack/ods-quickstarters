@@ -8,11 +8,10 @@ node {
 }
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-jdk:@agent_image_tag@',
   podContainers: [
         containerTemplate(
           name: 'jnlp',
-          image: "${dockerRegistry}/ods/jenkins-agent-maven:@agent_image_tag@",
+          image: "${dockerRegistry}/ods/jenkins-agent-jdk:@agent_image_tag@",
           workingDir: '/tmp',
           envVars: [
             envVar(key: 'SAUCE_LABS_ACCESS_KEY', value: sauceLabsAccessKey),
