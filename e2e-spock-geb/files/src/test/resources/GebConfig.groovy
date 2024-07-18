@@ -16,6 +16,13 @@ def properties = new SpecHelper().getApplicationProperties()
 def sauceLabsUsername = System.getenv('SAUCE_LABS_USERNAME')
 def sauceLabsAccessKey = System.getenv('SAUCE_LABS_ACCESS_KEY')
 
+// These are examples of configuring the URLs to Appium Server in different ways
+// Localhost if you are working in your local environment
+// SauceLabs connection if you are working with a SauceLabs device
+// Both are interchangeable
+def androidURL = "http://127.0.0.1:4723"
+def iosURL = "https://$sauceLabsUsername:$sauceLabsAccessKey@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+
 // Creating test environments
 // Please, configure the test environments properly, replacing the indicated values ("REPLACE...")
 // Feel free to remove/add as test environments as you need
@@ -87,7 +94,7 @@ environments {
             capabilities.setCapability("browserVersion", "REPLACE with your android version");
             capabilities.setCapability("automationName", "UiAutomator2");
             capabilities.setCapability("autoGrantPermissions", "true");
-            AndroidDriver driver = new AndroidDriver(new URL("REPLACE with your URL"), caps);
+            AndroidDriver driver = new AndroidDriver(new URL(androidURL), caps);
             return driver
         }
     }
@@ -102,7 +109,7 @@ environments {
             capabilities.setCapability("browserVersion", "REPLACE with your browser version");
             capabilities.setCapability("automationName", "XCUITest");
             capabilities.setCapability("autoGrantPermissions", "true");
-            IOSDriver driver = new IOSDriver(new URL("https://$sauceLabsUsername:$sauceLabsAccessKey@ondemand.eu-central-1.saucelabs.com:443/wd/hub"), caps);
+            IOSDriver driver = new IOSDriver(new URL(iosURL), caps);
             return driver
         }
     }
