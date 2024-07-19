@@ -1,9 +1,30 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
+node {
+  sauceLabsUsername = env.SAUCE_LABS_USERNAME
+  sauceLabsAccessKey = env.SAUCE_LABS_ACCESS_KEY
+  dockerRegistry = env.DOCKER_REGISTRY
+}
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-jdk:@agent_image_tag@',
+  podContainers: [
+        containerTemplate(
+          name: 'jnlp',
+          image: "${dockerRegistry}/ods/jenkins-agent-jdk:@agent_image_tag@",
+          workingDir: '/tmp',
+          envVars: [
+            envVar(key: 'SAUCE_LABS_ACCESS_KEY', value: sauceLabsAccessKey),
+            envVar(key: 'SAUCE_LABS_USERNAME', value: sauceLabsUsername)
+          ],
+          resourceRequestCpu: '100m',
+          resourceLimitCpu: '300m',
+          resourceRequestMemory: '1Gi',
+          resourceLimitMemory: '2Gi',
+          alwaysPullImage: true,
+          args: '${computer.jnlpmac} ${computer.name}'
+        )
+      ],
   branchToEnvironmentMapping: [
     'master': 'dev',
     // 'release/': 'test'
