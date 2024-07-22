@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Update Rust Axum Quickstarter ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
-- Update GEB&Spock Quickstarter with Mobile Testing capabilities ([DMP-2068](https://jira.biscrum.com/browse/DMP-2068))
+- Update GEB&Spock Quickstarter with Mobile Testing capabilities ([#1025](https://github.com/opendevstack/ods-quickstarters/pull/1025))
 
 ### Added
 
