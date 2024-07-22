@@ -24,6 +24,12 @@ plugins {
   id 'com.adarshr.test-logger' version "2.0.0"
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 repositories {
     if (no_nexus) {
         println("using repository 'mavenCentral', because property no_nexus=$no_nexus")
@@ -55,6 +61,10 @@ ext {
     seleniumVersion = "4.15.0"
     htmlunitVersion = "4.13.0"
     unirestVersion = "3.14.5"
+    seleniumJavaVersion = "3.141.59"
+    appiumVersion = "8.3.0"
+    chromeDriverVersion = "4.2.2"
+    edgeDriverVersion = "4.21.0"
     // When a test fail we can continue or fail the stage
     CONTINUE_WHEN_TEST_FAIL = true
 }
@@ -67,6 +77,10 @@ dependencies {
     testImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
     testImplementation "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumJavaVersion}"
+    testImplementation group: 'io.appium', name: 'java-client', version: "${appiumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-chrome-driver:${chromeDriverVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-edge-driver:${edgeDriverVersion}"
 }
 
 sourceSets {
@@ -135,15 +149,22 @@ class TestLanguages {
     static final String GROOVY = "groovy"
 }
 
-def generateTaskName(def type, def language) {
-    return "${type}-${language}"
+// Here is defined the default environment to execute the tests
+def TestEnv = ['defaultDriver']
+// You can add as many environments as needed and properly configured in GebConfig.groovy file
+// This is an example
+//def TestEnv = ['defaultDriver', 'chrome','edge', 'android', 'ios']
+
+def generateTaskName(def type, def language, def env) {
+    return "${type}-${language}-${env}"
 }
 
 // Task to create in a parametrized way Tests task
-def executeTest(def type, def language) {
-    return tasks.create(generateTaskName(type, language), Test) {
-        description = "Runs ${type} tests ${language}."
-        group = "verification"
+def executeTest(def type, def language, def env) {
+    return tasks.create(generateTaskName(type, language, env), Test) {
+        description = "Runs ${type} tests ${language} in ${env} enviroment."
+        // The tasks are grouped by type
+        group = "verification-${type}"
 
         // Since groovy tests are junit tests and they are run as part of java tests,
         // we disable here the execution of junit tests if not running for java language.
@@ -159,21 +180,32 @@ def executeTest(def type, def language) {
     }
 }
 
-test {
-    // To create the tasks
-    dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA)
-    dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)
-    dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)
-    dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)
-    dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)
-    dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY)
+def verification() {
+    // To group the tasks by type, create the required subfolders here
+    def subfolderNames = [TestExecutionPhases.ACCEPTANCE, TestExecutionPhases.INTEGRATION, TestExecutionPhases.INSTALLATION]
+    subfolderNames.each { subfolderName ->
+        file("verification-${subfolderName}").mkdirs()
+    }
+}
 
-    // To define the order
-    tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)
-    tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)
-    tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)
-    tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)
-    tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA)
+test {
+    //Per every test environment defined
+    for (env in TestEnv) {
+        // To create the tasks
+        dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env)
+        dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)
+        dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)
+        dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)
+        dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)
+        dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY, env)
+
+        // To define the order
+        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)
+        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env)
+    }
 }
 
 testlogger {
