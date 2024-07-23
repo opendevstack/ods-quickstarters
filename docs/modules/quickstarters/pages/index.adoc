@@ -28,6 +28,7 @@ Quickstarters are used from the https://github.com/opendevstack/ods-provisioning
 * xref::be-java-springboot.adoc[Backend - Java/SpringBoot]
 * xref::be-typescript-express.adoc[Backend - TypeScript/Express]
 * xref::be-python-flask.adoc[Backend - Python/Flask]
+* xref::be-rust-axum.adoc[Backend - Rust/Axum]
 * xref::be-scala-play.adoc[Backend - Scala/Play]
 
 === Frontend Quickstarter

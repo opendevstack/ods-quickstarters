@@ -174,14 +174,15 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
   cargo build --release
 ----
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[Rust] Jenkins builder agent.
+This quickstarter uses https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html[Rust] Jenkins builder agent.
 
 **NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.75.x and above.
 
+See the docker spec and openshift templates https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[here].
 
 == Technologies in use
 

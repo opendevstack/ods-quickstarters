@@ -84,7 +84,7 @@ In Jenkinsfile, there are various stages
 
 * stageBuild - checks source files formatting, runs the tests and builds and copies the artifacts for creating the docker image to the `docker` directory.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

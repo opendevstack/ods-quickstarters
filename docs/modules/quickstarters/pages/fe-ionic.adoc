@@ -115,7 +115,7 @@ Unit Test:: Runs unit test cases by executing `npm run test` command. If any tes
 Lint:: Profiler that ensures code best practices by running `npm run lint` command, if linting is not passing, the build is marked as failed also.
 SonarQube Analysis:: Triggers a code quality analysis by transfering code and test coverage analysis data to SonarQube. By default files like `*.spec.ts`, `*.modules.ts` and `./src/environments/**` are excluded from the analysis, since they usually don't contain application logic. Please revisit `sonar-project.properties` to configure analysis inclusions and exclusions according to your project's needs.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
