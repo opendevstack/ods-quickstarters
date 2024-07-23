@@ -194,4 +194,33 @@ The following main Rust technologies are in use when running this boilerplate:
 
 == Known limitations
 
-Let us know if you find any, thanks!
+First of all, please, let us know if you find any limitation or issue to comment on, thanks!
+
+=== Building with OpenSSL crate or using alternatives ===
+
+==== Using openssl crate ====
+
+In some cases one might not be able to skip requiring OpenSSL nor LibreSSL (see https://github.com/opendevstack/ods-quickstarters/issues/1026[issue]), hence to compile them.
+
+To have a lean compilation and shipping experience with Rust, ODS Jenkins Rust agent provides already the dependencies to build OpenSSL from source, hence avoiding any mismatch with existing/multiple OS libraries existing or none (at build or runtime), by enabling statically linking of the dependencies.
+
+The only mimssing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`:
+
+```
+openssl = { version = "0.10", features = ["vendored"] }
+```
+
+By doing so, `cargo` will locally build OpenSSL and statically link the openssl dependencies into the binarie(s) generated.
+
+==== Alternatives to openssl crate ====
+
+In most of cases, one does not require OpenSSL, indeed it is recommended to use more modern alternatives like:
+
+- https://docs.rs/ring/0.17.8/ring/[ring]
+- https://docs.rs/rustls/0.23.11/rustls/[rustls]
+
+Also when using the widely known/used https://crates.io/crates/reqwest[reqwest] crate, one can avoid openssl dependency by forcing the use of rustls, like:
+
+```
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+```
