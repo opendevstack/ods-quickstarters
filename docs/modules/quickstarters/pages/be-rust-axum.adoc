@@ -204,7 +204,7 @@ In some cases one might not be able to skip requiring OpenSSL nor LibreSSL (see 
 
 To have a lean compilation and shipping experience with Rust, ODS Jenkins Rust agent provides already the dependencies to build OpenSSL from source, hence avoiding any mismatch with existing/multiple OS libraries existing or none (at build or runtime), by enabling statically linking of the dependencies.
 
-The only mimssing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`:
+The only missing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`:
 
 ```
 openssl = { version = "0.10", features = ["vendored"] }
