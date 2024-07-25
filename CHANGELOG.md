@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Update Rust Axum Quickstarter ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
+- Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
 
 ### Added
 
