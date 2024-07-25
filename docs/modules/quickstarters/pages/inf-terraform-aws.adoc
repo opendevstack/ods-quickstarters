@@ -43,7 +43,7 @@ Inject preferred tags into common-tags.tf, add/remove resources needed to main.t
 
 The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In Jenkinsfile, there are various stages.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

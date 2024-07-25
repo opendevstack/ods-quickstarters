@@ -99,7 +99,7 @@ USER 1001
 
 To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
 
-1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results. 
+1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results.
 
 2. **Change the project ID as indicated in Cypress Cloud.** After creating the project, you will need to change the project ID in the four config files, to the one indicated in Cypress Cloud. This ID is used to identify your project and ensure that your tests are associated with the correct project.
 
@@ -124,7 +124,7 @@ if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
 
 You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
