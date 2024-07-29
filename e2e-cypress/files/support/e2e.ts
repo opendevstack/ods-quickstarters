@@ -86,7 +86,7 @@ afterEach(function() {
   const fileName = `system-output-${testName}.txt`;
   const filePath = `cypress/results/${fileName}`;
 
-  cy.writeFile(Filepath, consoleLogs.join('\n'));
+  cy.writeFile(filePath, consoleLogs.join('\n'));
 
   consoleLogs = [];
 })
