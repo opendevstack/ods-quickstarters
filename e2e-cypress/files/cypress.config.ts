@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 import setupNodeEvents from './plugins/index.js'
 export default defineConfig({
-  reporter: 'junit',
+  reporter: 'reporters/custom-reporter.js',
   reporterOptions: {
     mochaFile: 'build/test-results/tests-[hash].xml',
     toConsole: true,
