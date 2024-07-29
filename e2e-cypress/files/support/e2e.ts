@@ -5,7 +5,7 @@ function loginViaAAD(username: string, password: string) {
   //Go to your application URL and trigger the login.
   cy.visit('')
 
-  //If needed, navigate and click on the login button. 
+  //If needed, navigate and click on the login button.
   //As an example:
   //cy.get('button#signIn').click()
 
@@ -66,4 +66,27 @@ Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
 
   log.snapshot('after')
   log.end()
+})
+
+let consoleLogs: string[] = []
+
+Cypress.on('log:added', (options) => {
+  const message = options.message;
+  if(message) {
+    consoleLogs.push(message);
+  }
+});
+
+beforeEach(function() {
+  consoleLogs = [];
+})
+
+afterEach(function() {
+  const testName = this.currentTest.fullTitle().replace(/ /g, '_');
+  const fileName = `system-output-${testName}.txt`;
+  const Filepath = `cypress/results/${fileName}`;
+
+  cy.writeFile(Filepath, consoleLogs.join('\n'));
+
+  consoleLogs = [];
 })
