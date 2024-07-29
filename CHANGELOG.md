@@ -5,6 +5,7 @@
 - Update Rust Axum Quickstarter ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
 - Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
 - Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
+- Added custom reporter to Cypress Quickstarter and updated dependencies versions ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))
 
 ### Added
 
