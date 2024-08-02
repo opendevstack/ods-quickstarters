@@ -22,10 +22,3 @@ version: 1.0.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.0.0"
-
-# dependencies:
-# - name: common
-#   repository: oci://registry-1.docker.io/bitnamicharts
-#   tags:
-#   - bitnami-common
-#   version: 2.x.x

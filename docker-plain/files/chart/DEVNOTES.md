@@ -16,7 +16,7 @@ Can we adapt NOTES.txt to display some deployed resources and other important in
 - [X] update test-conection.yaml with better image (to not suffer dockerhub rate limiting)
 - [X] golden tests do not check anymore imagetags nor deploymentconfigs
 - [X] Test ingress on Openshift without hostname -> is there a generated one? NO -> host value is required but tls can be left empty now with default OpenShift TLS (See ingress.yaml and values.yaml). host value is required as ingress approach is a rules based system.
-- [] Make ingress more standard helm (e.g. list of hosts) -> Sebastian
+- [X] Make ingress more standard helm (e.g. list of hosts) -> Sebastian
 - start defining howtos/FAQS we detect on the way (goal to keep simple the chart but to show how to improve it and have good practises) bitnami examples (more elaborated affinity, ...)
 
 
