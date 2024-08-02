@@ -69,7 +69,7 @@ The build pipeline is defined in the `Jenkinsfile` in the project root. The main
 . Start OpenShift build
 . Deploy image to OpenShift
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

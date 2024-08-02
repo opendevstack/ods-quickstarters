@@ -96,7 +96,7 @@ In order to be sure that your code passes the linting stage execute or add it as
 
 * *Build* - Builds the application: copies src folder into docker_streamlit/dist folder.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

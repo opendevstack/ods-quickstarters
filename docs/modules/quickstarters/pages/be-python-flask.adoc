@@ -112,7 +112,7 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 
 * *Build* - Builds the application: copies src folder into docker/dist folder.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
