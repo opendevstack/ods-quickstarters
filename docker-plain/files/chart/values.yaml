@@ -1,0 +1,119 @@
+## Default values for chart.
+## This is a YAML-formatted file. Intendation matters!
+## Comments are prefixed with two hashes (##), examples are commented with one hash (#)
+## Declare variables to be passed into your templates.
+
+## The number of replicas to deploy.
+## For high availability use more than 1 replica
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# NOTE: By default image Values are injected from Jenkins pipeline, one can change that default to use values defined here
+# and, one can also make dinamically change (e.g. tag value) via the `helmValues` argument in the `odsComponentStageRolloutOpenShiftDeployment`
+# image:
+#   registry: "docker.io"
+#   path: "nginxinc"
+#   name: "nginx-unprivileged"
+#   tag: "latest"
+
+## Prefer using ingress over openshift routes
+ingress:
+  enabled: false
+  className: 'openshift-default'
+  # router: external
+  annotations:
+    ## adjust openshift timeouts (default is 60s)
+    haproxy.router.openshift.io/timeout: 300s
+    haproxy.router.openshift.io/timeout-tunnel: 300s
+    ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
+    ## ask in your company for good defaults
+
+  hosts: [] # When defining a host you must define also a path
+  # - host: yourapp.yourdomain.com
+  #   paths:
+  #     - path: /
+  #       pathType: Prefix
+  tls: [] # If `tls` is left empty then the default OpenShift TLS config will be loaded (i.e.: TLS edge termination with HTTP redirect to HTTPS)
+  # - secretName: chart-example-tls
+  #   hosts:
+  #     - yourapp.yourdomain.com
+
+service:
+  enabled: true
+  port: 8080
+  type: ClusterIP
+
+probes:
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: "/"
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+
+  readinessProbe:
+    failureThreshold: 1
+    httpGet:
+      path: "/"
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 3
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 3
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+  # bugmenot: "true"
+
+## PodAntiAffinity is a way to control that not all of your pods are scheduled
+## onto the same node.
+## possible values: soft, hard, null
+podAntiAffinity: soft
