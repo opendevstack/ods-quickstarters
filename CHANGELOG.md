@@ -5,6 +5,7 @@
 - Update Rust Axum Quickstarter ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
 - Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
 - Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
+- inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 
 ### Added
 
