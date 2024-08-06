@@ -11,7 +11,7 @@ end
 
 source 'https://packagecloud.io/cinc-project/stable' do
   gem 'inspec-core'
-  gem 'inspec', '~> 5.21'
+  gem 'inspec', '~> 5.22'
   gem 'cinc-auditor-bin'
   gem 'unf_ext'
   gem 'chef-config'
