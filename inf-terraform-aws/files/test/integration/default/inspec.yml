@@ -7,4 +7,4 @@ supports:
 depends:
   - name: inspec-aws
     git: https://github.com/inspec/inspec-aws
-    tag: v1.83.60
+    tag: v1.83.62
