@@ -11,7 +11,7 @@ odsComponentPipeline(
   podContainers: [
       containerTemplate(
         name: 'jnlp',
-        image: "${dockerRegistry}/ods/jenkins-agent-terraform-2306:@shared_library_ref@",
+        image: "${dockerRegistry}/ods/jenkins-agent-terraform-2408:@shared_library_ref@",
         envVars: [
           envVar(key: 'AWS_REGION', value: aws_region)
         ],
