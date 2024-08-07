@@ -24,6 +24,7 @@
 - Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
 - inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions, add jenkins agent terraform-2408 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 
 ### Added
 
