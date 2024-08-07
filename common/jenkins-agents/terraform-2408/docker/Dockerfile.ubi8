@@ -18,7 +18,11 @@ ENV TERRAFORM_VERSION=1.9.3 \
     RUBY_VERSION=3.3.4 \
     PACKER_VERSION=1.11.2 \
     CONSUL_VERSION=1.19.1 \
-    TFENV_VERSION=3.0.0 \
+    TENV_VERSION=3.0.0 \
+    TENV_AUTO_INSTALL=true \
+    TENV_ROOT=/opt/tenv \
+    GO_VERSION=1.21.13 \
+    GOBIN=/usr/local/go/bin \
     TFLINT_VERSION=0.50.3 \
     NODEJS_VERSION=20.16.0 \
     BUNDLER_VERSION=2.5.17 \
@@ -35,7 +39,7 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
 ENV INSTALL_CENTOS_PKGS="readline-devel bison automake libtool"
-ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
+ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/bin:/usr/local/go/bin:$PATH
 ENV HOME=/home/jenkins
 
 RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true"
@@ -101,20 +105,24 @@ RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-
     && node --version \
     && cdk --version
 
-# Install terraform
-RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
-    && unzip /tmp/terraform.zip -d /usr/local/bin terraform \
-    && rm -rf /tmp/terraform.zip \
-    && terraform -h
-
-# Install tfenv
-RUN umask 0002 && cd /opt && git clone --branch v${TFENV_VERSION} https://github.com/tfutils/tfenv.git \
-    && TFENV_CURL_OUTPUT=0 /opt/tfenv/bin/tfenv install ${TERRAFORM_VERSION} \
-    && /opt/tfenv/bin/tfenv use ${TERRAFORM_VERSION} \
-    && chown -R 1001:0 /opt/tfenv \
-    && chmod +x /opt/tfenv/bin/* \
+# Install tenv & install terraform
+RUN mkdir -p "${TENV_ROOT}" && chmod 2775 "${TENV_ROOT}" && chown 1001:0 "${TENV_ROOT}" \
+    && dnf install -y https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_amd64.rpm \
+    && tenv tf install ${TERRAFORM_VERSION} \
+    && tenv tf use ${TERRAFORM_VERSION} \
+    && tenv version \
     && terraform -version \
-    && tfenv list
+    && tenv tf list \
+    && echo 'export PATH=$(/usr/bin/tenv update-path)' > /etc/profile.d/tenv.sh \
+    && chown -R 1001:0 "${TENV_ROOT}" \
+    && chmod -R 2775 "${TENV_ROOT}"
+
+# Install GO for terratest
+RUN cd /tmp \
+    && curl -LfSso /tmp/go.tar.gz https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go.tar.gz \
+    && rm -f /tmp/go.tar.gz \
+    && /usr/local/go/bin/go version
 
 # Install tflint
 RUN wget -q -O /tmp/tflint.zip "https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip" \
@@ -130,23 +138,19 @@ RUN wget -q -O /tmp/packer.zip "https://releases.hashicorp.com/packer/${PACKER_V
 
 # Install terraform-config-inspect
 RUN wget -q -O /tmp/terraform-config-inspect.tar.gz https://github.com/nichtraunzer/terraform-config-inspect/releases/download/v${TERRAFORM_CONFIG_INSPECT_VERSION}/terraform-config-inspect_${TERRAFORM_CONFIG_INSPECT_VERSION}_linux_amd64.tar.gz \
-    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ \
+    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ terraform-config-inspect \
     && rm -f /tmp/terraform-config-inspect.tar.gz \
     && chmod 755 /usr/local/bin/terraform-config-inspect
 
 # Install terraform-docs
 RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && tar zxpf /tmp/terraform-docs.tar.gz -C /usr/local/bin/ terraform-docs \
-    && chmod +x /usr/local/bin/terraform-docs
-
-# Install jq
-RUN dnf install -y jq parallel \
-    && jq -Version \
-    && dnf clean all
+    && chmod +x /usr/local/bin/terraform-docs \
+    && rm -f /tmp/terraform-docs.tar.gz
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
-    && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
+    && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin consul \
     && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/consul \
     && /usr/local/bin/consul -version
@@ -156,6 +160,12 @@ RUN dnf install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VER
     && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
     && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
     && rm -f /tmp/age.tar.gz
+
+# Install jq
+RUN dnf install -y jq parallel \
+    && jq -Version \
+    && dnf clean all \
+    && rm -f /tmp/requirements.txt
 
 RUN chmod +t /tmp \
     && chown -R 1001:0 $HOME \
@@ -193,4 +203,3 @@ RUN cd /opt \
     && rm -Rf /home/jenkins/.bundle/cache
 
 USER 1001
-

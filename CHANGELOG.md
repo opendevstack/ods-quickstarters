@@ -10,6 +10,7 @@
 - Update jdk and scala quickstarters and agents ([#1032](https://github.com/opendevstack/ods-quickstarters/issues/1032))
 - Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
 - Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
+<<<<<<< HEAD
 - Update Streamlit Quickstarter ([#1030](https://github.com/opendevstack/ods-quickstarters/issues/1030))
 - Update Golang agent ([#1031](https://github.com/opendevstack/ods-quickstarters/issues/1031))
 - Update gateway/nginx Quickstarter ([#1048](https://github.com/opendevstack/ods-quickstarters/pull/1048))
@@ -25,6 +26,8 @@
 - Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
 - inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions, add jenkins agent terraform-2408 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 
 ### Added
 
