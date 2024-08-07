@@ -1,0 +1,58 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-terraform-2408
+parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.ubi8
+  description: Dockerfile variant to use
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-agent-terraform-2408
+    labels:
+      app: jenkins-agent-terraform-2408
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-agent-terraform-2408:${ODS_IMAGE_TAG}
+    postCommit: {}
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+      requests:
+        cpu: "200m"
+        memory: "1Gi"
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-agents/terraform-2408/docker
+      git:
+        ref: ${ODS_GIT_REF}
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-agent-base:${ODS_IMAGE_TAG}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers: []
