@@ -28,7 +28,7 @@ module SpecHelper
     def for_resource(type = nil, name = nil)
       tdata = @data['resource'].select { |x| x[type] }      # array having all resources of given type
       tdata = tdata.select { |x| x[type][name] }.first      # select the item matching resource name
-      extract_first_element_of_array(tdata[type][name])  # trim given structure
+      extract_first_element_of_array(tdata[type][name])     # trim given structure
       json_vars? ? @data : tdata[type][name]
     end
 
