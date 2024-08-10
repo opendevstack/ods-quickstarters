@@ -10,12 +10,12 @@ GEM
       tomlrb (~> 1.2)
     chef-utils (18.3.0)
       concurrent-ruby
-    cinc-auditor-bin (5.22.3)
-      inspec (= 5.22.3)
-    inspec (5.22.3)
+    cinc-auditor-bin (5.22.36)
+      inspec (= 5.22.36)
+    inspec (5.22.36)
       cookstyle
-      faraday_middleware (>= 0.12.2, < 1.1)
-      inspec-core (= 5.22.3)
+      faraday_middleware (>= 0.12.2, < 1.3)
+      inspec-core (= 5.22.36)
       mongo (= 2.13.2)
       progress_bar (~> 1.3.3)
       rake
@@ -24,25 +24,25 @@ GEM
       train-habitat (~> 0.1)
       train-kubernetes (~> 0.1)
       train-winrm (~> 0.2)
-    inspec-core (5.22.3)
+    inspec-core (5.22.36)
       addressable (~> 2.4)
       chef-telemetry (~> 1.0, >= 1.0.8)
       faraday (>= 1, < 3)
       faraday-follow_redirects (~> 0.3)
-      hashie (>= 3.4, < 5.0)
+      hashie (>= 3.4, < 6.0)
       license-acceptance (>= 0.2.13, < 3.0)
       method_source (>= 0.8, < 2.0)
       mixlib-log (~> 3.0)
       multipart-post (~> 2.0)
       parallel (~> 1.9)
-      parslet (>= 1.5, < 2.0)
+      parslet (>= 1.5, < 3.0)
       pry (~> 0.13)
-      rspec (>= 3.9, <= 3.11)
+      rspec (>= 3.9, <= 3.12)
       rspec-its (~> 1.2)
       rubyzip (>= 1.2.2, < 3.0)
       semverse (~> 3.0)
       sslshake (~> 1.2)
-      thor (>= 0.20, < 2.0)
+      thor (>= 0.20, < 1.3.0)
       tomlrb (>= 1.2, < 2.1)
       train-core (~> 3.10)
       tty-prompt (~> 0.17)
@@ -57,16 +57,17 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.1.3.4)
+    activesupport (7.2.0)
       base64
       bigdecimal
-      concurrent-ruby (~> 1.0, >= 1.0.2)
+      concurrent-ruby (~> 1.0, >= 1.3.1)
       connection_pool (>= 2.2.5)
       drb
       i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
       minitest (>= 5.1)
-      mutex_m
-      tzinfo (~> 2.0)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
@@ -1612,6 +1613,7 @@ GEM
     connection_pool (2.4.1)
     cookstyle (7.32.8)
       rubocop (= 1.25.1)
+    csv (3.3.0)
     declarative (0.0.20)
     delegate (0.3.1)
     diff-lcs (1.5.1)
@@ -1689,7 +1691,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
-    faraday_middleware (1.0.0)
+    faraday_middleware (1.2.0)
       faraday (~> 1.0)
     ffi (1.16.3)
     fuzzyurl (0.9.0)
@@ -1727,7 +1729,7 @@ GEM
       builder (>= 2.1.2)
       rexml (~> 3.0)
     hashdiff (1.0.1)
-    hashie (4.1.0)
+    hashie (5.0.0)
     highline (3.1.0)
       reline
     http-cookie (1.0.6)
@@ -1770,6 +1772,7 @@ GEM
       tty-box (~> 0.6)
       tty-prompt (~> 0.20)
     little-plugger (1.1.4)
+    logger (1.6.0)
     logging (2.4.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
@@ -1795,7 +1798,6 @@ GEM
       ms_rest (~> 0.7.6)
     multi_json (1.15.0)
     multipart-post (2.4.1)
-    mutex_m (0.2.0)
     net-scp (4.0.0)
       net-ssh (>= 2.6.5, < 8.0.0)
     net-ssh (7.2.3)
@@ -1805,11 +1807,11 @@ GEM
       bigdecimal
     options (2.3.2)
     os (1.1.4)
-    parallel (1.25.1)
-    parser (3.3.4.0)
+    parallel (1.26.1)
+    parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
-    parslet (1.8.2)
+    parslet (2.0.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
     progress_bar (1.3.4)
@@ -1837,24 +1839,24 @@ GEM
     retriable (3.1.2)
     rexml (3.3.4)
       strscan
-    rspec (3.11.0)
-      rspec-core (~> 3.11.0)
-      rspec-expectations (~> 3.11.0)
-      rspec-mocks (~> 3.11.0)
-    rspec-core (3.11.0)
-      rspec-support (~> 3.11.0)
-    rspec-expectations (3.11.1)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.3)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.4)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
+      rspec-support (~> 3.12.0)
     rspec-its (1.3.0)
       rspec-core (>= 3.0.0)
       rspec-expectations (>= 3.0.0)
-    rspec-mocks (3.11.2)
+    rspec-mocks (3.12.7)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
+      rspec-support (~> 3.12.0)
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
-    rspec-support (3.11.1)
+    rspec-support (3.12.2)
     rubocop (1.25.1)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
@@ -1871,6 +1873,7 @@ GEM
     rubyntlm (0.6.5)
       base64
     rubyzip (2.3.2)
+    securerandom (0.3.1)
     semverse (3.0.2)
     signet (0.19.0)
       addressable (~> 2.8)
@@ -1885,6 +1888,7 @@ GEM
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
     strscan (3.1.0)
+    syslog (0.1.2)
     test-kitchen (3.6.0)
       bcrypt_pbkdf (~> 1.0)
       chef-utils (>= 16.4.35)
@@ -1899,7 +1903,7 @@ GEM
       winrm (~> 2.0)
       winrm-elevated (~> 1.0)
       winrm-fs (~> 1.1)
-    thor (1.3.1)
+    thor (1.2.2)
     timeliness (0.3.10)
     tomlrb (1.3.0)
     trailblazer-option (0.1.2)
@@ -2078,13 +2082,15 @@ DEPENDENCIES
   chef-config!
   chef-utils!
   cinc-auditor-bin!
-  inspec (~> 5.22)!
+  csv!
+  inspec (~> 5.22, >= 5.22.36)!
   inspec-core!
   irb!
   kitchen-terraform (~> 7.0)!
   mixlib-install!
   mixlib-versioning!
   rspec-retry!
+  syslog!
   test-kitchen!
   unf_ext!
 
