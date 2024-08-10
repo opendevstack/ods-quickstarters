@@ -15,18 +15,20 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.4 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.61.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | 3.6.2 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.5.1 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.6.2 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.61.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.6.2 |
-| <a name="provider_time"></a> [time](#provider\_time) | n/a |
+| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.5.1 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.6.2 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12.0 |
 
 ## Modules
 
@@ -37,7 +39,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.6.2/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/5.61.0/docs/data-sources/region) | data source |
 
