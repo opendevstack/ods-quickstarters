@@ -30,7 +30,8 @@ ENV TERRAFORM_VERSION=1.9.4 \
     AGE_VERSION=1.2.0 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
-    RBENV_SHELL=bash
+    RBENV_SHELL=bash \
+    TASK_VERSION=3.38.0
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python39 python39-pip python39-setuptools \
@@ -124,6 +125,10 @@ RUN cd /tmp \
     && tar -C /usr/local -xzf go.tar.gz \
     && rm -f /tmp/go.tar.gz \
     && /usr/local/go/bin/go version
+
+# Install go-task
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d v${TASK_VERSION} \
+    && task --version
 
 # Install tflint
 RUN wget -q -O /tmp/tflint.zip "https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip" \
