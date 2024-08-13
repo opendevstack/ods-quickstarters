@@ -15,18 +15,20 @@ The behavior of a stack is determined by its purpose and the set of input parame
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.67.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | 3.5.1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.4 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.61.0 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.5.1 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.6.2 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.67.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
-| <a name="provider_time"></a> [time](#provider\_time) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.61.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.5.1 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.6.2 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12.0 |
 
 ## Modules
 
@@ -36,16 +38,15 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudformation_stack.cft-s3](https://registry.terraform.io/providers/hashicorp/aws/4.67.0/docs/resources/cloudformation_stack) | resource |
 | [local_file.terraform-data](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/3.5.1/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_static.deployment](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/5.61.0/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_data_bucket_name"></a> [data\_bucket\_name](#input\_data\_bucket\_name) | The name of the S3 data bucket. | `string` | `"quickstarter"` | no |
 | <a name="input_meta_environment"></a> [meta\_environment](#input\_meta\_environment) | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the stack. | `string` | `"stack-aws-quickstarter"` | no |
 
@@ -53,6 +54,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_aws_region"></a> [aws\_region](#output\_aws\_region) | The current region. |
 | <a name="output_inputs2outputs"></a> [inputs2outputs](#output\_inputs2outputs) | all inputs passed to outputs |
 | <a name="output_meta_environment"></a> [meta\_environment](#output\_meta\_environment) | The type of the environment. |
 | <a name="output_name"></a> [name](#output\_name) | The name of the stack. |

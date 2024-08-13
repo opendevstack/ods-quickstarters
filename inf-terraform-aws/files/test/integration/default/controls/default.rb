@@ -16,7 +16,7 @@ control 'stack' do
   tag    name
 
   describe aws_region(region_name: t['current_region']) do
-    its('endpoint') { should be_in ['ec2.eu-west-1.amazonaws.com','ec2.us-east-1.amazonaws.com'] }
+    its('endpoint') { should be_in ['ec2.eu-west-1.amazonaws.com', 'ec2.us-east-1.amazonaws.com'] }
   end
 
   describe "Stack Testing" do
