@@ -4,12 +4,15 @@ LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>"
 
 ARG rustVersion
 ARG rustToolchain
+ARG cargoNextestVersion
+ARG cargoLlvmCovVersion
+ARG cargoGenerateVersion
 
 ENV PATH="$HOME/.cargo/bin:$PATH"
 ENV USER="rust-agent"
-ENV CARGO_NEXTEST_VERSION=0.9.72 \
-    CARGO_LLVM_COV_VERSION=0.6.11 \
-    CARGO_GENERATE_VERSION=0.21.3
+ENV CARGO_NEXTEST_VERSION=${cargoNextestVersion} \
+    CARGO_LLVM_COV_VERSION=${cargoLlvmCovVersion} \
+    CARGO_GENERATE_VERSION=${cargoGenerateVersion}
 
 RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic \
     libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config \
