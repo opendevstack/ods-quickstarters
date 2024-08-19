@@ -84,9 +84,9 @@ beforeEach(function() {
 afterEach(function() {
   const testName = this.currentTest.fullTitle().replace(/ /g, '_');
   const fileName = `system-output-${testName}.txt`;
-  const Filepath = `cypress/results/${fileName}`;
+  const filePath = `cypress/results/${fileName}`;
 
-  cy.writeFile(Filepath, consoleLogs.join('\n'));
+  cy.writeFile(filePath, consoleLogs.join('\n'));
 
   consoleLogs = [];
 })
