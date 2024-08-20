@@ -124,7 +124,7 @@ You will see the results inside a new folder 'build' in project directory.
         └── integration-java-defaultDriver
             │── TEST-DemoIntegration.xml
             └── TEST-DemoIntegrationTest.xml
-    
+
 ----
 
 ## Customization - how do you start to configure your test
@@ -149,7 +149,7 @@ In Jenkinsfile.template, there is the following stage:
 
 All the results are stashed and published through Jenkins jUnit publisher.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
