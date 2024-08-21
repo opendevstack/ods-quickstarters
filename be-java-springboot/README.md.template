@@ -6,7 +6,12 @@ The official OpenDevStack documentation for this QuickStarter can be found [here
 
 One can improve the build pipeline time by adding a Gradle cache. This way, `gradlew` can use 
 previously downloaded distributions instead of downloading them from the internet on every build.
-To do so, follow the steps below:
+
+> **Note:** As the Jenkins jobs are sharing the same PVC with access mode `ReadWriteOnce`,
+only one Jenkins job accessing this PVC can run at a time. The Gradle cache locking mechanism
+does not support multiple processes working on it simultaneously.
+
+To add a PVC for the cache and add it to your pipeline, follow the steps below:
 
 - Create a `PersistentVolumeClaim` (PVC) with the name `gradle-cache` in your `@project_id@-cd`-namespace,
 either via the OpenShift UI or via `oc` like this:
@@ -55,5 +60,3 @@ def stageBuild(def context) {
 }
 ...
 ```
-
-**NOTE**: Be aware that, as the Jenkins jobs are sharing the same PVC, only one Jenkins job can run at a time.
