@@ -33,8 +33,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.registry }}/{{ .Values.imageNamespace }}/{{ .Values.componentId }}:{{ .Values.imageTag }}"
-          imagePullPolicy: IfNotPresent
+          # Priority is on Values from CICD jenkins injected Helm values, if not then use values from values.yaml
+          image: "{{ or .Values.registry .Values.image.registry }}/{{ or .Values.imageNamespace .Values.image.path }}/{{ or .Values.componentId .Values.image.name }}:{{ or .Values.imageTag .Values.image.tag  }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
