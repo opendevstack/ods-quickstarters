@@ -9,10 +9,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0%
-      maxSurge: 50%
+    {{- toYaml .Values.deploymentStrategy | nindent 4 }}
   selector:
     matchLabels:
       {{- include "chart.selectorLabels" . | nindent 6 }}

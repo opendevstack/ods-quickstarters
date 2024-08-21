@@ -38,3 +38,4 @@ Shared library ToDo's:
 - Review helm install command
 - Release manager image checks
 - Agree if helm install requires overwritting values on image (see helm notes and deployment, and values.yaml)
+- provide docs on how to test chart updates, by running `helm --debug template . ` under the chart folder to be tested

@@ -46,6 +46,14 @@ service:
   port: 8080
   type: ClusterIP
 
+# There are two types of strategy: `Recreate` and `RollingUpdate`
+# Please refer to https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0%
+    maxSurge: 50%
+
 probes:
   livenessProbe:
     failureThreshold: 3
