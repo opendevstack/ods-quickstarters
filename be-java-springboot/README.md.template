@@ -1,4 +1,4 @@
-# {{project-name}} - provisioned from the OpenDevStack Java/Spring Boot QuickStarter (be-java-springboot)
+# @project_id@-@component_id@ - provisioned from the OpenDevStack Java/Spring Boot QuickStarter (be-java-springboot)
 
 The official OpenDevStack documentation for this QuickStarter can be found [here](https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/be-java-springboot.html).
 
@@ -8,7 +8,7 @@ One can improve the build pipeline time by adding a Gradle cache. This way, `gra
 previously downloaded distributions instead of downloading them from the internet on every build.
 To do so, follow the steps below:
 
-- Create a `PersistentVolumeClaim` (PVC) with the name `gradle-cache` in your `{{project-name}}-cd`-namespace,
+- Create a `PersistentVolumeClaim` (PVC) with the name `gradle-cache` in your `@project_id@-cd`-namespace,
 either via the OpenShift UI or via `oc` like this:
 ```
 oc create -n {{project-name}}-cd -f - <<EOF

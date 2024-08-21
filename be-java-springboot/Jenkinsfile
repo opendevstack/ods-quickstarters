@@ -79,5 +79,11 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageRenderJenkinsfile(context)
 
+  odsQuickstarterStageRenderJenkinsfile(
+    context,
+    [source: 'README.md.template',
+     target: 'README.md']
+  )
+
   odsQuickstarterStageRenderSonarProperties(context)
 }
