@@ -15,13 +15,12 @@
     "delete-junit-results": "rimraf build/test-results",
     "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance",
     "combine:reports": "npm-run-all junit-installation-report junit-integration-report junit-acceptance-report",
-    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation --record && npm run cypress:run-integration --record && npm run cypress:run-acceptance --record"
+    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation -- --record && npm run cypress:run-integration -- --record && npm run cypress:run-acceptance -- --record"
   },
   "private": true,
   "devDependencies": {
     "@types/node": "^22.4.1",
     "cypress": "^13.13.1",
-    "cypress-junit-reporter": "^1.3.1",
     "junit-report-merger": "^7.0.0",
     "mocha-junit-reporter": "^2.2.1",
     "npm-run-all": "^4.1.5",
