@@ -6,7 +6,7 @@ This agent is used to build / execute Python code.
 The image is built in the global `ods` project and is named `jenkins-agent-python`.
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-python`.
 
-It supports building on **Python** versions: **3.11, 3.9, 3.8 and 3.6**.
+It supports building on **Python** versions: **3.12 (default), 3.11, 3.9, 3.8 and 3.6**.
 
 **NOTE**: Python 3.6 have reached EOL on 2021-12-23. See https://devguide.python.org/versions/[Python versions] for further information.
 
