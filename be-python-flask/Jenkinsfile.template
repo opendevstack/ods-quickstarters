@@ -29,7 +29,7 @@ def stageTestSuite(def context) {
 
   stage('Prepare Test Suite') {
     sh """
-      python3.11 -m venv testsuite
+      python3.12 -m venv testsuite
       . ./testsuite/bin/activate
       pip install -r tests_requirements.txt
       pip check
@@ -50,7 +50,7 @@ def stageTestSuite(def context) {
     def status = sh(
       script: """
         . ./testsuite/bin/activate
-        PYTHONPATH=src python3.11 -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+        PYTHONPATH=src python3.12 -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
         mv tests.xml ${testLocation}
         mv coverage.xml ${coverageLocation}
         mv .coverage ${coverageLocation}
