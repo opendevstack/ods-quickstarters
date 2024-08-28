@@ -14,7 +14,8 @@ jobs:
         working-directory: common/jenkins-agents/golang/docker
         run: |
           docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg goDistributionUrl=https://go.dev/dl/go1.20.4.linux-amd64.tar.gz \
+            --build-arg goDistributionUrl=https://go.dev/dl/go1.23.0.linux-amd64.tar.gz \
+            --build-arg golangciVersion=v1.60.1 \
             .
 
   jenkins-agent-jdk-ubi8:
