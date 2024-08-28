@@ -63,7 +63,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://blog.rust-lang.org/2024/06/13/Rust-1.79.0.html[Rust 1.79.0]
+* https://blog.rust-lang.org/2024/08/08/Rust-1.80.1.html[Rust 1.80.1]
 * https://github.com/tokio-rs/axum[Axum 0.7.x]
 * https://nexte.st/[Nextest 0.9.x]
 
@@ -131,7 +131,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: rust
-runtimeVersion: 1.79.0
+runtimeVersion: 1.80.1
 ```
 
 == How this quickstarter is built through Jenkins

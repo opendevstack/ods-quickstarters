@@ -34,6 +34,9 @@ def stageBuild(def context) {
 def stageTest(def context) {
   stage('Cargo Check') {
     sh """
+        cargo --version
+        cargo nextest --version
+        cargo llvm-cov --version
         cargo check --all-targets
       """
   }
