@@ -6,6 +6,7 @@
 - Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
 - Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
 - Support for Python3.12, and maintenance of be-python-flask quickstarter and python Jenkins agent ([#1030](https://github.com/opendevstack/ods-quickstarters/pull/1030))
+- Added custom reporter to Cypress Quickstarter and update dependencies ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))
 
 ### Added
 
