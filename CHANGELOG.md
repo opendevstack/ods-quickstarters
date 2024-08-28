@@ -6,6 +6,8 @@
 - Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
 - Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
 - Update Streamlit Quickstarter ([#1030](https://github.com/opendevstack/ods-quickstarters/issues/1030))
+- Update Golang agent ([#1031](https://github.com/opendevstack/ods-quickstarters/issues/1031))
+- Update gateway/nginx Quickstarter ([#1048](https://github.com/opendevstack/ods-quickstarters/pull/1048))
 - Update Rust Axum Quickstarter to Rust 1.80.1 and improve Agent build configuration ([#1040](https://github.com/opendevstack/ods-quickstarters/pull/1040))
 - Support for Python3.12, and maintenance of be-python-flask quickstarter and python Jenkins agent ([#1030](https://github.com/opendevstack/ods-quickstarters/pull/1030))
 - Added custom reporter to Cypress Quickstarter and update dependencies ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))

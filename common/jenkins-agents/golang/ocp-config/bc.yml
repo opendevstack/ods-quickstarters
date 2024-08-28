@@ -17,8 +17,11 @@ parameters:
   value: Dockerfile.ubi8
   description: Dockerfile variant to use
 - name: GO_DISTRIBUTION_URL
-  value: https://go.dev/dl/go1.21.3.linux-amd64.tar.gz
+  value: https://go.dev/dl/go1.23.0.linux-amd64.tar.gz
   description: URL pointing to go binary
+- name: GOLANG_CI_VERSION
+  value: v1.60.1
+  description: version of go linter runner
 objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
@@ -59,5 +62,7 @@ objects:
         buildArgs:
           - name: goDistributionUrl
             value: ${GO_DISTRIBUTION_URL}
+          - name: golangciVersion
+            value: ${GOLANG_CI_VERSION}
       type: Docker
     successfulBuildsHistoryLimit: 5
