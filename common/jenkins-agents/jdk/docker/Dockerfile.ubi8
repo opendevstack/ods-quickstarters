@@ -40,7 +40,7 @@ RUN chmod +x /usr/local/bin/use-j*.sh && \
     use-j11.sh && \
     use-j21.sh && \
     use-j17.sh && \
-    echo "--- ENDS JDK 11/17/21 TESTS ---" && \
+    echo "--- ENDS JDK 11/17/21 TESTS ---"
 
 # Set maven (nexus+proxy) and gradle (proxy) settings
 ENV MAVEN_OPTS="-Duser.home=$HOME" \

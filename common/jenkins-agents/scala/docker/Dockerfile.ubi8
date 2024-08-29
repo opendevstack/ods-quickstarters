@@ -20,7 +20,7 @@ RUN chmod +x /usr/local/bin/use-j*.sh && \
     echo "--- STARTS JDK 11/17 TESTS ---" && \
     use-j11.sh && \
     use-j17.sh && \
-    echo "--- ENDS JDK 11/17 TESTS ---" && \
+    echo "--- ENDS JDK 11/17 TESTS ---"
 
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
