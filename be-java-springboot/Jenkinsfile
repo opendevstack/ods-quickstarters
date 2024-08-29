@@ -3,6 +3,7 @@ def odsGitRef = ''
 def odsImageTag = ''
 def sharedLibraryRef = ''
 def agentImageTag = ''
+def javaVersion = '21'
 
 node {
   odsNamespace = env.ODS_NAMESPACE ?: 'ods'
@@ -21,7 +22,6 @@ odsQuickstarterPipeline(
   stage('Build spring project') {
     dir(context.targetDir) {
       def springBootVersion = '3.3.3'
-      def javaVersion = '21'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
       sh "curl https://start.spring.io/starter.tgz \
