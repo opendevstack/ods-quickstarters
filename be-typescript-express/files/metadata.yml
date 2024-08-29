@@ -1,6 +1,6 @@
 ---
 name: TypeScript
-description: "TypeScript is an open-source programming language developed and maintained by Microsoft. It is a strict syntactical superset of JavaScript, and adds optional static typing to the language. TypeScript is designed for development of large applications and transcompiles to JavaScript. Technologies: TypeScript 5.x, Node 20"
+description: "TypeScript is an open-source programming language developed and maintained by Microsoft. It is a strict syntactical superset of JavaScript, and adds optional static typing to the language. TypeScript is designed for development of large applications and transcompiles to JavaScript. Technologies: TypeScript 5.x, Node 22"
 supplier: https://www.typescriptlang.org
 version: 4.x
 type: ods

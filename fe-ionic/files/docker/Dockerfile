@@ -1,4 +1,4 @@
-FROM nginx:1.25.3-alpine
+FROM nginx:1.27.1-alpine
 
 RUN chmod -R 777 /var/log/nginx /var/cache/nginx /var/run \
      && chgrp -R 0 /etc/nginx \
