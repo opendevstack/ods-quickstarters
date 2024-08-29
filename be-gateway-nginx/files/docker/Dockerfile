@@ -1,5 +1,5 @@
 # https://github.com/openresty/docker-openresty
-FROM openresty/openresty:1.25.3.1-1-rocky
+FROM openresty/openresty:1.25.3.2-0-rocky
 
 ENV LANG=C.UTF-8
 

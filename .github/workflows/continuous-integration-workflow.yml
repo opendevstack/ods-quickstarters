@@ -14,7 +14,8 @@ jobs:
         working-directory: common/jenkins-agents/golang/docker
         run: |
           docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg goDistributionUrl=https://go.dev/dl/go1.20.4.linux-amd64.tar.gz \
+            --build-arg goDistributionUrl=https://go.dev/dl/go1.23.0.linux-amd64.tar.gz \
+            --build-arg golangciVersion=v1.60.1 \
             .
 
   jenkins-agent-jdk-ubi8:
@@ -123,8 +124,11 @@ jobs:
         working-directory: common/jenkins-agents/rust/docker
         run: |
           docker build --tag agent-rust-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg rustVersion=1.75.0 \
+            --build-arg rustVersion=1.80.1 \
             --build-arg rustToolchain=x86_64-unknown-linux-gnu \
+            --build-arg cargoNextestVersion=0.9.72 \
+            --build-arg cargoLlvmCovVersion=0.6.11 \
+            --build-arg cargoGenerateVersion=0.21.3 \
             .
 
   jenkins-agent-terraform-ubi8:
