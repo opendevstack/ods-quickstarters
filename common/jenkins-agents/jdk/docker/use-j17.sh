@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "temurin-17" | awk '{print $NF}' | head -1)
+JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "java-17-openjdk-.*\.x86_64" | awk '{print $NF}' | head -1)
 JAVA_VERSION="17"
 
 function msg_and_exit() {
