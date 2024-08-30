@@ -10,7 +10,7 @@ ARG nexusPassword
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
 # Install sbt and java 11 (for retrocompatibility)
-ENV SBT_VERSION=1.10.1
+ENV SBT_VERSION=1.8.2
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
     curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
