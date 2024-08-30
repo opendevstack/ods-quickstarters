@@ -19,7 +19,7 @@ odsQuickstarterPipeline(
 ) { context ->
 
   stage("init scala play project") {
-    sh "sbt -no-colors -v new file://${context.sourceDir}/be-scala-play.g8 --name=${context.componentId} --secret=\$(uuidgen)"
+    sh "source use-j11.sh && sbt -no-colors -v new file://${context.sourceDir}/be-scala-play.g8 --name=${context.componentId} --secret=\$(uuidgen) && source use-j17.sh"
   }
   
   odsQuickstarterStageCopyFiles(context)
