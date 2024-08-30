@@ -7,7 +7,7 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(PlayKeys.playDefaultPort := 8080)
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.14"
 
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 

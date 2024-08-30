@@ -6,9 +6,17 @@ ARG nexusUrl
 ARG nexusUsername
 ARG nexusPassword
 
-# Install Java
-RUN yum install -y java-11-openjdk-devel && \
-    yum clean all -y && \
+# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
+ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
+
+# Install sbt and java 11 (for retrocompatibility)
+ENV SBT_VERSION=1.10.1
+ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
+RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
+    curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
+    mv sbt-rpm.repo /etc/yum.repos.d/ && \
+    yum -y install sbt-$SBT_VERSION java-11-openjdk-devel && \
+    yum clean all && \
     rm -rf /var/cache/yum
 
 # Copy use java scripts.
@@ -21,20 +29,6 @@ RUN chmod +x /usr/local/bin/use-j*.sh && \
     use-j11.sh && \
     use-j17.sh && \
     echo "--- ENDS JDK 11/17 TESTS ---"
-
-# Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
-ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
-
-
-# Install sbt
-ENV SBT_VERSION=1.8.2
-ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
-RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
-    curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
-    mv sbt-rpm.repo /etc/yum.repos.d/ && \
-    yum -y install sbt-$SBT_VERSION && \
-    yum clean all && \
-    rm -rf /var/cache/yum
 
 COPY sbtconfig/repositories $HOME/.sbt/repositories
 COPY sbtconfig/credentials.sbt $HOME/.sbt/1.0/plugins/credentials.sbt
