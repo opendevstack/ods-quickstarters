@@ -1,6 +1,6 @@
 ---
 name: OpenJDK
-description: "OpenJDK is a free and open-source implementation of the Java Platform, Standard Edition. Technologies: Spring Boot 3.2.0, OpenJDK 21"
+description: "OpenJDK is a free and open-source implementation of the Java Platform, Standard Edition. Technologies: Spring Boot 3.3.3, OpenJDK 21"
 supplier: https://openjdk.java.net/
 version: 4.x
 type: ods

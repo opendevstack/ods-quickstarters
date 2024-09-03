@@ -3,6 +3,7 @@ def odsGitRef = ''
 def odsImageTag = ''
 def sharedLibraryRef = ''
 def agentImageTag = ''
+def javaVersion = '21'
 
 node {
   odsNamespace = env.ODS_NAMESPACE ?: 'ods'
@@ -20,7 +21,7 @@ odsQuickstarterPipeline(
 
   stage('Build spring project') {
     dir(context.targetDir) {
-      def springBootVersion = '3.2.0'
+      def springBootVersion = '3.3.3'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
       sh "curl https://start.spring.io/starter.tgz \
@@ -29,7 +30,7 @@ odsQuickstarterPipeline(
             -d dependencies='web,data-rest,data-jpa,h2,security,devtools' \
             -d platformVersion=${springBootVersion} \
             -d packaging=jar \
-            -d jvmVersion=21 \
+            -d jvmVersion=${javaVersion} \
             -d groupId=${context.projectId} \
             -d artifactId=${context.componentId} \
             -d name=${context.componentId} \
@@ -68,6 +69,9 @@ odsQuickstarterPipeline(
 
     // append maven-publish settings
     sh "cat ${context.sourceDir}/templates/gradle-maven-publish.template >> ${context.targetDir}/build.gradle"
+
+    // change java toolchain version
+    sh "sed -i 's/JavaLanguageVersion.of(17)/JavaLanguageVersion.of(${javaVersion})/g' ${context.targetDir}/build.gradle"
   }
 
   odsQuickstarterStageCopyFiles(context)
