@@ -17,6 +17,9 @@ USER root
 RUN mkdir -p /app && \
 	mkdir -p /app/.streamlit
 
+RUN yum -y update && \
+    yum clean all
+
 RUN chown -R 1001:0 /app && \
     chmod -R g=u /app
     
