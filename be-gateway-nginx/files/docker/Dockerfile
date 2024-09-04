@@ -15,7 +15,7 @@ COPY lua /usr/local/openresty/lualib
 COPY nginx.conf /usr/local/openresty/nginx/conf/
 COPY entrypoint.sh /app/
 
-RUN dnf upgrade-minimal -y && \
+RUN dnf upgrade -y && \
     dnf clean all
 
 RUN chgrp -R 0 /app /usr/local/openresty/nginx && \
