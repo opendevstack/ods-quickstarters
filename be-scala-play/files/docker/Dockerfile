@@ -4,6 +4,9 @@ WORKDIR /app
 COPY lib/* /app/lib/
 COPY conf /app/conf/
 
+RUN yum -y update && \
+    yum clean all
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-Duser.dir=/app", "-XX:+UnlockExperimentalVMOptions", "-cp", "conf/:lib/*"]

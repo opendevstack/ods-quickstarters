@@ -8,6 +8,9 @@ COPY run.sh /app/
 
 WORKDIR /app
 
+RUN yum -y update && \
+    yum clean all
+
 RUN if [ ! -z ${nexusHostWithBasicAuth} ]; \
     then pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} --upgrade pip && pip install -i ${nexusHostWithBasicAuth}/repository/pypi-all/simple --trusted-host ${nexusHostWithoutScheme} -r requirements.txt; \
     else pip install --upgrade pip && pip install -r requirements.txt; \
