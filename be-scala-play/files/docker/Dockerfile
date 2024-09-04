@@ -4,8 +4,8 @@ WORKDIR /app
 COPY lib/* /app/lib/
 COPY conf /app/conf/
 
-RUN yum -y update && \
-    yum clean all
+RUN microdnf upgrade -y && \
+    microdnf clean all
 
 EXPOSE 8080
 

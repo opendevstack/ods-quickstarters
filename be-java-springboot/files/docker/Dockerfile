@@ -6,8 +6,8 @@ ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
 
 COPY app.jar app.jar
 
-RUN yum -y update && \
-    yum clean all
+RUN microdnf upgrade -y && \
+    microdnf clean all
 
 EXPOSE 8080
 
