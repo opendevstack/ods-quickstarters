@@ -1,8 +1,10 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+FROM nginxinc/nginx-unprivileged:latest
 
-RUN echo "building simple container"
+USER root
 
-EXPOSE 8080
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get clean
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 -e echo -e \"HTTP/1.1 200 OK\n\nHello World!\n$(date)\""]
+USER 1001
