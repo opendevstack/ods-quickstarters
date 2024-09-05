@@ -12,32 +12,34 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 .
 ├── fixtures
 │   └── example.json
-│── plugins
+├── plugins
 │   └── index.js
-│── support
+├── reporters
+│   └── custom-reporter.js
+├── support
 │   ├── commands.ts
+│   ├── e2e.ts
 │   ├── generic-login.ts
-│   ├── index.ts
-│   ├── msalv2-login.ts
+│   ├── msalv2-login_obsolete.ts
 │   └── test-evidence.ts
 ├── tests
-|   ├── acceptance
-│   |   └── acceptance.spec.ts
-|   ├── installation
-│   |   └── installation.spec.ts
-|   └── integration
-│       └── integration.spec.ts
-├── cypress-acceptance.json
-├── cypress-installation.json
-├── cypress-integration.json
+│   ├── acceptance
+│   │   └── acceptance.spec.cy.ts
+│   ├── installation
+│   │   └── installation.spec.cy.ts
+│   └── integration
+│       └── integration.spec.cy.ts
+├── cypress-acceptance.config.ts
+├── cypress-installation.config.ts
+├── cypress-integration.config.ts
+├── cypress.config.ts
 ├── cypress.env.json.template
-├── cypress.json
 ├── Jenkinsfile
 ├── .pre-commit-config.yaml
 ├── metadata.yml - Component metadata
-│── package.json
+├── package.json
 ├── README.md
-│── release-manager.yml - Configuration file for the Release Manager
+├── release-manager.yml - Configuration file for the Release Manager
 └── tsconfig.json
 ----
 
@@ -67,9 +69,9 @@ A more advanced solution could be the use of a custom builder agent, where Cypre
 [source,docker]
 ----
 # The following FROM tag is informational. It is overwritten by OpenShift.
-FROM ods/jenkins-agent-nodejs20:4.x
+FROM ods/jenkins-agent-nodejs22:4.x
 
-ARG cypressVersion=13.6.0
+ARG cypressVersion=13.13.1
 ARG cypressHash=...
 
 USER root
@@ -129,7 +131,7 @@ include::partials$secret-scanning-with-gitleaks.adoc
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs22[Node.js 22 builder agent] for Jenkins.
 
 == Known limitations
 

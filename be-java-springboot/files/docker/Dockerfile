@@ -6,6 +6,13 @@ ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
 
 COPY app.jar app.jar
 
+USER root
+
+RUN microdnf upgrade -y && \
+    microdnf clean all
+
+USER 1001    
+
 EXPOSE 8080
 
 CMD ["java","-Xmx512m", "-jar", "app.jar"]

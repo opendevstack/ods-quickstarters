@@ -24,6 +24,10 @@ FROM alpine
 
 COPY app_linux_amd64 app_linux_amd64
 
+RUN apk update  && \
+    apk -i upgrade && \
+    apk cache clean
+
 EXPOSE 8080
 
 CMD ["./app_linux_amd64"]
