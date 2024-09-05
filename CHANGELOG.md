@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
 - Update Angular, Ionic and Typescript Quickstarters ([#1033](https://github.com/opendevstack/ods-quickstarters/issues/1033))
 - Update Rust Axum Quickstarter to Rust 1.79.0 ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
 - Update jdk and scala quickstarters and agents ([#1032](https://github.com/opendevstack/ods-quickstarters/issues/1032))
