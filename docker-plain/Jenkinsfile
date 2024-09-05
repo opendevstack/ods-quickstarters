@@ -32,5 +32,5 @@ def renderHelmChart(def context) {
   def relativeDestinationFilePath = "chart/Chart.yaml"
   def absoluteSourceFilePath = "${context.sourceDir}/${relativeSourceFilePath}"
   def absoluteDestinationFilePath = "${context.targetDir}/${relativeDestinationFilePath}"
-  sh(script: "source use-j21.sh && ./gradlew clean build --stacktrace --no-daemon && source use-j11.sh", label: "Render Helm Chart.yaml file")
+  sh(script: "sed 's|@component_id@|${context.componentId}|g' ${absoluteSourceFilePath} > ${absoluteDestinationFilePath}", label: "Render Helm Chart.yaml file")
 }
