@@ -20,7 +20,9 @@ odsComponentPipeline(
     */
     odsComponentStageBuildOpenShiftImage(context)
   }
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  odsComponentStageRolloutOpenShiftDeployment(context, [
+    'selector': "app.kubernetes.io/name=${context.componentId}"
+  ])
 }
 
 def stageBuild(def context) {
