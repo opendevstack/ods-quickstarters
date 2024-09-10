@@ -121,7 +121,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-  # bugmenot: "true"
 
 ## PodAntiAffinity is a way to control that not all of your pods are scheduled
 ## onto the same node.
