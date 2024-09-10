@@ -27,6 +27,7 @@ NOTE: like this example, you will need to switch back to `java 17` after running
 
 Dockerfile.ubi8 installs:
 - java-21-openjdk-devel
+- java-17-openjdk-devel
 - java-11-openjdk-devel
 
 == Known limitations
