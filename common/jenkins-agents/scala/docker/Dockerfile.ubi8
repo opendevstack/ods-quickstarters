@@ -9,13 +9,13 @@ ARG nexusPassword
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
-# Install sbt and java 11 (for retrocompatibility)
+# Install sbt and java devel 11/17
 ENV SBT_VERSION=1.8.2
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
     curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
     mv sbt-rpm.repo /etc/yum.repos.d/ && \
-    yum -y install sbt-$SBT_VERSION java-11-openjdk-devel && \
+    yum -y install sbt-$SBT_VERSION java-11-openjdk-devel java-17-openjdk-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
 
