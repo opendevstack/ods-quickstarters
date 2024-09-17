@@ -21,7 +21,8 @@ odsComponentPipeline(
     odsComponentStageBuildOpenShiftImage(context)
   }
   odsComponentStageRolloutOpenShiftDeployment(context, [
-    'selector': "app.kubernetes.io/name=${context.componentId}"
+    'selector': "app.kubernetes.io/name=${context.componentId}",
+    'helmEnvBasedValuesFiles': ["values.env.yaml"],
   ])
 }
 
