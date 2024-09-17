@@ -14,12 +14,12 @@ fullnameOverride: ""
 # NOTE: By default image Values are injected from CICD Jenkins pipeline, values defined here are used when not being on CICD Jenkins pipeline context.
 # Default values here are provided in case one needs to use the chart without CICD (i.e.: testing the chart).
 image:
-  registry: "docker.io"
-  path: "nginxinc"
-  name: "nginx-unprivileged"
-  tag: "latest"
-  # You might consider using `IfNotPresent` policy, see https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
-  pullPolicy: Always
+  # registry: "docker.io"
+  # path: "nginxinc"
+  # name: "nginx-unprivileged"
+  # tag: "latest"
+  # see https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
+  pullPolicy: IfNotPresent
 
 ## Prefer using ingress over openshift routes
 ingress:
