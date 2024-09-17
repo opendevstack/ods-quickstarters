@@ -24,13 +24,11 @@ name: Project Phoenix
 
 repositories:
   - id: A
-    branch: master
   - id: B
     name: my-repo-B
-    branch: master
   - id: C
 ```
-
+For all repositories mentioned above (A, B, C) the library will resolve the default branch configured in each.
 If a named repository wants to announce a dependency on another repo, the dependency needs to be listed in that repository's `release-manager.yml`, simply by referring to its `repo.id` as defined in `metadata.yml`:
 
 ```
@@ -46,11 +44,9 @@ name: Project Phoenix
 
 repositories:
   - id: A
-    branch: master
     type: ods
   - id: B
     name: my-repo-B
-    branch: master
     type: ods
   - id: C
     type: ods
@@ -98,7 +94,6 @@ name: Project Phoenix
 repositories:
   - id: B
     name: my-repo-B
-    branch: master
 ```
 
 Assuming your release manager component's origin at `https://github.com/my-org/my-pipeline.git` in this example, the Git URL for repository `B` will resolve to `https://github.com/my-org/my-repo-B.git`, based on the value in `repositories[0].name`.
