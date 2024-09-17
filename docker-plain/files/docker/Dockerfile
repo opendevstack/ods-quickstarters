@@ -1,10 +1,6 @@
-# add /overwrite FROM with your base image, and do whatever you like here :)
-FROM nginxinc/nginx-unprivileged:latest
+FROM registry.access.redhat.com/ubi9/nginx-122
 
-USER root
+RUN echo -n "Hello World" > index.html
 
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get clean
-
-USER 1001
+# Run script uses standard ways to run the application
+CMD nginx -g "daemon off;"
