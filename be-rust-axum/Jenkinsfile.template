@@ -53,10 +53,11 @@ def stageCI(def context) {
   }
   stage('Cargo Deny') {
     sh """
-        # mkdir -p build/test-results/deny
-        # cargo deny --format json check &> build/test-results/deny/cargo-deny-report.json
-        cargo deny check
+        mkdir -p build/test-results/deny
+        cargo deny --format json check &> build/test-results/deny/cargo-deny-report.json
+        cat build/test-results/deny/cargo-deny-report.json
       """
+    archiveArtifacts artifacts: 'build/test-results/deny/cargo-deny-report.json', fingerprint: true
   }
   stage('Cargo Test') {
     sh """
