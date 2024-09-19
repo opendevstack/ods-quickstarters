@@ -211,19 +211,52 @@ First of all, please, let us know if you find any limitation or issue to comment
 
 === Building with OpenSSL crate or using alternatives ===
 
-==== Using openssl crate ====
+==== Recommended first approach ====
 
-In some cases one might not be able to skip requiring OpenSSL nor LibreSSL (see https://github.com/opendevstack/ods-quickstarters/issues/1026[issue]), hence to compile them.
+Most of the crates out there, that require cryptographic related features, come with `openssl` crate as a default dependency feature, but
+one can check the crate's docs in regards available features and disable openssl and/or default-features and enable provided alternatives,
+like `rustls``.
 
-To have a lean compilation and shipping experience with Rust, ODS Jenkins Rust agent provides already the dependencies to build OpenSSL from source, hence avoiding any mismatch with existing/multiple OS libraries existing or none (at build or runtime), by enabling statically linking of the dependencies.
+See some examples of known crates that can be configured to skip requiring OpenSSL C library:
 
-The only missing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`:
+===== SQLx crate without openssl dependency =====
+
+With the https://crates.io/crates/sqlx[sqlx] crate, one can avoid `openssl` dependency by enabling the dependency feature `tls-rustls`
+which makes use of the crate `rustls`, like:
 
 ```
+[dependencies]
+sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "chrono", "macros", "migrate" ] }
+```
+
+See SQLx's https://docs.rs/sqlx/latest/sqlx/#tls-support[TLS features list support], or https://github.com/launchbadge/sqlx?tab=readme-ov-file#cargo-feature-flags[all SQLx feature flags], for further learning.
+
+===== Reqwest crate without openssl dependency =====
+
+With the https://crates.io/crates/reqwest[reqwest] crate, one can avoid `openssl` dependency by enabling the dependency feature `rustls-tls`,
+which makes use of the crate `rustls` and disabling default features, like:
+
+```
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+```
+
+See reqwest's https://docs.rs/reqwest/latest/reqwest/#optional-features[features list] for further learning.
+
+==== Using openssl crate ====
+
+In some cases one might not be able to skip requiring OpenSSL nor LibreSSL C libraries (see https://github.com/opendevstack/ods-quickstarters/issues/1026[issue]), but requires compiling them.
+
+To have a lean compilation and shipping experience with Rust, ODS Jenkins Rust agent provides already the dependencies to build OpenSSL from source and statically link them, hence avoiding any mismatch with existing/multiple OS libraries or none (at build or runtime), by enabling statically linking of the dependency within the binary.
+
+The only missing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`, see example:
+
+```
+[dependencies]
 openssl = { version = "0.10", features = ["vendored"] }
 ```
 
-By doing so, `cargo` will locally build OpenSSL and statically link the openssl dependencies into the binarie(s) generated.
+By doing so, `cargo` will locally build OpenSSL and statically link the openssl dependencies into the binarie(s) generated, hence avoiding any OS existence nor dependency of the openssl library.
 
 ==== Alternatives to openssl crate ====
 
@@ -231,9 +264,3 @@ In most of cases, one does not require OpenSSL, indeed it is recommended to use 
 
 - https://docs.rs/ring/latest/ring/[ring]
 - https://docs.rs/rustls/latest/rustls[rustls]
-
-Also when using the widely known/used https://crates.io/crates/reqwest[reqwest] crate, one can avoid openssl dependency by forcing the use of rustls, like:
-
-```
-reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
-```
