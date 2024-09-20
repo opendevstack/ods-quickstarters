@@ -31,9 +31,26 @@ Using a local container runtime you can build the container and tag it with the 
 docker build -t testing/my-component:$(git rev-parse --short=8 HEAD) docker/
 ```
 
-### Deploying the helm chart using 
+### Helm chart linting
 
-Using a local kubernetes cluster you can deploy the component:
+This quickstarter comes with a fine-tunned [values.schema.json](chart/values.schema.json) Helm chart linting file.
+Validate your chart template by running, under the `chart` folder, the following command:
+
+```bash
+helm lint
+```
+
+### Helm chart template processing test
+
+One can test the chart template processing; run, under the `chart` folder, the following command:
+
+```bash
+helm --debug template . --set image.path=testing --set image.name=my-component --set image.tag=$(git rev-parse --short=8 HEAD)
+```
+
+### Deploying the helm chart using a local k8s
+
+Using a local kubernetes cluster (i.e.: [kind](https://kind.sigs.k8s.io/)) you can deploy the component:
 
 ```bash
 kubectl create ns docker-plain
