@@ -1,5 +1,12 @@
 FROM registry.access.redhat.com/ubi9/nginx-124
 
+USER root
+
+RUN yum -y update && \
+    yum clean all
+
+USER 1001
+
 RUN echo -n "Hello World" > index.html
 
 # Run script uses standard ways to run the application
