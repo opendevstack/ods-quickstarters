@@ -1,7 +1,15 @@
 # {{project-name}} - from the OpenDevStack Rust QuickStarter (be-rust-axum)
 
-
 The official OpenDevStack documentation for this QuickStarter can be found [here](https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/be-rust-axum.html).
+
+## Pre-commit hooks
+
+This project uses [pre-commit](https://pre-commit.com).
+[Install it](https://pre-commit.com/#install) and apply the already provided pre-commit hooks (see `.pre-commit-config.yaml`) configurations:
+
+```bash
+pre-commit install
+```
 
 ## Adding caching in your CICD
 
@@ -19,15 +27,15 @@ One can improve the build pipeline time by implementing a caching mechanism as s
       ]
     ) { context ->
     ...
-      stageTest(context)
+      stageCI(context)
     ...
       stageBuild(context)
     ...
       def stageBuild(def context) {
     ...
-      def stageTest(def context) {
+      def stageCI(def context) {
     ...
-        sh "cp -r target/release/${context.projectId}-${context.componentId} docker/app"
+        sh "cp -r target/release/${context.componentId} docker/app"
     ...
         cp -r target/llvm-cov/html/ build/test-results/coverage
     ```
@@ -69,15 +77,15 @@ One can improve the build pipeline time by implementing a caching mechanism as s
       ]
     ) { context ->
     ...
-      stageTest(context, cachePath)
+      stageCI(context, cachePath)
     ...
       stageBuild(context, cachePath)
     ...
       def stageBuild(def context, def cachePath) {
     ...
-      def stageTest(def context, def cachePath) {
+      def stageCI(def context, def cachePath) {
     ...
-        sh "cp -r ${cachePath}/release/${context.projectId}-${context.componentId} docker/app"
+        sh "cp -r ${cachePath}/release/${context.componentId} docker/app"
     ...
         cp -r ${cachePath}/llvm-cov/html/ build/test-results/coverage
     ```
