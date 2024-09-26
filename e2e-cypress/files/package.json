@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run cypress:open",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --browser=chrome",
+    "cypress:run": "cypress run --browser=edge",
     "cypress:run-installation": "npm run cypress:run -- --config-file cypress-installation.config.ts",
     "cypress:run-integration": "npm run cypress:run -- --config-file cypress-integration.config.ts",
     "cypress:run-acceptance": "npm run cypress:run -- --config-file cypress-acceptance.config.ts",
