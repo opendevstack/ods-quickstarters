@@ -20,6 +20,8 @@
 - Fix ETL Python QS: AWS Test codepipeline Status Managment and update cryptography dependency([#1056](https://github.com/opendevstack/ods-quickstarters/pull/1052))
 - Fix for npm based jenkins agents to support private nexus repositories ([#1059](https://github.com/opendevstack/ods-quickstarters/issues/1059))
 - Introduce Rust Quickstarter dependency graph linting (cargo-deny) and upgrade maintenance ([#1061](https://github.com/opendevstack/ods-quickstarters/issues/1061))
+- Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 
 ### Added
 
