@@ -2,7 +2,7 @@ import path from 'path';
 import { isScreenshotEvidenceResult, ScreenshotEvidenceData } from "../plugins/screenshot";
 import { consoleLogs } from "./e2e";
 
-export const printTestEvidence = (testName: string, testStep: number, selector: string, description: string) => {
+export const printTestDOMEvidence = (testName: string, testStep: number, selector: string, description: string) => {
   if (!selector) {
     throw new Error('selector must not NOT be undefined');
   }
@@ -17,6 +17,25 @@ export const printTestEvidence = (testName: string, testStep: number, selector: 
   cy.get(selector).then($selectedElement => {
     logs.push('Selector: ' + selector + '\r ' + $selectedElement.get(0).outerHTML);
   });
+  logs.push('----- Test Evidence ends here ----');
+  consoleLogs.push(...logs);
+  cy.task('log', logs.join('\n'));
+};
+
+export const printTestPlainEvidence = (testName: string, testStep: number, expectedValue: string, actualValue: string, description: string) => {
+  if (!expectedValue || !actualValue) {
+    throw new Error('expectedValue and actualValue must not NOT be undefined');
+  }
+  const logs: string[] = [];
+  logs.push('=====================================');
+  logs.push('Testname: ' + testName + ' // step: ' + testStep);
+  cy.url().then(urlString => {
+    logs.push('URL: ' + urlString);
+  });
+  logs.push('Description: ' + description);
+  logs.push('----- Test Evidence starts here ----');
+  logs.push(`Expected Result:\r ${String(expectedValue)}`);
+  logs.push(`Actual Result:\r ${String(actualValue)}`);
   logs.push('----- Test Evidence ends here ----');
   consoleLogs.push(...logs);
   cy.task('log', logs.join('\n'));
