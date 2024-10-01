@@ -15,7 +15,7 @@ export const printTestDOMEvidence = (testName: string, testStep: number, selecto
   logs.push('Description: ' + description);
   logs.push('----- Test Evidence starts here ----');
   cy.get(selector).then($selectedElement => {
-    logs.push('Selector: ' + selector + '\r ' + $selectedElement.get(0).outerHTML);
+    logs.push('Selector: ' + selector + '\n ' + $selectedElement.get(0).outerHTML);
   });
   logs.push('----- Test Evidence ends here ----');
   consoleLogs.push(...logs);
@@ -34,8 +34,8 @@ export const printTestPlainEvidence = (testName: string, testStep: number, expec
   });
   logs.push('Description: ' + description);
   logs.push('----- Test Evidence starts here ----');
-  logs.push(`Expected Result:\r ${String(expectedValue)}`);
-  logs.push(`Actual Result:\r ${String(actualValue)}`);
+  logs.push(`Expected Result:\n ${String(expectedValue)}`);
+  logs.push(`Actual Result:\n ${String(actualValue)}`);
   logs.push('----- Test Evidence ends here ----');
   consoleLogs.push(...logs);
   cy.task('log', logs.join('\n'));
