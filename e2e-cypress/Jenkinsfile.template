@@ -54,6 +54,8 @@ def stageTest(def context) {
       // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
       // "CYPRESS_USERNAME=${cypressUser}",
       // "CYPRESS_PASSWORD=${cypressPassword}"
+      "COMMIT_INFO_SHA=${context.gitCommit}",
+      "BUILD_NUMBER=${context.buildNumber}",
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)

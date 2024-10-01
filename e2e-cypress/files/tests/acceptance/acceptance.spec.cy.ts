@@ -1,4 +1,4 @@
-import { printTestEvidence } from '../../support/test-evidence';
+import { printTestEvidence, takeScreenshotEvidence } from '../../support/test-evidence';
 
 /* tslint:disable:no-unused-expression */
 // describe('ADD login example test', () => {
@@ -21,5 +21,7 @@ describe('W3 application test', () => {
     cy.title().should('include', 'Tryit Editor');
     printTestEvidence(this.test.fullTitle(), 1, '#textareaCode', 'code area');
     printTestEvidence(this.test.fullTitle(), 2, '#iframecontainer', 'rendered code area');
+    takeScreenshotEvidence(this.test.fullTitle(), 3, 1, 'screenshot');
+    takeScreenshotEvidence(this.test.fullTitle(), 3, 2, 'screenshot substep 2');
   });
 });

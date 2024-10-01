@@ -8,6 +8,9 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
+import type { ScreenshotEvidenceData } from './screenshot';
+import { addEvidenceMetaToScreenshot } from './screenshot';
+
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
@@ -19,6 +22,9 @@ const setupNodeEvents: NonNullable<Cypress.ConfigOptions['setupNodeEvents']> = (
       console.log(message);
       return null;
     },
+    async takeScreenshotEvidence(data: ScreenshotEvidenceData) {
+      return await addEvidenceMetaToScreenshot(data);
+    }
   });
 };
 
