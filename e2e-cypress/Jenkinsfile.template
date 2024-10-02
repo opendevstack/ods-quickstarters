@@ -29,11 +29,23 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  
+  def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
+
   stageTest(context)
   odsComponentStageScanWithSonar(context)
-  
+
+  if (fileExists('cypress/screenshots.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/screenshots.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
   }
+
+}
 
 def stageTest(def context) {
   stage('Integration Test') {
@@ -67,11 +79,13 @@ def stageTest(def context) {
       zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
       stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
       archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
-      if (status != 0) {
+
+      if (fileExists('cypress/screenshots')) {
         zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
         stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
         archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
+      
       return status
     }
   }
