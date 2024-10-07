@@ -6,39 +6,39 @@ export const printTestDOMEvidence = (testName: string, testStep: number, selecto
   if (!selector) {
     throw new Error('selector must not NOT be undefined');
   }
-  const logs: string[] = [];
-  logs.push('=====================================');
-  logs.push('Testname: ' + testName + ' // step: ' + testStep);
   cy.url().then(urlString => {
-    logs.push('URL: ' + urlString);
+    cy.get(selector).then($selectedElement => {
+      const logs: string[] = [];
+      logs.push('=====================================');
+      logs.push('Testname: ' + testName + ' // step: ' + testStep);
+      logs.push('URL: ' + urlString);
+      logs.push('Description: ' + description);
+      logs.push('----- Test Evidence starts here ----');
+      logs.push('Selector: ' + selector + '\n ' + $selectedElement.get(0).outerHTML);
+      logs.push('----- Test Evidence ends here ----');
+      consoleLogs.push(...logs);
+      cy.task('log', logs.join('\n'));
+    });
   });
-  logs.push('Description: ' + description);
-  logs.push('----- Test Evidence starts here ----');
-  cy.get(selector).then($selectedElement => {
-    logs.push('Selector: ' + selector + '\n ' + $selectedElement.get(0).outerHTML);
-  });
-  logs.push('----- Test Evidence ends here ----');
-  consoleLogs.push(...logs);
-  cy.task('log', logs.join('\n'));
 };
 
 export const printTestPlainEvidence = (testName: string, testStep: number, expectedValue: string, actualValue: string, description: string) => {
   if (!expectedValue || !actualValue) {
     throw new Error('expectedValue and actualValue must not NOT be undefined');
   }
-  const logs: string[] = [];
-  logs.push('=====================================');
-  logs.push('Testname: ' + testName + ' // step: ' + testStep);
   cy.url().then(urlString => {
+    const logs: string[] = [];
+    logs.push('=====================================');
+    logs.push('Testname: ' + testName + ' // step: ' + testStep);
     logs.push('URL: ' + urlString);
+    logs.push('Description: ' + description);
+    logs.push('----- Test Evidence starts here ----');
+    logs.push(`Expected Result:\n ${String(expectedValue)}`);
+    logs.push(`Actual Result:\n ${String(actualValue)}`);
+    logs.push('----- Test Evidence ends here ----');
+    consoleLogs.push(...logs);
+    cy.task('log', logs.join('\n'));
   });
-  logs.push('Description: ' + description);
-  logs.push('----- Test Evidence starts here ----');
-  logs.push(`Expected Result:\n ${String(expectedValue)}`);
-  logs.push(`Actual Result:\n ${String(actualValue)}`);
-  logs.push('----- Test Evidence ends here ----');
-  consoleLogs.push(...logs);
-  cy.task('log', logs.join('\n'));
 };
 
 export const takeScreenshotEvidence = (testName: string, testStep: number, testSubStep: number = 1, description: string, skipMeta = false) => {
@@ -67,20 +67,20 @@ export const takeScreenshotEvidence = (testName: string, testStep: number, testS
           return null;
         }
 
-        const logs: string[] = [];
-        logs.push('=====================================');
-        logs.push('Testname: ' + testName + ' // step: ' + testStep);
         cy.url().then(urlString => {
+          const logs: string[] = [];
+          logs.push('=====================================');
+          logs.push('Testname: ' + testName + ' // step: ' + testStep);
           logs.push('URL: ' + urlString);
+          logs.push('Description: ' + description);
+          logs.push('----- Test Evidence starts here ----');
+          logs.push(
+            `Stored screenshot "${path.basename(result.path)}" with hash (sha256) ${result.hash} taken at ${String(data.takenAt)} as evidence.`
+          );
+          logs.push('----- Test Evidence ends here ----');
+          consoleLogs.push(...logs);
+          cy.task('log', logs.join('\n'));
         });
-        logs.push('Description: ' + description);
-        logs.push('----- Test Evidence starts here ----');
-        logs.push(
-          `Stored screenshot "${path.basename(result.path)}" with hash (sha256) ${result.hash} taken at ${String(data.takenAt)} as evidence.`
-        );
-        logs.push('----- Test Evidence ends here ----');
-        consoleLogs.push(...logs);
-        cy.task('log', logs.join('\n'));
       });
   });
 };
