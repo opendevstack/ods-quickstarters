@@ -8,7 +8,7 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
-import type { ScreenshotEvidenceData } from './screenshot';
+import type { ScreenshotEvidenceData } from './screenshot.types';
 import { addEvidenceMetaToScreenshot } from './screenshot';
 
 // This function is called when a project is opened or re-opened (e.g. due to
