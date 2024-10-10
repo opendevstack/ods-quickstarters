@@ -1,12 +1,13 @@
-# add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+FROM registry.access.redhat.com/ubi9/nginx-124
 
-RUN echo "building simple container"
+USER root
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+RUN yum -y update && \
+    yum clean all
 
-EXPOSE 8080
+USER 1001
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 -e echo -e \"HTTP/1.1 200 OK\n\nHello World!\n$(date)\""]
+RUN echo -n "Hello World" > index.html
+
+# Run script uses standard ways to run the application
+CMD nginx -g "daemon off;"
