@@ -29,11 +29,23 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
-  
+  def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
+
   stageTest(context)
   odsComponentStageScanWithSonar(context)
-  
+
+  if (fileExists('cypress/screenshots.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/screenshots.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
   }
+
+}
 
 def stageTest(def context) {
   stage('Integration Test') {
@@ -54,6 +66,8 @@ def stageTest(def context) {
       // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
       // "CYPRESS_USERNAME=${cypressUser}",
       // "CYPRESS_PASSWORD=${cypressPassword}"
+      "COMMIT_INFO_SHA=${context.gitCommit}",
+      "BUILD_NUMBER=${context.buildNumber}",
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
@@ -62,14 +76,19 @@ def stageTest(def context) {
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
       stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
-      zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
-      stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
-      archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
-      if (status != 0) {
+
+      if (fileExists('cypress/videos')) {
+        zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+        stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
+        archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+      }
+
+      if (fileExists('cypress/screenshots')) {
         zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
         stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
         archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
+      
       return status
     }
   }

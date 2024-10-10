@@ -13,7 +13,9 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 ├── fixtures
 │   └── example.json
 ├── plugins
-│   └── index.js
+│   ├── index.ts
+│   ├── screenshot.ts
+│   └── screenshot.types.ts
 ├── reporters
 │   └── custom-reporter.js
 ├── support

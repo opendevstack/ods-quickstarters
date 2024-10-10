@@ -68,17 +68,10 @@ Cypress.Commands.add('loginToAAD', (username: string, password: string) => {
   log.end()
 })
 
-let consoleLogs: string[] = []
-
-Cypress.on('log:added', (options) => {
-  const message = options.message;
-  if(message) {
-    consoleLogs.push(message);
-  }
-});
+export const consoleLogs: string[] = [];
 
 beforeEach(function() {
-  consoleLogs = [];
+  consoleLogs.splice(0);
 })
 
 afterEach(function() {
@@ -88,5 +81,5 @@ afterEach(function() {
 
   cy.writeFile(filePath, consoleLogs.join('\n'));
 
-  consoleLogs = [];
+  consoleLogs.splice(0);
 })
