@@ -76,9 +76,12 @@ def stageTest(def context) {
       stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
       stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
-      zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
-      stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
-      archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+
+      if (fileExists('cypress/videos')) {
+        zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+        stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
+        archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+      }
 
       if (fileExists('cypress/screenshots')) {
         zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
