@@ -32,7 +32,7 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python39 python39-pip python39-setuptools \
     readline \
     libffi-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
-ENV INSTALL_CENTOS_PKGS="readline-devel bison automake libtool"
+ENV INSTALL_YUM_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
@@ -44,16 +44,12 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
-RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \
-    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
+COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
 
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo centos-base --enablerepo centos-plus --enablerepo centos-extras \
-                      --enablerepo centos-appstream --enablerepo centos-devel $INSTALL_CENTOS_PKGS
+    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_YUM_PKGS
 
 RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
