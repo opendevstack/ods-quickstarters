@@ -26,7 +26,6 @@ ENV TERRAFORM_VERSION=1.9.4 \
     TFLINT_VERSION=0.52.0 \
     NODEJS_VERSION=20.16.0 \
     BUNDLER_VERSION=2.5.17 \
-    SOPS_VERSION=3.9.0 \
     AGE_VERSION=1.2.0 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
@@ -160,9 +159,8 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && chmod +x /usr/local/bin/consul \
     && /usr/local/bin/consul -version
 
-# Install mozilla/sops and age
-RUN dnf install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
-    && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+# Install age
+RUN wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
     && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
     && rm -f /tmp/age.tar.gz
 
