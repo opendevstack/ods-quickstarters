@@ -24,8 +24,6 @@
 - Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
-- inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
-- inf-terraform-[aws|azure], bump terraform versions, pre-commit-hooks, library versions, add jenkins agent terraform-2408 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1036))
