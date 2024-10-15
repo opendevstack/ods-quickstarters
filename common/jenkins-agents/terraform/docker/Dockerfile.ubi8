@@ -12,27 +12,27 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.k8s.description="The jenkins Agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
-ENV TERRAFORM_VERSION 1.2.9
-ENV TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0
-ENV TERRAFORM_DOCS_VERSION v0.16.0
-ENV RUBY_VERSION 2.7.5
-ENV PACKER_VERSION 1.7.10
-ENV CONSUL_VERSION 1.11.2
-ENV TFENV_VERSION 2.2.0
-ENV NODEJS_VERSION 16.17.1
-ENV BUNDLER_VERSION 2.2.23
-ENV SOPS_VERSION=3.7.1
-ENV AGE_VERSION=1.0.0
-ENV GEM_HOME /opt/bundle
-ENV RBENV_ROOT /opt/rbenv
-ENV RBENV_SHELL bash
+ENV TERRAFORM_VERSION 1.2.9 \
+    TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0 \
+    TERRAFORM_DOCS_VERSION v0.16.0 \
+    RUBY_VERSION 2.7.5 \
+    PACKER_VERSION 1.7.10 \
+    CONSUL_VERSION 1.11.2 \
+    TFENV_VERSION 2.2.0 \
+    NODEJS_VERSION 16.17.1 \
+    BUNDLER_VERSION 2.2.23 \
+    SOPS_VERSION=3.7.1 \
+    AGE_VERSION=1.0.0 \
+    GEM_HOME /opt/bundle \
+    RBENV_ROOT /opt/rbenv \
+    RBENV_SHELL bash
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python38 python38-pip python38-setuptools \
     python39 python39-pip python39-setuptools \
     readline \
     libffi-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
-ENV INSTALL_YUM_PKGS="readline-devel bison automake libtool"
+ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
@@ -44,12 +44,15 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
+COPY yum.repos.d/rockylinux.repo /etc/yum.repos.d/rockylinux.repo
+RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/rockylinux.repo \
+    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_YUM_PKGS
+    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS
 
 RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py

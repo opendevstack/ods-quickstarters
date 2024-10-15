@@ -22,7 +22,7 @@
 - Introduce Rust Quickstarter dependency graph linting (cargo-deny) and upgrade maintenance ([#1061](https://github.com/opendevstack/ods-quickstarters/issues/1061))
 - Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
-- Replaced centos8 repository for AlmaLinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1067))
+- Replaced centos8 repository for rockylinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1067))
 
 ### Added
 
