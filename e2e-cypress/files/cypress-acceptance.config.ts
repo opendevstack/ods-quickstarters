@@ -16,8 +16,8 @@ export default defineConfig({
     viewportHeight: 660,
     experimentalModifyObstructiveThirdPartyCode:true,
     video: true,
-    setupNodeEvents(on, config) {
-      return require('./plugins/index.js')(on, config)
+    async setupNodeEvents(on, config) {
+      return (await import('./plugins/index')).default(on, config);
     },
   },
 })
