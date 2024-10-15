@@ -12,20 +12,20 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.k8s.description="The jenkins Agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
-ENV TERRAFORM_VERSION 1.2.9 \
-    TERRAFORM_CONFIG_INSPECT_VERSION 0.2.0 \
-    TERRAFORM_DOCS_VERSION v0.16.0 \
-    RUBY_VERSION 2.7.5 \
-    PACKER_VERSION 1.7.10 \
-    CONSUL_VERSION 1.11.2 \
-    TFENV_VERSION 2.2.0 \
-    NODEJS_VERSION 16.17.1 \
-    BUNDLER_VERSION 2.2.23 \
+ENV TERRAFORM_VERSION=1.2.9 \
+    TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
+    TERRAFORM_DOCS_VERSION=v0.16.0 \
+    RUBY_VERSION=2.7.5 \
+    PACKER_VERSION=1.7.10 \
+    CONSUL_VERSION=1.11.2 \
+    TFENV_VERSION=2.2.0 \
+    NODEJS_VERSION=16.17.1 \
+    BUNDLER_VERSION=2.2.23 \
     SOPS_VERSION=3.7.1 \
     AGE_VERSION=1.0.0 \
-    GEM_HOME /opt/bundle \
-    RBENV_ROOT /opt/rbenv \
-    RBENV_SHELL bash
+    GEM_HOME=/opt/bundle \
+    RBENV_ROOT=/opt/rbenv \
+    RBENV_SHELL=bash
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python38 python38-pip python38-setuptools \
