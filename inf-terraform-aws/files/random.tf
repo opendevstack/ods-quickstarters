@@ -10,4 +10,3 @@ resource "random_id" "id" {
 locals {
   id = random_id.id.hex
 }
-
