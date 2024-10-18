@@ -18,6 +18,14 @@
 - Added custom reporter to Cypress Quickstarter and update dependencies ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))
 - Fix permissions in Golang agent for the golden tests ([#1052](https://github.com/opendevstack/ods-quickstarters/pull/1052))
 - Fix ETL Python QS: AWS Test codepipeline Status Managment and update cryptography dependency([#1056](https://github.com/opendevstack/ods-quickstarters/pull/1052))
+- Fix for npm based jenkins agents to support private nexus repositories ([#1059](https://github.com/opendevstack/ods-quickstarters/issues/1059))
+- Introduce Rust Quickstarter dependency graph linting (cargo-deny) and upgrade maintenance ([#1061](https://github.com/opendevstack/ods-quickstarters/issues/1061))
+- Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
+- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 
 ### Added
 

@@ -8,4 +8,5 @@ output "inputs2outputs" {
     meta_environment = var.meta_environment
     name             = var.name
   }]
+  sensitive = true
 }
