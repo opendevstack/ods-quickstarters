@@ -99,6 +99,10 @@ RUN chgrp -R 0 $HOME && \
 USER 1001
 ----
 
+== Configuring Microsoft Account with Google Authenticator
+
+To use the login with MFA function, MFA must be set up in the account that logs into the application under test. It is important that the MFA method used is OTP (One Time Password) for this feature to work correctly. The secret key generated during the setup process needs to be used for the OTP generation.
+
 == Cypress Cloud
 
 To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:

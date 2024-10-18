@@ -56,6 +56,7 @@ def stageTest(def context) {
     // azureClientId = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_ID}' | base64 -d")
     // azureClientSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.AZURE_CLIENT_SECRET}' | base64 -d")
     // azureTenantId = sh(returnStdout: true, script:"oc get configmaps azure -o jsonpath='{.data.AZURE_TENANT}'") // config map values are not base64 encoded
+    // authenticatorOTPSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.OTP_SECRET}' | base64 -d")
 
     withEnv(["TAGVERSION=${context.tagversion}",
       "NEXUS_HOST=${context.nexusHost}",
@@ -65,7 +66,8 @@ def stageTest(def context) {
       // "CYPRESS_CLIENT_ID=${azureClientId}",
       // "CYPRESS_CLIENT_SECRET=${azureClientSecret}",
       // "CYPRESS_USERNAME=${cypressUser}",
-      // "CYPRESS_PASSWORD=${cypressPassword}"
+      // "CYPRESS_PASSWORD=${cypressPassword}",
+      // "OTP_SECRET=${authenticatorOTPSecret}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
     ]) {
