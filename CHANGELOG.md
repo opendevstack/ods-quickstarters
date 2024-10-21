@@ -26,6 +26,7 @@
 - inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
 
 ### Added
 
