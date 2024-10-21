@@ -164,7 +164,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.2.1
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2408/docker
