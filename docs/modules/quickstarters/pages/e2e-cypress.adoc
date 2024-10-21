@@ -101,11 +101,19 @@ USER 1001
 
 == Configuring Microsoft Account with Google Authenticator
 
-To use the login with MFA function, MFA must be set up in the account that logs into the application under test. It is important that the MFA method used is OTP (One Time Password) for this feature to work correctly. The secret key generated during the setup process needs to be used for the OTP generation.
+To use the login with MFA function, the following requirements have to be met:
+
+1. A testing account must be created with access to the application under test.
+
+2. The account must have MFA enabled.
+
+3. The MFA method used must be OTP (One Time Password).
+
+4. The secret key generated during the setup process must be used for the OTP generation. In the case of microsoft, it can be retrieved by clicking the "Can't scan image" button during the setup process.
 
 == Cypress Cloud
 
-To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
+To use Cypress Cloud  within the Cypress QuickStarter, follow these steps:
 
 1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results.
 
