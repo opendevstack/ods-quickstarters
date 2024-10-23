@@ -22,7 +22,6 @@ ENV TERRAFORM_VERSION=1.4.6 \
     TFLINT_VERSION=0.46.1 \
     NODEJS_VERSION=18.16.0 \
     BUNDLER_VERSION=2.4.13 \
-    SOPS_VERSION=3.7.3 \
     AGE_VERSION=1.1.1 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
@@ -34,7 +33,7 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python3.11 python3.11-pip python3.11-setuptools \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
-ENV INSTALL_CENTOS_PKGS="readline-devel bison automake libtool"
+ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
@@ -46,16 +45,15 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+COPY yum.repos.d/rockylinux.repo /etc/yum.repos.d/rockylinux.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/centos8.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/rockylinux.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo centos-base --enablerepo centos-plus --enablerepo centos-extras \
-                      --enablerepo centos-appstream --enablerepo centos-devel $INSTALL_CENTOS_PKGS
+    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS
 
 RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
@@ -151,9 +149,8 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
     && chmod +x /usr/local/bin/consul \
     && /usr/local/bin/consul -version
 
-# Install mozilla/sops and age
-RUN dnf install -y https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-${SOPS_VERSION}-1.x86_64.rpm \
-    && wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+# Install age
+RUN wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
     && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
     && rm -f /tmp/age.tar.gz
 
