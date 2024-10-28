@@ -9,8 +9,6 @@
 ** xref:quickstarters:be-scala-play.adoc[BE Scala/Play]
 ** xref:quickstarters:fe-angular.adoc[FE Angular]
 ** xref:quickstarters:fe-ionic.adoc[FE Ionic]
-** xref:quickstarters:ds-jupyter-lab.adoc[Data Science Jupyter Lab]
-** xref:quickstarters:ds-rshiny.adoc[Data Science RShiny app]
 ** xref:quickstarters:ds-streamlit.adoc[Data Science Streamlit app]
 ** xref:quickstarters:e2e-cypress.adoc[Cypress E2E testing]
 ** xref:quickstarters:e2e-etl-python.adoc[ETL Python E2E testing]
