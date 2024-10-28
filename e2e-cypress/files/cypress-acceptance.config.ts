@@ -20,4 +20,7 @@ export default defineConfig({
       return (await import('./plugins/index')).default(on, config);
     },
   },
+  // env: {
+  //   otp_secret: process.env.OTP_SECRET
+  // },
 })

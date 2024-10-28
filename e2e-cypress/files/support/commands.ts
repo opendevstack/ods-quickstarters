@@ -8,7 +8,10 @@
 // ***********************************************
 
 import { addGenericLoginCommands } from './generic-login';
-import { addMsalv2LoginCommand } from './msalv2-login';
+import { addLoginToAADWithMFA, addLoginToAAD, addGetTOTP, addSessionLoginWithMFA } from './login-functions';
 
 addGenericLoginCommands();
-addMsalv2LoginCommand();
+addGetTOTP();
+addSessionLoginWithMFA();
+addLoginToAAD();
+addLoginToAADWithMFA();
