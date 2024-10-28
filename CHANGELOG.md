@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Remove obsolete branch parameter from release-manager ([#1058](https://github.com/opendevstack/ods-quickstarters/pull/1058))
+
 - Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
 - Install java 17 devel only in scala and jdk agents ([#1057](https://github.com/opendevstack/ods-quickstarters/pull/1057))
 - Update Angular, Ionic and Typescript Quickstarters ([#1033](https://github.com/opendevstack/ods-quickstarters/issues/1033))
@@ -23,9 +23,6 @@
 - Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
-- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
-- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
-- Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1067](https://github.com/opendevstack/ods-quickstarters/pull/1036))
 - Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
 
 ### Added
@@ -33,6 +30,16 @@
 ### Changed
 
 ### Fixed
+
+## [4.6.0] - 2024-10-23
+
+### Changed
+- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+
+### Fixed
+- Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- Remove obsolete branch parameter from release-manager ([#1058](https://github.com/opendevstack/ods-quickstarters/pull/1058))
 
 ## [4.5.0] - 2024-06-06
 
