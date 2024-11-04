@@ -8,7 +8,7 @@ export default defineConfig({
     toConsole: true,
   },
   e2e: {
-    baseUrl: 'https://www.w3schools.com',
+    baseUrl: process.env.CYPRESS_BASE_URL,
     fixturesFolder: "fixtures",
     specPattern: 'tests/installation/*.cy.ts',
     supportFile: "support/e2e.ts",
