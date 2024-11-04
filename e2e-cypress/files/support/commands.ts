@@ -15,3 +15,15 @@ addGetTOTP();
 addSessionLoginWithMFA();
 addLoginToAAD();
 addLoginToAADWithMFA();
+
+declare global {
+  namespace Cypress {
+    interface Chainable<> {
+      loginToAAD(username: string, password: string);
+      loginToAADWithMFA(username: string, password: string);
+      sessionLoginWithMFA(username: string, password: string);
+      getTOTP();
+      addScreenshot(title: string, screenshot: string);
+    }
+  }
+}

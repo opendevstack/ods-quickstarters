@@ -1,4 +1,5 @@
 import './commands';
+const addContext = require('mochawesome/addContext');
 
 export const consoleLogs: string[] = [];
 
@@ -14,4 +15,14 @@ afterEach(function() {
   cy.writeFile(filePath, consoleLogs.join('\n'));
 
   consoleLogs.splice(0);
+})
+
+Cypress.Commands.add('addScreenshot', (title: string, screenshot: string) => {
+  cy.on('test:after:run', (attributes) => {
+    // The context needs the screenshot path relative to the build/test-results/mochawesome folder
+    addContext({ test: attributes }, {
+      title: title,
+      value: screenshot
+    });
+  });
 })
