@@ -65,6 +65,10 @@ export const takeScreenshotEvidence = (testName: string, testStep: number, testS
         logEvidence(testName, testStep, description, [
           `Stored screenshot "${path.basename(result.path)}" with hash (sha256) ${result.hash} taken at ${String(data.takenAt)} as evidence.`
         ]);
+
+        // Create a relative path from the screenshots folder to the mochawesome test-results folder
+        const relativePath = path.relative('build/test-results/mochawesome', result.path.replace(/^.*(build.*)$/, '$1'));
+        cy.addScreenshot(`${testName} ${testStep} ${testSubStep}`, relativePath);
       });
   });
 };

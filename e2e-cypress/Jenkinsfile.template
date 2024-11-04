@@ -95,16 +95,20 @@ def stageTest(def context) {
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
       stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
 
+      sh 'npx ts-node ./pdf-generator.ts'
+      zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
+      archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+
       if (fileExists('cypress/videos')) {
         zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
         stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
         archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
 
-      if (fileExists('cypress/screenshots')) {
-        zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'cypress/screenshots'
-        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
-        archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+      if (fileExists('build/test-results/screenshots')) {
+        zip zipFile: 'screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'screenshots.zip', allowEmpty: true)
+        archiveArtifacts artifacts: 'screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
       
       return status
