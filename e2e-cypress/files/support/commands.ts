@@ -26,4 +26,3 @@ declare global {
       addScreenshot(title: string, screenshot: string);
     }
   }
-}
