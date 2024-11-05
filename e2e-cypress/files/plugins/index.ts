@@ -26,6 +26,12 @@ const setupNodeEvents: NonNullable<Cypress.ConfigOptions['setupNodeEvents']> = (
       return await addEvidenceMetaToScreenshot(data);
     }
   });
+  on('before:browser:launch', (browser: Cypress.Browser, launchOptions) => {
+    if (browser.isHeadless && (browser.name === 'chrome' || browser.name === 'edge')) {
+      launchOptions.args.push('--disable-gpu');
+    }
+    return launchOptions;
+  });
 };
 
 export default setupNodeEvents;

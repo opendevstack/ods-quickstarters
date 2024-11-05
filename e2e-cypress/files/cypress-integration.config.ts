@@ -2,18 +2,30 @@ import { defineConfig } from 'cypress'
 import setupNodeEvents from './plugins/index.js'
 export default defineConfig({
   //projectId: '[Your project ID from Cypress cloud]',
-  reporter: 'reporters/custom-reporter.js',
+  reporter: 'cypress-multi-reporters',
   reporterOptions: {
-    mochaFile: 'build/test-results/integration-junit-[hash].xml',
-    toConsole: true,
+    reporterEnabled: 'mochawesome,./reporters/custom-reporter.js',
+    cypressMochawesomeReporterReporterOptions: {
+      reportDir: 'build/test-results/mochawesome',
+      reportFilename: 'integration-mochawesome',
+      charts: true,
+      html: true,
+      timestamp: true,
+      json: true
+    },
+    reportersCustomReporterJsReporterOptions: {
+      mochaFile: 'build/test-results/integration-junit-[hash].xml',
+      toConsole: true,
+    },
   },
   e2e: {
-    baseUrl: 'https://www.w3schools.com',
+    baseUrl: process.env.CYPRESS_BASE_URL,
     fixturesFolder: "fixtures",
     specPattern: 'tests/integration/*.cy.ts',
     supportFile: "support/e2e.ts",
-    viewportWidth: 1376,
-    viewportHeight: 660,
+    screenshotsFolder: 'build/test-results/screenshots',
+    viewportWidth: 1280,
+    viewportHeight: 720,
     experimentalModifyObstructiveThirdPartyCode:true,
     video: true,
     async setupNodeEvents(on, config) {
