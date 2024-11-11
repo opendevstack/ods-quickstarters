@@ -1,6 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import * as path from 'path';
 import * as fs from 'fs';
+import baseConfig from './cypress.config';
 
 async function expandReportTestCases(htmlPage: puppeteer.Page) {
   await htmlPage.evaluate(() => {
@@ -11,7 +12,7 @@ async function expandReportTestCases(htmlPage: puppeteer.Page) {
   });
 }
 
-const mochawesomeDir = path.resolve(__dirname, 'build/test-results/mochawesome/');
+const mochawesomeDir = path.resolve(__dirname, baseConfig.reporterOptions.mochawesomeReporterOptions.reportDir);
 
 const isLocal = process.env.NODE_ENV === 'local';
 
