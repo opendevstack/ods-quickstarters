@@ -17,7 +17,7 @@ afterEach(function() {
   consoleLogs.splice(0);
 })
 
-Cypress.Commands.add('addScreenshot', (title: string, screenshot: string) => {
+Cypress.Commands.add('addContextPath', (title: string, screenshot: string) => {
   cy.on('test:after:run', (attributes) => {
     // The context needs the screenshot path relative to the build/test-results/mochawesome folder
     addContext({ test: attributes }, {

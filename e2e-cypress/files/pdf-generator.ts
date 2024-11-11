@@ -11,16 +11,16 @@ async function expandReportTestCases(htmlPage: puppeteer.Page) {
   });
 }
 
+const mochawesomeDir = path.resolve(__dirname, 'build/test-results/mochawesome/');
+
 const isLocal = process.env.NODE_ENV === 'local';
 
 (async () => {
   try {
-    const files = await fs.promises.readdir('build/test-results/mochawesome/');
+    const files = await fs.promises.readdir(mochawesomeDir);
 
     for (const file of files) {
 
-      if (!fs.existsSync(path.resolve(__dirname, 'build/test-results/mochawesome/', 'pdf')))
-        fs.mkdirSync(path.resolve(__dirname, 'build/test-results/mochawesome/', 'pdf'));
       if (!file.endsWith('.html')) {
         continue;
       }
@@ -31,7 +31,7 @@ const isLocal = process.env.NODE_ENV === 'local';
         executablePath
       });
       const page = await browser.newPage();
-      const htmlFullFilePath = path.resolve(__dirname, 'build/test-results/mochawesome/', file);
+      const htmlFullFilePath = path.resolve(__dirname, mochawesomeDir, file);
 
       await page.goto(`file://${htmlFullFilePath}`, { waitUntil: 'networkidle2' });
 
@@ -52,8 +52,11 @@ const isLocal = process.env.NODE_ENV === 'local';
               `
       });
 
+      if (!fs.existsSync(path.resolve(__dirname, mochawesomeDir, 'pdf')))
+        fs.mkdirSync(path.resolve(__dirname, mochawesomeDir, 'pdf'));
+
       await page.pdf({
-        path: path.resolve(__dirname, 'build/test-results/mochawesome/', 'pdf/', file.replace('.html', '.pdf')),
+        path: path.resolve(__dirname, mochawesomeDir, 'pdf/', file.replace('.html', '.pdf')),
         format: 'A4',
         printBackground: true,
       });

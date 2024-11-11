@@ -1,38 +1,21 @@
-import { defineConfig } from 'cypress'
-import setupNodeEvents from './plugins/index.js'
+import { defineConfig } from 'cypress';
+import baseConfig from './cypress.config';
+
 export default defineConfig({
-  //projectId: '[Your project ID from Cypress cloud]',
-  reporter: 'cypress-multi-reporters',
+  ...baseConfig,
   reporterOptions: {
-    reporterEnabled: 'mochawesome,./reporters/custom-reporter.js',
-    cypressMochawesomeReporterReporterOptions: {
-      reportDir: 'build/test-results/mochawesome',
+    ...baseConfig.reporterOptions,
+    mochawesomeReporterOptions: {
+      ...baseConfig.reporterOptions.mochawesomeReporterOptions,
       reportFilename: 'integration-mochawesome',
-      charts: true,
-      html: true,
-      timestamp: true,
-      json: true
     },
     reportersCustomReporterJsReporterOptions: {
+      ...baseConfig.reporterOptions.reportersCustomReporterJsReporterOptions,
       mochaFile: 'build/test-results/integration-junit-[hash].xml',
-      toConsole: true,
     },
   },
   e2e: {
-    baseUrl: process.env.CYPRESS_BASE_URL,
-    fixturesFolder: "fixtures",
-    specPattern: 'tests/integration/*.cy.ts',
-    supportFile: "support/e2e.ts",
-    screenshotsFolder: 'build/test-results/screenshots',
-    viewportWidth: 1280,
-    viewportHeight: 720,
-    experimentalModifyObstructiveThirdPartyCode:true,
-    video: true,
-    async setupNodeEvents(on, config) {
-      return (await import('./plugins/index')).default(on, config);
-    },
+    ...baseConfig.e2e,
+    specPattern: 'tests/integration/**/*.cy.ts',
   },
-  // env: {
-  //   otp_secret: process.env.OTP_SECRET
-  // },
-})
+});

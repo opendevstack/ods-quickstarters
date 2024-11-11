@@ -68,7 +68,7 @@ export const takeScreenshotEvidence = (testName: string, testStep: number, testS
 
         // Create a relative path from the screenshots folder to the mochawesome test-results folder
         const relativePath = path.relative('build/test-results/mochawesome', result.path.replace(/^.*(build.*)$/, '$1'));
-        cy.addScreenshot(`${testName} ${testStep} ${testSubStep}`, relativePath);
+        cy.addContextPath(`${testName} ${testStep} ${testSubStep}`, relativePath);
       });
   });
 };

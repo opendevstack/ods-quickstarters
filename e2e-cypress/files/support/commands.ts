@@ -23,6 +23,6 @@ declare global {
       loginToAADWithMFA(username: string, password: string);
       sessionLoginWithMFA(username: string, password: string);
       getTOTP();
-      addScreenshot(title: string, screenshot: string);
+      addContextPath(title: string, screenshot: string);
     }
   }

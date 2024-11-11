@@ -85,7 +85,7 @@ def stageTest(def context) {
       // "OTP_SECRET=${authenticatorOTPSecret}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
-      "CYPRESS_BASE_URL=${baseUrl}",
+      "BASE_URL=${baseUrl}",
     ]) {
       sh 'npm install'
       def status = sh(script: 'npm run e2e', returnStatus: true)
@@ -95,7 +95,7 @@ def stageTest(def context) {
       stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
       stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
 
-      sh 'npx ts-node ./pdf-generator.ts'
+      sh 'npm run generate:pdf'
       zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
       archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
 
@@ -106,9 +106,9 @@ def stageTest(def context) {
       }
 
       if (fileExists('build/test-results/screenshots')) {
-        zip zipFile: 'screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
-        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'screenshots.zip', allowEmpty: true)
-        archiveArtifacts artifacts: 'screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+        zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
+        archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
       
       return status

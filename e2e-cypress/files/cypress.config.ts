@@ -18,7 +18,7 @@ export default defineConfig({
     },
   },
   e2e: {
-    baseUrl: process.env.CYPRESS_BASE_URL || 'https://www.w3schools.com',
+    baseUrl: process.env.BASE_URL || 'https://www.w3schools.com',
     fixturesFolder: "fixtures",
     specPattern: 'tests/**/*.cy.ts',
     supportFile: "support/e2e.ts",

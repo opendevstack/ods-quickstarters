@@ -15,7 +15,8 @@
     "delete-junit-results": "rimraf build/test-results",
     "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance",
     "combine:reports": "npm-run-all junit-installation-report junit-integration-report junit-acceptance-report",
-    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation -- --record && npm run cypress:run-integration -- --record && npm run cypress:run-acceptance -- --record"
+    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation -- --record && npm run cypress:run-integration -- --record && npm run cypress:run-acceptance -- --record",
+    "generate:pdf": "ts-node ./pdf-generator.ts"
   },
   "private": true,
   "devDependencies": {
