@@ -30,16 +30,6 @@ odsComponentPipeline(
   ]
 ) { context ->
 
-  // Note: Testing in the production environment is not recommended as it can lead to unintended consequences,
-  // including potential downtime, data corruption, or exposure of sensitive information.
-  // This block is designed to skip tests in the production environment to avoid these risks.
-  // If you choose to enable testing in production, do so at your own risk and take all necessary precautions.
-  if (context.environment == 'prod') {
-    currentBuild.result = 'SUCCESS'
-    echo 'Skipping the entire test build for production environment'
-    return
-  }
-
   def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
 
   stageTest(context)
@@ -55,7 +45,26 @@ odsComponentPipeline(
       ]
     )
   }
-
+  if (fileExists('cypress/screenshots.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/screenshots.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
+  }
+  if (fileExists('cypress/pdf.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/pdf.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
+  }
 }
 
 def stageTest(def context) {
@@ -66,6 +75,7 @@ def stageTest(def context) {
       : // remove this line once you have defined the config map and uncommented the next two lines, it's only here to make the example default case work
       // dev: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.DEV_BASE_URL}'").trim(),
       // test: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.TEST_BASE_URL}'").trim()
+      // prod: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.PROD_BASE_URL}'").trim()
     ]
 
     def baseUrl = baseUrls.get(context.environment ?: 'dev', 'https://www.w3schools.com') // default to W3Schools for demo purposes, replace with your own default
@@ -75,25 +85,50 @@ def stageTest(def context) {
     // test_username, test_password, etc.)
     // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.${context.environment}_username}' | base64 -d")
     // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.${context.environment}_password}' | base64 -d")
+    // authenticatorOTPSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.OTP_SECRET}' | base64 -d")
 
     withEnv(["TAGVERSION=${context.tagversion}",
       "NEXUS_HOST=${context.nexusHost}",
       "OPENSHIFT_PROJECT=${context.targetProject}",
       "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
-      // "CYPRESS_USERNAME=${cypressUser}",
-      // "CYPRESS_PASSWORD=${cypressPassword}",
-      // "OTP_SECRET=${authenticatorOTPSecret}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
       "BASE_URL=${baseUrl}",
     ]) {
-      sh 'npm install'
-      def status = sh(script: 'npm run e2e', returnStatus: true)
-      sh 'npm run combine:reports'
-      junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
-      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
-      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
-      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+      withCredentials([
+        // string(credentialsId: cypressUser, variable: 'CYPRESS_USERNAME'),
+        // string(credentialsId: cypressPassword, variable: 'CYPRESS_PASSWORD'),
+        // string(credentialsId: authenticatorOTPSecret, variable: 'OTP_SECRET')
+      ]) {
+        sh 'npm install'
+
+        // Note: Testing in the production environment is not recommended as it can lead to unintended consequences,
+        // including potential downtime, data corruption, or exposure of sensitive information.
+        // This block is designed to skip acceptance and integration tests in the production environment to avoid these risks.
+        // If you choose to enable these tests in production, do so at your own risk and take all necessary precautions.
+        def status
+        if (context.environment == 'prod') {
+          status = sh(script: 'npm run e2e:prod', returnStatus: true)
+          sh 'npm run junit-installation-report'
+          junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+        } else {
+          status = sh(script: 'npm run e2e', returnStatus: true)
+          sh 'npm run combine:reports'
+          junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+          stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
+          stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+        }
+      }
+
+      publishHTML (target : [
+          allowMissing: false,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: 'build/test-results',
+          reportFiles: '**/*.html'
+      ])
 
       sh 'npm run generate:pdf'
       zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
@@ -101,8 +136,6 @@ def stageTest(def context) {
 
       if (fileExists('cypress/videos')) {
         zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
-        stash(name: "acceptance-test-videos-${context.componentId}-${context.buildNumber}", includes: 'cypress/videos.zip', allowEmpty: true)
-        archiveArtifacts artifacts: 'cypress/videos.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
 
       if (fileExists('build/test-results/screenshots')) {
@@ -110,7 +143,7 @@ def stageTest(def context) {
         stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
         archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
       }
-      
+
       return status
     }
   }
