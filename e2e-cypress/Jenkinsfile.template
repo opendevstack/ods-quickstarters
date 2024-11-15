@@ -45,10 +45,10 @@ odsComponentPipeline(
       ]
     )
   }
-  if (fileExists('cypress/screenshots.zip')) {
+  if (fileExists('cypress/videos.zip')) {
     odsComponentStageUploadToNexus(context,
       [
-        distributionFile: 'cypress/screenshots.zip',
+        distributionFile: 'cypress/videos.zip',
         repository: 'leva-documentation',
         repositoryType: 'raw',
         targetDirectory: "${targetDirectory}"
