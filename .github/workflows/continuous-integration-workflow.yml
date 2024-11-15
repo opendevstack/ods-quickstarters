@@ -35,22 +35,6 @@ jobs:
               --build-arg nexusPassword=s3cr3t \
               .
 
-  jenkins-agent-nodejs16-ubi8:
-    name: Jenkins agent NodeJS 16 (UBI8)
-    runs-on: ubuntu-22.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v4.2.2
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs16/docker
-        run: |
-            docker build --tag agent-nodejs16-test-ubi8 --file Dockerfile.ubi8 \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
-
   jenkins-agent-nodejs18-ubi8:
     name: Jenkins agent NodeJS 18 (UBI8)
     runs-on: ubuntu-22.04
@@ -131,19 +115,6 @@ jobs:
             --build-arg cargoGenerateVersion=0.22.0 \
             --build-arg cargoDenyVersion=0.16.1 \
             .
-
-  jenkins-agent-terraform-ubi8:
-    name: Jenkins agent Terraform (UBI8)
-    runs-on: ubuntu-22.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v4.2.2
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/terraform/docker
-        run: |
-          docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
 
   jenkins-agent-terraform-2306-ubi8:
     name: Jenkins agent Terraform 2306 (UBI8)

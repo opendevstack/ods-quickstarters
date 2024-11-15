@@ -23,7 +23,6 @@
 *** xref:jenkins-agents:golang.adoc[Go]
 *** xref:jenkins-agents:inf-terraform.adoc[terraform]
 *** xref:jenkins-agents:jdk.adoc[jdk]
-*** xref:jenkins-agents:nodejs16.adoc[Node.js 16]
 *** xref:jenkins-agents:nodejs18.adoc[Node.js 18]
 *** xref:jenkins-agents:nodejs20.adoc[Node.js 20]
 *** xref:jenkins-agents:nodejs22.adoc[Node.js 22]

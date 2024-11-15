@@ -4,12 +4,11 @@
 This agents are used to deploy (Cloud) resources using terraform code.
 
 There are two terraform jenkins agents available:
-1. jenkins-agent-terraform (ruby 2.7.5, terraform 1.2.x) - this agent is *DEPRECATED* and will be removed in the next release.
 1. jenkins-agent-terraform-2306 (ruby 3.2.2, terraform 1.4.6, and matching tools).
 1. jenkins-agent-terraform-2408 (ruby 3.3.4, terraform 1.9.4, and matching tools) - this is the current active jenkins agent.
 
-The images are built in the global `ods` project and are named `jenkins-agent-terraform`, `jenkins-agent-terraform-2306` and `jenkins-agent-terraform-2408`.
-It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-terraform:latest`, `ods/jenkins-agent-terraform-2306:latest` or `ods/jenkins-agent-terraform-2408:latest`.
+The images are built in the global `ods` project and are named `jenkins-agent-terraform-2306` and `jenkins-agent-terraform-2408`.
+It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-terraform-2306:latest` or `ods/jenkins-agent-terraform-2408:latest`.
 
 == Features
 1. support of multiple terraform versions using tfenv

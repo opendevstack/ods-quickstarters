@@ -17,15 +17,14 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 
 1. [GoLang](golang)
 2. [Jdk](jdk)
-3. [Node.js 16](nodejs16)
-4. [Node.js 18](nodejs18)
-5. [Node.js 20](nodejs20)
+3. [Node.js 18](nodejs18)
+4. [Node.js 20](nodejs20)
+5. [Node.js 22](nodejs22)
 6. [Python](python)
 7. [Rust](rust)
 8. [Scala & SBT](scala)
-9. [Terraform](terraform)
-10. [Terraform 2306](terraform-2306)
-11. [Terraform 2408](terraform-2408)
+9. [Terraform 2306](terraform-2306)
+10. [Terraform 2408](terraform-2408)
 
 ## OCP Config / Installation
 
