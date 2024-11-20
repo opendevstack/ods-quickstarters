@@ -68,24 +68,17 @@ odsComponentPipeline(
 }
 
 def stageTest(def context) {
-  stage('Integration Test') {
+  stage('Functional Tests') {
     // Define your DEV and QA base URLs in a config map in OpenShift; please adapt variable names to your OpenShift config
     // sh "oc project <project-with-configured-secrets>"
     def baseUrls = [
-      : // remove this line once you have defined the config map and uncommented the next two lines, it's only here to make the example default case work
+      : // remove this line once you have defined the config map and uncommented the next three lines, it's only here to make the example default case work
       // dev: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.DEV_BASE_URL}'").trim(),
       // test: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.TEST_BASE_URL}'").trim()
       // prod: sh(returnStdout: true, script:"oc get configmaps cypress-config -o jsonpath='{.data.PROD_BASE_URL}'").trim()
     ]
 
     def baseUrl = baseUrls.get(context.environment ?: 'dev', 'https://www.w3schools.com') // default to W3Schools for demo purposes, replace with your own default
-
-    // Example for loading environment variables for Azure SSO; please adapt variable names to your OpenShift config,
-    // making sure to precede the variable names with the environment name in lowercase (e.g., dev_username, dev_password,
-    // test_username, test_password, etc.)
-    // cypressUser = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.${context.environment}_username}' | base64 -d")
-    // cypressPassword = sh(returnStdout: true, script:"oc get secret e2euser -o jsonpath='{.data.${context.environment}_password}' | base64 -d")
-    // authenticatorOTPSecret = sh(returnStdout: true, script:"oc get secret azure -o jsonpath='{.data.OTP_SECRET}' | base64 -d")
 
     withEnv(["TAGVERSION=${context.tagversion}",
       "NEXUS_HOST=${context.nexusHost}",
@@ -95,56 +88,63 @@ def stageTest(def context) {
       "BUILD_NUMBER=${context.buildNumber}",
       "BASE_URL=${baseUrl}",
     ]) {
+      // For loading environment variables for Azure SSO; please adapt the secrets names to your OpenShift config,
+      // making sure to include in the secret names the environment name in lowercase (e.g., e2e-user-dev, e2e-user-test,
+      // etc.), in case of using different secrets for different environments.
+      // Secrets in OpenShift need to be created with the credential.sync.jenkins.openshift.io=true label to be available in Jenkins.
       withCredentials([
-        // string(credentialsId: cypressUser, variable: 'CYPRESS_USERNAME'),
-        // string(credentialsId: cypressPassword, variable: 'CYPRESS_PASSWORD'),
-        // string(credentialsId: authenticatorOTPSecret, variable: 'OTP_SECRET')
+        // usernamePassword(credentialsId: "${context.projectId}-cd-e2e-user", passwordVariable: 'CYPRESS_PASSWORD', usernameVariable: 'CYPRESS_USERNAME'),
+        // string(credentialsId: "${context.projectId}-cd-otp-secret", variable: 'OTP_SECRET')
       ]) {
         sh 'npm install'
 
-        // Note: Testing in the production environment is not recommended as it can lead to unintended consequences,
+        // Note: Testing in the production environment is not enabled by default as it can lead to unintended consequences,
         // including potential downtime, data corruption, or exposure of sensitive information.
         // This block is designed to skip acceptance and integration tests in the production environment to avoid these risks.
-        // If you choose to enable these tests in production, do so at your own risk and take all necessary precautions.
+        // If you choose to enable these tests in production take all necessary precautions. This means verifying your
+        // preconditions, database access, fake data, API calls, etc.
+        // Remember that any test case in the installation folder will be executed in production.
         def status
         if (context.environment == 'prod') {
           status = sh(script: 'npm run e2e:prod', returnStatus: true)
           sh 'npm run junit-installation-report'
-          junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
+          junit(testResults:'build/test-results/*.xml')
           stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
         } else {
           status = sh(script: 'npm run e2e', returnStatus: true)
           sh 'npm run combine:reports'
-          junit(testResults:'build/test-results/*.xml', allowEmptyResults: true)
+          junit(testResults:'build/test-results/*.xml')
           stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
           stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
           stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
         }
+
+        publishHTML (target : [
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'build/test-results',
+            reportFiles: '**/*.html',
+            reportName: 'Cypress Reports'
+        ])
+
+        sh 'npm run generate:pdf'
+        zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
+        archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+
+        if (fileExists('cypress/videos')) {
+          zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+        }
+
+        if (fileExists('build/test-results/screenshots')) {
+          zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+          archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+        }
+
+        if (status != 0) {
+          unstable "Some tests have failed or encountered errors. Please check the logs for more details."
+        }
       }
-
-      publishHTML (target : [
-          allowMissing: false,
-          alwaysLinkToLastBuild: true,
-          keepAll: true,
-          reportDir: 'build/test-results',
-          reportFiles: '**/*.html'
-      ])
-
-      sh 'npm run generate:pdf'
-      zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-      archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
-
-      if (fileExists('cypress/videos')) {
-        zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
-      }
-
-      if (fileExists('build/test-results/screenshots')) {
-        zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
-        stash(name: "acceptance-test-screenshots-${context.componentId}-${context.buildNumber}", includes: 'cypress/screenshots.zip', allowEmpty: true)
-        archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
-      }
-
-      return status
     }
   }
 }
