@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "properties": {
     "replicaCount": {
       "description": "Number of replicas to deploy",
@@ -532,7 +532,7 @@
     "global": {
       "description": "Global configuration - Injected by ODS pipeline",
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "imageNamespace": {
           "description": "Image namespace - Injected by ODS pipeline",
