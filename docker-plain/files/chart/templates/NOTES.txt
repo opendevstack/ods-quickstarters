@@ -1,7 +1,9 @@
 Component '{{ include "chart.fullname" . }}' on version '{{ .Values.imageTag }}' released with Helm!
 {{- if .Values.ingress.enabled }}
 The component is exposed via the following routes:
-{{- $appUrl := .Values.appUrl -}}
+{{- if .Values.ingress.simpleHost }}
+{{ printf "https://%s" .Values.ingress.simpleHost }}
+{{- end }}
 {{- range .Values.ingress.hosts }}
 {{ printf "https://%s" .host }}
 {{- end }}

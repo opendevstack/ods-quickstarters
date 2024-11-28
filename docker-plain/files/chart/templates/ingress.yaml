@@ -32,6 +32,18 @@ spec:
   - {}
   {{- end }}
   rules:
+    {{- if .Values.ingress.simpleHost }}
+    - host: {{ .Values.ingress.simpleHost | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+    {{- end }}
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:

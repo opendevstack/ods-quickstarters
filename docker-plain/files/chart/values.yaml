@@ -33,6 +33,10 @@ ingress:
     ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
     ## ask in your company for good defaults
 
+  # If no more than one URL is needed, simpleHost is probably sufficient. Alternatively, Use hosts for more customization capabilities.
+  # simpleHost and hosts can coexist. Check out templates/ingress.yaml for more details.
+  # Usually we want different URLs for dev, test and prod environments. It makes sense to define them in values.<env>.yaml rather than in this file.
+  simpleHost: ""
   hosts: [] # When defining a host you must define also a path
   # - host: yourapp.yourdomain.com
   #   paths:
