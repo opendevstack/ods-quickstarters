@@ -35,12 +35,12 @@
         "registry": {
           "description": "Image registry",
           "type": "string",
-          "default": "docker.io"
+          "default": "public.ecr.aws"
         },
         "path": {
           "description": "Image path",
           "type": "string",
-          "default": "nginxinc"
+          "default": "nginx"
         },
         "name": {
           "description": "Image name",
@@ -50,7 +50,7 @@
         "tag": {
           "description": "Image tag",
           "type": "string",
-          "default": "latest"
+          "default": "alpine-slim"
         },
         "pullPolicy": {
           "description": "Image pull policy",

@@ -14,10 +14,10 @@ fullnameOverride: ""
 # NOTE: By default image Values are injected from CICD Jenkins pipeline, values defined here are used when not being on CICD Jenkins pipeline context.
 # Default values here are provided in case one needs to use the chart without CICD (i.e.: testing the chart).
 image:
-  # registry: "docker.io"
-  # path: "nginxinc"
+  # registry: "public.ecr.aws"
+  # path: "nginx"
   # name: "nginx-unprivileged"
-  # tag: "latest"
+  # tag: "alpine-slim"
   # see https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   pullPolicy: IfNotPresent
 
@@ -60,7 +60,7 @@ probes:
   livenessProbe:
     failureThreshold: 3
     httpGet:
-      path: "/"
+      path: "/health"
       port: 8080
       scheme: HTTP
     initialDelaySeconds: 5
@@ -71,7 +71,7 @@ probes:
   readinessProbe:
     failureThreshold: 1
     httpGet:
-      path: "/"
+      path: "/health"
       port: 8080
       scheme: HTTP
     initialDelaySeconds: 3
@@ -104,10 +104,10 @@ securityContext: {}
 resources:
   limits:
     cpu: 100m
-    memory: 128Mi
+    memory: 32Mi
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 10m
+    memory: 16Mi
 
 autoscaling:
   enabled: false

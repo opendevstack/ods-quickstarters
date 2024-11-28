@@ -1,13 +1,5 @@
-FROM registry.access.redhat.com/ubi9/nginx-124
+FROM public.ecr.aws/nginx/nginx-unprivileged:alpine-slim
 
-USER root
+ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=set
 
-RUN yum -y update && \
-    yum clean all
-
-USER 1001
-
-RUN echo -n "Hello World" > index.html
-
-# Run script uses standard ways to run the application
-CMD nginx -g "daemon off;"
+COPY default.conf /etc/nginx/conf.d/
