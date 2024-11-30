@@ -81,10 +81,6 @@
             "type": "string"
           }
         },
-        "simpleHost": {
-          "description": "Hostname for simple use cases",
-          "type": "string"
-        },
         "hosts": {
           "description": "List of ingress hosts",
           "type": "array",
