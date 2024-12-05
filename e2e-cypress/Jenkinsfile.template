@@ -92,6 +92,7 @@ def stageTest(def context) {
       // making sure to include in the secret names the environment name in lowercase (e.g., e2e-user-dev, e2e-user-test,
       // etc.), in case of using different secrets for different environments.
       // Secrets in OpenShift need to be created with the credential.sync.jenkins.openshift.io=true label to be available in Jenkins.
+      // These are examples for loading credentials from the testing user for logging into your application.
       withCredentials([
         // usernamePassword(credentialsId: "${context.projectId}-cd-e2e-user", passwordVariable: 'CYPRESS_PASSWORD', usernameVariable: 'CYPRESS_USERNAME'),
         // string(credentialsId: "${context.projectId}-cd-otp-secret", variable: 'OTP_SECRET')
@@ -119,18 +120,9 @@ def stageTest(def context) {
           stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
         }
 
-        publishHTML (target : [
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'build/test-results',
-            reportFiles: '**/*.html',
-            reportName: 'Cypress Reports'
-        ])
-
         sh 'npm run generate:pdf'
         zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-        archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
+        archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true
 
         if (fileExists('cypress/videos')) {
           zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
@@ -138,7 +130,6 @@ def stageTest(def context) {
 
         if (fileExists('build/test-results/screenshots')) {
           zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
-          archiveArtifacts artifacts: 'cypress/screenshots.zip', fingerprint: true, daysToKeep: 2, numToKeep: 3
         }
 
         if (status != 0) {

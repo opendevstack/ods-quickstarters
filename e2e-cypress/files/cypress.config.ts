@@ -26,7 +26,7 @@ export default defineConfig({
     viewportWidth: 1280,
     viewportHeight: 720,
     experimentalModifyObstructiveThirdPartyCode: true,
-    video: true,
+    video: false,
     async setupNodeEvents(on, config) {
       return (await import('./plugins/index')).default(on, config);
     },
