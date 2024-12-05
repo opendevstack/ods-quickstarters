@@ -26,7 +26,7 @@ In order to generate one xml report per test type (installation, integration and
 Starting version 12 of Cypress `cy.origin()` allows you to handle redirections. This functionality eases the login handling.
 See `./support/login-functions.ts` for a generic login example.
 
-In order to load your testing user's credentials for this login with SSO, you need to create a secret in OpenShift with the label `credential.sync.jenkins.openshift.io=true` and import them as environment variables using the withCredentials block to keep them secure. Find an example on how to do this in the `Jenkinsfile`.
+In order to load your testing user's credentials for this login with SSO, you need to create a secret in OpenShift with the label `credential.sync.jenkins.openshift.io=true` and import them as environment variables using the `withCredentials` block to keep them secure. Find an example on how to do this in the `Jenkinsfile`.
 
 ## Cypress Cloud
 
