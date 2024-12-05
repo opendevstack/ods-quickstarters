@@ -121,20 +121,31 @@ To use Cypress Cloud  within the Cypress QuickStarter, follow these steps:
 
 3. **Set the Cypress Record Key as an environment variable in Openshift.** To enable recording of your tests in Cypress Cloud, you will need to set the Cypress Record Key as an environment variable named CYPRESS_RECORD_KEY in Openshift. This key is provided by Cypress and is used to authenticate your tests and results. By setting it in Openshift, we ensure that the record functionality will only be used in official runs and not for local development.
 
-4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction line:
+4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction lines:
 [source,Jenkinsfile]
 ----
-def status = sh(script: 'npm run e2e', returnStatus: true)
+status = sh(script: 'npm run e2e', returnStatus: true)
 ----
-for the following block of code, which will run the record script only when in master or in a release branch:
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:prod', returnStatus: true)
+----
+for the following blocks of code, which will run the record script only when in master or in a release branch:
 [source,Jenkinsfile]
 ----
 if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
-    def status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+    status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
 } else {
-    def status = sh(script: 'npm run e2e', returnStatus: true)
+    status = sh(script: 'npm run e2e', returnStatus: true)
 }
 ----
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+----
+For the case of prod environment, the master or release check is not necessary, as the prod environment is only used in releases.
 
 **Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
 

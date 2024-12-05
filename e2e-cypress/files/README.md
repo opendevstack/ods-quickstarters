@@ -10,28 +10,11 @@ Please note that each stage is executed with its own Cypress configuration file 
 
 ## Running end-to-end tests
 
-Run `npm run e2e` to execute all end-to-end tests via [Cypress](https://www.cypress.io) against the test instance of the front end.
+Run `npm run e2e` to execute all end-to-end tests via [Cypress](https://www.cypress.io) against the test instance of the front end. In order to run the tests against different environments for releases, you can define the base URLs of each environment in a config map in OpenShift, and import them as environment variables in the `Jenkinsfile`. See an example on how to do this using `context.environment` in the `Jenkinsfile`.
 
 ## Local development
 
 Run `npm start` to develop the e2e tests. The tests will automatically rebuild and run, if you change any of the source files. Ideally the test will run against a local instance of the front end, e.g. `http://localhost:4200` for an Angular app. This destination is configurable in the `cypress.config.ts` file.
-
-## How to upload images or videos to Nexus
-
-Screenshots are only taken when test fails.
-  1. Open the Jenkinsfile
-  2. Replace `stageTest(context)` by the following lines:
-  ```
-  def status = stageTest(context)
-  if (status != 0) {
-    odsComponentStageUploadToNexus(context,
-    [
-      distributionFile: 'tests/screenshots.zip',
-      repository: 'leva-documentation',
-      repositoryType: 'raw',
-      targetDirectory: "${targetDirectory}"])
-  }
-  ```
 
 ## Reports
 From [Merging reports across spec files](https://docs.cypress.io/guides/tooling/reporters#Merging-reports-across-spec-files): each spec file is processed completely separately during each cypress run execution. Thus each spec run overwrites the previous report file. To preserve unique reports for each spec file, use the `[hash]` in the `mochaFile` filename.
@@ -40,8 +23,10 @@ In order to generate one xml report per test type (installation, integration and
 
 ## E2e test user authentication
 
-With Cypress 12 version is now available `cy.origin()` that allows you to handle redirections. This funcionality eases the login handling.
-See `./support/e2e.ts` for a generic login example.
+Starting version 12 of Cypress `cy.origin()` allows you to handle redirections. This functionality eases the login handling.
+See `./support/login-functions.ts` for a generic login example.
+
+In order to load your testing user's credentials for this login with SSO, you need to create a secret in OpenShift with the label `credential.sync.jenkins.openshift.io=true` and import them as environment variables using the `withCredentials` block to keep them secure. Find an example on how to do this in the `Jenkinsfile`.
 
 ## Cypress Cloud
 

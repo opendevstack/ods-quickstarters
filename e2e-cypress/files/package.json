@@ -14,19 +14,25 @@
     "junit-acceptance-report": "jrm build/test-results/acceptance-junit.xml 'build/test-results/acceptance-*.xml'",
     "delete-junit-results": "rimraf build/test-results",
     "e2e": "npm-run-all delete-junit-results cypress:run-installation cypress:run-integration cypress:run-acceptance",
+    "e2e:prod": "npm-run-all delete-junit-results cypress:run-installation",
     "combine:reports": "npm-run-all junit-installation-report junit-integration-report junit-acceptance-report",
-    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation -- --record && npm run cypress:run-integration -- --record && npm run cypress:run-acceptance -- --record"
+    "e2e:jenkins:record": "npm run delete-junit-results && npm run cypress:run-installation -- --record && npm run cypress:run-integration -- --record && npm run cypress:run-acceptance -- --record",
+    "e2e:jenkins:record:prod": "npm run delete-junit-results && npm run cypress:run-installation -- --record",
+    "generate:pdf": "ts-node ./pdf-generator.ts"
   },
   "private": true,
   "devDependencies": {
     "@types/node": "^22.4.1",
     "cypress": "^13.13.1",
+    "cypress-multi-reporters": "^1.6.4",
     "junit-report-merger": "^7.0.0",
     "mocha-junit-reporter": "^2.2.1",
     "npm-run-all": "^4.1.5",
     "otplib": "^12.0.1",
+    "puppeteer": "^23.5.1",
     "rimraf": "^6.0.1",
     "sharp": "^0.33.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }
 }
