@@ -107,14 +107,3 @@ const validateLocalStorage = (localStorage: Record<string, unknown>) =>
   Cypress._.some(localStorage, (value: unknown, key: string) =>
     key.includes('CognitoIdentityServiceProvider'),
   )
-
-declare global {
-  namespace Cypress {
-    interface Chainable<> {
-      loginToAAD(username: string, password: string);
-      loginToAADWithMFA(username: string, password: string);
-      sessionLoginWithMFA(username: string, password: string);
-      getTOTP();
-    }
-  }
-}

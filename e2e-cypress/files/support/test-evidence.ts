@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { isScreenshotEvidenceResult, ScreenshotEvidenceData } from "../plugins/screenshot.types";
 import { consoleLogs } from "./e2e";
+import baseConfig from './cypress.config';
 
 const logEvidence = (name: string, step: number, description: string, evidenceLogs: string[]) => {
   cy.url().then(url => {
@@ -65,6 +66,10 @@ export const takeScreenshotEvidence = (testName: string, testStep: number, testS
         logEvidence(testName, testStep, description, [
           `Stored screenshot "${path.basename(result.path)}" with hash (sha256) ${result.hash} taken at ${String(data.takenAt)} as evidence.`
         ]);
+
+        // Create a relative path from the screenshots folder to the mochawesome test-results folder
+        const relativePath = path.relative(baseConfig.reporterOptions.mochawesomeReporterOptions.reportDir, result.path.replace(/^.*(build.*)$/, '$1'));
+        cy.addContextPath(`${testName} ${testStep} ${testSubStep}`, relativePath);
       });
   });
 };
