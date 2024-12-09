@@ -1,26 +1,21 @@
-import { defineConfig } from 'cypress'
-import setupNodeEvents from './plugins/index.js'
+import { defineConfig } from 'cypress';
+import baseConfig from './cypress.config';
+
 export default defineConfig({
-  //projectId: '[Your project ID from Cypress cloud]',
-  reporter: 'reporters/custom-reporter.js',
+  ...baseConfig,
   reporterOptions: {
-    mochaFile: 'build/test-results/installation-junit-[hash].xml',
-    toConsole: true,
-  },
-  e2e: {
-    baseUrl: 'https://www.w3schools.com',
-    fixturesFolder: "fixtures",
-    specPattern: 'tests/installation/*.cy.ts',
-    supportFile: "support/e2e.ts",
-    viewportWidth: 1376,
-    viewportHeight: 660,
-    experimentalModifyObstructiveThirdPartyCode:true,
-    video: true,
-    async setupNodeEvents(on, config) {
-      return (await import('./plugins/index')).default(on, config);
+    ...baseConfig.reporterOptions,
+    mochawesomeReporterOptions: {
+      ...baseConfig.reporterOptions.mochawesomeReporterOptions,
+      reportFilename: 'installation-mochawesome',
+    },
+    reportersCustomReporterJsReporterOptions: {
+      ...baseConfig.reporterOptions.reportersCustomReporterJsReporterOptions,
+      mochaFile: 'build/test-results/installation-junit-[hash].xml',
     },
   },
-  // env: {
-  //   otp_secret: process.env.OTP_SECRET
-  // },
-})
+  e2e: {
+    ...baseConfig.e2e,
+    specPattern: 'tests/installation/**/*.cy.ts',
+  },
+});
