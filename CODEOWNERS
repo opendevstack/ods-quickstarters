@@ -7,8 +7,6 @@
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
 /docker-plain/ @michaelsauter
-/ds-jupyter-lab/ @gerardcl @hugowschneider
-/ds-rshiny/ @gerardcl
 /ds-streamlit/ @sklingel
 /e2e-cypress/ @cschweikert @garcanam @roicarrera
 /e2e-spock-geb/ @metmajer @garcanam @roicarrera
