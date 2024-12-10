@@ -55,10 +55,10 @@ odsComponentPipeline(
       ]
     )
   }
-  if (fileExists('cypress/pdf.zip')) {
+  if (fileExists('cypress/cypress-test-reports-pdf.zip')) {
     odsComponentStageUploadToNexus(context,
       [
-        distributionFile: 'cypress/pdf.zip',
+        distributionFile: 'cypress/cypress-test-reports-pdf.zip',
         repository: 'leva-documentation',
         repositoryType: 'raw',
         targetDirectory: "${targetDirectory}"
@@ -121,8 +121,8 @@ def stageTest(def context) {
         }
 
         sh 'npm run generate:pdf'
-        zip zipFile: 'cypress/pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-        archiveArtifacts artifacts: 'cypress/pdf.zip', fingerprint: true
+        zip zipFile: 'cypress/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
+        archiveArtifacts artifacts: 'cypress/cypress-test-reports-pdf.zip', fingerprint: true
 
         if (fileExists('cypress/videos')) {
           zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
