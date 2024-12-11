@@ -134,6 +134,10 @@ This template is prepared to work with Sauce Labs virtual devices, allowing you 
 * **Error Monitoring and Reporting**: Capture and resolve application errors quickly with detailed insights.
 * **CI/CD Integration**: Seamlessly integrate with your continuous integration and delivery pipelines.
 
+=== How to use it
+
+To use Sauce Labs, a secret will be created by default where the `username` and `accessKey` necessary to execute the test cases in Sauce Labs will be stored. By default, these values will be set to "changeme". Once you have obtained your Sauce Labs username and access key, you should modify the secret data to start interacting with Sauce Labs.
+
 == Usage - how do you start after you provisioned this quickstarter
 
 * Run command `gradlew test` in project directory to execute the end-to-end tests via spock/geb against the demo pages and demo jUnit 5 tests.
