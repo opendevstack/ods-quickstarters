@@ -10,30 +10,30 @@ odsComponentPipeline(
   ]
 ) { context ->
   odsComponentFindOpenShiftImageOrElse(context) {
-    stageTest(context)
+    stageCI(context)
     odsComponentStageScanWithSonar(context)
     stageBuild(context)
     odsComponentStageBuildOpenShiftImage(context)
   }
-  odsComponentStageRolloutOpenShiftDeployment(
-    context, [
-      'selector': "app=${context.componentId}",
-      // uncomment this to use values.<ENV>.yaml files to override defaults on values.yaml
-      // 'helmEnvBasedValuesFiles': ["values.env.yaml"],
-    ]
-  )
+  odsComponentStageRolloutOpenShiftDeployment(context, [
+    'selector': "app.kubernetes.io/name=${context.componentId}"
+  ])
 }
 
 def stageBuild(def context) {
   stage('Cargo Build') {
     sh "cargo build --release"
-    sh "cp -r target/release/${context.projectId}-${context.componentId} docker/app"
+    sh "cp -r target/release/${context.componentId} docker/app"
   }
 }
 
-def stageTest(def context) {
+def stageCI(def context) {
   stage('Cargo Check') {
     sh """
+        cargo --version
+        cargo nextest --version
+        cargo llvm-cov --version
+        cargo deny --version
         cargo check --all-targets
       """
   }
@@ -51,6 +51,14 @@ def stageTest(def context) {
         cargo clippy --message-format=json &> build/test-results/clippy/report.json
       """
   }
+  stage('Cargo Deny') {
+    sh """
+        mkdir -p build/test-results/deny
+        cargo deny --format json check &> build/test-results/deny/cargo-deny-report.json
+        cat build/test-results/deny/cargo-deny-report.json
+      """
+    archiveArtifacts artifacts: 'build/test-results/deny/cargo-deny-report.json', fingerprint: true
+  }
   stage('Cargo Test') {
     sh """
       # create report folders
@@ -62,9 +70,9 @@ def stageTest(def context) {
 
       # Coverage with LLVM lcov report from tests
       # generate the lcov.info report
-      cargo llvm-cov --lcov --output-path ./build/test-results/coverage/lcov.info
+      cargo llvm-cov nextest --lcov --output-path ./build/test-results/coverage/lcov.info
       # generate the html report
-      cargo llvm-cov report --html
+      cargo llvm-cov nextest report --html
 
       cp -r target/nextest/ci/results.xml build/test-results/test
       cp -r target/llvm-cov/html/ build/test-results/coverage

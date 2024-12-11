@@ -1,6 +1,6 @@
 ---
 name: Axum - Rust web framework
-description: "Axum is an ergonomic and modular web framework built with Tokio, Tower, and Hyper; written in Rust. Technologies: Axum 0.7.x, Rust 1.75.0"
+description: "Axum is an ergonomic and modular web framework built with Tokio, Tower, and Hyper; written in Rust. Technologies: Axum 0.7.x, Rust 1.81.x"
 supplier: https://github.com/tokio-rs/axum
 version: 4.x
 type: ods

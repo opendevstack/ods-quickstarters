@@ -35,7 +35,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://docs.python.org/3.11[Python 3.11]
+* https://docs.python.org/3.12[Python 3.12]
 * https://gunicorn.org/[gunicorn]
 * http://flask.pocoo.org/[flask]
 * https://docs.pytest.org/en/stable/[pytest]
@@ -48,9 +48,9 @@ The project is production ready when deployed in OpenShift thanks to gunicorn.
 
 It is strongly recommended when you are developing a Python project to use separated environments.
 For this purpose usually one can use Python's
-https://docs.python.org/3.11/library/venv.html[venv] core package (check how to use it in the next steps).
+https://docs.python.org/3.12/library/venv.html[venv] core package (check how to use it in the next steps).
 
-NOTE: since the version of Python is 3.11, ensure your system's python executable is also in version 3.11
+NOTE: since the version of Python is 3.12, ensure your system's python executable is also in version 3.12
 
 [source,bash]
 ----
@@ -112,24 +112,24 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 
 * *Build* - Builds the application: copies src folder into docker/dist folder.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
 This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/python[Python] builder agent Jenkins builder agent.
 
-**NOTE**: The ODS Jenkins Pytnon Agent supports Python versions 3.11, 3.9 and 3.8. See next chapter for further information.
+**NOTE**: The ODS Jenkins Python Agent supports Python versions 3.12, 3.11, 3.9 and 3.8. See next chapter for further information.
 
 
 == Multiple Python versions support
 
-Build and run environment defaults to python3.11, but older python3.8 and python3.6 versions are also supported.
+Build and run environment defaults to python3.12, but python3.11, python3.9 and python3.8 versions are also supported.
 
-If you need older versions support in your project, change:
+If you need other versions support in your project, change:
 
-* in the provided `Jenkinsfile`, the mentions of `python3.11` binary to, for example, `python3.9` binary,
+* in the provided `Jenkinsfile`, the mentions of `python3.12` binary to, for example, `python3.9` binary,
 
-* and switch the `FROM` statement in your `Dockerfile` to the python version required, for example, `registry.access.redhat.com/ubi8/python-38`.
+* and switch the `FROM` statement in your `Dockerfile` to the python version required, for example, `registry.access.redhat.com/ubi8/python-39`.
 
 == Known limitations
 

@@ -109,9 +109,9 @@ Note that the xref:jenkins-shared-library:labelling.adoc[OpenShift resources wil
 
 ```yaml
 name: nginx
-description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.25.3.1-1"
+description: "Enhanced nginx with Lua embeded. nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server. Technologies: OpenResty/nginx 1.25.3.2-0"
 supplier: https://openresty.org
-version: 1.25.3.1-1
+version: 1.25.3.2-0
 type: ods-service
 role: integration
 ```
@@ -123,7 +123,7 @@ There are two steps:
 * Build the container image.
 * Deploy.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

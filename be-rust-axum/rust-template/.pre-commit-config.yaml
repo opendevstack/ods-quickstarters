@@ -1,5 +1,24 @@
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.16.1
+    rev: v8.19.1
     hooks:
       - id: gitleaks
+  - repo: https://github.com/EmbarkStudios/cargo-deny
+    rev: 0.16.1
+    hooks:
+      - id: cargo-deny
+        args: ["--all-features", "check"] # optionally modify the arguments for cargo-deny (default arguments shown here)
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: Cargo formatter (cargo fmt)
+        entry: bash -c 'cargo fmt'
+        language: system
+        types: [rust]
+        pass_filenames: false
+      - id: cargo-clippy
+        name: Cargo linter (cargo clippy)
+        entry: bash -c 'cargo clippy'
+        language: system
+        types: [rust]
+        pass_filenames: false

@@ -72,7 +72,7 @@ version: 1.0.1
 type: ods
 role: frontend
 runtime: angular-cli
-runtimeVersion: 18.0.1
+runtimeVersion: 18.2.1
 ```
 
 == How this quickstarter is built through Jenkins
@@ -87,7 +87,7 @@ Please note: By default the applciation is always build as full production build
 
 Please note: The support for *TSLint* has been removed from this quickstarter. Also Angular is not shipping a linter by default anymore. Please consider adding *ESLint* support or a formatter like *Prettier*. For adding ESLint simply type `ng add @angular-eslint/schematics`. For setting up Prettier please see https://prettier.io/docs/en/install.html.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

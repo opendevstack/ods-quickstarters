@@ -19,11 +19,27 @@ parameters:
 - name: RUST_VERSION
   description: "The Rust version"
   required: true
-  value: "1.75.0"
+  value: "1.81.0"
 - name: RUST_TOOLCHAIN
   description: "The Rust target toolchain"
   required: true
   value: "x86_64-unknown-linux-gnu"
+- name: CARGO_NEXTEST_VERSION
+  description: "The Cargo Nextest testing framework version"
+  required: true
+  value: "0.9.78"
+- name: CARGO_LLVM_COV_VERSION
+  description: "The Cargo LLVM Coverage tool version"
+  required: true
+  value: "0.6.13"
+- name: CARGO_GENERATE_VERSION
+  description: "The Cargo Generate tool version"
+  required: true
+  value: "0.22.0"
+- name: CARGO_DENY_VERSION
+  description: "The Cargo Deny tool version"
+  required: true
+  value: "0.16.1"
 objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
@@ -63,6 +79,14 @@ objects:
             value: ${RUST_VERSION}
           - name: rustToolchain
             value: ${RUST_TOOLCHAIN}
+          - name: cargoNextestVersion
+            value: ${CARGO_NEXTEST_VERSION}
+          - name: cargoLlvmCovVersion
+            value: ${CARGO_LLVM_COV_VERSION}
+          - name: cargoGenerateVersion
+            value: ${CARGO_GENERATE_VERSION}
+          - name: cargoDenyVersion
+            value: ${CARGO_DENY_VERSION}
         from:
           kind: ImageStreamTag
           name: jenkins-agent-base:${ODS_IMAGE_TAG}

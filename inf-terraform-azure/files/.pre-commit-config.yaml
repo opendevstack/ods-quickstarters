@@ -1,79 +1,84 @@
+---
 exclude: .terraform
 fail_fast: true
+
 repos:
--   repo: https://github.com/gitleaks/gitleaks
-    rev: v8.16.1
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
     hooks:
-    -   id: gitleaks
--   repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.4.0
+      - id: gitleaks
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v4.6.0
     hooks:
-    -   id: check-added-large-files
+      - id: check-added-large-files
         args:
-        - --maxkb=5000
-    -   id: check-byte-order-marker
-    -   id: check-case-conflict
-    -   id: check-json
-    -   id: check-merge-conflict
-    -   id: check-symlinks
-    -   id: check-yaml
+          - --maxkb=5000
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
         args:
-        - --allow-multiple-documents
-        - --unsafe
-    -   id: detect-private-key
-    -   id: mixed-line-ending
+          - --allow-multiple-documents
+          - --unsafe
+      - id: detect-private-key
+      - id: mixed-line-ending
         args:
-        - --fix=lf
-    -   id: pretty-format-json
+          - --fix=lf
+      - id: pretty-format-json
+        exclude: ^.devcontainer/.*$
         args:
-        - --autofix
-        - --indent=2
-        - --no-ensure-ascii
-    -   id: trailing-whitespace
+          - --autofix
+          - --indent=2
+          - --no-ensure-ascii
+      - id: trailing-whitespace
 
--   repo: https://github.com/psf/black.git
-    rev: 23.3.0
+  - repo: https://github.com/psf/black.git
+    rev: 24.8.0
     hooks:
-    -   id: black
-        args: [--line-length=90]
+      - id: black
+        args: [--line-length=150]
         files: (\.py)$
 
--   repo: https://github.com/PyCQA/flake8.git
-    rev: 6.0.0
+  - repo: https://github.com/PyCQA/flake8.git
+    rev: 7.1.1
     hooks:
-    -   id: flake8
-        args: [--max-line-length=90]
+      - id: flake8
+        args: [--max-line-length=150]
         files: (\.py)$
 
--   repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.79.1
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.1
     hooks:
-    -   id: terraform_fmt
-
--   repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
-    rev: v0.4.2
-    hooks:
-    -   id: terraformcreatei2o
-        files: (\.tf)$
-    -   id: terraformstackmoduleoutputs
-        files: (\.tf)$
-
--   repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.79.1
-    hooks:
-    -   id: terraform_fmt
-    -   id: terraform_docs
-
--   repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 3.0.0
-    hooks:
-    -   id: rubocop
+      - id: terraform_fmt
+      - id: terraform_tflint
         args:
-        - --fix-layout
+          - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
 
--   repo: local
+  - repo: https://github.com/nichtraunzer/ods-pre-commit-hooks
+    rev: v0.5.0
     hooks:
-    -   id: test
+      - id: terraformcreatei2o
+        files: (\.tf)$
+      - id: terraformstackmoduleoutputs
+        files: (\.tf)$
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.1
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+
+  - repo: https://github.com/rubocop/rubocop
+    rev: v1.65.1
+    hooks:
+      - id: rubocop
+        args: [--fix-layout]
+
+  - repo: local
+    hooks:
+      - id: test
         name: make test
         description: Run integration tests.
         entry: make test

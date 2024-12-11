@@ -11,5 +11,24 @@ It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-scala`.
 . HTTP proxy aware
 . Nexus aware
 
+== Supported Java Versions
+This agent provides 1 JDKs: `java 11` and `java 17` (default).
+
+For backwards compatibility `java 11` is till included. Java projects migrating from previous ODS version will require the use of the bash script `use-j11.sh` to use java 11. A migration to `java 17` can be done afterwards.
+
+To switch the environment to `java 11` the script `use-j11.sh` is provided at the jenkins home folder.
+To switch the environment to `java 17` the script `use-j17.sh` is provided at the jenkins home folder.
+Following command shows how the jenkins build script from the scala quickstarter switches the java version before calling the SBT:
+```
+def status = sh(script: "$HOME/use-j11.sh && sbt -v clean scalafmtSbtCheck scalafmtCheckAll coverage test coverageReport coverageOff compile:clean copyDockerFiles && $HOME/use-j17.sh", returnStatus: true)
+```
+NOTE: like this example, you will need to switch back to `java 17` after running the SBT build. This is required because the scala agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the java 11.
+
+== Installed packages
+
+Dockerfile.ubi8 installs:
+- java-17-openjdk-devel
+- java-11-openjdk-devel
+
 == Known limitations
 In case HTTP Proxy config is injected through environment variables (including `NO_PROXY`), Nexus configuration is disabled because of an SBT bug.

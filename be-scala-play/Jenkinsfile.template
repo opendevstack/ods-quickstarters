@@ -22,7 +22,10 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Build and Unit Test') {
     withEnv(["TAGVERSION=${context.tagversion}"]){
-      sh "sbt -v clean scalafmtSbtCheck scalafmtCheckAll coverage test coverageReport coverageOff compile:clean copyDockerFiles"
+      def status = sh(script: "source use-j11.sh && sbt -v clean scalafmtSbtCheck scalafmtCheckAll coverage test coverageReport coverageOff compile:clean copyDockerFiles && source use-j17.sh", returnStatus: true)
+      if (status != 0) {
+        error "Build failed!"
+      }
     }
   }
 }

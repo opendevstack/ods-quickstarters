@@ -162,7 +162,7 @@ You will see the results inside a new folder 'build' in project directory.
         └── integration-java-desktop
             │── TEST-DemoIntegrationSpec.xml
             └── TEST-DemoIntegrationTest.xml
-    
+
 ----
 == Frameworks used
 

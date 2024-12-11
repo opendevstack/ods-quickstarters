@@ -3,23 +3,31 @@
 name = "{{project-name}}"
 version = "0.1.0"
 edition = "2021"
-description = "{{project-name}} - from the OpenDevStack Rust QuickStarter."
+description = "{{project-name}} component - from the OpenDevStack Rust QuickStarter."
 license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 # one can add more dependencies via cargo to Cargo.toml as shown next: cargo add axum -F axum/http2
 axum = { version = "0.7", features = ["http2"] }
-tokio = { version = "1.35", features = ["rt-multi-thread", "macros", "signal"] }
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros", "signal"] }
+
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-http = "1.0"
+
+http = "1.1"
 http-body-util = "0.1"
-bytes = "1.5"
+bytes = "1.7"
+
 thiserror = "1.0"
+
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["tracing", "env-filter"] }
-lazy_static = "1.4"
+
+lazy_static = "1.5"
+
+envy = "0.4"
+dotenvy = "0.15"
 
 # Nice HTTP middlewares from Tower crate, to be added to router.rs.
 # Uncomment as per need, check official docs.
@@ -32,12 +40,9 @@ lazy_static = "1.4"
 # ] }
 
 # SQLx is the recommended safe and performant package to work with relational DBs like PostgreSQL; check official docs
-# sqlx = { version = "0.7", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "time", "macros", "migrate" ] }
-
-# One can use envy crate for more automated env vars management, see docs.
-# envy = "*"
-# One can use dotenvy crate for automating ingestion of env vars from .env file.
-# dotenvy = "*"
+# sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "time", "macros", "migrate" ] }
 
 [dev-dependencies]
-tower = { version = "0.4", features = ["util"] }
+# mockito = "1.5"  # mockito is recommended when requiring mocking network requests to either external or internal services
+temp-env = { version = "0.3", features = ["async_closure"] }  # it is highly recommended the usage of cargo nextest run instead of cargo test; this way each test runs on its own process
+tower = { version = "0.5", features = ["util"] }

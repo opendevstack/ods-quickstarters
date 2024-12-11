@@ -10,26 +10,25 @@ It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-jdk`.
 . Nexus and HTTP proxy configuration for Maven & Gradle
 
 == Supported Java Versions
-This agent provides 3 JDKs: `java 11`, `java 17` and `java 21`.
+This agent provides 3 JDKs: `java 11`, `java 17` (default) and `java 21`.
 
-For backwards compatibility `java 11` is the default version. Java projects migrating from previous ODS version will not require any change. A migration to `java 17` and `java 21` can be done afterwards.
+For backwards compatibility `java 11` is still included. Java projects migrating from previous ODS version will require the use of the bash script `use-j11.sh` to use java 11. A migration to `java 17` and `java 21` can be done afterwards.
 
+To switch the environment to `java 11` the script `use-j11.sh` is provided at the jenkins home folder.
 To switch the environment to `java 17` the script `use-j17.sh` is provided at the jenkins home folder.
 To switch the environment to `java 21` the script `use-j21.sh` is provided at the jenkins home folder.
 Following command shows how the jenkins build script from the springboot quickstarter switches the java version before calling the gradle wrapper:
 ```
-def status = sh(script: "$HOME/use-j21.sh && ./gradlew clean build --stacktrace --no-daemon && $HOME/use-j11.sh", returnStatus: true)
+def status = sh(script: "$HOME/use-j21.sh && ./gradlew clean build --stacktrace --no-daemon && $HOME/use-j17.sh", returnStatus: true)
 ```
-NOTE: like this example, you will need to switch back to `java 11` after running the gradlew build. This is required because the jdk agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the latest java version.
+NOTE: like this example, you will need to switch back to `java 17` after running the gradlew build. This is required because the jdk agent environment still does not support the latest java version. E.g. the `sonar scanner` is not compatible with the latest java version.
 
 == Installed packages
 
 Dockerfile.ubi8 installs:
-- java-21-openjdk-devel & java-21-openjdk-jmods
-- java-17-openjdk-devel & java-17-openjdk-jmods
-- java-11-openjdk-devel & java-11-openjdk-jmods
-
-NOTE: detail about java installed packages can be found in https://centos.pkgs.org
+- java-21-openjdk-devel
+- java-17-openjdk-devel
+- java-11-openjdk-devel
 
 == Known limitations
 n/a

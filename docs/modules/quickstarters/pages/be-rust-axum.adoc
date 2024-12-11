@@ -1,7 +1,7 @@
 = Backend Rust Axum Quickstarter (be-rust-axum)
 
 The project supports generation of https://www.rust-lang.org/[Rust] programming language based projects, with the https://github.com/tokio-rs/axum/[Axum] web framework by default,
-and quick installation and integration within OpenShift Jenkins CICD pipelines.
+and quick installation and integration within OpenShift Jenkins CICD pipelines within the [OpenDevStack](https://www.opendevstack.org/) context.
 
 For Database/Postgres integration it is recommended to use https://github.com/launchbadge/sqlx/[SQLx]. Check the https://github.com/launchbadge/sqlx/tree/main/examples/postgres/axum-social-with-tests/[Axum with SQLx] example. Enjoy a full async, safe and high performant setup!
 
@@ -19,21 +19,21 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 ----
 ├── 📂 .config - The local Rust project config folder
-│   └──  nextest.toml - The local Nextest config file (required for Jenkins CICD)
-├──  .pre-commit-config.yaml - The pre-commit config file one can extend, and providing gitleaks tool by default.
+│   └── 📄 nextest.toml - The local Nextest config file (required for Jenkins CICD)
 ├── 📂 chart - The Helm chart folder
 │   ├── 📂 templates - The resource files to define in your project (i.e.: deployment.yml, service.yml,...)
 │   │   ├── 📂 tests - Helm tests folder
-│   │   │   └──  test-connection.yaml - Helm test connection to app service after a new release
+│   │   │   └── 📄 test-connection.yaml - Helm test connection to app service after a new release
 │   │   ├── 📄 _helpers.tpl - Helm helpers template
-│   │   ├──  deployment.yaml - The k8s Deployment template for the app to release
-│   │   ├──  NOTES.txt - The release notes processed on each release
-│   │   └──  service.yaml - The k8s Service template for the app to release
-│   ├──  Chart.yaml - The Helm Chart main config file
-│   └──  values.yaml - The values to process on your Helm chart
+│   │   ├── 📄 deployment.yaml - The k8s Deployment template for the app to release
+│   │   ├── 📄 NOTES.txt - The release notes processed on each release
+│   │   └── 📄 service.yaml - The k8s Service template for the app to release
+│   ├── 📄 .helmignore - The Helm ignore file
+│   ├── 📄 Chart.yaml - The Helm Chart main config file
+│   └── 📄 values.yaml - The values to process on your Helm chart
 ├── 📂 docker - The docker context to build
-│   └──  Dockerfile - The docker file to deploy and run
-├── Jenkinsfile - This file contains Jenkins build configuration settings
+│   └── 📄 Dockerfile - The docker file to deploy and run
+├── 🤖 Jenkinsfile - This file contains Jenkins build configuration settings
 ├── 📂 src
 │   ├── 📂 api
 │   │   ├── 📂 routes
@@ -47,24 +47,30 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 │   ├── 📂 models
 │   │   ├── 🦀 mod.rs - The models module file
 │   │   └── 🦀 status.rs - The status model example file
-│   └── 🦀 main.rs
+│   ├── 🦀 lib.rs - The component's library exposing this project's crates to the main.rs
+│   └── 🦀 main.rs - The component's binary compilation
 ├── 📂 target - The target folder where all builds (debug, release, ...) are stored (do not commit to git!)
-├── 📂 tests
+├── 📂 tests - Integration tests folder for all exposed component's crates within the lib.rs
 │   ├── 🦀 common.rs - Common util implementations and functions
 │   └── 🦀 status_test.rs - Testing the status endpoint example
-├──  Cargo.lock - The Rust dependency hash tree of this project
-├──  Cargo.toml - The Rust project config file
-├──  metadata.yml - Component metadata
-├──  README.md - This README file
-├──  release-manager.yml - Configuration file for the Release Manager
-├──  rustfmt.toml
-└──  sonar-project.properties - This file contains SonarQube configuration settings
+├── 📄 .editorconfig - To share with your team IDEs some files formatting defaults
+├── 📄 .gitignore - The Git ignore file, with some Rust defaults
+├── 📄 .pre-commit-config.yaml - The pre-commit tool config file, prepared for a Rust project.
+├── 📄 Cargo.lock - The Rust dependency hash tree of this project
+├── 📄 Cargo.toml - The Rust project config file
+├── 📄 deny.toml - Cargo Deny TOML configuration based on defaults
+├── 📄 metadata.yml - Component metadata
+├── 📚 README.md - The README file
+├── 📄 release-manager.yml - Configuration file for the Release Manager
+├── 📄 rustfmt.toml - The Rust formatter configuration file (for cargo fmt)
+└── 📄 sonar-project.properties - This file contains SonarQube configuration settings
 ----
 
 == Frameworks used
 
-* https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html[Rust 1.75.0]
+* https://www.rust-lang.org/[Rust 1.81.x]
 * https://github.com/tokio-rs/axum[Axum 0.7.x]
+* https://nexte.st/[Nextest 0.9.x]
 
 == Usage - how do you start after you provisioned this quickstarter
 
@@ -83,8 +89,9 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # If you are new to Rust (also check the rustlings TUI)
 rustup doc --book
 
-# Run Unit, Integration and Documentation tests
-cargo test
+# Run Unit, Integration and Documentation tests in isolated processes on each test
+cargo install cargo-nextest  # install nextest!
+cargo nextest run
 
 # Cargo format source code
 cargo fmt
@@ -107,8 +114,10 @@ cargo install cargo-watch  # https://github.com/watchexec/cargo-watch
 # Then you can live reload by:
 cargo watch -x run
 
-# Nextest, with enhanced usage from default Rust cargo test
-cargo install cargo-nextest
+# Audit Cargo.lock against the advisory DB. The [RustSec Advisory Database](https://github.com/rustsec/rustsec) is a repository of security advisories filed against Rust crates published via crates.io.
+cargo install cargo-audit
+# Audit you dependencies on Licenses, Bans, Advisories and Sources, with [cargo-deny](https://github.com/EmbarkStudios/cargo-deny)
+cargo install cargo-deny
 # ...
 ----
 
@@ -127,7 +136,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: rust
-runtimeVersion: 1.75.0
+runtimeVersion: 1.81.0
 ```
 
 == How this quickstarter is built through Jenkins
@@ -155,12 +164,19 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
   cargo clippy --all-features
 ----
 
-* *Cargo Test* - Runs nextest (instead of `cargo test`) with xUnit test report generation (see .config/nextest.toml) and code coverage reports with LLVM coverage tool:
+* *Cargo Deny* - Collection of lints to catch dependency graph issues related to licenses, bans, advisories and sources:
++
+[source,bash]
+----
+  cargo deny --all-features check
+----
+
+* *Cargo Test* - Runs nextest (instead of `cargo test`, see above why) with xUnit test report generation (see .config/nextest.toml) and code coverage reports with LLVM coverage tool:
 +
 [source,bash]
 ----
   cargo nextest run --profile ci
-  cargo llvm-cov --lcov
+  cargo llvm-cov nextest --lcov
 ----
 
 * *Build* - Builds the release target binary and moves it to the docker folder:
@@ -170,18 +186,19 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
   cargo build --release
 ----
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
-This quickstarter uses https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[Rust] Jenkins builder agent.
+This quickstarter uses https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html[Rust] Jenkins builder agent.
 
 **NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.75.x and above.
 
+See the docker spec and openshift templates https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[here].
 
 == Technologies in use
 
-The following Rust technologies are in use when running this boilerplate:
+The following main Rust technologies are in use when running this boilerplate:
 
 - https://github.com/tokio-rs/axum[Axum]: Web application framework that focuses on ergonomics and modularity.
 - https://github.com/tokio-rs/tokio[Tokio]: Runtime for writing reliable, asynchronous, and slim applications.
@@ -190,4 +207,60 @@ The following Rust technologies are in use when running this boilerplate:
 
 == Known limitations
 
-Let us know if you find any, thanks!
+First of all, please, let us know if you find any limitation or issue to comment on, thanks!
+
+=== Building with OpenSSL crate or using alternatives ===
+
+==== Recommended first approach ====
+
+Most of the crates out there, that require cryptographic related features, come with `openssl` crate as a default dependency feature, but
+one can check the crate's docs in regards available features and disable openssl and/or default-features and enable provided alternatives,
+like `rustls``.
+
+See some examples of known crates that can be configured to skip requiring OpenSSL C library:
+
+===== SQLx crate without openssl dependency =====
+
+With the https://crates.io/crates/sqlx[sqlx] crate, one can avoid `openssl` dependency by enabling the dependency feature `tls-rustls`
+which makes use of the crate `rustls`, like:
+
+```
+[dependencies]
+sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "chrono", "macros", "migrate" ] }
+```
+
+See SQLx's https://docs.rs/sqlx/latest/sqlx/#tls-support[TLS features list support], or https://github.com/launchbadge/sqlx?tab=readme-ov-file#cargo-feature-flags[all SQLx feature flags], for further learning.
+
+===== Reqwest crate without openssl dependency =====
+
+With the https://crates.io/crates/reqwest[reqwest] crate, one can avoid `openssl` dependency by enabling the dependency feature `rustls-tls`,
+which makes use of the crate `rustls` and disabling default features, like:
+
+```
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+```
+
+See reqwest's https://docs.rs/reqwest/latest/reqwest/#optional-features[features list] for further learning.
+
+==== Using openssl crate ====
+
+In some cases one might not be able to skip requiring OpenSSL nor LibreSSL C libraries (see https://github.com/opendevstack/ods-quickstarters/issues/1026[issue]), but requires compiling them.
+
+To have a lean compilation and shipping experience with Rust, ODS Jenkins Rust agent provides already the dependencies to build OpenSSL from source and statically link them, hence avoiding any mismatch with existing/multiple OS libraries or none (at build or runtime), by enabling statically linking of the dependency within the binary.
+
+The only missing piece required is to enable the `vendored` feature in the crate in your `Cargo.toml`, see example:
+
+```
+[dependencies]
+openssl = { version = "0.10", features = ["vendored"] }
+```
+
+By doing so, `cargo` will locally build OpenSSL and statically link the openssl dependencies into the binarie(s) generated, hence avoiding any OS existence nor dependency of the openssl library.
+
+==== Alternatives to openssl crate ====
+
+In most of cases, one does not require OpenSSL, indeed it is recommended to use more modern alternatives like:
+
+- https://docs.rs/ring/latest/ring/[ring]
+- https://docs.rs/rustls/latest/rustls[rustls]

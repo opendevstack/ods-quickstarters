@@ -12,32 +12,36 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 .
 ├── fixtures
 │   └── example.json
-│── plugins
-│   └── index.js
-│── support
-│   ├── commands.ts
-│   ├── generic-login.ts
+├── plugins
 │   ├── index.ts
-│   ├── msalv2-login.ts
+│   ├── screenshot.ts
+│   └── screenshot.types.ts
+├── reporters
+│   └── custom-reporter.js
+├── support
+│   ├── commands.ts
+│   ├── e2e.ts
+│   ├── generic-login.ts
+│   ├── msalv2-login_obsolete.ts
 │   └── test-evidence.ts
 ├── tests
-|   ├── acceptance
-│   |   └── acceptance.spec.ts
-|   ├── installation
-│   |   └── installation.spec.ts
-|   └── integration
-│       └── integration.spec.ts
-├── cypress-acceptance.json
-├── cypress-installation.json
-├── cypress-integration.json
+│   ├── acceptance
+│   │   └── acceptance.spec.cy.ts
+│   ├── installation
+│   │   └── installation.spec.cy.ts
+│   └── integration
+│       └── integration.spec.cy.ts
+├── cypress-acceptance.config.ts
+├── cypress-installation.config.ts
+├── cypress-integration.config.ts
+├── cypress.config.ts
 ├── cypress.env.json.template
-├── cypress.json
 ├── Jenkinsfile
 ├── .pre-commit-config.yaml
 ├── metadata.yml - Component metadata
-│── package.json
+├── package.json
 ├── README.md
-│── release-manager.yml - Configuration file for the Release Manager
+├── release-manager.yml - Configuration file for the Release Manager
 └── tsconfig.json
 ----
 
@@ -67,9 +71,9 @@ A more advanced solution could be the use of a custom builder agent, where Cypre
 [source,docker]
 ----
 # The following FROM tag is informational. It is overwritten by OpenShift.
-FROM ods/jenkins-agent-nodejs20:4.x
+FROM ods/jenkins-agent-nodejs22:4.x
 
-ARG cypressVersion=13.6.0
+ARG cypressVersion=13.13.1
 ARG cypressHash=...
 
 USER root
@@ -95,41 +99,64 @@ RUN chgrp -R 0 $HOME && \
 USER 1001
 ----
 
+== Configuring Microsoft Account with Google Authenticator
+
+To use the login with MFA function, the following requirements have to be met:
+
+1. A testing account must be created with access to the application under test.
+
+2. The account must have MFA enabled.
+
+3. The MFA method used must be OTP (One Time Password).
+
+4. The secret key generated during the setup process must be used for the OTP generation. In the case of microsoft, it can be retrieved by clicking the "Can't scan image" button during the setup process.
+
 == Cypress Cloud
 
-To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
+To use Cypress Cloud  within the Cypress QuickStarter, follow these steps:
 
-1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results. 
+1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results.
 
 2. **Change the project ID as indicated in Cypress Cloud.** After creating the project, you will need to change the project ID in the four config files, to the one indicated in Cypress Cloud. This ID is used to identify your project and ensure that your tests are associated with the correct project.
 
 3. **Set the Cypress Record Key as an environment variable in Openshift.** To enable recording of your tests in Cypress Cloud, you will need to set the Cypress Record Key as an environment variable named CYPRESS_RECORD_KEY in Openshift. This key is provided by Cypress and is used to authenticate your tests and results. By setting it in Openshift, we ensure that the record functionality will only be used in official runs and not for local development.
 
-4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction line:
+4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction lines:
 [source,Jenkinsfile]
 ----
-def status = sh(script: 'npm run e2e', returnStatus: true)
+status = sh(script: 'npm run e2e', returnStatus: true)
 ----
-for the following block of code, which will run the record script only when in master or in a release branch:
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:prod', returnStatus: true)
+----
+for the following blocks of code, which will run the record script only when in master or in a release branch:
 [source,Jenkinsfile]
 ----
 if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
-    def status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+    status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
 } else {
-    def status = sh(script: 'npm run e2e', returnStatus: true)
+    status = sh(script: 'npm run e2e', returnStatus: true)
 }
 ----
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+----
+For the case of prod environment, the master or release check is not necessary, as the prod environment is only used in releases.
 
 **Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
 
 You can find more information about using the Cypress Cloud in the official documentation for Cypress https://docs.cypress.io/guides/cloud/introduction.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
 This quickstarter uses
-https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs20[Node.js 20 builder agent] for Jenkins.
+https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/nodejs22[Node.js 22 builder agent] for Jenkins.
 
 == Known limitations
 

@@ -13,10 +13,11 @@ ENV PYTHONUNBUFFERED=1 \
 RUN yum module install -y python38:3.8/build && \
     yum module install -y python39:3.9/build --allowerasing && \
     yum install -y python3.11 python3.11-pip python3.11-devel python3.11-setuptools --allowerasing && \
+    yum install -y python3.12 python3.12-pip python3.12-devel python3.12-setuptools --allowerasing && \
     yum install -y autoconf automake gcc-c++ openssl-devel libffi-devel && \
     yum -y clean all
 
-RUN pipVersions=( pip3.8 pip3.9 pip3.11 ); \
+RUN pipVersions=( pip3.8 pip3.9 pip3.11 pip3.12 ); \
     for pipV in "${pipVersions[@]}"; \
     do \
         if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
@@ -26,7 +27,7 @@ RUN pipVersions=( pip3.8 pip3.9 pip3.11 ); \
         fi; \
         $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
         $pipV install --upgrade pip --user && \
-        $pipV install virtualenv==20.25.0 setuptools==69.0.2 Cython==3.0.6 pypandoc==1.12; \
+        $pipV install virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13; \
     done;
 
 # Enables default user to access $HOME folder

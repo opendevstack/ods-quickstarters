@@ -2,11 +2,46 @@
 
 ## Unreleased
 
+
+- Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
+- Install java 17 devel only in scala and jdk agents ([#1057](https://github.com/opendevstack/ods-quickstarters/pull/1057))
+- Update Angular, Ionic and Typescript Quickstarters ([#1033](https://github.com/opendevstack/ods-quickstarters/issues/1033))
+- Update Rust Axum Quickstarter to Rust 1.79.0 ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
+- Update jdk and scala quickstarters and agents ([#1032](https://github.com/opendevstack/ods-quickstarters/issues/1032))
+- Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
+- Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
+- Update Streamlit Quickstarter ([#1030](https://github.com/opendevstack/ods-quickstarters/issues/1030))
+- Update Golang agent ([#1031](https://github.com/opendevstack/ods-quickstarters/issues/1031))
+- Update gateway/nginx Quickstarter ([#1048](https://github.com/opendevstack/ods-quickstarters/pull/1048))
+- Update Rust Axum Quickstarter to Rust 1.80.1 and improve Agent build configuration ([#1040](https://github.com/opendevstack/ods-quickstarters/pull/1040))
+- Support for Python3.12, and maintenance of be-python-flask quickstarter and python Jenkins agent ([#1030](https://github.com/opendevstack/ods-quickstarters/pull/1030))
+- Added custom reporter to Cypress Quickstarter and update dependencies ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))
+- Fix permissions in Golang agent for the golden tests ([#1052](https://github.com/opendevstack/ods-quickstarters/pull/1052))
+- Fix ETL Python QS: AWS Test codepipeline Status Managment and update cryptography dependency([#1056](https://github.com/opendevstack/ods-quickstarters/pull/1052))
+- Fix for npm based jenkins agents to support private nexus repositories ([#1059](https://github.com/opendevstack/ods-quickstarters/issues/1059))
+- Introduce Rust Quickstarter dependency graph linting (cargo-deny) and upgrade maintenance ([#1061](https://github.com/opendevstack/ods-quickstarters/issues/1061))
+- Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
+- Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
+- Removal of deprecated versions ([#1068](https://github.com/opendevstack/ods-quickstarters/issues/1068))
+- Generate PDF report for cypress and improved environment management ([#1079](https://github.com/opendevstack/ods-quickstarters/pull/1079))
+
 ### Added
 
 ### Changed
 
 ### Fixed
+
+## [4.6.0] - 2024-10-23
+
+### Changed
+- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+
+### Fixed
+- Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- Remove obsolete branch parameter from release-manager ([#1058](https://github.com/opendevstack/ods-quickstarters/pull/1058))
 
 ## [4.5.0] - 2024-06-06
 
