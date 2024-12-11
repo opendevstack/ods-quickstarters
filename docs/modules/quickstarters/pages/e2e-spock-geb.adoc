@@ -10,8 +10,6 @@ This is a Spock, Geb, Unirest and Apium e2e testing project quickstarter with ba
 
 ----
 .
-├── application
-│   └── EmptyFile.apk
 ├── Jenkinsfile
 ├── .pre-commit-config.yaml
 ├── README.md
@@ -24,12 +22,11 @@ This is a Spock, Geb, Unirest and Apium e2e testing project quickstarter with ba
 │   │   │   │       └── DemoManualMenuModule.groovy
 │   │   │   │   └── pages
 │   │   │   │       └── DemoGebHomePage.groovy
-│   │   │   │       └── DemoGitHubAcceptanceHomePage.groovy
 │   │   │   │       └── DemoTheBookOfGebPage.groovy
 │   │   │   │   └── specs
 │   │   │   │       └── DemoGebHomePageSpec.groovy
-│   │   │   │       └── DemoGitHubAcceptanceHomeSpec.groovy
-│   │   │   │       └── DemoGoogleKeepSpec.groovy
+│   │   │   │       └── DemoMobileAppSpec.groovy
+│   │   │   │       └── DemoMobileGebHomePageSpec.groovy
 │   │   │   └── java
 │   │   │       └── DemoAcceptanceTest.java
 │   │   └── installation
@@ -44,6 +41,7 @@ This is a Spock, Geb, Unirest and Apium e2e testing project quickstarter with ba
 │   │   │       └── DemoIntegrationTest.java
 │   │   └── resources
 │   │   │   └── helpers
+│   │   │       └── Environments.groovy
 │   │   │       └── SpecHelper.groovy
 │   │   │   └── application.properties
 │   │   │   └── GebConfig.groovy
@@ -86,8 +84,41 @@ If you do not want to use Nexus at all, just define the following property:
 ```
 no_nexus=true
 ```
-
 Run `gradlew -v` to verify the installed version of gradle wrapper.
+
+
+=== Environments Configuration
+
+The environments used in the tests are defined in the `build.gradle` file. You can find the environments under the `ext` block as project properties. These environments are accessed via system properties in the Groovy classes. Here is an example of how the environments are defined:
+```
+ext {
+...
+    environments = [
+        DESKTOP: "desktop",
+        MOBILE_BROWSER: "mobile_browser",
+        MOBILE_APP: "mobile_app"
+    ]
+}
+...
+tasks.withType(Test) {
+    systemProperty 'environments.desktop', environments.DESKTOP
+    systemProperty 'environments.mobile_browser', environments.MOBILE_BROWSER
+    systemProperty 'environments.mobile_app', environments.MOBILE_APP
+}
+```
+
+Additionally, there is a class called `Environments.groovy` that facilitates access to these environments from the Groovy code. The class is located in the `src/test/resources/helpers` directory.
+```
+package helpers
+
+class Environments {
+    // Define environment constants using system properties
+    // Check the build.gradle file for the defined properties
+    static final String DESKTOP = System.getProperty('environments.desktop')
+    static final String MOBILE_BROWSER = System.getProperty('environments.mobile_browser')
+    static final String MOBILE_APP = System.getProperty('environments.mobile_app')
+}
+```
 
 == Frameworks used
 
@@ -111,18 +142,19 @@ You will see the results inside a new folder 'build' in project directory.
 .
 └── build
     └── test-results
-        ├── acceptance-groovy-defaultDriver
-        ├── acceptance-java-defaultDriver
+        ├── acceptance-groovy-desktop
+        ├── acceptance-java-desktop
+        │   │── TEST-DemoAcceptanceTest.xml
         │   │── TEST-specs.DemoGebHomePageSpec.xml
-        │   │── TEST-specs.DemoGitHubAcceptanceHomeSpec.xml
-        │   └── TEST-DemoAcceptanceTest.xml
-        ├── installation-groovy-defaultDriver
-        ├── installation-java-defaultDriver
-        │   │── TEST-DemoInstallation.xml
+        │   │── TEST-specs.DemoMobileAppSpec.xml
+        │   └── TEST-specs.DemoMobileGebHomePageSpec.xml
+        ├── installation-groovy-desktop
+        ├── installation-java-desktop
+        │   │── TEST-DemoInstallationSpec.xml
         │   └── TEST-DemoInstallationTest.xml
-        ├── integration-groovy-defaultDriver
-        └── integration-java-defaultDriver
-            │── TEST-DemoIntegration.xml
+        ├── integration-groovy-desktop
+        └── integration-java-desktop
+            │── TEST-DemoIntegrationSpec.xml
             └── TEST-DemoIntegrationTest.xml
     
 ----
@@ -148,8 +180,6 @@ In Jenkinsfile.template, there is the following stage:
 ** acceptance-groovy
 
 All the results are stashed and published through Jenkins jUnit publisher.
-
-include::partial$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

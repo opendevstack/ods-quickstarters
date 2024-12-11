@@ -58,15 +58,20 @@ ext {
     junitVersion = "5.10.1"
     spockVersion = "2.3-groovy-4.0"
     gebVersion = "7.0"
-    seleniumVersion = "4.15.0"
+    seleniumVersion = "4.25.0"
     htmlunitVersion = "4.13.0"
     unirestVersion = "3.14.5"
-    seleniumJavaVersion = "3.141.59"
-    appiumVersion = "8.3.0"
+    appiumVersion = "9.3.0"
     chromeDriverVersion = "4.2.2"
     edgeDriverVersion = "4.21.0"
-    // When a test fail we can continue or fail the stage
+    apiGuardianAPI = "1.1.2"
     CONTINUE_WHEN_TEST_FAIL = true
+    // Define environments as project properties to be accessed via system properties in Groovy classes
+    environments = [
+        DESKTOP: "desktop",
+        MOBILE_BROWSER: "mobile_browser",
+        MOBILE_APP: "mobile_app"
+    ]
 }
 
 dependencies {
@@ -75,55 +80,30 @@ dependencies {
     testImplementation "com.konghq:unirest-java:${unirestVersion}"
     testImplementation "org.gebish:geb-spock:${gebVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
-    testImplementation "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
-    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumJavaVersion}"
-    testImplementation group: 'io.appium', name: 'java-client', version: "${appiumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-chrome-driver:${chromeDriverVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-edge-driver:${edgeDriverVersion}"
+    testImplementation "io.appium:java-client:${appiumVersion}"
+    testImplementation "org.apiguardian:apiguardian-api:${apiGuardianAPI}"
 }
 
 sourceSets {
-    installation {
-        groovy {
-            srcDir 'src/test/installation/groovy'
+    [TestExecutionPhases.INSTALLATION, TestExecutionPhases.INTEGRATION, TestExecutionPhases.ACCEPTANCE].each { phase ->
+        "$phase" {
+            groovy {
+                srcDir "src/test/${phase}/groovy"
+            }
+            java {
+                srcDir "src/test/${phase}/java"
+            }
+            resources {
+                srcDir 'src/test/resources'
+            }
+            compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+            runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
         }
-        java {
-            srcDir 'src/test/installation/java'
-        }
-        resources {
-            srcDir 'src/test/resources'
-        }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-    }
-
-    integration {
-        groovy {
-            srcDir 'src/test/integration/groovy'
-        }
-        java {
-            srcDir 'src/test/integration/java'
-        }
-        resources {
-            srcDir 'src/test/resources'
-        }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-    }
-
-    acceptance {
-        groovy {
-            srcDir 'src/test/acceptance/groovy'
-        }
-        java {
-            srcDir 'src/test/acceptance/java'
-        }
-        resources {
-            srcDir 'src/test/resources'
-        }
-        compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
     }
 }
 
@@ -149,12 +129,6 @@ class TestLanguages {
     static final String GROOVY = "groovy"
 }
 
-// Here is defined the default environment to execute the tests
-def TestEnv = ['defaultDriver']
-// You can add as many environments as needed and properly configured in GebConfig.groovy file
-// This is an example
-//def TestEnv = ['defaultDriver', 'chrome','edge', 'android', 'ios']
-
 def generateTaskName(def type, def language, def env) {
     return "${type}-${language}-${env}"
 }
@@ -162,8 +136,7 @@ def generateTaskName(def type, def language, def env) {
 // Task to create in a parametrized way Tests task
 def executeTest(def type, def language, def env) {
     return tasks.create(generateTaskName(type, language, env), Test) {
-        description = "Runs ${type} tests ${language} in ${env} enviroment."
-        // The tasks are grouped by type
+        description = "Runs ${type} tests ${language} in ${env} environment."
         group = "verification-${type}"
 
         // Since groovy tests are junit tests and they are run as part of java tests,
@@ -177,35 +150,69 @@ def executeTest(def type, def language, def env) {
         ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
         testClassesDirs = sourceSets["${type}"].output.classesDirs
         classpath = sourceSets["${type}"].runtimeClasspath
+
+        systemProperty "geb.env", env
+
     }
 }
 
-def verification() {
-    // To group the tasks by type, create the required subfolders here
-    def subfolderNames = [TestExecutionPhases.ACCEPTANCE, TestExecutionPhases.INTEGRATION, TestExecutionPhases.INSTALLATION]
-    subfolderNames.each { subfolderName ->
-        file("verification-${subfolderName}").mkdirs()
+def executeTestProd(def type, def language, def env) {
+    return tasks.create(generateTaskName(type, language, env), Test) {
+        description = "Runs ${type} tests ${language} in ${env} environment."
+        group = "verification-${type}"
+
+        // Since groovy tests are junit tests and they are run as part of java tests,
+        // we disable here the execution of junit tests if not running for java language.
+        // jenkins to jira integration does not allows to run a test more than once.
+        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
+            // Mandatory to run JUnit 5 test but incompatible with groovy tests
+            useJUnitPlatform()
+        }
+
+        ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
+        testClassesDirs = sourceSets["${type}"].output.classesDirs
+        classpath = sourceSets["${type}"].runtimeClasspath
+
+        systemProperty "geb.env", env
+
     }
 }
 
 test {
-    //Per every test environment defined
-    for (env in TestEnv) {
-        // To create the tasks
-        dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env)
-        dependsOn executeTest(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)
-        dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)
-        dependsOn executeTest(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)
-        dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)
-        dependsOn executeTest(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY, env)
-
+    // To create the tasks
+    environments.each {env ->
+        [TestExecutionPhases.INSTALLATION, TestExecutionPhases.INTEGRATION, TestExecutionPhases.ACCEPTANCE].each { phase ->
+            [TestLanguages.JAVA, TestLanguages.GROOVY].each { language ->
+                dependsOn executeTest(phase, language, env.value)
+            }
+        }
         // To define the order
-        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)
-        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)
-        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)
-        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)
-        tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env)
+        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.GROOVY, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env.value)
+        tasks.findByName(generateTaskName(TestExecutionPhases.ACCEPTANCE, TestLanguages.JAVA, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env.value)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.GROOVY, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env.value)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INTEGRATION, TestLanguages.JAVA, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env.value)
+        tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env.value)
     }
+}
+
+task testProd {
+    description = "Runs only the installation phase tests."
+    group = "verification"
+
+    // Define dependencies on installation phase tasks
+    environments.each { env ->
+        [TestLanguages.JAVA, TestLanguages.GROOVY].each { language ->
+            dependsOn generateTaskName(TestExecutionPhases.INSTALLATION, language, env.value)
+        }
+        // To define the order
+        tasks.findByName(generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.GROOVY, env.value)).mustRunAfter generateTaskName(TestExecutionPhases.INSTALLATION, TestLanguages.JAVA, env.value)
+    }
+}
+
+tasks.withType(Test) {
+    systemProperty 'environments.desktop', environments.DESKTOP
+    systemProperty 'environments.mobile_browser', environments.MOBILE_BROWSER
+    systemProperty 'environments.mobile_app', environments.MOBILE_APP
 }
 
 testlogger {

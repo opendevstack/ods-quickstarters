@@ -1,120 +1,84 @@
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.gargoylesoftware.htmlunit.WebClient
-import helpers.SpecHelper
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
+import org.openqa.selenium.MutableCapabilities
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.openqa.selenium.Proxy
-import org.openqa.selenium.remote.DesiredCapabilities
-import org.openqa.selenium.edge.EdgeDriver
-import org.openqa.selenium.chrome.ChromeDriver
+import helpers.*
 
-// Load application.properties
+// Load application properties from application.properties file
 def properties = new SpecHelper().getApplicationProperties()
 
-// Getting SauceLabs environment variables to configure IOs device
+// Get SauceLabs environment variables for configuring iOS device
 def sauceLabsUsername = System.getenv('SAUCE_LABS_USERNAME')
 def sauceLabsAccessKey = System.getenv('SAUCE_LABS_ACCESS_KEY')
 
-// These are examples of configuring the URLs to Appium Server in different ways
-// Localhost if you are working in your local environment
-// SauceLabs connection if you are working with a SauceLabs device
-// Both are interchangeable
-def androidURL = "http://127.0.0.1:4723"
-def iosURL = "https://$sauceLabsUsername:$sauceLabsAccessKey@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
-
-// Creating test environments
-// Please, configure the test environments properly, replacing the indicated values ("REPLACE...")
-// Feel free to remove/add as test environments as you need
 environments {
 
-    defaultDriver {
+    // Configuration for desktop environment using HtmlUnitDriver
+    "${Environments.DESKTOP}" {
         driver = {
             HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED, true) {
                 @Override
                 protected WebClient newWebClient(BrowserVersion version) {
-                    WebClient webClient = super.newWebClient(version);
-                    webClient.getOptions().setThrowExceptionOnScriptError(false);
-                    return webClient;
+                    WebClient webClient = super.newWebClient(version)
+                    webClient.getOptions().setThrowExceptionOnScriptError(false)
+                    webClient.getOptions().setCssEnabled(false)
+                    return webClient
                 }
-            };
-
-            def env = System.getenv()
-            if(env.HTTP_PROXY) {
-                Proxy proxy = new Proxy();
-                URL url = new URL(env.HTTP_PROXY);
-                proxy.setHttpProxy("${url.getHost()}:${url.getPort()}");
-                proxy.setNoProxy(env.NO_PROXY)
-                driver.setProxySettings(proxy);
             }
             return driver
         }
     }
 
-    chrome {
+    // Configuration for mobile browser environment using AndroidDriver
+    "${Environments.MOBILE_BROWSER}" {
         driver = {
-            System.setProperty("webdriver.chrome.driver", "REPLACE with your chrome driver path")
-            ChromeDriver driver = new ChromeDriver()
-
-            def env = System.getenv()
-            if(env.HTTP_PROXY) {
-                Proxy proxy = new Proxy();
-                URL url = new URL(env.HTTP_PROXY);
-                proxy.setHttpProxy("${url.getHost()}:${url.getPort()}");
-                proxy.setNoProxy(env.NO_PROXY)
-                driver.setProxySettings(proxy);
-            }
+            MutableCapabilities caps = new MutableCapabilities()
+            caps.setCapability("platformName", "Android")
+            caps.setCapability("browserName", "Chrome")
+            caps.setCapability("appium:deviceName", "Google Pixel 7a GoogleAPI Emulator")
+            caps.setCapability("appium:platformVersion", "13.0")
+            caps.setCapability("appium:automationName", "UiAutomator2")
+            MutableCapabilities sauceOptions = new MutableCapabilities()
+            sauceOptions.setCapability("appiumVersion", "2.11.0")
+            sauceOptions.setCapability("username", sauceLabsUsername)
+            sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+            sauceOptions.setCapability("build", "<your build id>")
+            sauceOptions.setCapability("name", "<MOBILE_BROWSER test name>")
+            sauceOptions.setCapability("deviceOrientation", "PORTRAIT")
+            caps.setCapability("sauce:options", sauceOptions)
+            URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+            AndroidDriver driver = new AndroidDriver(url, caps)
             return driver
         }
     }
 
-    edge {
+    // Configuration for mobile app environment using IOSDriver
+    "${Environments.MOBILE_APP}" {
         driver = {
-            System.setProperty("webdriver.edge.driver", "REPLACE with your edge driver path")
-
-            EdgeDriver driver = new EdgeDriver()
-            def env = System.getenv()
-            if(env.HTTP_PROXY) {
-                Proxy proxy = new Proxy();
-                URL url = new URL(env.HTTP_PROXY);
-                proxy.setHttpProxy("${url.getHost()}:${url.getPort()}");
-                proxy.setNoProxy(env.NO_PROXY)
-                driver.setProxySettings(proxy);
-            }
-            return driver
-        }
-    }
-
-    android {
-        driver = {
-            DesiredCapabilities capabilities = new DesiredCapabilities()
-            capabilities.setCapability("platformName", "Android")
-            capabilities.setCapability("deviceName", "REPLACE with your device name")
-            capabilities.setCapability("app", "REPLACE with your application mobile path")
-            capabilities.setCapability("browserVersion", "REPLACE with your android version");
-            capabilities.setCapability("automationName", "UiAutomator2");
-            capabilities.setCapability("autoGrantPermissions", "true");
-            AndroidDriver driver = new AndroidDriver(new URL(androidURL), caps);
-            return driver
-        }
-    }
-
-    ios {
-        driver = {
-            DesiredCapabilities capabilities = new DesiredCapabilities()
-            capabilities.setCapability("platformName", "iOS")
-            capabilities.setCapability("deviceName", "REPLACE with your device name")
-            capabilities.setCapability("app", "REPLACE with your application mobile path")
-            capabilities.setCapability("browserName", "REPLACE with your browser name");
-            capabilities.setCapability("browserVersion", "REPLACE with your browser version");
-            capabilities.setCapability("automationName", "XCUITest");
-            capabilities.setCapability("autoGrantPermissions", "true");
-            IOSDriver driver = new IOSDriver(new URL(iosURL), caps);
+            MutableCapabilities caps = new MutableCapabilities()
+            caps.setCapability("platformName", "iOS")
+            caps.setCapability("appium:app", "storage:filename=SauceLabs-Demo-App.Simulator.XCUITest.zip")  // The filename of the mobile app
+            caps.setCapability("appium:deviceName", "iPhone Simulator")
+            caps.setCapability("appium:platformVersion", "17.0")
+            caps.setCapability("appium:automationName", "XCUITest")
+            MutableCapabilities sauceOptions = new MutableCapabilities()
+            sauceOptions.setCapability("appiumVersion", "2.1.3")
+            sauceOptions.setCapability("username", sauceLabsUsername)
+            sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+            sauceOptions.setCapability("build", "<your build id>")
+            sauceOptions.setCapability("name", "<MOBILE_APP test name>")
+            sauceOptions.setCapability("deviceOrientation", "PORTRAIT")
+            caps.setCapability("sauce:options", sauceOptions)
+            URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+            IOSDriver driver = new IOSDriver(url, caps)
             return driver
         }
     }
 }
 
+// Configure waiting settings
 waiting {
     timeout = 25
     retryInterval = 0.5
@@ -130,9 +94,8 @@ waiting {
     }
 }
 
-// Base URL of the application to test
+// Set the base URL of the application to test
 baseUrl = properties."config.application.url"
 
-// Reports dir
+// Set the directory for storing reports
 reportsDir = new File(properties."config.reports.dir")
-

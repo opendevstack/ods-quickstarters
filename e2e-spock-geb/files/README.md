@@ -30,7 +30,7 @@ with designated spaces for `modules`, `pages`, and `specs`.
 In addition to these, within the src/test directory, there is a resources section. Here, you will find important configuration files such as `application.properties` and `GebConfig.groovy`.
 These resources are crucial for the configuration and efficient operation of the project.
 
-Also within the `src/test` directory, you will find a `helpers` folder. This folder contains the `SpecHelper.groovy` file, which includes several functions designed to assist you in your development process, such as functions for capturing evidence.
+Also within the `src/test` directory, you will find a `helpers` folder. This folder contains the `SpecHelper.groovy` file, which includes several functions designed to assist you in your development process, such as functions for capturing evidence, and the `Environments.groovy` to define the different environments in which the tests can be executed.
 
 ## Working with GebConfig.groovy
 
@@ -61,41 +61,79 @@ return driver
 
 ### Environments
 
-This section defines different environments such as defaultDriver, chrome, edge, android, and ios. Each environment has its own driver setup.
+This section defines different environments such as DESKTOP, MOBILE_BROWSER, and MOBILE_APP. Each environment has its own driver setup.
 
-These three environments are dedicated to browser:
-* defaultDriver - This driver is ready to use.
-* chrome - To use this driver you must replace this system property:  
-  ```System.setProperty("webdriver.chrome.driver", "replace by your chrome driver path")```
-* edge - To use this driver you must replace this system property:  
-  ```System.setProperty("webdriver.edge.driver", "replace by your edge driver path")```
+These environments are dedicated to browser testing: 
+	DESKTOP - This environment uses the HtmlUnitDriver for headless browser testing.
+	MOBILE_BROWSER - This environment uses the AndroidDriver for testing on mobile browsers.
+And this environment is dedicated to mobile app testing:  
+  MOBILE_APP - This environment uses the IOSDriver for testing on iOS mobile applications.
 
-And these other two are dedicated to mobile:
-* android - To use this driver you must replace some capabilities showed below:
-    ```
-    DesiredCapabilities capabilities = new DesiredCapabilities()
-    capabilities.setCapability("platformName", "Android")
-    capabilities.setCapability("deviceName", "replace by your device name")
-    capabilities.setCapability("app", "replace by your application mobile path")
-    capabilities.setCapability("browserVersion", "replace by your android version");
-    capabilities.setCapability("automationName", "UiAutomator2");
-    capabilities.setCapability("autoGrantPermissions", "true");
-    AndroidDriver driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), caps);
-    return driver
-    ```
-* ios - To use this driver you must replace some capabilities showed below:
-    ```
-    DesiredCapabilities capabilities = new DesiredCapabilities()
-    capabilities.setCapability("platformName", "iOS")
-    capabilities.setCapability("deviceName", "replace by your device name")
-    capabilities.setCapability("app", "replace by your application mobile path")
-    capabilities.setCapability("browserName", "replace by your browser name");
-    capabilities.setCapability("browserVersion", "replace by your browser version");
-    capabilities.setCapability("automationName", "XCUITest");
-    capabilities.setCapability("autoGrantPermissions", "true");
-    IOSDriver driver = new IOSDriver(new URL("https://$sauceLabsUsername:$sauceLabsAccessKey@ondemand.eu-central-1.saucelabs.com:443/wd/hub"), caps);
-    return driver
-    ```
+* Desktop Environment - The DESKTOP environment is configured to use the HtmlUnitDriver:
+		```
+		"${Environments.DESKTOP}" {
+			driver = {
+        HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED, true) {
+          @Override
+          protected WebClient newWebClient(BrowserVersion version) {
+            WebClient webClient = super.newWebClient(version)
+            webClient.getOptions().setThrowExceptionOnScriptError(false)
+            webClient.getOptions().setCssEnabled(false)
+            return webClient
+          }
+        }
+        return driver
+			}
+		}
+		```
+* Mobile Browser Environment - The MOBILE_BROWSER environment is configured to use the AndroidDriver:
+  ```
+	"${Environments.MOBILE_BROWSER}" {
+    driver = {
+      MutableCapabilities caps = new MutableCapabilities()
+      caps.setCapability("platformName", "Android")
+      caps.setCapability("browserName", "Chrome")
+      caps.setCapability("appium:deviceName", "Google Pixel 7a GoogleAPI Emulator")
+      caps.setCapability("appium:platformVersion", "13.0")
+      caps.setCapability("appium:automationName", "UiAutomator2")
+      MutableCapabilities sauceOptions = new MutableCapabilities()
+      sauceOptions.setCapability("appiumVersion", "2.11.0")
+      sauceOptions.setCapability("username", sauceLabsUsername)
+      sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+      sauceOptions.setCapability("build", "<your build id>")
+      sauceOptions.setCapability("name", "<MOBILE_BROWSER test name>")
+      sauceOptions.setCapability("deviceOrientation", "PORTRAIT")
+      caps.setCapability("sauce:options", sauceOptions)
+      URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+      AndroidDriver driver = new AndroidDriver(url, caps)
+      return driver
+    }
+  }
+	```
+* Mobile App Environment - The MOBILE_APP environment is configured to use the IOSDriver:  
+  ```
+	"${Environments.MOBILE_APP}" {
+    driver = {
+        MutableCapabilities caps = new MutableCapabilities()
+        caps.setCapability("platformName", "iOS")
+        caps.setCapability("appium:app", "storage:filename=SauceLabs-Demo-App.Simulator.XCUITest.zip")
+        caps.setCapability("appium:deviceName", "iPhone Simulator")
+        caps.setCapability("appium:platformVersion", "17.0")
+        caps.setCapability("appium:automationName", "XCUITest")
+        MutableCapabilities sauceOptions = new MutableCapabilities()
+        sauceOptions.setCapability("appiumVersion", "2.1.3")
+        sauceOptions.setCapability("username", sauceLabsUsername)
+        sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+        sauceOptions.setCapability("build", "<your build id>")
+        sauceOptions.setCapability("name", "<MOBILE_APP test name>")
+        sauceOptions.setCapability("deviceOrientation", "PORTRAIT")
+        caps.setCapability("sauce:options", sauceOptions)
+        URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+        IOSDriver driver = new IOSDriver(url, caps)
+        return driver
+    }
+	}
+	```
 
 ### Base URL
 
@@ -117,155 +155,279 @@ This project is structured with different sections for `pages`, `modules`, and `
 In this section, we have the `DemoGebHomePage` class which defines the home page, https://gebish.org.
 This class includes the title of the page and some of its content, specifically the `manuals` menu.
 There is a second web page defined called DemoTheBookOfGebPage, which can be accessed through the 'manuals' menu.
-
-    package pages
-
-    import geb.Page
-    import modules.DemoManualsMenuModule
-
-    class DemoGebHomePage extends Page {
-
-        static url = "https://gebish.org"
-
-        static at = { title == "Geb - Very Groovy Browser Automation" }
-
-        static content = {
-            manualsMenu { module(DemoManualsMenuModule) }
-        }
-    }
-
+	```
+	package pages
+	
+	import geb.Page
+	import modules.DemoManualMenuModule
+	
+	class DemoGebHomePage extends Page {
+			// URL of the Geb home page
+			static url = "https://gebish.org"
+	
+			// Condition to verify that the browser is at the correct page
+			static at = { title == "Geb - Very Groovy Browser Automation" }
+	
+			static content = {
+					// Define the manuals menu module
+					manualsMenu { module(DemoManualMenuModule) }
+			}
+	}
+	```
 
 ### Modules Section
 The `manuals` menu from the home page is defined as a module in this section.
-
-    package modules
-
-    class DemoManualsMenuModule extends geb.Module {
-        static content = {
-            toggle { $("div.menu a.manuals") }
-            linksContainer { $("#manuals-menu") }
-            links { linksContainer.find("a") }
-        }
-
-        void open() {
-            toggle.click()
-            waitFor { !linksContainer.hasClass("animating") }
-        }
-    }
-
+	```
+	package modules
+	
+	class DemoManualMenuModule extends geb.Module {
+		static content = {
+			// Define the toggle element for the manuals menu
+			toggle { $("div.menu a.manuals") }
+	
+			// Define the container for the links in the manuals menu
+			linksContainer { $("#manuals-menu") }
+	
+			// Define the links within the links container
+			links { linksContainer.find("a") }
+		}
+	
+		// Method to open the manuals menu
+		void open() {
+			toggle.click()
+			// Wait until the links container is no longer animating
+			waitFor { !linksContainer.hasClass("animating") }
+		}
+	}
+	```
+	
 ### Specs Section
 
-#### Gebish.org example
+#### Gebish.org example - for DESKTOP
 
 The test that utilizes these pages and modules is located in the `specs` section and is called `DemoGebHomePageSpec`.
 
-**Setup** - In the `DemoGebHomePageSpec` test, the `def setup()` method is used to define the test environment that will be used for the test.
+**Setup** - In the `DemoGebHomePageSpec` test, the `def setupSpec()` method is used to check the environment and skips tests if it is not DESKTOP.
 
 **Test Case** - The test case `can access The Book of Geb via homepage` is defined in this test. This test case simply accesses the `gebHomePage` and then accesses the `theBookOfGebPage` by opening the `manualsMenu` module.
 
-**Evidence Collection** - During the process of executing this test, two pieces of evidence are collected.
-
+**Evidence Collection** - During the process of executing this test, multiple pieces of evidence are collected.
+	```
 	package specs
+  
+  import geb.spock.GebReportingSpec
+  import helpers.SpecHelper
+  import pages.DemoGebHomePage
+  import pages.DemoTheBookOfGebPage
+  import spock.lang.IgnoreIf
+  import helpers.*
+  
+  class DemoGebHomePageSpec extends GebReportingSpec {
+  
+    def gebHomePage = page(DemoGebHomePage)
+    def theBookOfGebPage = page(DemoTheBookOfGebPage)
+  
+    def setupSpec() {
+      if (System.getProperty("geb.env") != Environments.DESKTOP) {
+        println "Skipping tests - environments not supported"
+        return
+      }
+    }
+  
+    @IgnoreIf({ System.getProperty("geb.env") != Environments.DESKTOP })
+    def "can access The Book of Geb via homepage"() {
+      given:
+      to gebHomePage
+  
+      when:
+      gebHomePage.manualsMenu.open()
+      gebHomePage.manualsMenu.links[0].click()
+  
+      SpecHelper.printEvidenceForPageElement(this, 1, $("#introduction"), "Introduction header")
+      SpecHelper.printEvidenceForPageElements(this, 1,
+        [
+          [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(1)"), 'description' : '1st paragraph'],
+          [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(2)"), 'description' : '2nd paragraph']
+        ]
+      )
+  
+      then:
+      at theBookOfGebPage
+    }
+  }
+	```
 	
-	import geb.spock.GebReportingSpec
-	import helpers.SpecHelper
-	import pages.DemoGebHomePage
-	import pages.DemoTheBookOfGebPage
-	
-	class DemoGebHomePageSpec extends GebReportingSpec {
-	
-		def gebHomePage = page(DemoGebHomePage)
-		def theBookOfGebPage = page(DemoTheBookOfGebPage)
-	
-		def setup() {
-			System.setProperty("geb.env", "defaultDriver")
-		}
-	
-		def "can access The Book of Geb via homepage"() {
-			given:
-			to gebHomePage
-	
-			when:
-			SpecHelper.printEvidenceForPageElement(this, 1, $("manuals-menu"), "Manuals menu exists")
-			gebHomePage.manualsMenu.open()
-			SpecHelper.printEvidenceForPageElement(this, 1, $("a", xpath: '//*[@id=\"manuals-menu\"]/div/a[1]'), "Current version submenu exists")
-			gebHomePage.manualsMenu.links[0].click()
-	
-			then:
-			at theBookOfGebPage
-		}
-	}
+#### Gebish.org example - for MOBILE_BROWSER
+The test that utilizes these elements is located in the `specs` section and is called `DemoMobileGebHomePageSpec`.
 
-#### Google Keep example
-The test that utilizes these pages and modules is located in the `specs` section and is called `DemoGebHomePageSpec`.
+**Setup** - In the `DemoMobileGebHomePageSpec` test, the `def setupSpec()` method is used to check the environment and skips tests if it is not MOBILE_BROWSER, and initialize the Appium driver.
 
-**Setup** - In the `DemoGoogleKeepSpec` test, the `def setupSpec()` method is used to define the test environment that will be used for the test.
-
-**Test Case** - The test case `Open Google Keep and press Start button` is defined in this test. This test case simply open the Google Keep mobile application and click on Start button.
+**Test Case** - The test case ` verify geb home page and documentation navigation` is defined in this test. This test case navigates to the Geb home page and then accesses the Documentation page.
 
 **Evidence Collection** - During the process of executing this test, evidence is collected.
+  ```
+  package specs
+  
+  import geb.spock.GebReportingSpec
+  import io.appium.java_client.AppiumDriver
+  import org.openqa.selenium.WebElement
+  import spock.lang.Shared
+  import spock.lang.Stepwise
+  import spock.lang.IgnoreIf
+  import helpers.*
+  
+  @Stepwise
+  class DemoMobileGebHomePageSpec extends GebReportingSpec {
 
-**Steps to make it work property**
-This example is commented by default because android environment is not configured and apk is not part of the template.
-```
-	import org.openqa.selenium.WebElement
-	import spock.lang.Stepwise
-	
-	@Stepwise
-	class DemoGoogleKeepSpec extends GebReportingSpec {
-	
-	
-		static Browser browser
-	
-		def setupSpec() {
-			System.setProperty("geb.env", "android")
-			browser = new Browser()
-		}
-	
-		def cleanupSpec() {
-			browser.driver.quit()
-		}
-	
-		// This is a demo test for Google Keep apk
-		// Please, ensure your android test environment is properly configured before uncommenting the lines below
-		def "Open Google Keep and press Start button"() {
-			when: "Google Keep is opened"
-			browser.driver.activateApp('com.google.android.keep')
-	
-			then: "Press the Start button"
-			SpecHelper.printEvidenceForMobileElement(this, 1, By.className("android.widget.Button"), "Current version submenu exists")
-			List<WebElement> startButton = browser.driver.findElements(By.className("android.widget.Button"))
-			if (!startButton.isEmpty()) {
-				startButton.get(0).click()
-			}
-			List<WebElement> buttons = browser.driver.findElements(By.className("android.widget.Button"))
-			assert !buttons.isEmpty()
-		}
-	
+    // Shared driver instance for the AppiumDriver
+    @Shared
+    def static driver
+    // Shared result variable to track test success
+    @Shared
+    def static result = true
+
+    def setupSpec() {
+      // Check the environment and skip tests if it is not MOBILE_BROWSER
+      if (System.getProperty("geb.env") != Environments.MOBILE_BROWSER) {
+        println "Skipping tests - environments not supported"
+        return
+      }
+
+      // Initialize the Appium driver
+      driver = browser.driver as AppiumDriver
+    }
+
+    def cleanupSpec() {
+      // Set the job result and quit the driver if it is initialized
+      if (driver) {
+        driver.executeScript("sauce:job-result=$result")
+        driver.quit()
+      }
+    }
+
+    @IgnoreIf({ System.getProperty("geb.env") != Environments.MOBILE_BROWSER })
+    def "verify geb home page and documentation navigation"() {
+      when: "Navigating to Geb home page"
+      try {
+        // Open the Geb home page
+        driver.get("https://www.gebish.org")
+      } catch (AssertionError e) {
+        result = false
+        throw e
+      }
+
+      then: "The page title should be 'Geb - Very Groovy Browser Automation'"
+      try {
+        // Verify the page title
+        assert title == "Geb - Very Groovy Browser Automation"
+      } catch (AssertionError e) {
+        result = false
+        throw e
+      }
+
+      when: "Accessing to the Documentation page"
+      try {
+        // Wait for the Documentation button to be displayed and click it
+        waitFor { $("button.ui.blue.button", text: "Documentation").displayed }
+        WebElement documentationButton = $("button.ui.blue.button", text: "Documentation").firstElement()
+        documentationButton.click()
+
+        // Print evidence for the Documentation button
+        SpecHelper.printEvidenceForWebElement(this, 1, documentationButton, "Documentation Button Evidence")
+      } catch (AssertionError e) {
+        result = false
+        throw e
+      }
+
+      then: "The page title should be 'The Book Of Geb'"
+      try {
+        // Verify the page title
+        assert title == "The Book Of Geb"
+      } catch (AssertionError e) {
+        result = false
+        throw e
+      }
+    }
+
 	}
-```
+	```
+#### My Demo App Sauce Labs example - for MOBILE_APP
+The test that utilizes these elements is located in the `specs` section and is called `DemoMobileGebHomePageSpec`.
 
-Below there are all the steps you have to follow to prepare your locale environment:
-* Download the Google Keep apk, save it in application folder, and call it Keep.apk
-* Install and run Appium server:
-  * Prerequisite - node and npm already installed.
-  * Open a cmd console with administrator mode
-  * Execute the command to install Appium server: `npm install -g appium`
-  * Execute the command to run Appium server: `appium`
-* Configure the `android` environment. This is an example of how to configure it with Appium server installed locally:
+**Setup** - In the `DemoMobileAppSpec` test,  the `def setupSpec()` method is used to check the environment and skips tests if it is not MOBILE_APP, and initialize the Appium driver
+
+**Test Case** - The test case `check elements in the first page of the app` is defined in this test. This test case verifies the presence of a specific element and interacts with it.
+
+**Evidence Collection** - During the process of executing this test, evidence is collected for the specific element.
+
 ```
-    DesiredCapabilities capabilities = new DesiredCapabilities();
-    capabilities.setCapability("platformName", "Android");
-    capabilities.setCapability("browserVersion", "12.0.0.149");
-    capabilities.setCapability("deviceName", "HuaweiP60Pro");
-    capabilities.setCapability("automationName", "UiAutomator2");
-    capabilities.setCapability("app", new File(System.getProperty("user.dir"), "/application/Keep.apk").getAbsolutePath())
-    AndroidDriver driver = new AndroidDriver(
-        // The default URL in Appium is http://127.0.0.1:4723/wd/hub
-        new URL("http://127.0.0.1:4723"), capabilities
-    );
-    return driver
-```
+	package specs
+
+  import geb.spock.GebReportingSpec
+  import io.appium.java_client.AppiumDriver
+  import io.appium.java_client.AppiumBy
+  import org.openqa.selenium.WebElement
+  import spock.lang.IgnoreIf
+  import spock.lang.Shared
+  import spock.lang.Stepwise
+  import helpers.*
+  
+  @Stepwise
+  class DemoMobileAppSpec extends GebReportingSpec {
+
+    // Shared driver instance for the AppiumDriver
+    @Shared
+    def static driver
+    // Shared result variable to track test success
+    @Shared
+    def static result = true
+
+    def setupSpec() {
+      // Check the environment and skip tests if it is not MOBILE_APP
+      if (System.getProperty("geb.env") != Environments.MOBILE_APP) {
+        println "Skipping tests - environments not supported"
+        return
+      }
+      // Initialize the Appium driver
+      driver = browser.driver as AppiumDriver
+    }
+
+    def cleanupSpec() {
+      // Set the job result and quit the driver if it is initialized
+      if (driver) {
+        driver.executeScript("sauce:job-result=$result")
+        driver.quit()
+      }
+    }
+
+    @IgnoreIf({ System.getProperty("geb.env") != Environments.MOBILE_APP})
+    def "check elements in the first page of the app"() {
+      given: "Launching the app"
+      when: "Printing all the elements"
+      try {
+        // Verify if the specific element is present
+        List<WebElement> specificElements = driver.findElements(AppiumBy.name("Cart-tab-item"))
+
+        if (!specificElements.isEmpty() && specificElements[0].isDisplayed()) {
+          // Click on the element
+          specificElements[0].click()
+          println "Clicked on element with name 'Cart-tab-item'"
+					
+          // Print evidence for the specific element
+          SpecHelper.printEvidenceForWebElement(this, 1, specificElements[0], "Cart-tab-item Element Evidence")
+        } else {
+          println "Element with name 'Cart-tab-item' not found or not displayed"
+        }
+      } catch (Exception e) {
+        result = false
+        throw e
+      }
+      then: "The specific element should be present"
+      assert true
+    }
+
+  }
+  ```
 
 ## Running end-to-end tests
 
