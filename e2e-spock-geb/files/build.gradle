@@ -69,8 +69,8 @@ ext {
     // Define environments as project properties to be accessed via system properties in Groovy classes
     environments = [
         DESKTOP: "desktop",
-        MOBILE_BROWSER: "mobile_browser",
-        MOBILE_APP: "mobile_app"
+//        MOBILE_BROWSER: "mobile_browser",
+//        MOBILE_APP: "mobile_app"
     ]
 }
 
@@ -156,31 +156,10 @@ def executeTest(def type, def language, def env) {
     }
 }
 
-def executeTestProd(def type, def language, def env) {
-    return tasks.create(generateTaskName(type, language, env), Test) {
-        description = "Runs ${type} tests ${language} in ${env} environment."
-        group = "verification-${type}"
-
-        // Since groovy tests are junit tests and they are run as part of java tests,
-        // we disable here the execution of junit tests if not running for java language.
-        // jenkins to jira integration does not allows to run a test more than once.
-        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
-            // Mandatory to run JUnit 5 test but incompatible with groovy tests
-            useJUnitPlatform()
-        }
-
-        ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
-        testClassesDirs = sourceSets["${type}"].output.classesDirs
-        classpath = sourceSets["${type}"].runtimeClasspath
-
-        systemProperty "geb.env", env
-
-    }
-}
-
 test {
+
     // To create the tasks
-    environments.each {env ->
+    environments.each { env ->
         [TestExecutionPhases.INSTALLATION, TestExecutionPhases.INTEGRATION, TestExecutionPhases.ACCEPTANCE].each { phase ->
             [TestLanguages.JAVA, TestLanguages.GROOVY].each { language ->
                 dependsOn executeTest(phase, language, env.value)

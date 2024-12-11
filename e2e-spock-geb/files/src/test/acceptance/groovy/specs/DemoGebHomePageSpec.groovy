@@ -3,7 +3,6 @@ package specs
 import geb.spock.GebReportingSpec
 import pages.DemoGebHomePage
 import pages.DemoTheBookOfGebPage
-import spock.lang.IgnoreIf
 import helpers.*
 
 class DemoGebHomePageSpec extends GebReportingSpec {
@@ -13,14 +12,9 @@ class DemoGebHomePageSpec extends GebReportingSpec {
     def theBookOfGebPage = page(DemoTheBookOfGebPage)
 
     def setupSpec() {
-        // Check the environment and skip tests if it is not DESKTOP
-        if (System.getProperty("geb.env") != Environments.DESKTOP) {
-            println "Skipping tests - environments not supported"
-            return
-        }
+
     }
 
-    @IgnoreIf({ System.getProperty("geb.env") != Environments.DESKTOP })
     def "can access The Book of Geb via homepage"() {
         given:
         // Navigate to the Geb home page
