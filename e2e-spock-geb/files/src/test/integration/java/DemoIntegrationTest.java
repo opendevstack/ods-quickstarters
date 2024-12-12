@@ -5,7 +5,6 @@ import spock.lang.Tag;
 public class DemoIntegrationTest {
 
     @Test
-    @Tag("empty")
     void basicTest() {
         // Assert that the condition is true
         Assertions.assertTrue(true);

@@ -145,13 +145,13 @@ def executeTest(def type, def language, def env) {
         useJUnitPlatform {
             switch (env) {
                 case environments.DESKTOP:
-                    includeTags 'demo_desktop'
+                    includeTags 'test_desktop'
                     break
 //                case environments.MOBILE_BROWSER:
-//                    includeTags 'demo_mobile_browser'
+//                    includeTags 'test_mobile_browser'
 //                    break
 //                case environments.MOBILE_APP:
-//                    includeTags 'demo_mobile_app'
+//                    includeTags 'test_mobile_app'
 //                    break
             }
         }

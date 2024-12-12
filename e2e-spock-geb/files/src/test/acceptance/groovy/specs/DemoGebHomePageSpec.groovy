@@ -12,11 +12,9 @@ class DemoGebHomePageSpec extends GebReportingSpec {
     def gebHomePage = page(DemoGebHomePage)
     def theBookOfGebPage = page(DemoTheBookOfGebPage)
 
-    def setupSpec() {
-
-    }
-
-    @Tag("demo_desktop")
+    // Add this @Tag to include this test in the 'test_desktop' group.
+    // This tag ensures the test runs in the Environment.DESKTOP configuration.
+    @Tag("test_desktop")
     def "can access The Book of Geb via homepage"() {
         given:
         // Navigate to the Geb home page
