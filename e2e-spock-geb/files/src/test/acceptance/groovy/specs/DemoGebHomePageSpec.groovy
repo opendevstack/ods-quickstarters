@@ -3,7 +3,8 @@ package specs
 import geb.spock.GebReportingSpec
 import pages.DemoGebHomePage
 import pages.DemoTheBookOfGebPage
-import helpers.*
+import helpers.SpecHelper
+import spock.lang.Tag
 
 class DemoGebHomePageSpec extends GebReportingSpec {
 
@@ -15,6 +16,7 @@ class DemoGebHomePageSpec extends GebReportingSpec {
 
     }
 
+    @Tag("demo_desktop")
     def "can access The Book of Geb via homepage"() {
         given:
         // Navigate to the Geb home page
