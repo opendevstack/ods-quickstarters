@@ -58,8 +58,17 @@ def stageTest(def context) {
           stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration*/*.xml', allowEmpty: true)
           stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance*/*.xml', allowEmpty: true)
         }
-        if (status != 0) {
-          error "Executing tests failed!"
+
+        // Handle the test status
+        switch (status) {
+          case 0:
+            echo "All tests passed successfully"
+            break
+          case 1:
+            unstable "Some tests have failed"
+            break
+          default:
+            error "Something went wrong, when executing tests, exitCode ${status}"
         }
       }
     }
