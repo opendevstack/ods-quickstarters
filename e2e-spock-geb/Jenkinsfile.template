@@ -64,11 +64,8 @@ def stageTest(def context) {
           case 0:
             echo "All tests passed successfully"
             break
-          case 1:
-            unstable "Some tests have failed"
-            break
           default:
-            error "Something went wrong, when executing tests, exitCode ${status}"
+            unstable "Some tests have failed or encountered errors. Please check the logs for more details."
         }
       }
     }

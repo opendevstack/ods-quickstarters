@@ -40,4 +40,5 @@ class DemoGebHomePageSpec extends GebReportingSpec {
         // Verify that the browser is at the book page
         at theBookOfGebPage
     }
+
 }

@@ -15,9 +15,9 @@ class DemoMobileAppSpec extends GebReportingSpec {
     // Shared driver instance for the AppiumDriver
     @Shared
     def static driver
-    // Shared result variable to track test success
+    // Shared variable to indicate the success of the test for Sauce Labs
     @Shared
-    def static result = false
+    def static sauceLabsResult = false
 
     def setupSpec() {
         // Initialize the Appium driver
@@ -28,12 +28,19 @@ class DemoMobileAppSpec extends GebReportingSpec {
         driver.quit()
     }
     def setup() {
-        // Set the job result to false
-        result = false
+        // Initialize the Sauce Labs result to false
+        sauceLabsResult = false
     }
     def cleanup() {
-        // Set the job result in Sauce Labs
-        driver.executeScript("sauce:job-result=$result")
+        // Set the job result in
+        driver.executeScript("sauce:job-result=$sauceLabsResult")
+    }
+
+    // This function sets the Sauce Labs result to true, indicating that the test passed successfully.
+    // We use this variable to inform Sauce Labs about the test results, storing whether there were any failures.
+    // By setting it to true at the end of each test, we ensure that Sauce Labs is updated with the correct test status.
+    def setTrueResultForSauceLabs() {
+        (sauceLabsResult = true) != null
     }
 
     // Add this @Tag to include this test in the 'test_mobile_app' group.
@@ -54,8 +61,8 @@ class DemoMobileAppSpec extends GebReportingSpec {
         // Print evidence for the specific element
         SpecHelper.printEvidenceForWebElement(this, 1, specificElements[0], "Cart-tab-item Element Evidence")
 
-        // Set the job result to true if the assertion passes
-        (result = true) != null
+        // Set the Sauce Labs result to true, indicating that the test passed successfully
+        setTrueResultForSauceLabs()
     }
 
 }
