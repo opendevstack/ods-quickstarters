@@ -26,7 +26,7 @@
 - Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
 - Removal of deprecated versions ([#1068](https://github.com/opendevstack/ods-quickstarters/issues/1068))
 - Generate PDF report for cypress and improved environment management ([#1079](https://github.com/opendevstack/ods-quickstarters/pull/1079))
-- Mobile testing enablement adding Appium in e2e-spock-geb quickstarter
+- Mobile testing enablement adding Appium & Sauce Labs in e2e-spock-geb quickstarter ([#1083](https://github.com/opendevstack/ods-quickstarters/pull/1083))
 
 ### Added
 
