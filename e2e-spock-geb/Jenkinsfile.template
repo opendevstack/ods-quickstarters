@@ -1,10 +1,9 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
+// Import the shared Jenkins library
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
-node {
-  dockerRegistry = env.DOCKER_REGISTRY
-}
 
+// Define the Jenkins pipeline
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-jdk:@agent_image_tag@',
   branchToEnvironmentMapping: [
@@ -16,6 +15,7 @@ odsComponentPipeline(
   odsComponentStageScanWithSonar(context)
 }
 
+// Define the test stage
 def stageTest(def context) {
   def javaOpts = "-Xmx512m"
   def gradleTestOpts = "-Xmx128m"
@@ -37,6 +37,8 @@ def stageTest(def context) {
       "OPENSHIFT_PROJECT=${context.targetProject}",
       "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"
     ]) {
+      // Use credentials for SauceLabs authentication
+      // You can remove this block if you are not using SauceLabs
       withCredentials([
         usernamePassword(credentialsId: "${context.projectId}-cd-sauce-labs-user-access-key", passwordVariable: 'SAUCE_LABS_ACCESS_KEY', usernameVariable: 'SAUCE_LABS_USERNAME'),
       ]) {
