@@ -193,7 +193,7 @@ RUN cd /opt \
     && git clone https://github.com/rbenv/ruby-build.git /opt/rbenv/plugins/ruby-build \
     && echo 'export PATH="/opt/rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bash_profile \
     && source ~/.bash_profile \
-    && rbenv install $RUBY_VERSION \
+    && MAKE_OPTS='-j 4' rbenv install $RUBY_VERSION \
     && rbenv global $RUBY_VERSION \
     && gem install bundler -v $BUNDLER_VERSION \
     && RBENV_VERSION=$RUBY_VERSION gem install bundler -v $BUNDLER_VERSION \
