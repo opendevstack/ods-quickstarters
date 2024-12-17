@@ -4,6 +4,7 @@ import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import org.openqa.selenium.MutableCapabilities
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.Proxy
 import helpers.*
 
 // Load application properties from application.properties file
@@ -26,6 +27,14 @@ environments {
                     webClient.getOptions().setCssEnabled(false)
                     return webClient
                 }
+            }
+            def env = System.getenv()
+            if(env.HTTP_PROXY) {
+                Proxy proxy = new Proxy();
+                URL url = new URL(env.HTTP_PROXY);
+                proxy.setHttpProxy("${url.getHost()}:${url.getPort()}");
+                proxy.setNoProxy(env.NO_PROXY)
+                driver.setProxySettings(proxy);
             }
             return driver
         }
