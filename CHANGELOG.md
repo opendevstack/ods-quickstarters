@@ -27,6 +27,7 @@
 - Removal of deprecated versions ([#1068](https://github.com/opendevstack/ods-quickstarters/issues/1068))
 - Generate PDF report for cypress and improved environment management ([#1079](https://github.com/opendevstack/ods-quickstarters/pull/1079))
 - Change PDF report zip file name in Cypress Quickstarter ([#1082](https://github.com/opendevstack/ods-quickstarters/pull/1082))
+- Included small fixes in e2e-cypress ([#1086](https://github.com/opendevstack/ods-quickstarters/pull/1086))
 
 ### Added
 
