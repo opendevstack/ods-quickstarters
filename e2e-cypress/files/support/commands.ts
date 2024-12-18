@@ -26,3 +26,4 @@ declare global {
       addContextPath(title: string, screenshot: string);
     }
   }
+}
