@@ -120,6 +120,68 @@ class Environments {
 }
 ```
 
+For each environment, we have a driver configured in the GebConfig.groovy file:
+```
+	environments {
+	  
+	  // Configuration for desktop environment using HtmlUnitDriver
+	  "${Environments.DESKTOP}" {
+	    driver = {
+	      HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED, true) {
+	      ...
+	      }
+	    }
+	  }
+	  
+	  // Configuration for mobile browser environment using AndroidDriver
+	  "${Environments.MOBILE_BROWSER}" {
+	    driver = {
+	      MutableCapabilities caps = new MutableCapabilities()
+	      ...
+	      MutableCapabilities sauceOptions = new MutableCapabilities()
+	      ...
+	      caps.setCapability("sauce:options", sauceOptions)
+	      URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+	      AndroidDriver driver = new AndroidDriver(url, caps)
+	      return driver
+	    }
+	  }
+	  
+	  // Configuration for mobile app environment using IOSDriver
+	  "${Environments.MOBILE_APP}" {
+	    driver = {
+	      MutableCapabilities caps = new MutableCapabilities()
+	      ...
+	      MutableCapabilities sauceOptions = new MutableCapabilities()
+	      ...
+	      caps.setCapability("sauce:options", sauceOptions)
+	      URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub")
+	      IOSDriver driver = new IOSDriver(url, caps)
+	      return driver
+	    }
+	  }
+	}
+```
+
+In the build.gradle file, there is also a filter by environment and tags:
+```
+  // Specify the tags to include/exclude for each environment
+  // Please, adjust the tags according to your project needs
+  useJUnitPlatform {
+    switch (env) {
+      case environments.DESKTOP:
+        includeTags 'test_desktop'
+        break
+      case environments.MOBILE_BROWSER:
+        includeTags 'test_mobile_browser'
+        break
+      case environments.MOBILE_APP:
+        includeTags 'test_mobile_app'
+        break
+    }
+  }
+```
+
 == Sauce Labs Integration
 
 Sauce Labs is a cloud-based platform that provides comprehensive testing solutions for web and mobile applications. It allows you to run tests on a wide range of real devices and emulators/simulators, ensuring your applications work seamlessly across different environments.
@@ -134,9 +196,29 @@ This template is prepared to work with Sauce Labs virtual devices, allowing you 
 * **Error Monitoring and Reporting**: Capture and resolve application errors quickly with detailed insights.
 * **CI/CD Integration**: Seamlessly integrate with your continuous integration and delivery pipelines.
 
-=== How to use it
+=== Credentials for Sauce Labs
 
-To use Sauce Labs, a secret will be created by default where the `username` and `accessKey` necessary to execute the test cases in Sauce Labs will be stored. By default, these values will be set to "changeme". Once you have obtained your Sauce Labs username and access key, you should modify the secret data to start interacting with Sauce Labs.
+To execute tests on Sauce Labs, you need Sauce Labs credentials. These credentials are stored in a secret called sauce-labs-user-access-key, which by default is created with "changeme" values for both username and password. Users will need to update these values with their actual Sauce Labs credentials.
+
+In the Jenkinsfile, the credentials are retrieved as follows:
+```
+	// Use credentials for SauceLabs authentication
+	// You can remove this block if you are not using SauceLabs
+	withCredentials([
+	  usernamePassword(credentialsId: "${context.projectId}-cd-sauce-labs-user-access-key", passwordVariable: 'SAUCE_LABS_ACCESS_KEY', usernameVariable: 'SAUCE_LABS_USERNAME'),
+	]) {
+    ...
+	}
+```
+
+In the GebConfig.groovy file, these credentials are used to configure the drivers:
+```
+	// Get SauceLabs environment variables for configuring iOS device
+	def sauceLabsUsername = System.getenv('SAUCE_LABS_USERNAME')
+	def sauceLabsAccessKey = System.getenv('SAUCE_LABS_ACCESS_KEY')
+```
+
+This setup ensures that your tests can authenticate with Sauce Labs and run on the specified virtual devices.
 
 == Usage - how do you start after you provisioned this quickstarter
 

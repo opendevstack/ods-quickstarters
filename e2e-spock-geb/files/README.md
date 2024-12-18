@@ -43,22 +43,6 @@ Loading Application Properties: This section loads the application properties us
 def properties = new SpecHelper().getApplicationProperties()
 ```
 
-### SauceLabs
-SauceLabs Environment Variables: If you're using SauceLabs for testing, these environment variables are used to configure the iOS device.
-Please note that a SauceLabs account is a prerequisite for this process.
-```
-// Getting SauceLabs environment variables to configure IOs device
-def sauceLabsUsername = System.getenv('SAUCE_LABS_USERNAME')
-def sauceLabsAccessKey = System.getenv('SAUCE_LABS_ACCESS_KEY')
-...
-ios {
-driver = {
-...
-IOSDriver driver = new IOSDriver(new URL("https://$sauceLabsUsername:$sauceLabsAccessKey@ondemand.eu-central-1.saucelabs.com:443/wd/hub"), caps);
-return driver
-}
-```
-
 ### Environments
 
 This section defines different environments such as DESKTOP, MOBILE_BROWSER, and MOBILE_APP. Each environment has its own driver setup.
@@ -82,7 +66,15 @@ And this environment is dedicated to mobile app testing:
             return webClient
           }
         }
-        return driver
+        def env = System.getenv()
+        if(env.HTTP_PROXY) {
+            Proxy proxy = new Proxy();
+            URL url = new URL(env.HTTP_PROXY);
+            proxy.setHttpProxy("${url.getHost()}:${url.getPort()}");
+            proxy.setNoProxy(env.NO_PROXY)
+            driver.setProxySettings(proxy);
+        }
+        return driver			
 			}
 		}
 		```
@@ -134,18 +126,61 @@ And this environment is dedicated to mobile app testing:
     }
 	}
 	```
+### SauceLabs Integration
+Sauce Labs is a cloud-based platform that provides comprehensive testing solutions for web and mobile applications. It allows you to run tests on a wide range of real devices and emulators/simulators, ensuring your applications work seamlessly across different environments.
+
+This template is prepared to work with Sauce Labs virtual devices, allowing you to perform all mobile tests on these virtual devices.
+
+#### Credentials for Sauce Labs
+To execute tests on Sauce Labs, you need Sauce Labs credentials. These credentials are stored in a secret called sauce-labs-user-access-key, which by default is created with "changeme" values for both username and password. Users will need to update these values with their actual Sauce Labs credentials.
+
+In the Jenkinsfile, the credentials are retrieved as follows:
+```
+  // Use credentials for SauceLabs authentication
+  // You can remove this block if you are not using SauceLabs
+  withCredentials([
+    usernamePassword(credentialsId: "${context.projectId}-cd-sauce-labs-user-access-key", passwordVariable: 'SAUCE_LABS_ACCESS_KEY', usernameVariable: 'SAUCE_LABS_USERNAME'),
+  ]) {
+    ...
+  }
+```
+
+In the GebConfig.groovy file, these credentials are used to configure the mobile drivers:
+```
+  // Get SauceLabs environment variables for configuring iOS device
+  def sauceLabsUsername = System.getenv('SAUCE_LABS_USERNAME')
+  def sauceLabsAccessKey = System.getenv('SAUCE_LABS_ACCESS_KEY')
+
+  ...
+  
+  // Configuration for mobile browser environment using AndroidDriver
+  "${Environments.MOBILE_BROWSER}" {
+    driver = {
+      ...
+      sauceOptions.setCapability("username", sauceLabsUsername)
+      sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+    	
+  ...
+	
+  // Configuration for mobile app environment using IOSDriver
+  "${Environments.MOBILE_APP}" {
+    driver = {
+      ...
+      sauceOptions.setCapability("username", sauceLabsUsername)
+      sauceOptions.setCapability("accessKey", sauceLabsAccessKey)
+```
+
+This setup ensures that your tests can authenticate with Sauce Labs and run on the specified virtual devices.
 
 ### Base URL
 
 This refers to the root URL of the application under test. Please modify config.application.url in the 'application.properties' file, located within 'src\test\resources'.
-
-    ```baseUrl = properties."config.application.url"```
+```baseUrl = properties."config.application.url"```
 
 ### Reports Directory
 
 This is the directory where the Geb reports will be stored.  Please modify config.reports.dir in the 'application.properties' file, located within 'src\test\resources'.
-
-    ```reportsDir = new File(properties."config.reports.dir")```
+```reportsDir = new File(properties."config.reports.dir")```
 
 ## Test example
 
@@ -155,51 +190,51 @@ This project is structured with different sections for `pages`, `modules`, and `
 In this section, we have the `DemoGebHomePage` class which defines the home page, https://gebish.org.
 This class includes the title of the page and some of its content, specifically the `manuals` menu.
 There is a second web page defined called DemoTheBookOfGebPage, which can be accessed through the 'manuals' menu.
-	```
-	package pages
-	
-	import geb.Page
-	import modules.DemoManualMenuModule
-	
-	class DemoGebHomePage extends Page {
-			// URL of the Geb home page
-			static url = "https://gebish.org"
-	
-			// Condition to verify that the browser is at the correct page
-			static at = { title == "Geb - Very Groovy Browser Automation" }
-	
-			static content = {
-					// Define the manuals menu module
-					manualsMenu { module(DemoManualMenuModule) }
-			}
-	}
-	```
+```
+  package pages
+  
+  import geb.Page
+  import modules.DemoManualMenuModule
+  
+  class DemoGebHomePage extends Page {
+    // URL of the Geb home page
+    static url = "https://gebish.org"
+    
+    // Condition to verify that the browser is at the correct page
+    static at = { title == "Geb - Very Groovy Browser Automation" }
+    
+    static content = {
+      // Define the manuals menu module
+      manualsMenu { module(DemoManualMenuModule) }
+    }
+  }
+```
 
 ### Modules Section
 The `manuals` menu from the home page is defined as a module in this section.
-	```
-	package modules
-	
-	class DemoManualMenuModule extends geb.Module {
-		static content = {
-			// Define the toggle element for the manuals menu
-			toggle { $("div.menu a.manuals") }
-	
-			// Define the container for the links in the manuals menu
-			linksContainer { $("#manuals-menu") }
-	
-			// Define the links within the links container
-			links { linksContainer.find("a") }
-		}
-	
-		// Method to open the manuals menu
-		void open() {
-			toggle.click()
-			// Wait until the links container is no longer animating
-			waitFor { !linksContainer.hasClass("animating") }
-		}
-	}
-	```
+```
+  package modules
+  
+  class DemoManualMenuModule extends geb.Module {
+    static content = {
+      // Define the toggle element for the manuals menu
+      toggle { $("div.menu a.manuals") }
+      
+      // Define the container for the links in the manuals menu
+      linksContainer { $("#manuals-menu") }
+      
+      // Define the links within the links container
+      links { linksContainer.find("a") }
+    }
+    
+    // Method to open the manuals menu
+    void open() {
+      toggle.click()
+      // Wait until the links container is no longer animating
+      waitFor { !linksContainer.hasClass("animating") }
+    }
+  }
+```
 	
 ### Specs Section
 
@@ -212,50 +247,18 @@ The test that utilizes these pages and modules is located in the `specs` section
 **Test Case** - The test case `can access The Book of Geb via homepage` is defined in this test. This test case simply accesses the `gebHomePage` and then accesses the `theBookOfGebPage` by opening the `manualsMenu` module.
 
 **Evidence Collection** - During the process of executing this test, multiple pieces of evidence are collected.
-	```
-	package specs
+```
+  // Print evidence of the introduction header element
+  SpecHelper.printEvidenceForPageElement(this, 1, $("#introduction"), "Introduction header")
   
-  import geb.spock.GebReportingSpec
-  import helpers.SpecHelper
-  import pages.DemoGebHomePage
-  import pages.DemoTheBookOfGebPage
-  import spock.lang.IgnoreIf
-  import helpers.*
-  
-  class DemoGebHomePageSpec extends GebReportingSpec {
-  
-    def gebHomePage = page(DemoGebHomePage)
-    def theBookOfGebPage = page(DemoTheBookOfGebPage)
-  
-    def setupSpec() {
-      if (System.getProperty("geb.env") != Environments.DESKTOP) {
-        println "Skipping tests - environments not supported"
-        return
-      }
-    }
-  
-    @IgnoreIf({ System.getProperty("geb.env") != Environments.DESKTOP })
-    def "can access The Book of Geb via homepage"() {
-      given:
-      to gebHomePage
-  
-      when:
-      gebHomePage.manualsMenu.open()
-      gebHomePage.manualsMenu.links[0].click()
-  
-      SpecHelper.printEvidenceForPageElement(this, 1, $("#introduction"), "Introduction header")
-      SpecHelper.printEvidenceForPageElements(this, 1,
-        [
-          [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(1)"), 'description' : '1st paragraph'],
-          [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(2)"), 'description' : '2nd paragraph']
-        ]
-      )
-  
-      then:
-      at theBookOfGebPage
-    }
-  }
-	```
+  // Print evidence of the first and second paragraphs
+  SpecHelper.printEvidenceForPageElements(this, 1,
+    [
+      [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(1)"), 'description' : '1st paragraph'],
+      [ 'fragment' : $("#content > div:nth-child(2) > div > div:nth-child(2)"), 'description' : '2nd paragraph']
+    ]
+  )
+```
 	
 #### Gebish.org example - for MOBILE_BROWSER
 The test that utilizes these elements is located in the `specs` section and is called `DemoMobileGebHomePageSpec`.
@@ -265,92 +268,11 @@ The test that utilizes these elements is located in the `specs` section and is c
 **Test Case** - The test case ` verify geb home page and documentation navigation` is defined in this test. This test case navigates to the Geb home page and then accesses the Documentation page.
 
 **Evidence Collection** - During the process of executing this test, evidence is collected.
-  ```
-  package specs
-  
-  import geb.spock.GebReportingSpec
-  import io.appium.java_client.AppiumDriver
-  import org.openqa.selenium.WebElement
-  import spock.lang.Shared
-  import spock.lang.Stepwise
-  import spock.lang.IgnoreIf
-  import helpers.*
-  
-  @Stepwise
-  class DemoMobileGebHomePageSpec extends GebReportingSpec {
+```
+  // Print evidence for the Documentation button
+  SpecHelper.printEvidenceForWebElement(this, 1, documentationButton, "Documentation Button Evidence")
+```
 
-    // Shared driver instance for the AppiumDriver
-    @Shared
-    def static driver
-    // Shared result variable to track test success
-    @Shared
-    def static result = true
-
-    def setupSpec() {
-      // Check the environment and skip tests if it is not MOBILE_BROWSER
-      if (System.getProperty("geb.env") != Environments.MOBILE_BROWSER) {
-        println "Skipping tests - environments not supported"
-        return
-      }
-
-      // Initialize the Appium driver
-      driver = browser.driver as AppiumDriver
-    }
-
-    def cleanupSpec() {
-      // Set the job result and quit the driver if it is initialized
-      if (driver) {
-        driver.executeScript("sauce:job-result=$result")
-        driver.quit()
-      }
-    }
-
-    @IgnoreIf({ System.getProperty("geb.env") != Environments.MOBILE_BROWSER })
-    def "verify geb home page and documentation navigation"() {
-      when: "Navigating to Geb home page"
-      try {
-        // Open the Geb home page
-        driver.get("https://www.gebish.org")
-      } catch (AssertionError e) {
-        result = false
-        throw e
-      }
-
-      then: "The page title should be 'Geb - Very Groovy Browser Automation'"
-      try {
-        // Verify the page title
-        assert title == "Geb - Very Groovy Browser Automation"
-      } catch (AssertionError e) {
-        result = false
-        throw e
-      }
-
-      when: "Accessing to the Documentation page"
-      try {
-        // Wait for the Documentation button to be displayed and click it
-        waitFor { $("button.ui.blue.button", text: "Documentation").displayed }
-        WebElement documentationButton = $("button.ui.blue.button", text: "Documentation").firstElement()
-        documentationButton.click()
-
-        // Print evidence for the Documentation button
-        SpecHelper.printEvidenceForWebElement(this, 1, documentationButton, "Documentation Button Evidence")
-      } catch (AssertionError e) {
-        result = false
-        throw e
-      }
-
-      then: "The page title should be 'The Book Of Geb'"
-      try {
-        // Verify the page title
-        assert title == "The Book Of Geb"
-      } catch (AssertionError e) {
-        result = false
-        throw e
-      }
-    }
-
-	}
-	```
 #### My Demo App Sauce Labs example - for MOBILE_APP
 The test that utilizes these elements is located in the `specs` section and is called `DemoMobileGebHomePageSpec`.
 
@@ -361,73 +283,9 @@ The test that utilizes these elements is located in the `specs` section and is c
 **Evidence Collection** - During the process of executing this test, evidence is collected for the specific element.
 
 ```
-	package specs
-
-  import geb.spock.GebReportingSpec
-  import io.appium.java_client.AppiumDriver
-  import io.appium.java_client.AppiumBy
-  import org.openqa.selenium.WebElement
-  import spock.lang.IgnoreIf
-  import spock.lang.Shared
-  import spock.lang.Stepwise
-  import helpers.*
-  
-  @Stepwise
-  class DemoMobileAppSpec extends GebReportingSpec {
-
-    // Shared driver instance for the AppiumDriver
-    @Shared
-    def static driver
-    // Shared result variable to track test success
-    @Shared
-    def static result = true
-
-    def setupSpec() {
-      // Check the environment and skip tests if it is not MOBILE_APP
-      if (System.getProperty("geb.env") != Environments.MOBILE_APP) {
-        println "Skipping tests - environments not supported"
-        return
-      }
-      // Initialize the Appium driver
-      driver = browser.driver as AppiumDriver
-    }
-
-    def cleanupSpec() {
-      // Set the job result and quit the driver if it is initialized
-      if (driver) {
-        driver.executeScript("sauce:job-result=$result")
-        driver.quit()
-      }
-    }
-
-    @IgnoreIf({ System.getProperty("geb.env") != Environments.MOBILE_APP})
-    def "check elements in the first page of the app"() {
-      given: "Launching the app"
-      when: "Printing all the elements"
-      try {
-        // Verify if the specific element is present
-        List<WebElement> specificElements = driver.findElements(AppiumBy.name("Cart-tab-item"))
-
-        if (!specificElements.isEmpty() && specificElements[0].isDisplayed()) {
-          // Click on the element
-          specificElements[0].click()
-          println "Clicked on element with name 'Cart-tab-item'"
-					
-          // Print evidence for the specific element
-          SpecHelper.printEvidenceForWebElement(this, 1, specificElements[0], "Cart-tab-item Element Evidence")
-        } else {
-          println "Element with name 'Cart-tab-item' not found or not displayed"
-        }
-      } catch (Exception e) {
-        result = false
-        throw e
-      }
-      then: "The specific element should be present"
-      assert true
-    }
-
-  }
-  ```
+  // Print evidence for the specific element
+  SpecHelper.printEvidenceForWebElement(this, 1, specificElements[0], "Cart-tab-item Element Evidence")
+```
 
 ## Running end-to-end tests
 
