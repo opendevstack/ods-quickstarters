@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-
+- Fix Ruby installation with high amount of CPU cores ([#1084](https://github.com/opendevstack/ods-quickstarters/issues/1084))
 - Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
 - Install java 17 devel only in scala and jdk agents ([#1057](https://github.com/opendevstack/ods-quickstarters/pull/1057))
 - Update Angular, Ionic and Typescript Quickstarters ([#1033](https://github.com/opendevstack/ods-quickstarters/issues/1033))
@@ -26,6 +26,7 @@
 - Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
 - Removal of deprecated versions ([#1068](https://github.com/opendevstack/ods-quickstarters/issues/1068))
 - Generate PDF report for cypress and improved environment management ([#1079](https://github.com/opendevstack/ods-quickstarters/pull/1079))
+- Change PDF report zip file name in Cypress Quickstarter ([#1082](https://github.com/opendevstack/ods-quickstarters/pull/1082))
 - Mobile testing enablement adding Appium & Sauce Labs in e2e-spock-geb quickstarter ([#1083](https://github.com/opendevstack/ods-quickstarters/pull/1083))
 
 ### Added
