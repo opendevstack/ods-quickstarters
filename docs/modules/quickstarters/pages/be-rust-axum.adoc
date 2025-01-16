@@ -68,9 +68,11 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://www.rust-lang.org/[Rust 1.81.x]
-* https://github.com/tokio-rs/axum[Axum 0.7.x]
+* https://www.rust-lang.org/[Rust 1.83.x]
+* https://github.com/tokio-rs/axum[Axum 0.8.x]
 * https://nexte.st/[Nextest 0.9.x]
+* https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.6.x]
+* https://github.com/EmbarkStudios/cargo-deny/[Deny 0.16.x]
 
 == Usage - how do you start after you provisioned this quickstarter
 
@@ -136,7 +138,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: rust
-runtimeVersion: 1.81.0
+runtimeVersion: 1.83.0
 ```
 
 == How this quickstarter is built through Jenkins
@@ -176,7 +178,7 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 [source,bash]
 ----
   cargo nextest run --profile ci
-  cargo llvm-cov nextest --lcov
+  cargo llvm-cov nextest --profile ci --lcov
 ----
 
 * *Build* - Builds the release target binary and moves it to the docker folder:
@@ -192,7 +194,7 @@ include::partials$secret-scanning-with-gitleaks.adoc
 
 This quickstarter uses https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html[Rust] Jenkins builder agent.
 
-**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.75.x and above.
+**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.83.x, and depending on project's dependencies it can also handle Minor Rust versions above and below the supported one.
 
 See the docker spec and openshift templates https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[here].
 

@@ -29,6 +29,7 @@
 - Change PDF report zip file name in Cypress Quickstarter ([#1082](https://github.com/opendevstack/ods-quickstarters/pull/1082))
 - Included small fixes in e2e-cypress ([#1086](https://github.com/opendevstack/ods-quickstarters/pull/1086))
 - Mobile testing enablement adding Appium & Sauce Labs in e2e-spock-geb quickstarter ([#1083](https://github.com/opendevstack/ods-quickstarters/pull/1083))
+- Rust Jenkins agent and Quickstarter updates of January 2025 ([#1087](https://github.com/opendevstack/ods-quickstarters/issues/1087))
 
 ### Added
 
