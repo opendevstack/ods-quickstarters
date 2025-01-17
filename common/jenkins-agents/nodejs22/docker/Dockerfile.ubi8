@@ -50,6 +50,8 @@ RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
     npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) && \
     npm config set email=no-reply@opendevstack.org && \
 #    npm config set ca /etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem && \
+    npm config set ca=null && \
+    npm config set strict-ssl=true && \
     yarn config set registry $nexusUrl/repository/npmjs/ -g && \
     echo node version: $(node --version) && \
     echo npm version: $(npm --version) && \
