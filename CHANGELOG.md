@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Nodejs agents should make use of the installed certificates in the agent ([#1078](https://github.com/opendevstack/ods-quickstarters/issues/1078))
 - Fix Ruby installation with high amount of CPU cores ([#1084](https://github.com/opendevstack/ods-quickstarters/issues/1084))
 - Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
 - Install java 17 devel only in scala and jdk agents ([#1057](https://github.com/opendevstack/ods-quickstarters/pull/1057))
