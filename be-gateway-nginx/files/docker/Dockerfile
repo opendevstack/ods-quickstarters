@@ -1,5 +1,5 @@
 # https://github.com/openresty/docker-openresty
-FROM openresty/openresty:1.25.3.1-1-rocky
+FROM openresty/openresty:1.25.3.2-0-rocky
 
 ENV LANG=C.UTF-8
 
@@ -14,6 +14,9 @@ WORKDIR /app
 COPY lua /usr/local/openresty/lualib
 COPY nginx.conf /usr/local/openresty/nginx/conf/
 COPY entrypoint.sh /app/
+
+RUN dnf upgrade -y && \
+    dnf clean all
 
 RUN chgrp -R 0 /app /usr/local/openresty/nginx && \
     chmod -R g=u /app /usr/local/openresty/nginx && \

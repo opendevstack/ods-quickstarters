@@ -24,41 +24,23 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryM
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-
-COPY yum.repos.d/* /etc/yum.repos.d/
-RUN sh -c "echo 'rhel' > /etc/yum/vars/osname" && \
-    sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo && \
-    sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/adoptium-temurin.repo && \
-    grep -ri '^\s*\(name\|enabled\)\s*=' /etc/yum.repos.d/*
-
-# Install Java 11, 17, 21 and binutils
+# Install Java devel 11, 17 21 and binutils
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 3nd place to set is as default version
-RUN yum -y --nobest --skip-broken update && \
-    yum install -y java-11-openjdk-devel && \
-    yum install -y --enablerepo Adoptium temurin-17-jdk && \
-    yum install -y --enablerepo Adoptium temurin-21-jdk && \
-    yum install -y binutils && \
-    yum updateinfo -y && \
-    yum repolist -y && \
-    sh -c "yum list installed | grep -i '\(java\|jdk\|temurin\)'" && \
-    yum clean all -y && rm -rf /var/cache/yum
+RUN yum install -y java-11-openjdk-devel java-17-openjdk-devel java-21-openjdk-devel binutils && \
+    yum clean all -y && \
+    rm -rf /var/cache/yum
 
-# Copy use java scripts.
+# Copy and use java scripts.
 COPY use-j*.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/use-j*.sh && \
     chmod ugo+s /usr/local/bin/use-j*.sh && \
     sh -c 'chmod ugo+s $(which alternatives)' && \
     ls -la /usr/local/bin/use-j*.sh && \
     echo "--- STARTS JDK 11/17/21 TESTS ---" && \
+    use-j11.sh && \
     use-j21.sh && \
     use-j17.sh && \
-    use-j11.sh && \
-    echo "--- ENDS JDK 11/17/21 TESTS ---" && \
-## Needed in case base and jdk agents has a mismatch in java versions
-    rm -fv /etc/profile.d/set-default-java.sh && \
-    echo "export JAVA_HOME=/usr/lib/jvm/$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1)" >> /etc/profile.d/set-default-java.sh && \
-    echo "export USE_JAVA_VERSION=java-11" >> /etc/profile.d/set-default-java.sh && \
-    chmod +x /etc/profile.d/set-default-java.sh
+    echo "--- ENDS JDK 11/17/21 TESTS ---"
 
 # Set maven (nexus+proxy) and gradle (proxy) settings
 ENV MAVEN_OPTS="-Duser.home=$HOME" \
@@ -82,9 +64,6 @@ RUN mkdir -p $GRADLE_USER_HOME && \
     sed -i "s/__NEXUS_PW/$nexusPassword/gi" $HOME/.m2/settings.xml && \
     sed -i "s|__NEXUS_URL|$nexusUrl|gi" $HOME/.m2/settings.xml && \
     cat $HOME/.m2/settings.xml
-
-# Set java proxy via JAVA_OPTS
-RUN bash -l -c 'echo export JAVA_OPTS="$(/tmp/set_java_proxy.sh && echo $JAVA_OPTS)" >> /etc/bash.bashrc'
 
 RUN chown -R 1001:0 $HOME && \
     chmod -R g+rwX $HOME && \

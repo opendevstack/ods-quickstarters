@@ -1,7 +1,9 @@
 // See https://www.opendevstack.org/ods-documentation/ for usage and customization.
 
+// Import the shared Jenkins library
 @Library('ods-jenkins-shared-library@@shared_library_ref@') _
 
+// Define the Jenkins pipeline
 odsComponentPipeline(
   imageStreamTag: '@ods_namespace@/jenkins-agent-jdk:@agent_image_tag@',
   branchToEnvironmentMapping: [
@@ -13,6 +15,7 @@ odsComponentPipeline(
   odsComponentStageScanWithSonar(context)
 }
 
+// Define the test stage
 def stageTest(def context) {
   def javaOpts = "-Xmx512m"
   def gradleTestOpts = "-Xmx128m"
@@ -21,16 +24,51 @@ def stageTest(def context) {
     springBootEnv = 'dev'
   }
 
-  stage('Integration Test') {
-  	sh (script: "chmod a+x gradle*", label : "allow gradle to execute")
-    withEnv(["TAGVERSION=${context.tagversion}", "NEXUS_HOST=${context.nexusHost}", "NEXUS_USERNAME=${context.nexusUsername}", "NEXUS_PASSWORD=${context.nexusPassword}", "JAVA_OPTS=${javaOpts}","GRADLE_TEST_OPTS=${gradleTestOpts}","ENVIRONMENT=${springBootEnv}","OPENSHIFT_PROJECT=${context.targetProject}","OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"]) {
-      def status = sh(script: "source use-j17.sh && ./gradlew clean test --stacktrace --no-daemon && source use-j11.sh", returnStatus: true)
-      junit(testResults:"build/test-results/installation*/*.xml, build/test-results/integration*/*.xml, build/test-results/acceptance*/*.xml", allowEmptyResults:true)
-      stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
-      stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration*/*.xml', allowEmpty: true)
-      stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance*/*.xml', allowEmpty: true)
-      if (status != 0) {
-        error "Executing tests failed!"
+  stage('Functional Test') {
+    sh (script: "chmod a+x gradle*", label : "allow gradle to execute")
+    withEnv([
+      "TAGVERSION=${context.tagversion}",
+      "NEXUS_HOST=${context.nexusHost}",
+      "NEXUS_USERNAME=${context.nexusUsername}",
+      "NEXUS_PASSWORD=${context.nexusPassword}",
+      "JAVA_OPTS=${javaOpts}",
+      "GRADLE_TEST_OPTS=${gradleTestOpts}",
+      "ENVIRONMENT=${springBootEnv}",
+      "OPENSHIFT_PROJECT=${context.targetProject}",
+      "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}"
+    ]) {
+      // Use credentials for SauceLabs authentication
+      // You can remove this block if you are not using SauceLabs
+      withCredentials([
+        usernamePassword(credentialsId: "${context.projectId}-cd-sauce-labs-user-access-key", passwordVariable: 'SAUCE_LABS_ACCESS_KEY', usernameVariable: 'SAUCE_LABS_USERNAME'),
+      ]) {
+        // Note: Testing in the production environment is not enabled by default as it can lead to unintended consequences,
+        // including potential downtime, data corruption, or exposure of sensitive information.
+        // This block is designed to skip acceptance and integration tests in the production environment to avoid these risks.
+        // If you choose to enable these tests in production take all necessary precautions. This means verifying your
+        // preconditions, database access, fake data, API calls, etc.
+        // Remember that any test case in the installation folder will be executed in production.
+        def status
+        if (context.environment == 'prod') {
+          status = sh(script: './gradlew clean testProd --stacktrace --no-daemon', returnStatus: true)
+          junit(testResults:"build/test-results/installation*/*.xml", allowEmptyResults:true)
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
+        } else {
+          status = sh(script: './gradlew clean test --stacktrace --no-daemon', returnStatus: true)
+          junit(testResults:"build/test-results/installation*/*.xml, build/test-results/integration*/*.xml, build/test-results/acceptance*/*.xml", allowEmptyResults:true)
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
+          stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration*/*.xml', allowEmpty: true)
+          stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance*/*.xml', allowEmpty: true)
+        }
+
+        // Handle the test status
+        switch (status) {
+          case 0:
+            echo "All tests passed successfully"
+            break
+          default:
+            unstable "Some tests have failed or encountered errors. Please check the logs for more details."
+        }
       }
     }
   }

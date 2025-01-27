@@ -12,9 +12,9 @@ The quickstarter uses the spring boot project generator service hosted by Spring
 
 This is implemented in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
 
-When provisioning this quickstarter in the provisioning app a spring boot project based on version `3.2.0` will be generated and pushed to your git repository.
+When provisioning this quickstarter in the provisioning app a spring boot project based on version `3.3.3` will be generated and pushed to your git repository.
 
-The generated project requires `java 21` and includes the required gradle build and wrapper artifact based on gradle version `8.5`.
+The generated project requires `java 21` and includes the required gradle build and wrapper artifact based on gradle version `8.10`.
 
 == Project Structure
 
@@ -111,7 +111,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: spring-boot
-runtimeVersion: 3.2.0
+runtimeVersion: 3.3.3
 ```
 
 == How this quickstarter is built thru jenkins
@@ -134,7 +134,7 @@ comment on line `stageUploadToNexus` in  `Jenkinsfile`
 NOTE: The 2nd step executes `gradlew build` to compile your project and create a distribution as `jar` file.
 This file is copied to the `docker` folder to be included in the docker image when the image is built in step 5.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
@@ -144,14 +144,14 @@ https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-age
 == Migration to Java 21
 
 The https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent] Jenkins builder agent has installed 3 JDK: `java 11`, `java 17` and `java 21`.
-The default version is `java 11`. This makes the agent backwards compatible.
+The default version is `java 17`. This makes the agent backwards compatible.
 
 If you are migrating an ODS-based spring boot project to `java 21` following instructions provide a some guidance about the typical steps to achieve this:
 
 - change the agent version as indicated in https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent]
-- upgrade the gradle wrapper to version `8.5` running this gradle command at the root folder of your spring project:
+- upgrade the gradle wrapper to version `8.10` running this gradle command at the root folder of your spring project:
 ```
-gradle wrapper --gradle-version 8.5 --distribution-type bin
+gradle wrapper --gradle-version 8.10 --distribution-type bin
 ```
 NOTE: this command use just `gradle` instead of the wrapper.
 

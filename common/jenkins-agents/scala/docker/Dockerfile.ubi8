@@ -6,34 +6,29 @@ ARG nexusUrl
 ARG nexusUsername
 ARG nexusPassword
 
-# Install Java
-RUN yum install -y java-11-openjdk-devel && \
-    yum clean all -y && \
-    exactVersion=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1) && \
-    alternatives --set java /usr/lib/jvm/${exactVersion}/bin/java && \
-    alternatives --set javac /usr/lib/jvm/${exactVersion}/bin/javac && \
-    java -version && \
-    javac -version && \
-## Needed in case base and scala agents has a mismatch in java versions
-    rm -fv /etc/profile.d/set-default-java.sh && \
-    echo "export JAVA_HOME=/usr/lib/jvm/${exactVersion}" >> /etc/profile.d/set-default-java.sh && \
-    echo "export USE_JAVA_VERSION=java-11" >> /etc/profile.d/set-default-java.sh && \
-    chmod +x /etc/profile.d/set-default-java.sh
-ENV JAVA_HOME=/usr/lib/jvm/jre
-
 # Container support is now integrated in Java 11, the +UseCGroupMemoryLimitForHeap option has been pruned
 ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true"
 
-
-# Install sbt
+# Install sbt and java devel 11/17
 ENV SBT_VERSION=1.8.2
 ENV SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 RUN rm -f /etc/yum.repos.d/bintray-rpm.repo && \
     curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
     mv sbt-rpm.repo /etc/yum.repos.d/ && \
-    yum -y install sbt-$SBT_VERSION && \
+    yum -y install sbt-$SBT_VERSION java-11-openjdk-devel java-17-openjdk-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
+
+# Copy use java scripts.
+COPY use-j*.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/use-j*.sh && \
+    chmod ugo+s /usr/local/bin/use-j*.sh && \
+    sh -c 'chmod ugo+s $(which alternatives)' && \
+    ls -la /usr/local/bin/use-j*.sh && \
+    echo "--- STARTS JDK 11/17 TESTS ---" && \
+    use-j11.sh && \
+    use-j17.sh && \
+    echo "--- ENDS JDK 11/17 TESTS ---"
 
 COPY sbtconfig/repositories $HOME/.sbt/repositories
 COPY sbtconfig/credentials.sbt $HOME/.sbt/1.0/plugins/credentials.sbt
@@ -53,6 +48,21 @@ RUN cat $HOME/.sbt/repositories | sed -e "s|NEXUS_URL|$nexusUrl|g" > $HOME/.sbt/
     /tmp/set_sbt_proxy.sh && \
     if [ ! -f "/usr/bin/sbt" ]; then echo "sbt path /usr/bin/sbt could not be found"; exit 1 ; fi
 
-RUN chgrp -R 0 $HOME && \
-    chmod -R g=u $HOME
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rwX $HOME && \
+    chmod -c 666 /etc/pki/ca-trust/extracted/java/cacerts && \
+    ls -la /etc/pki/ca-trust/extracted/java/cacerts
+
+# temporary java version switch bugfix
+USER root
+RUN chgrp -R 0 /var/lib/alternatives && \
+  chmod -R g=u /var/lib/alternatives && \
+  chgrp -R 0 /etc/alternatives && \
+  chmod -R g=u /etc/alternatives && \
+  chmod -R u+w /usr/bin && \
+  chgrp -R 0 /usr/bin && \
+  chmod -R g=u /usr/bin && \
+  chgrp -R 0 /usr/share/man && \
+  chmod -R g=u /usr/share/man
+
 USER 1001

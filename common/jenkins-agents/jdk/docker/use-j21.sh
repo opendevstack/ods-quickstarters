@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "temurin-21" | awk '{print $NF}' | head -1)
+JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "java-21-openjdk-.*\.x86_64" | awk '{print $NF}' | head -1)
 JAVA_VERSION="21"
 
 function msg_and_exit() {

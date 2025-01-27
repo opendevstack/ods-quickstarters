@@ -1,4 +1,8 @@
-FROM nginx:1.26.0-alpine
+FROM nginx:1.27.1-alpine
+
+RUN apk update  && \
+    apk -i upgrade && \
+    apk cache clean
 
 RUN chmod -R 777 /var/log/nginx /var/cache/nginx /var/run \
      && chgrp -R 0 /etc/nginx \

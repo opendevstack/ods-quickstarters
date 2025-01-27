@@ -35,7 +35,7 @@ Provisions a streamlit based dashboard with authentication.
 
 == Frameworks used
 
-* https://docs.python.org/3.11[Python 3.11]
+* https://docs.python.org/3.12[Python 3.12]
 * https://docs.streamlit.io/library/changelog[streamlit]
 * https://pandas.pydata.org/[pandas]
 * https://plotly.com/python/[plotly]
@@ -46,9 +46,9 @@ The quickstarter sets up in OpenShift a pod with two containers. The main `ds-st
 
 It is strongly recommended when you are developing a Python project to use separated environments.
 For this purpose usually one can use Python's
-https://docs.python.org/3.11/library/venv.html[venv] core package (check how to use it in the next steps).
+https://docs.python.org/3.12/library/venv.html[venv] core package (check how to use it in the next steps).
 
-NOTE: since the version of Python is 3.11, ensure your system's python executable is also in version 3.11
+NOTE: since the version of Python is 3.12, ensure your system's python executable is also in version 3.12
 
 [source,bash]
 ----
@@ -75,7 +75,7 @@ version: 1.0.1
 type: ods
 role: dashboard
 runtime: streamlit
-runtimeVersion: 1.29.0
+runtimeVersion: 1.38.0
 ```
 
 == How this quickstarter is built through Jenkins
@@ -96,7 +96,7 @@ In order to be sure that your code passes the linting stage execute or add it as
 
 * *Build* - Builds the application: copies src folder into docker_streamlit/dist folder.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 

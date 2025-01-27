@@ -40,11 +40,11 @@ resource "aws_codebuild_project" "build_project" {
         build:
           commands:
             - python tests/acceptance/great_expectations/test_preparation/pre_requisites.py
-            - python utils/checkpoints_executions.py
+            - python utils/checkpoints_executions.py || error=1
             - python tests/acceptance/great_expectations/test_preparation/post_requisites.py
-            - python -m pytest --alluredir=pytest/test_results/acceptance --junitxml=pytest/test_results/junit/acceptance_pytest_junit.xml tests/acceptance/pytest
-            - python -m pytest --alluredir=pytest/test_results/installation --junitxml=pytest/test_results/junit/installation_pytest_junit.xml tests/installation
-            - python -m pytest --alluredir=pytest/test_results/integration --junitxml=pytest/test_results/junit/integration_pytest_junit.xml tests/integration
+            - python -m pytest --alluredir=pytest/test_results/acceptance --junitxml=pytest/test_results/junit/acceptance_pytest_junit.xml tests/acceptance/pytest || error=1
+            - python -m pytest --alluredir=pytest/test_results/installation --junitxml=pytest/test_results/junit/installation_pytest_junit.xml tests/installation || error=1
+            - python -m pytest --alluredir=pytest/test_results/integration --junitxml=pytest/test_results/junit/integration_pytest_junit.xml tests/integration || error=1
 
         post_build:
           commands:

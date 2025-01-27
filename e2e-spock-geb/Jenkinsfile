@@ -21,6 +21,24 @@ odsQuickstarterPipeline(
   odsQuickstarterStageCopyFiles(context)
 
   odsQuickstarterStageRenderJenkinsfile(context)
+	
+  createSauceLabsOpenshiftSecret(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
+}
+
+def createSauceLabsOpenshiftSecret(def context) {
+  stage('Create Credentials') {
+    def project = context.projectId + "-cd"
+    def secretExists = sh(script: "oc get secret sauce-labs-user-access-key -n $project", returnStatus: true) == 0
+    if (!secretExists) {
+      sh """
+        oc create secret generic sauce-labs-user-access-key -n $project \
+          --from-literal=username=changeme \
+          --from-literal=password=changeme \
+          --type="kubernetes.io/basic-auth" && \
+        oc label secret sauce-labs-user-access-key -n $project credential.sync.jenkins.openshift.io=true
+      """
+    }
+  }
 }

@@ -76,7 +76,7 @@ Assuming your component contains source code you want to have delivered by the _
 
 Feel free to look out for examples in our existing quickstarters, such as link:https://github.com/opendevstack/ods-quickstarters/blob/master/be-java-springboot[be-java-springboot].
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
