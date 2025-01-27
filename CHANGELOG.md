@@ -31,6 +31,7 @@
 - Included small fixes in e2e-cypress ([#1086](https://github.com/opendevstack/ods-quickstarters/pull/1086))
 - Mobile testing enablement adding Appium & Sauce Labs in e2e-spock-geb quickstarter ([#1083](https://github.com/opendevstack/ods-quickstarters/pull/1083))
 - Rust Jenkins agent and Quickstarter updates of January 2025 ([#1087](https://github.com/opendevstack/ods-quickstarters/issues/1087))
+- Fix Nginx related Quickstarters worker processes value to 1 as default ([#1092](https://github.com/opendevstack/ods-quickstarters/issues/1092))
 
 ### Added
 
