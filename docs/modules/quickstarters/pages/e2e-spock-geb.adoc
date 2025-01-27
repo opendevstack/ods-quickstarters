@@ -282,6 +282,8 @@ In Jenkinsfile.template, there is the following stage:
 
 All the results are stashed and published through Jenkins jUnit publisher.
 
+include::partial$secret-scanning-with-gitleaks.adoc
+
 == Builder agent used
 
 This quickstarter uses the

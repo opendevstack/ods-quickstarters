@@ -8,15 +8,15 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 
 # JENKINS AGENT
 ## Install or update Jenkins agent resources.
-install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform-2306 install-jenkins-agent-terraform-2408 install-jenkins-agent-rust
+install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform install-jenkins-agent-terraform-2306 install-jenkins-agent-terraform-2408 install-jenkins-agent-rust
 .PHONY: install-jenkins-agent
 
 ## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-terraform-build-2408 apply-jenkins-agent-rust-build
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs16-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-terraform-build-2408 apply-jenkins-agent-rust-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2408 start-jenkins-agent-rust-build
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs16-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build start-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2408 start-jenkins-agent-rust-build
 .PHONY: start-jenkins-agent-build
 
 
@@ -87,6 +87,16 @@ start-jenkins-agent-nodejs22-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs22 --follow
 .PHONY: start-jenkins-agent-nodejs22-build
 
+## Start build of BuildConfig "jenkins-agent-nodejs18".
+start-jenkins-agent-nodejs18-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs18 --follow
+.PHONY: start-jenkins-agent-nodejs18-build
+
+## Start build of BuildConfig "jenkins-agent-nodejs20".
+start-jenkins-agent-nodejs20-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs20 --follow
+.PHONY: start-jenkins-agent-nodejs20-build
+
 # JENKINS AGENT PYTHON
 ## Install or update Jenkins Python agent resources.
 install-jenkins-agent-python: apply-jenkins-agent-python-build start-jenkins-agent-python-build
@@ -133,6 +143,38 @@ apply-jenkins-agent-scala-build:
 start-jenkins-agent-scala-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-scala --follow
 .PHONY: start-jenkins-agent-scala-build
+
+
+# JENKINS AGENT TERRAFORM-2306
+## Install or update Jenkins Terraform agent resources.
+install-jenkins-agent-terraform-2306: apply-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2306
+.PHONY: install-jenkins-agent-terraform-2306
+
+## Update OpenShift resources related to Jenkins Terraform agent image 2306.
+apply-jenkins-agent-terraform-build-2306:
+	cd common/jenkins-agents/terraform-2306/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-terraform-build-2306
+
+## Start build of BuildConfig "jenkins-agent-terraform-2306".
+start-jenkins-agent-terraform-build-2306:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-terraform-2306 --follow
+.PHONY: start-jenkins-agent-terraform-build-2306
+
+
+# JENKINS AGENT TERRAFORM-2408
+## Install or update Jenkins Terraform agent resources.
+install-jenkins-agent-terraform-2408: apply-jenkins-agent-terraform-build-2408 start-jenkins-agent-terraform-build-2408
+.PHONY: install-jenkins-agent-terraform-2408
+
+## Update OpenShift resources related to Jenkins Terraform agent image 2408.
+apply-jenkins-agent-terraform-build-2408:
+	cd common/jenkins-agents/terraform-2408/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-terraform-build-2408
+
+## Start build of BuildConfig "jenkins-agent-terraform-2408".
+start-jenkins-agent-terraform-build-2408:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-terraform-2408 --follow
+.PHONY: start-jenkins-agent-terraform-build-2408
 
 
 # JENKINS AGENT TERRAFORM-2306

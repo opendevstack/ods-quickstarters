@@ -136,6 +136,7 @@ def stageTest(def context) {
           unstable "Some tests have failed or encountered errors. Please check the logs for more details."
         }
       }
+      return status
     }
   }
 }
