@@ -37,6 +37,7 @@
 - Update jdk and scala quickstarters and agents ([#1032](https://github.com/opendevstack/ods-quickstarters/issues/1032))
 
 ### Fixed
+- inf-terraform-aws: Fix .devcontainer directory and its configuration template missing in latest AWS Quickstarter ([#1091](https://github.com/opendevstack/ods-quickstarters/pull/1091))
 - Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
 - Nodejs agents should make use of the installed certificates in the agent ([#1078](https://github.com/opendevstack/ods-quickstarters/issues/1078))
 - Fix for npm based jenkins agents to support private nexus repositories ([#1059](https://github.com/opendevstack/ods-quickstarters/issues/1059))
