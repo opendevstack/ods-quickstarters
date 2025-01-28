@@ -67,7 +67,7 @@ The files are generated using https://ionicframework.com/docs/cli/[Ionic CLI].
 
 * https://ionicframework.com/docs/cli/[Ionic CLI]
 * https://ionicframework.com/docs/[Ionic Framework]
-* https://angular.io/[Angular]
+* https://angular.dev/[Angular]
 * https://www.typescriptlang.org/[TypeScript]
 
 == Usage - how do you start after you provisioned this quickstarter
