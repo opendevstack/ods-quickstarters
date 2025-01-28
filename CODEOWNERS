@@ -14,8 +14,8 @@
 /e2e-spock-geb/ @metmajer @garcanam @roicarrera
 /fe-angular/ @cschweikert
 /fe-ionic/ @rianet @bljubisic
-/inf-terraform-aws/ @frankjoas @metmajer @nichtraunzer @tbugfinder
-/inf-terraform-azure/ @frankjoas @metmajer @nichtraunzer @tbugfinder
+/inf-terraform-aws/ @terra-naut @tbugfinder
+/inf-terraform-azure/ @terra-naut @tbugfinder
 /ods-document-gen-svc/ @metmajer
 /ods-provisioning-app/ @clemensutschig @michaelsauter
 /release-manager/ @metmajer @michaelsauter

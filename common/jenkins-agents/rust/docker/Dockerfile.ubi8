@@ -7,12 +7,14 @@ ARG rustToolchain
 ARG cargoNextestVersion
 ARG cargoLlvmCovVersion
 ARG cargoGenerateVersion
+ARG cargoDenyVersion
 
 ENV PATH="$HOME/.cargo/bin:$PATH"
 ENV USER="rust-agent"
 ENV CARGO_NEXTEST_VERSION=${cargoNextestVersion} \
     CARGO_LLVM_COV_VERSION=${cargoLlvmCovVersion} \
-    CARGO_GENERATE_VERSION=${cargoGenerateVersion}
+    CARGO_GENERATE_VERSION=${cargoGenerateVersion} \
+    CARGO_DENY_VERSION=${cargoDenyVersion}
 
 RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic \
     libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config \
@@ -32,10 +34,14 @@ RUN cd /tmp && \
     curl --proto '=https' --tlsv1.2 -fsSL https://github.com/cargo-generate/cargo-generate/releases/download/v$CARGO_GENERATE_VERSION/cargo-generate-v$CARGO_GENERATE_VERSION-$rustToolchain.tar.gz | tar xzf - -C "$HOME/.cargo/bin" && \
     # curl --proto '=https' --tlsv1.2 -fsSL https://github.com/taiki-e/cargo-llvm-cov/releases/download/v$CARGO_LLVM_COV_VERSION/cargo-llvm-cov-$rustToolchain.tar.gz | tar xzf - -C "$HOME/.cargo/bin" && \
     # cargo LLVM coverage crate is recommended to be compiled as it takes care to add the OS lib dependencies the proper way
-    cargo install cargo-llvm-cov --version $CARGO_LLVM_COV_VERSION && \
+    cargo install cargo-llvm-cov --locked --version $CARGO_LLVM_COV_VERSION && \
+    # install cargo deny as release sources do not provide our rust toolchain target
+    cargo install cargo-deny --locked --version $CARGO_DENY_VERSION && \
+    cargo --version && \
     cargo nextest --version && \
     cargo llvm-cov --version && \
-    cargo generate --version
+    cargo generate --version && \
+    cargo deny --version
 
 RUN chgrp -R 0 $HOME/.cargo && \
     chmod -R g=u $HOME/.cargo

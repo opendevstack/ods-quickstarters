@@ -13,7 +13,9 @@ This is a Cypress end-to-end testing project quickstarter with basic setup for h
 ├── fixtures
 │   └── example.json
 ├── plugins
-│   └── index.js
+│   ├── index.ts
+│   ├── screenshot.ts
+│   └── screenshot.types.ts
 ├── reporters
 │   └── custom-reporter.js
 ├── support
@@ -97,9 +99,21 @@ RUN chgrp -R 0 $HOME && \
 USER 1001
 ----
 
+== Configuring Microsoft Account with Google Authenticator
+
+To use the login with MFA function, the following requirements have to be met:
+
+1. A testing account must be created with access to the application under test.
+
+2. The account must have MFA enabled.
+
+3. The MFA method used must be OTP (One Time Password).
+
+4. The secret key generated during the setup process must be used for the OTP generation. In the case of microsoft, it can be retrieved by clicking the "Can't scan image" button during the setup process.
+
 == Cypress Cloud
 
-To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
+To use Cypress Cloud  within the Cypress QuickStarter, follow these steps:
 
 1. **Create a project in Cypress Cloud.** Access Cypress Cloud by following this link (https://cloud.cypress.io/), and create a project. This project will be used to store your Cypress tests and results.
 
@@ -107,20 +121,31 @@ To use Cypress Cloud  within the Cypress QuickSarter, follow these steps:
 
 3. **Set the Cypress Record Key as an environment variable in Openshift.** To enable recording of your tests in Cypress Cloud, you will need to set the Cypress Record Key as an environment variable named CYPRESS_RECORD_KEY in Openshift. This key is provided by Cypress and is used to authenticate your tests and results. By setting it in Openshift, we ensure that the record functionality will only be used in official runs and not for local development.
 
-4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction line:
+4. **Modify the Jenkinsfile for using the record script.** In the Jenkinsfile, change the exeuction lines:
 [source,Jenkinsfile]
 ----
-def status = sh(script: 'npm run e2e', returnStatus: true)
+status = sh(script: 'npm run e2e', returnStatus: true)
 ----
-for the following block of code, which will run the record script only when in master or in a release branch:
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:prod', returnStatus: true)
+----
+for the following blocks of code, which will run the record script only when in master or in a release branch:
 [source,Jenkinsfile]
 ----
 if (context.gitBranch == 'master' || context.gitBranch.startsWith('release/')) {
-    def status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+    status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
 } else {
-    def status = sh(script: 'npm run e2e', returnStatus: true)
+    status = sh(script: 'npm run e2e', returnStatus: true)
 }
 ----
+and
+[source,Jenkinsfile]
+----
+status = sh(script: 'npm run e2e:jenkins:record', returnStatus: true)
+----
+For the case of prod environment, the master or release check is not necessary, as the prod environment is only used in releases.
 
 **Only use this functionality in releases, not development.** It is important to note that Cypress Cloud is intended for use in releases, not development. This ensures that your tests are run against stable and reliable code, and that the Dashboard does not get overflooded with non-relevant tests. For the same reason, the Jenkinsfile is configured to only pass the record parameter when running in the master branch, or in a release.
 

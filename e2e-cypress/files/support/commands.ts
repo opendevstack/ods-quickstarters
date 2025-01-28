@@ -8,7 +8,22 @@
 // ***********************************************
 
 import { addGenericLoginCommands } from './generic-login';
-import { addMsalv2LoginCommand } from './msalv2-login';
+import { addLoginToAADWithMFA, addLoginToAAD, addGetTOTP, addSessionLoginWithMFA } from './login-functions';
 
 addGenericLoginCommands();
-addMsalv2LoginCommand();
+addGetTOTP();
+addSessionLoginWithMFA();
+addLoginToAAD();
+addLoginToAADWithMFA();
+
+declare global {
+  namespace Cypress {
+    interface Chainable<> {
+      loginToAAD(username: string, password: string);
+      loginToAADWithMFA(username: string, password: string);
+      sessionLoginWithMFA(username: string, password: string);
+      getTOTP();
+      addContextPath(title: string, screenshot: string);
+    }
+  }
+}

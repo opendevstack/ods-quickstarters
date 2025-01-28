@@ -24,9 +24,9 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryM
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-# Install Java 11, 21 and binutils (Java 17 comes from base agent)
+# Install Java devel 11, 17 21 and binutils
 # Note: use java scripts are executed to test the scripts but also use-j11.sh in called 3nd place to set is as default version
-RUN yum install -y java-11-openjdk-devel java-21-openjdk-devel binutils && \
+RUN yum install -y java-11-openjdk-devel java-17-openjdk-devel java-21-openjdk-devel binutils && \
     yum clean all -y && \
     rm -rf /var/cache/yum
 

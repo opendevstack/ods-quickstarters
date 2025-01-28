@@ -16,6 +16,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Cargo Deny",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Cargo Test",
     "status": "SUCCESS"
   },
