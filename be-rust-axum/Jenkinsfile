@@ -21,11 +21,11 @@ odsQuickstarterPipeline(
   // https://cargo-generate.github.io/cargo-generate/index.html
   stage('Cargo Generate project') {
     sh(
-      script: "cargo generate --path ${context.sourceDir}/rust-template --name ${context.componentId}",
+      script: "cargo generate --path ${context.sourceDir}/rust-template --name ${context.componentId} --destination /tmp",
       label: "Process Rust template"
     )
     sh(
-      script: "mv ${context.componentId} ${context.sourceDir}/files",
+      script: "mv /tmp/${context.componentId} ${context.sourceDir}/files",
       label: "Create files folder"
     )
   }
