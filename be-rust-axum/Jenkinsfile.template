@@ -23,7 +23,7 @@ odsComponentPipeline(
 def stageBuild(def context) {
   stage('Cargo Build') {
     sh "cargo build --release"
-    sh "cp -r target/release/${context.projectId}-${context.componentId} docker/app"
+    sh "cp -r target/release/${context.componentId} docker/app"
   }
 }
 
