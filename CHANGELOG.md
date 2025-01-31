@@ -7,6 +7,8 @@
 ### Changed
 
 ### Fixed
+- Fixed Rust Quickstarter provisioning issues ([#1097](https://github.com/opendevstack/ods-quickstarters/pull/1097))
+
 
 ## [4.7.0] - 2025-1-27
 
