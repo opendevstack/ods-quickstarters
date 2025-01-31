@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Fixed duplication of Groovy tests in results ([#1098](https://github.com/opendevstack/ods-quickstarters/issues/1098))
+
 ## [4.7.1] - 2025-1-31
 
 ### Fixed
