@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-
+Update angular and ionic quick starter
 ### Added
 
 ### Changed
