@@ -5,6 +5,7 @@ Update angular and ionic quick starter
 ### Added
 
 ### Changed
+- Add Helm Chart to Docker Plain Quickstarter ([#1035](https://github.com/opendevstack/ods-quickstarters/pull/1035))
 
 ### Fixed
 
