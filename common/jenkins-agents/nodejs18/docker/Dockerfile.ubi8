@@ -15,6 +15,7 @@ ARG nexusAuth
 ENV NODEJS_VERSION=18 \
     YARN_VERSION=1.22.18 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
+    NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
@@ -24,9 +25,9 @@ COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 # Generate machine ID
 RUN dbus-uuidgen > /etc/machine-id
 
-# Install NodeJS (https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x does NOT work)
+# Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
-    yum module enable -y nodejs:${NODEJS_VERSION} && \
+    curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - && \
     yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
@@ -38,17 +39,18 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERS
 # Install Cypress dependencies
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
 COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-COPY yum.repos.d/centos8.repo /etc/yum.repos.d/centos8.repo
+COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
+COPY yum.repos.d/microsoft-edge.repo /etc/yum.repos.d/microsoft-edge.repo
 RUN yum repolist \
     && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
     && yum install -y --enablerepo google-chrome google-chrome-stable \
+    && yum install -y --enablerepo edge microsoft-edge-stable \
     && yum clean all -y
 
 RUN npm config set registry=$nexusUrl/repository/npmjs/ && \
-    npm config set //$nexusUrl/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) && \
+    npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) && \
     npm config set email=no-reply@opendevstack.org && \
-    npm config set ca=null && \
-    npm config set strict-ssl=false && \
+    npm config set strict-ssl=true && \
     yarn config set registry $nexusUrl/repository/npmjs/ -g && \
     echo node version: $(node --version) && \
     echo npm version: $(npm --version) && \

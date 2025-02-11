@@ -4,7 +4,7 @@
 
 Use this quickstarter to generate a https://www.tutorialspoint.com/spring_boot/index.htm[spring boot] based project.
 
-It will provide a java 17 project with preconfigured gradle build and CI/CD integration (Jenkinsfile).
+It will provide a java 21 project with preconfigured gradle build and CI/CD integration (Jenkinsfile).
 
 == What files / architecture is generated?
 
@@ -12,9 +12,9 @@ The quickstarter uses the spring boot project generator service hosted by Spring
 
 This is implemented in the quickstarter jenkins build script called `Jenkinsfile` (open it to understand the internal of the code generation of this quickstarter).
 
-When provisioning this quickstarter in the provisioning app a spring boot project based on version `3.0.5` will be generated and pushed to your git repository.
+When provisioning this quickstarter in the provisioning app a spring boot project based on version `3.3.3` will be generated and pushed to your git repository.
 
-The generated project requires `java 17` and includes the required gradle build and wrapper artifact based on gradle version `8.0.2`.
+The generated project requires `java 21` and includes the required gradle build and wrapper artifact based on gradle version `8.10`.
 
 == Project Structure
 
@@ -96,7 +96,7 @@ This git repository contains the generated project artifacts as describe above i
 To start working with it you´ll need to clone the git repository in your local development environment.
 After cloning it use `./gradlew build` to verify that the project compiles and test runs.
 
-NOTE: java 17 or later version is required to run gradlew and compile java classes.
+NOTE: java 21 or later version is required to run gradlew and compile java classes.
 
 === Metadata
 
@@ -111,7 +111,7 @@ version: 1.0.1
 type: ods
 role: backend
 runtime: spring-boot
-runtimeVersion: 3.0.5
+runtimeVersion: 3.3.3
 ```
 
 == How this quickstarter is built thru jenkins
@@ -134,24 +134,24 @@ comment on line `stageUploadToNexus` in  `Jenkinsfile`
 NOTE: The 2nd step executes `gradlew build` to compile your project and create a distribution as `jar` file.
 This file is copied to the `docker` folder to be included in the docker image when the image is built in step 5.
 
-include::partial$secret-scanning-with-gitleaks.adoc
+include::partials$secret-scanning-with-gitleaks.adoc
 
 == Builder agent used
 
 This quickstarter uses the
 https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk] Jenkins builder agent.
 
-== Migration to Java 17
+== Migration to Java 21
 
-The https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent] Jenkins builder agent has installed 2 JDK: `java 11` and `java 17`.
-The default version is `java 11`. This makes the agent backwards compatible.
+The https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent] Jenkins builder agent has installed 3 JDK: `java 11`, `java 17` and `java 21`.
+The default version is `java 17`. This makes the agent backwards compatible.
 
-If you are migrating an ODS-based spring boot project to `java 17` following instructions provide a some guidance about the typical steps to achieve this:
+If you are migrating an ODS-based spring boot project to `java 21` following instructions provide a some guidance about the typical steps to achieve this:
 
 - change the agent version as indicated in https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/jdk[jdk builder agent]
-- upgrade the gradle wrapper to version `8.0.2` running this gradle command at the root folder of your spring project:
+- upgrade the gradle wrapper to version `8.10` running this gradle command at the root folder of your spring project:
 ```
-gradle wrapper --gradle-version 8.0.2 --distribution-type bin
+gradle wrapper --gradle-version 8.10 --distribution-type bin
 ```
 NOTE: this command use just `gradle` instead of the wrapper.
 
@@ -164,11 +164,11 @@ Following files are expected to be included in the change:
 
 ```
 - verify that the jenkins build pipeline run successful. Fix any error if is not the case.
-- change your local runtime to `java 17` and compile your project with the gradle wrapper.
-- update in your `build.gradle` file the source compatibility to `sourceCompatibility = JavaVersion.VERSION_17` and compile again.
-- update the project `Jenkinfile` by adding in the stage `Build and Unit Test` a call to  the `use-j17.sh` before the gradle wrapper. This will set the runtime to `java 17. It would look like this:
+- change your local runtime to `java 21` and compile your project with the gradle wrapper.
+- update in your `build.gradle` file the source compatibility to `sourceCompatibility = JavaVersion.VERSION_21` and compile again.
+- update the project `Jenkinfile` by adding in the stage `Build and Unit Test` a call to  the `use-j21.sh` before the gradle wrapper. This will set the runtime to `java 21. It would look like this:
 ```
-def status = sh(script: "use-j17.sh && ./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
+def status = sh(script: "use-j21.sh && ./gradlew clean build --stacktrace --no-daemon", returnStatus: true)
 ```
 - commit and push the changes to the remote git project repository.
 - verify that the jenkins build pipeline run successful. Fix any error if is not the case.

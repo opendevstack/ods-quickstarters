@@ -27,7 +27,7 @@ import org.ods.util.GitCredentialStore
 
 
 odsComponentPipeline(
-  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform-2306:@agent_image_tag@',
+  imageStreamTag: '@ods_namespace@/jenkins-agent-terraform-2408:@agent_image_tag@',
   branchToEnvironmentMapping: [
     'master': 'dev',
   ]

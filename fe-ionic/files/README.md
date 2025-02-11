@@ -1,5 +1,5 @@
 # Ionic Quickstarter
-Quickstarter created with Ionic CLI 7.1.1
+Quickstarter created with Ionic CLI 7.2.0
 
 ## Running unit tests
 All files with the ending `.spec.ts` in the src folder will be tested with karma
@@ -11,10 +11,8 @@ All files with the ending `.e2e-spec.ts` in the e2e folder will be tested with p
 
 Start e2e tests with `npm run e2e`
 
-## Integrating Cordova or Capacitor for building mobile apps
-By default this Quickstarter does not come with any native integration enabled.
-To integrate Cordova into your project run `ionic integrations enable cordova`
-To integrate Coapacitor into your project run `ionic integrations enable capacitor`
+## Incorporating Capacitor for mobile app development
+By default, ionic-cli integrate capacitor into the projects to build native parts.
 
 ## Environments
 The folder src/environments contains a config file for production, development and e2e.

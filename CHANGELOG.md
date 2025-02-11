@@ -2,23 +2,115 @@
 
 ## Unreleased
 
-- Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
+### Added
 
 ### Added
 
-- Added secret scanning in docker plain ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
-- Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
-- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968))
+### Changed
 
-### Modified
-
-- Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
+- Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
 
 ### Fixed
 
+## [4.7.2] - 2025-2-03
+
+### Fixed
+- Fixed duplication of Groovy tests in results ([#1098](https://github.com/opendevstack/ods-quickstarters/issues/1098))
+
+## [4.7.1] - 2025-1-31
+
+### Fixed
+- Fixed Rust Quickstarter provisioning issues ([#1097](https://github.com/opendevstack/ods-quickstarters/pull/1097))
+
+## [4.7.0] - 2025-1-27
+
+### Added
+- Introduce Rust Quickstarter dependency graph linting (cargo-deny) and upgrade maintenance ([#1061](https://github.com/opendevstack/ods-quickstarters/issues/1061))
+- Enable OpenSSL vendored compilation for Rust Jenkins Agent ([#1026](https://github.com/opendevstack/ods-quickstarters/pull/1026))
+- Added custom reporter to Cypress Quickstarter and update dependencies ([#1034](https://github.com/opendevstack/ods-quickstarters/pull/1034))
+- Add microsoft-edge to nodejs agents for using with cypress ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Added new function to cypress to log into applications using MFA ([#1070](https://github.com/opendevstack/ods-quickstarters/pull/1070))
+
+### Changed
+- Removal of deprecated versions ([#1068](https://github.com/opendevstack/ods-quickstarters/issues/1068))
+- Update OS packages by default and bump gitleaks version ([#1049](https://github.com/opendevstack/ods-quickstarters/issues/1049))
+- Install java 17 devel only in scala and jdk agents ([#1057](https://github.com/opendevstack/ods-quickstarters/pull/1057))
+- Update Angular, Ionic and Typescript Quickstarters ([#1033](https://github.com/opendevstack/ods-quickstarters/issues/1033))
+- Update Rust Axum Quickstarter to Rust 1.79.0 ([#1024](https://github.com/opendevstack/ods-quickstarters/pull/1024))
+- Update Rust Axum Quickstarter to Rust 1.80.1 and improve Agent build configuration ([#1040](https://github.com/opendevstack/ods-quickstarters/pull/1040))
+- Rust Jenkins agent and Quickstarter updates of January 2025 ([#1087](https://github.com/opendevstack/ods-quickstarters/issues/1087))
+- Mobile testing enablement adding Appium & Sauce Labs in e2e-spock-geb quickstarter ([#1083](https://github.com/opendevstack/ods-quickstarters/pull/1083))
+- Generate PDF report for cypress and improved environment management ([#1079](https://github.com/opendevstack/ods-quickstarters/pull/1079))
+- Change PDF report zip file name in Cypress Quickstarter ([#1082](https://github.com/opendevstack/ods-quickstarters/pull/1082))
+- Improvements in the reporter for cypress ([#1042](https://github.com/opendevstack/ods-quickstarters/issues/1042))
+- Support for Python3.12, and maintenance of be-python-flask quickstarter and python Jenkins agent ([#1030](https://github.com/opendevstack/ods-quickstarters/pull/1030))
+- Update Streamlit Quickstarter ([#1030](https://github.com/opendevstack/ods-quickstarters/issues/1030))
+- Update Golang agent ([#1031](https://github.com/opendevstack/ods-quickstarters/issues/1031))
+- Update gateway/nginx Quickstarter ([#1048](https://github.com/opendevstack/ods-quickstarters/pull/1048))
+- Gitleaks docs fix and update ([#1028](https://github.com/opendevstack/ods-quickstarters/issues/1028))
+- Update jdk and scala quickstarters and agents ([#1032](https://github.com/opendevstack/ods-quickstarters/issues/1032))
+
+### Fixed
+- inf-terraform-aws: Fix .devcontainer directory and its configuration template missing in latest AWS Quickstarter ([#1091](https://github.com/opendevstack/ods-quickstarters/pull/1091))
+- Replaced centos8 repository for AlmaLinux 8 due to deprecation ([#1063](https://github.com/opendevstack/ods-quickstarters/pull/1063))
+- Nodejs agents should make use of the installed certificates in the agent ([#1078](https://github.com/opendevstack/ods-quickstarters/issues/1078))
+- Fix for npm based jenkins agents to support private nexus repositories ([#1059](https://github.com/opendevstack/ods-quickstarters/issues/1059))
+- Fix Ruby installation with high amount of CPU cores ([#1084](https://github.com/opendevstack/ods-quickstarters/issues/1084))
+- Included small fixes in e2e-cypress ([#1086](https://github.com/opendevstack/ods-quickstarters/pull/1086))
+- Fix ETL Python QS: AWS Test codepipeline Status Managment and update cryptography dependency([#1056](https://github.com/opendevstack/ods-quickstarters/pull/1052))
+- Fix permissions in Golang agent for the golden tests ([#1052](https://github.com/opendevstack/ods-quickstarters/pull/1052))
+
+## [4.6.0] - 2024-10-23
+
+### Changed
+- inf-terraform-[aws|azure]: bump terraform versions, pre-commit-hooks, library versions ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- jenkins-agent-terraform-2408: add jenkins agent terraform-2408, add go-task, go for experimental terratest, add python-3.12 (drop python-3.8), use tenv for terraform (tofu) version management, ruby version 3.3.4, terraform 1.9.4 ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+
+### Fixed
+- Replaced centos8 repository for RockyLinux 8 due to deprecation in terraform agents ([#1036](https://github.com/opendevstack/ods-quickstarters/pull/1036))
+- Remove obsolete branch parameter from release-manager ([#1058](https://github.com/opendevstack/ods-quickstarters/pull/1058))
+
+## [4.5.0] - 2024-06-06
+
+### Added
+- Added nodejs22 agent and switch install of node to nodesource ([#1011](https://github.com/opendevstack/ods-quickstarters/pull/1011))
+
+### Changed
+- Update Ionic Quickstarter ([#1009](https://github.com/opendevstack/ods-quickstarters/pull/1009))
+- Update Angular Quickstarter ([#1019](https://github.com/opendevstack/ods-quickstarters/pull/1019))
+
+### Fixed
+- Workaround for centos 8 stream repository deprecation ([#1021](https://github.com/opendevstack/ods-quickstarters/issues/1021))
+
+## [4.4.0] - 2024-04-22
+
+### Added
+- Added secret scanning (gitleaks) in all quickstarters ([#963](https://github.com/opendevstack/ods-quickstarters/pull/963))
+
+### Changed
+- Update api version in ocp templates for image, buildconfig, route and deploymentconfig ([#1072](https://github.com/opendevstack/ods-jenkins-shared-library/issues/1072))
+- Update Makefile adding all missing agents ([#999](https://github.com/opendevstack/ods-quickstarters/pull/999))
+
+### Fixed
+- jenkins agent nodejs20 can not import private keys into gpg keyring to use with helm secrets ([#1001](https://github.com/opendevstack/ods-quickstarters/issues/1001))
+
+## [4.3.1] - 2024-02-19
+
+### Added
+- Rust Quickstarter with Axum web framework simple boilerplate ([#980](https://github.com/opendevstack/ods-quickstarters/issues/980))
+- Added ETL pipeline testing QS (e2e-python) ([#985](https://github.com/opendevstack/ods-quickstarters/pull/985))
+- Added Nodejs20 agent ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
+- Added java 21 to jdk agent, updated Springboot and Spock quickstarters ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
+- Update Streamlit and Python quickstarters and agent ([#968](https://github.com/opendevstack/ods-quickstarters/issues/968)) & ([#982](https://github.com/opendevstack/ods-quickstarters/pull/982))
+- Update gateway-Nginx quickstarter ([#983](https://github.com/opendevstack/ods-quickstarters/pull/983))
+- Remove nodejs12 form the code ([#936](https://github.com/opendevstack/ods-quickstarters/issues/936))
+- Update release manager readme ([#969](https://github.com/opendevstack/ods-quickstarters/issues/969))
+- Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
+- Update Angular, TypeScript, Cypress and Ionic quickstarters ([#962](https://github.com/opendevstack/ods-quickstarters/issues/962))
 - Maintenance for Golang Agent and QuickStarter ([#955](https://github.com/opendevstack/ods-quickstarters/issues/955))
 - jenkins agents can not import private keys into gpg keyring to use with helm secrets ([#945](https://github.com/opendevstack/ods-quickstarters/issues/945))
 - Streamlit quickstarter build fails to import nexus host certificates into truststore ([#951](https://github.com/opendevstack/ods-quickstarters/issues/951))
+- Rust Quickstarter Jenkins Agent CICD tools with fixed versions ([#988](https://github.com/opendevstack/ods-quickstarters/issues/988))
 
 ## [4.3.0] - 2023-07-13
 

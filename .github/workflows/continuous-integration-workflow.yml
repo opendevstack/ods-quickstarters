@@ -8,13 +8,14 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/golang/docker
         run: |
           docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg goDistributionUrl=https://go.dev/dl/go1.20.4.linux-amd64.tar.gz \
+            --build-arg goDistributionUrl=https://go.dev/dl/go1.23.0.linux-amd64.tar.gz \
+            --build-arg golangciVersion=v1.60.1 \
             .
 
   jenkins-agent-jdk-ubi8:
@@ -23,7 +24,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/jdk/docker
@@ -34,29 +35,13 @@ jobs:
               --build-arg nexusPassword=s3cr3t \
               .
 
-  jenkins-agent-nodejs16-ubi8:
-    name: Jenkins agent NodeJS 16 (UBI8)
-    runs-on: ubuntu-22.04
-    steps:
-      -
-        name: Checkout repository
-        uses: actions/checkout@v4.1.1
-      -
-        name: Build docker image
-        working-directory: common/jenkins-agents/nodejs16/docker
-        run: |
-            docker build --tag agent-nodejs16-test-ubi8 --file Dockerfile.ubi8 \
-              --build-arg nexusUrl=https://nexus.example.com \
-              --build-arg nexusAuth=developer:s3cr3t \
-              .
-
   jenkins-agent-nodejs18-ubi8:
     name: Jenkins agent NodeJS 18 (UBI8)
     runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs18/docker
@@ -72,12 +57,28 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs20/docker
         run: |
             docker build --tag agent-nodejs20-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
+  jenkins-agent-nodejs22-ubi8:
+    name: Jenkins agent NodeJS 22 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4.2.2
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs22/docker
+        run: |
+            docker build --tag agent-nodejs22-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
@@ -88,25 +89,32 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
         run: |
           docker build --tag agent-python-test-ubi8 --file Dockerfile.ubi8 .
 
-  jenkins-agent-terraform-ubi8:
-    name: Jenkins agent Terraform (UBI8)
+  jenkins-agent-rust-ubi8:
+    name: Jenkins agent Rust (UBI8)
     runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
-        working-directory: common/jenkins-agents/terraform/docker
+        working-directory: common/jenkins-agents/rust/docker
         run: |
-          docker build --tag agent-terraform-test-ubi8 --file Dockerfile.ubi8 .
+          docker build --tag agent-rust-test-ubi8 --file Dockerfile.ubi8 \
+            --build-arg rustVersion=1.83.0 \
+            --build-arg rustToolchain=x86_64-unknown-linux-gnu \
+            --build-arg cargoNextestVersion=0.9.87 \
+            --build-arg cargoLlvmCovVersion=0.6.15 \
+            --build-arg cargoGenerateVersion=0.22.1 \
+            --build-arg cargoDenyVersion=0.16.3 \
+            .
 
   jenkins-agent-terraform-2306-ubi8:
     name: Jenkins agent Terraform 2306 (UBI8)
@@ -114,12 +122,25 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
         run: |
           docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 .
+
+  jenkins-agent-terraform-2408-ubi8:
+    name: Jenkins agent Terraform 2408 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4.2.2
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/terraform-2408/docker
+        run: |
+          docker build --tag agent-terraform-2408-test-ubi8 --file Dockerfile.ubi8 .
 
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
@@ -127,7 +148,7 @@ jobs:
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
       -
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker

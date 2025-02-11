@@ -1,6 +1,6 @@
 ---
 name: Cypress
-description: "Cypress is a JavaScript-based end-to-end testing framework. It is built on top of Mocha, which is again a feature-rich JavaScript test framework running on and in the browser, making asynchronous testing simple and fun. Technologies: Cypress 9.5, TypeScript 4.6"
+description: "Cypress is a JavaScript-based end-to-end testing framework. It is built on top of Mocha, which is again a feature-rich JavaScript test framework running on and in the browser, making asynchronous testing simple and fun. Technologies: Cypress 13.x, TypeScript 5.x"
 supplier: https://www.cypress.io
 version: 4.x
 type: ods-test

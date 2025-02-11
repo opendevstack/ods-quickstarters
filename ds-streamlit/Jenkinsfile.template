@@ -33,7 +33,7 @@ def createTestVirtualenv(def context) {
   stage('Create virtualenv for tests') {
     sh(
       script: """
-        python3.11 -m venv testvenv
+        python3.12 -m venv testvenv
         . ./testvenv/bin/activate
         pip install --upgrade pip
         pip install -r test_requirements.txt

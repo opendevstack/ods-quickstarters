@@ -1,0 +1,14 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-rust
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-rust
+    labels:
+      app: jenkins-agent-rust
+  spec:
+    lookupPolicy:
+      local: false

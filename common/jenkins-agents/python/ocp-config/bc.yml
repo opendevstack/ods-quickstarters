@@ -23,7 +23,7 @@ parameters:
   description: "Your Nexus Authentication credentials: username:password"
   required: true
 objects:
-- apiVersion: v1
+- apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
     name: jenkins-agent-python

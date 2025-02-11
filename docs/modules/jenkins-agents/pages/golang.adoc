@@ -7,8 +7,8 @@ The image is built in the global `ods` project and is named `jenkins-agent-golan
 It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-golang:latest`.
 
 == Features
-1. Go 1.21.x
-2. golangci-lint 1.54.x
+1. Go 1.23.0
+2. golangci-lint 1.60.1
 
 == Known limitations
 Not (yet) Nexus package manager aware and no special HTTP Proxy configuration.

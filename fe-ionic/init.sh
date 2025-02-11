@@ -23,8 +23,11 @@ mkdir start_$COMPONENT
 cd start_$COMPONENT
 
 # creating project
-ionic start $COMPONENT blank --type=angular --no-deps --no-git --no-interactive
-
+ionic start $COMPONENT blank --type=angular-standalone --no-deps --no-git --no-interactive
+#
+# The --no-deps option is ineffective because capacitor is automatically included through npm.
+# For the time being, the node_modules directory must be deleted manually.
+rm -rf $COMPONENT/node_modules
 # move generated project to the intended directory
 mv $COMPONENT/ ..
 # switch to component directory

@@ -1,0 +1,30 @@
+{
+  "key": "{{.ProjectID}}-{{.ComponentID}}",
+  "name": "{{.ProjectID}}-{{.ComponentID}}",
+  "isFavorite": false,
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "{{.SonarQualityProfile}}",
+      "language": "js",
+      "deleted": false
+    },
+    {
+      "name": "{{.SonarQualityProfile}}",
+      "language": "ts",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "Sonar way",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
+      "qualifier": "TRK"
+    }
+  ]
+}
