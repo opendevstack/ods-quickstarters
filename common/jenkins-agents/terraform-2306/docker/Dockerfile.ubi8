@@ -12,6 +12,9 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.k8s.description="The jenkins agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
+ARG nexusUrl
+ARG nexusAuth
+
 ENV TERRAFORM_VERSION=1.4.6 \
     TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
     TERRAFORM_DOCS_VERSION=v0.16.0 \
@@ -20,19 +23,21 @@ ENV TERRAFORM_VERSION=1.4.6 \
     CONSUL_VERSION=1.15.2 \
     TFENV_VERSION=3.0.0 \
     TFLINT_VERSION=0.46.1 \
-    NODEJS_VERSION=18.16.0 \
+    NODEJS_VERSION=18 \
     BUNDLER_VERSION=2.4.13 \
     AGE_VERSION=1.1.1 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
-    RBENV_SHELL=bash
+    RBENV_SHELL=bash \
+    NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     python38 python38-pip python38-setuptools \
     python39 python39-pip python39-setuptools \
     python3.11 python3.11-pip python3.11-setuptools \
     readline \
-    libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz"
+    libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
+    jq parallel"
 ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
@@ -53,18 +58,25 @@ RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS
+    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS \
+    && dnf clean all
 
 RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
     && python3 get-pip.py
 
 # Upgrade pip
-RUN pip3 install --upgrade pip \
-    && pip3 -V \
-    && pip3 install virtualenv pycodestyle \
-    && pip3.8 install virtualenv pycodestyle \
-    && pip3.9 install virtualenv pycodestyle \
-    && pip3.11 install virtualenv pycodestyle \
+RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
+    for pipV in "${pipVersions[@]}"; \
+    do \
+        if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
+        then $pipV config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+            && $pipV config set global.trusted-host ${nexusHost} \
+            && $pipV config set global.extra-index-url https://pypi.org/simple; \
+        fi; \
+        $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
+        $pipV install --upgrade pip --user && \
+        $pipV install virtualenv==20.26.3 pycodestyle==2.12.1; \
+    done; \
     && alternatives --set python /usr/bin/python3.11 \
     && alternatives --set python3 /usr/bin/python3.11
 
@@ -89,12 +101,19 @@ RUN curl -sSL "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-s
     && unzip -qq -d awssam awssam.zip \
     && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
 
+# Install NodeJS
+RUN INSTALL_NODE="nodejs nodejs-nodemon" && \
+    && curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - \
+    && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
+    && rpm -V $INSTALL_NODE \
+    && yum clean all -y \
+    && npm config set registry=$nexusUrl/repository/npmjs/ \
+    && npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
+    && npm config set email=no-reply@opendevstack.org \
+    && npm config set strict-ssl=true
+
 # Install aws cdk
-RUN wget -q "https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz" \
-    && xzcat node-v${NODEJS_VERSION}-linux-x64.tar.xz | tar xpf - -C /opt/ \
-    && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/node \
-    && rm -f node-v${NODEJS_VERSION}-linux-x64.tar.xz \
-    && /opt/node/bin/npm install -g aws-cdk \
+RUN npm install -g aws-cdk \
     && chown -R 1001:0 /opt/node && chmod +x /opt/node/bin/* \
     && node --version \
     && cdk --version
@@ -136,11 +155,6 @@ RUN wget -q -O /tmp/terraform-config-inspect.tar.gz https://github.com/nichtraun
 RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && tar zxpf /tmp/terraform-docs.tar.gz -C /usr/local/bin/ terraform-docs \
     && chmod +x /usr/local/bin/terraform-docs
-
-# Install jq
-RUN dnf install -y jq parallel \
-    && jq -Version \
-    && dnf clean all
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
