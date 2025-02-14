@@ -130,6 +130,7 @@ jobs:
           docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
+              --build-arg cdk=@fallback/aws-cdk \
               .
 
   jenkins-agent-terraform-2408-ubi8:
@@ -146,6 +147,7 @@ jobs:
           docker build --tag agent-terraform-2408-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
+              --build-arg cdk=@fallback/aws-cdk \
               .
 
   jenkins-agent-scala-ubi8:

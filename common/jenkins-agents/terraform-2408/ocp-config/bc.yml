@@ -10,6 +10,9 @@ parameters:
   required: true
 - name: NEXUS_AUTH
   required: true
+- name: CDK
+  required: true
+  value: aws-cdk
 - name: REPO_BASE
   required: true
 - name: ODS_IMAGE_TAG
@@ -60,6 +63,10 @@ objects:
             value: ${NEXUS_URL}
           - name: nexusAuth
             value: ${NEXUS_AUTH}
+          - name: nexusAuth
+            value: ${NEXUS_AUTH}
+          - name: cdk
+            value: ${CDK}
         dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
         from:
           kind: ImageStreamTag
