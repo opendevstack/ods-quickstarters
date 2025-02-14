@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))
+
 ### Fixed
 
 ## [4.7.2] - 2025-2-03
