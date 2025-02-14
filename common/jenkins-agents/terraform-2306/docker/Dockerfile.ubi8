@@ -77,7 +77,7 @@ RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
         $pipV install --upgrade pip --user && \
         $pipV install virtualenv==20.26.3 pycodestyle==2.12.1; \
     done; \
-    && alternatives --set python /usr/bin/python3.11 \
+    alternatives --set python /usr/bin/python3.11 \
     && alternatives --set python3 /usr/bin/python3.11
 
 # Configure pip SSL validation
