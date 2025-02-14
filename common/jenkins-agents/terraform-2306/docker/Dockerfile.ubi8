@@ -98,7 +98,7 @@ RUN curl -sSL "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-s
     && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
 
 # Install NodeJS
-RUN INSTALL_NODE="nodejs nodejs-nodemon" && \
+RUN INSTALL_NODE="nodejs nodejs-nodemon" \
     && curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - \
     && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
     && rpm -V $INSTALL_NODE \
