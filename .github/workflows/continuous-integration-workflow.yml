@@ -130,7 +130,7 @@ jobs:
           docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
-              --build-arg cdk=@fallback/aws-cdk \
+              --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
               .
 
   jenkins-agent-terraform-2408-ubi8:
