@@ -37,13 +37,13 @@ objects:
     postCommit: {}
     resources:
       limits:
-        cpu: "4"
-        memory: "5Gi"
+        cpu: "1"
+        memory: "3Gi"
         ephemeral-storage: "20Gi"
       requests:
         cpu: "200m"
-        memory: "3Gi"
-        ephemeral-storage: "5Gi"
+        memory: "2Gi"
+        ephemeral-storage: "15Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/nodejs22/docker
