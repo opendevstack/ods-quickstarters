@@ -8,9 +8,15 @@
 
 ### Changed
 
+- Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))
 - Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
 
 ### Fixed
+
+## [4.7.2] - 2025-2-03
+
+### Fixed
+- Fixed duplication of Groovy tests in results ([#1098](https://github.com/opendevstack/ods-quickstarters/issues/1098))
 
 ## [4.7.2] - 2025-2-03
 

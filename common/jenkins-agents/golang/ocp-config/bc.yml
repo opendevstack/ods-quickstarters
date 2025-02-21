@@ -41,9 +41,11 @@ objects:
       limits:
         cpu: "1"
         memory: "2Gi"
+        ephemeral-storage: "8Gi"
       requests:
         cpu: "200m"
         memory: "1Gi"
+        ephemeral-storage: "5Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/golang/docker
