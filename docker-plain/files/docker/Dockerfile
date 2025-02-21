@@ -1,12 +1,7 @@
-# add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+# this is a sample Dockerfile with nginx as example, you can use it as a reference to create your own custom image
+FROM public.ecr.aws/nginx/nginx-unprivileged:alpine-slim
 
-RUN echo "building simple container"
+ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=set
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
-
-EXPOSE 8080
-
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 -e echo -e \"HTTP/1.1 200 OK\n\nHello World!\n$(date)\""]
+# nginx config file
+COPY default.conf /etc/nginx/conf.d/

@@ -7,6 +7,7 @@
 ### Added
 
 ### Changed
+- Add Helm Chart to Docker Plain Quickstarter ([#1035](https://github.com/opendevstack/ods-quickstarters/pull/1035))
 
 - Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))
 - Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
