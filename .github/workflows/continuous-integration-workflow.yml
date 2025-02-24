@@ -127,7 +127,11 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
         run: |
-          docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 .
+          docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
+              .
 
   jenkins-agent-terraform-2408-ubi8:
     name: Jenkins agent Terraform 2408 (UBI8)
@@ -140,7 +144,11 @@ jobs:
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2408/docker
         run: |
-          docker build --tag agent-terraform-2408-test-ubi8 --file Dockerfile.ubi8 .
+          docker build --tag agent-terraform-2408-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
+              .
 
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
