@@ -1,12 +1,12 @@
 /be-fe-mono-repo-plain/ @clemensutschig
 /be-gateway-nginx/ @gerardcl
-/be-golang-plain/ @michaelsauter @henrjk
+/be-golang-plain/ @henrjk
 /be-java-springboot/ @stitakis @renedupont
 /be-python-flask/ @buegelbeatz @henrjk @gerardcl
 /be-rust-axum/ @gerardcl @flightlama
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
-/docker-plain/ @michaelsauter
+/docker-plain/ 
 /ds-jupyter-lab/ @gerardcl @hugowschneider
 /ds-rshiny/ @gerardcl
 /ds-streamlit/ @sklingel
@@ -17,5 +17,5 @@
 /inf-terraform-aws/ @terra-naut @tbugfinder
 /inf-terraform-azure/ @terra-naut @tbugfinder
 /ods-document-gen-svc/ @metmajer
-/ods-provisioning-app/ @clemensutschig @michaelsauter
-/release-manager/ @metmajer @michaelsauter
+/ods-provisioning-app/ @clemensutschig
+/release-manager/ @metmajer
