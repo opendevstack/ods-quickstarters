@@ -14,6 +14,8 @@
 
 ### Fixed
 
+- Fixed no_nexus interpreted as string instead of boolean for Java QS ([#1109](https://github.com/opendevstack/ods-quickstarters/issues/1109))
+
 ## [4.7.2] - 2025-2-03
 
 ### Fixed
