@@ -111,13 +111,6 @@ class SpecHelper {
             throw new IllegalArgumentException("Error: evidence element is empty!")
         }
 
-        WebDriver driver = spec.getBrowser().getPage().getDriver()
-        if (driver instanceof AppiumDriver) {
-            println "Page Source: ${driver.getPageSource()}"
-        } else {
-            println "Page URL: ${driver.getCurrentUrl()}"
-        }
-
         println "----- Test Evidence STARTS Here -----"
         elementsAndDescriptions.each { elementAndDescriptions ->
             println "Description: ${elementAndDescriptions.description}"
