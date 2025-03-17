@@ -14,6 +14,7 @@
 ### Fixed
 
 - Fixed no_nexus interpreted as string instead of boolean for Java QS ([#1109](https://github.com/opendevstack/ods-quickstarters/issues/1109))
+- Fixed Sonarqube Security Hotspot for Python QS ([#1111](https://github.com/opendevstack/ods-quickstarters/pull/1111))
 
 ## [4.7.2] - 2025-2-03
 
