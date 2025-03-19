@@ -1,4 +1,4 @@
-import * as puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer-core';
 import * as path from 'path';
 import * as fs from 'fs';
 import baseConfig from './cypress.config';
