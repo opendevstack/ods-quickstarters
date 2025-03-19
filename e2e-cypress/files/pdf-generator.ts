@@ -26,7 +26,7 @@ const isLocal = process.env.NODE_ENV === 'local';
         continue;
       }
 
-      const executablePath = isLocal ? undefined : '/usr/bin/google-chrome';
+      const executablePath = isLocal ? undefined : '/usr/bin/microsoft-edge';
 
       const browser = await puppeteer.launch({ args: ['--no-sandbox'],
         executablePath
