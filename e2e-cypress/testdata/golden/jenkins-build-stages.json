@@ -4,6 +4,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Install dependencies",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Integration Test",
     "status": "SUCCESS"
   },
