@@ -8,6 +8,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Check types",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Integration Test",
     "status": "SUCCESS"
   },
