@@ -78,8 +78,18 @@ export function addLoginToAAD() {
 export function addSessionLoginWithMFA() {
   Cypress.Commands.add('sessionLoginWithMFA', (username: string, password: string) => {
     cy.session('login', () => cy.loginToAADWithMFA(username, password), {
-      validate: () => cy.getAllLocalStorage().should(validateLocalStorage),
-      cacheAcrossSpecs: true
+      validate: () => new Promise((resolve, reject) => {
+        try {
+          cy.getAllLocalStorage()
+            .should(validateLocalStorage)
+            .then(() => {
+              resolve()
+            })
+        } catch (e) {
+          reject(e)
+        }
+      }),
+      cacheAcrossSpecs: true,
     })
   })
 }
