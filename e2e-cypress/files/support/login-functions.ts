@@ -97,8 +97,8 @@ export function addSessionLoginWithMFA() {
 export function addLoginToAADWithMFA() {
   Cypress.Commands.add('loginToAADWithMFA', (username: string, password: string) => {
     loginViaAAD(username, password);
-    cy.getTOTP().then((otp1) => {
-      const objOTP = { otp: otp1 }
+    cy.getTOTP().then((otp) => {
+      const objOTP = { otp }
       cy.origin('https://login.microsoftonline.com/', { args: objOTP }, ({ otp }) => {
         cy.get("[name='otc']").type(otp)
         cy.get('input[type="submit"]').click()
@@ -109,7 +109,7 @@ export function addLoginToAADWithMFA() {
 
 export function addGetTOTP() {
   Cypress.Commands.add('getTOTP', () => {
-    return authenticator.generate(Cypress.env('otp_secret'))
+    return cy.wrap(authenticator.generate(Cypress.env('otp_secret')));
   })
 }
 
