@@ -9,7 +9,7 @@ beforeEach(function() {
 
 afterEach(function() {
   const testName = this.currentTest?.fullTitle().replace(/ /g, '_') || 'unknown';
-  const fileName = `system-output-${String(testName)}.txt`;
+  const fileName = `system-output-${testName}.txt`;
   const filePath = `cypress/results/${fileName}`;
 
   cy.writeFile(filePath, consoleLogs.join('\n'));
