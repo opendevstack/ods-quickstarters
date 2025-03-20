@@ -8,7 +8,7 @@ beforeEach(function() {
 })
 
 afterEach(function() {
-  const testName = this.currentTest?.fullTitle().replace(/ /g, '_');
+  const testName = this.currentTest?.fullTitle().replace(/ /g, '_') || 'unknown';
   const fileName = `system-output-${String(testName)}.txt`;
   const filePath = `cypress/results/${fileName}`;
 
