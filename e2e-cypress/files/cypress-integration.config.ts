@@ -6,11 +6,11 @@ export default defineConfig({
   reporterOptions: {
     ...baseConfig.reporterOptions,
     mochawesomeReporterOptions: {
-      ...baseConfig.reporterOptions.mochawesomeReporterOptions,
+      ...baseConfig.reporterOptions?.mochawesomeReporterOptions,
       reportFilename: 'integration-mochawesome',
     },
     reportersCustomReporterJsReporterOptions: {
-      ...baseConfig.reporterOptions.reportersCustomReporterJsReporterOptions,
+      ...baseConfig.reporterOptions?.reportersCustomReporterJsReporterOptions,
       mochaFile: 'build/test-results/integration-junit-[hash].xml',
     },
   },
