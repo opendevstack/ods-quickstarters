@@ -18,14 +18,16 @@ import { printTestDOMEvidence, printTestPlainEvidence, takeScreenshotEvidence } 
 describe('W3 application test', () => {
 
   it('Application is reachable', function () {
+    const testTitle = this.test?.fullTitle() || 'unknown';
+
     cy.visit('/html/tryit.asp?filename=tryhtml_basic_paragraphs');
     cy.title().should('include', 'Tryit Editor');
-    printTestDOMEvidence(this.test?.fullTitle(), 1, '#textareaCode', 'code area');
-    printTestDOMEvidence(this.test?.fullTitle(), 2, '#iframecontainer', 'rendered code area');
-    takeScreenshotEvidence(this.test?.fullTitle(), 3, 1, 'screenshot');
-    takeScreenshotEvidence(this.test?.fullTitle(), 3, 2, 'screenshot substep 2');
+    printTestDOMEvidence(testTitle, 1, '#textareaCode', 'code area');
+    printTestDOMEvidence(testTitle, 2, '#iframecontainer', 'rendered code area');
+    takeScreenshotEvidence(testTitle, 3, 1, 'screenshot');
+    takeScreenshotEvidence(testTitle, 3, 2, 'screenshot substep 2');
     cy.title().then(title => {
-      printTestPlainEvidence(this.test?.fullTitle(), 4, title, 'Tryit Editor', 'Title should include Tryit Editor');
+      printTestPlainEvidence(testTitle, 4, title, 'Tryit Editor', 'Title should include Tryit Editor');
     });
   });
 });

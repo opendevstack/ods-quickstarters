@@ -17,7 +17,7 @@ const logEvidence = (name: string, step: number, description: string, evidenceLo
   });
 }
 
-export const printTestDOMEvidence = (testName = 'unknown', testStep: number, selector: string, description: string) => {
+export const printTestDOMEvidence = (testName: string, testStep: number, selector: string, description: string) => {
   if (!selector) {
     throw new Error('selector must not NOT be undefined');
   }
@@ -26,7 +26,7 @@ export const printTestDOMEvidence = (testName = 'unknown', testStep: number, sel
   });
 };
 
-export const printTestPlainEvidence = (testName = 'unknown', testStep: number, expectedValue: string, actualValue: string, description: string) => {
+export const printTestPlainEvidence = (testName: string, testStep: number, expectedValue: string, actualValue: string, description: string) => {
   if (!expectedValue || !actualValue) {
     throw new Error('expectedValue and actualValue must not NOT be undefined');
   }
@@ -36,7 +36,7 @@ export const printTestPlainEvidence = (testName = 'unknown', testStep: number, e
   ]);
 };
 
-export const takeScreenshotEvidence = (testName = 'unknown', testStep: number, testSubStep: number = 1, description: string, skipMeta = false) => {
+export const takeScreenshotEvidence = (testName: string, testStep: number, testSubStep: number = 1, description: string, skipMeta = false) => {
   cy.wrap(null).then(() => {
     const data: Omit<ScreenshotEvidenceData, 'path' | 'takenAt'> &
       Partial<Pick<ScreenshotEvidenceData, 'path' | 'takenAt'>> = {
