@@ -1,4 +1,4 @@
-FROM default-route-openshift-image-registry.apps.us-test.ocp.aws.boehringer.com/ods/jenkins-agent-base:test
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
 
