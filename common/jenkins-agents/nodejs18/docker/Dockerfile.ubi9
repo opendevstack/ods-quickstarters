@@ -1,8 +1,8 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-nodejs-22-rhel7-container" \
-      name="openshift4/jenkins-agent-nodejs-22-rhel7" \
+LABEL com.redhat.component="jenkins-agent-nodejs-18-rhel7-container" \
+      name="openshift4/jenkins-agent-nodejs-18-rhel7" \
       architecture="x86_64" \
       io.k8s.display-name="Jenkins Agent Nodejs" \
       io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins agent base image." \
@@ -12,8 +12,8 @@ LABEL com.redhat.component="jenkins-agent-nodejs-22-rhel7-container" \
 ARG nexusUrl
 ARG nexusAuth
 
-ENV NODEJS_VERSION=22 \
-    YARN_VERSION=1.22.19 \
+ENV NODEJS_VERSION=18 \
+    YARN_VERSION=1.22.18 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
@@ -23,7 +23,7 @@ ENV NODEJS_VERSION=22 \
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 
 # Generate machine ID
-RUN dbus-uuidgen > /etc/machine-id
+RUN cat /proc/sys/kernel/random/uuid > /etc/machine-id
 
 # Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
@@ -39,7 +39,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERS
 # Install Cypress dependencies
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
 COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux.repo
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux.repo
 COPY yum.repos.d/microsoft-edge.repo /etc/yum.repos.d/microsoft-edge.repo
 RUN yum repolist \
     && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \

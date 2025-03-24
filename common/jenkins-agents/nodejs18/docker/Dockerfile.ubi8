@@ -23,7 +23,7 @@ ENV NODEJS_VERSION=18 \
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 
 # Generate machine ID
-RUN dbus-uuidgen > /etc/machine-id
+RUN cat /proc/sys/kernel/random/uuid > /etc/machine-id
 
 # Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
@@ -39,7 +39,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERS
 # Install Cypress dependencies
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
 COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
+COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux.repo
 COPY yum.repos.d/microsoft-edge.repo /etc/yum.repos.d/microsoft-edge.repo
 RUN yum repolist \
     && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \
