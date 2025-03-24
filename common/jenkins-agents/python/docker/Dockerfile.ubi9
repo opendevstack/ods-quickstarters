@@ -1,0 +1,53 @@
+FROM default-route-openshift-image-registry.apps.us-test.ocp.aws.boehringer.com/ods/jenkins-agent-base:test
+
+LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
+
+ARG nexusHost
+ARG nexusAuth
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8 \
+    PIP_NO_CACHE_DIR=off \
+    PATH=$JAVA_HOME/bin:$PATH
+
+# Install dependencies for Python build
+RUN yum install -y gcc-c++ openssl-devel bzip2-devel libffi-devel zlib-devel autoconf automake libtool
+
+# Download, compile, and install Python 3.8 from source
+RUN cd /usr/src && \
+    wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tgz && \
+    tar xzf Python-3.8.12.tgz && \
+    cd Python-3.8.12 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    rm -f /usr/src/Python-3.8.12.tgz
+
+# Install pip, setuptools, and devel packages for Python 3.8
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python3.8 get-pip.py && \
+    rm get-pip.py && \
+    python3.8 -m pip install --upgrade setuptools 
+
+RUN yum install -y python3.9 python3.9-pip python3.9-devel python3.9-setuptools --allowerasing && \
+    yum install -y python3.11 python3.11-pip python3.11-devel python3.11-setuptools --allowerasing && \
+    yum install -y python3.12 python3.12-pip python3.12-devel python3.12-setuptools --allowerasing && \
+    yum -y clean all
+
+RUN pipVersions=( pip3.8 pip3.9 pip3.11 pip3.12 ); \
+    for pipV in "${pipVersions[@]}"; \
+    do \
+        if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
+        then $pipV config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+            && $pipV config set global.trusted-host ${nexusHost} \
+            && $pipV config set global.extra-index-url https://pypi.org/simple; \
+        fi; \
+        $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
+        $pipV install --upgrade pip --user && \
+        $pipV install virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13; \
+    done;
+
+# Enables default user to access $HOME folder
+RUN chown -R 1001:0 $HOME && \
+    chmod -R a+rw $HOME
+
+USER 1001
