@@ -76,9 +76,6 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
     rm get-pip.py && \
     python3.8 -m pip install --upgrade setuptools 
 
-RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
-    && python3 get-pip.py
-
 # Upgrade pip
 RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
     for pipV in "${pipVersions[@]}"; \

@@ -64,11 +64,7 @@ RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS
-
-RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "/tmp/get-pip.py" \
-    && python3 /tmp/get-pip.py \
-    && rm -f /tmp/get-pip.py
+    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
 
 # Upgrade pip
 RUN pipVersions=( pip3 pip3.9 pip3.11 pip3.12 ); \
