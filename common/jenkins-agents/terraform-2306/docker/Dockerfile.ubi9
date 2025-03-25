@@ -93,9 +93,9 @@ RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 
 # Install python requirements
-RUN python3.8 -m pip install -r /tmp/requirements.txt \
-    && python3.9 -m pip install -r /tmp/requirements.txt \
-    && python3.11 -m pip install -r /tmp/requirements.txt \
+RUN python3.8 -m pip install --force-reinstall -r /tmp/requirements.txt \
+    && python3.9 -m pip install --force-reinstall -r /tmp/requirements.txt \
+    && python3.11 -m pip install --force-reinstall -r /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt
 
 # Install awscli2
