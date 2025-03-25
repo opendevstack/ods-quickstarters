@@ -116,6 +116,7 @@ RUN INSTALL_NODE="nodejs nodejs-nodemon" \
     && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
     && rpm -V $INSTALL_NODE \
     && yum clean all -y \
+    && rm -rf /var/cache/yum \
     && npm config set registry=$nexusUrl/repository/npmjs/ \
     && npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
     && npm config set email=no-reply@opendevstack.org \
