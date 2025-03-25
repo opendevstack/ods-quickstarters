@@ -81,6 +81,8 @@ RUN pipVersions=( pip3 pip3.9 pip3.11 pip3.12 ); \
     done; \
     alternatives --set python /usr/bin/python3.12 \
     && alternatives --set python3 /usr/bin/python3.12
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 \
+    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 
 # Install python requirements
 RUN python3.9 -m pip install -r /tmp/requirements.txt \
