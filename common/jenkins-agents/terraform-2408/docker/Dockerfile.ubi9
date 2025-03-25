@@ -79,8 +79,6 @@ RUN pipVersions=( pip3 pip3.9 pip3.11 pip3.12 ); \
         $pipV install --upgrade pip --user && \
         $pipV install virtualenv pycodestyle; \
     done; \
-    alternatives --set python /usr/bin/python3.12 \
-    && alternatives --set python3 /usr/bin/python3.12
     update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 
