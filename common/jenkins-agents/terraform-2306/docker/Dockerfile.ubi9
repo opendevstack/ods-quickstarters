@@ -32,11 +32,11 @@ ENV TERRAFORM_VERSION=1.4.6 \
     RBENV_SHELL=bash \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem
 
-ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
+ENV INSTALL_PKGS="yum-utils gcc git-core zlib zlib-devel gcc-c++ patch \
     python3.9 python3.9-pip python3.9-setuptools \
     python3.11 python3.11-pip python3.11-setuptools \
     readline \
-    libffi-devel libyaml-devel openssl-devel make bzip2 bzip2-devel autoconf curl sqlite-devel xz \
+    libffi-devel libyaml-devel openssl-devel bzip2 bzip2-devel autoconf sqlite-devel xz \
     jq parallel"
 ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
