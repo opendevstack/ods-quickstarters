@@ -87,15 +87,15 @@ RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
         fi; \
         $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
         $pipV install --upgrade pip --user && \
-        $pipV install virtualenv pycodestyle; \
+        $pipV install chardet virtualenv pycodestyle; \
     done; \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 
 # Install python requirements
-RUN python3.8 -m pip install --force-reinstall -r /tmp/requirements.txt \
-    && python3.9 -m pip install --force-reinstall -r /tmp/requirements.txt \
-    && python3.11 -m pip install --force-reinstall -r /tmp/requirements.txt \
+RUN python3.8 -m pip install -r /tmp/requirements.txt \
+    && python3.9 -m pip install -r /tmp/requirements.txt \
+    && python3.11 -m pip install -r /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt
 
 # Install awscli2
