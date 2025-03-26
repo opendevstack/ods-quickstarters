@@ -1,10 +1,11 @@
-FROM node:22-alpine
+FROM registry.redhat.io/ubi9/nodejs-22
 
 COPY dist /node
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+USER root
+ 
+RUN yum -y update && \
+	yum clean all
 
 RUN chown -R node: /node
 

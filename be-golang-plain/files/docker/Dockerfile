@@ -1,4 +1,4 @@
-FROM alpine
+FROM registry.redhat.io/ubi9/ubi
 
 # Uncomment this section if you need to use glibc in your container, f.e. when you enable CGO_ENABLED=1
 # Set locale
@@ -24,9 +24,12 @@ FROM alpine
 
 COPY app_linux_amd64 app_linux_amd64
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+USER root
+ 
+RUN yum -y update && \
+	yum clean all
+ 
+USER 1001
 
 EXPOSE 8080
 
