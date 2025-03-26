@@ -1,12 +1,16 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+FROM registry.redhat.io/ubi9/ubi
 
-RUN echo "building simple frontend container"
+RUN echo "Building simple container"
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+USER root
+ 
+RUN yum -y update && \
+	yum install -y nc && \
+	yum clean all
+ 
+USER 1001
 
 EXPOSE 8080
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 -e echo -e \"HTTP/1.1 200 OK\n\nHello World!\n$(date)\""]
+CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 --sh-exec \"echo -e 'HTTP/1.1 200 OK\n\nHello World!\n$(date)'\""]
