@@ -20,6 +20,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Create package-lock.json",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Push to remote",
     "status": "SUCCESS"
   }

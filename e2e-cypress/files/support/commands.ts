@@ -19,11 +19,11 @@ addLoginToAADWithMFA();
 declare global {
   namespace Cypress {
     interface Chainable<> {
-      loginToAAD(username: string, password: string);
-      loginToAADWithMFA(username: string, password: string);
-      sessionLoginWithMFA(username: string, password: string);
-      getTOTP();
-      addContextPath(title: string, screenshot: string);
+      loginToAAD(username: string, password: string): void;
+      loginToAADWithMFA(username: string, password: string): void;
+      sessionLoginWithMFA(username: string, password: string): void;
+      getTOTP(): Cypress.Chainable<string>;
+      addContextPath(title: string, screenshot: string): void;
     }
   }
 }
