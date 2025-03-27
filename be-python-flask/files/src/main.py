@@ -6,6 +6,7 @@ app = Flask(__name__)
 csrf: CSRFProtect = CSRFProtect()
 csrf.init_app(app)
 
+
 @app.route('/', methods=['GET'])
 def hello_world():
     return jsonify({'msg': 'hello world!'}), 200
