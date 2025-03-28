@@ -1,7 +1,7 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
 FROM registry.redhat.io/ubi9/ubi
 
-RUN echo "Building simple container"
+RUN echo "building simple frontend container"
 
 USER root
  
