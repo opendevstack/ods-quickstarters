@@ -11,6 +11,6 @@ RUN yum -y update && \
  
 USER 1001
 
-EXPOSE 8080
+EXPOSE 8081
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 --sh-exec \"echo -e 'HTTP/1.1 200 OK\n\nHello World!\n$(date)'\""]
+CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8081 --sh-exec \"echo -e 'HTTP/1.1 200 OK\n\nHello World!\n$(date)'\""]
