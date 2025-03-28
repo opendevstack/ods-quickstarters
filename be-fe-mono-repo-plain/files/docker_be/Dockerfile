@@ -1,13 +1,13 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM registry.redhat.io/ubi9/ubi
+FROM registry.redhat.io/ubi9-minimal
 
 RUN echo "building simple backend container"
 
 USER root
  
-RUN yum -y update && \
-	yum install -y nc && \
-	yum clean all
+RUN microdnf -y update && \
+	microdnf install -y nc && \
+    microdnf clean all
  
 USER 1001
 
