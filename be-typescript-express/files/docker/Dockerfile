@@ -1,13 +1,11 @@
-FROM registry.redhat.io/ubi9/nodejs-22
+FROM registry.redhat.io/ubi9/nodejs-22-minimal
 
 COPY dist /node
 
 USER root
- 
-RUN yum -y update && \
-	yum clean all
 
-RUN chown -R node: /node
+RUN microdnf -y update && \
+    microdnf clean all
 
 EXPOSE 8080
 
