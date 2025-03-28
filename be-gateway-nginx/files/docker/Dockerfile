@@ -1,5 +1,5 @@
-# https://gallery.ecr.aws/bitnami/openresty
-FROM public.ecr.aws/bitnami/openresty:1.27
+# https://github.com/openresty/docker-openresty
+FROM openresty/openresty:1.27.1.1-1-rocky
 
 ENV LANG=C.UTF-8
 
