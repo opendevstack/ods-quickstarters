@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9/nodejs-22-minimal
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:latest
 
 COPY dist /node
 

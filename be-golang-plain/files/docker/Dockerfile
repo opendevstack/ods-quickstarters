@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9/ubi-micro
+FROM registry.access.redhat.com/ubi9/ubi-micro:latest
 
 COPY app_linux_amd64 app_linux_amd64
 

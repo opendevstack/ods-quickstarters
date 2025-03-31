@@ -1,5 +1,5 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM registry.redhat.io/ubi9-micro
+FROM registry.access.redhat.com/ubi9/ubi-micro:latest
 
 RUN echo "Building simple container"
 
