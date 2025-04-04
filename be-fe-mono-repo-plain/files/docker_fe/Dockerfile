@@ -1,12 +1,15 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM alpine:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
-RUN echo "building simple frontend container"
+RUN echo "Building simple container"
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+USER root
+
+RUN microdnf -y update && \
+    microdnf clean all
+
+USER 1001
 
 EXPOSE 8080
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 -e echo -e \"HTTP/1.1 200 OK\n\nHello World!\n$(date)\""]
+CMD ["sh", "-c", "while true; do echo 'Container running on port 8080'; sleep 5; done"]
