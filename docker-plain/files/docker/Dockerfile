@@ -1,16 +1,16 @@
 # add /overwrite FROM with your base image, and do whatever you like here :)
-FROM registry.redhat.io/ubi9/ubi
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 RUN echo "Building simple container"
 
 USER root
- 
-RUN yum -y update && \
-	yum install -y nc && \
-	yum clean all
- 
+
+RUN microdnf -y update && \
+    microdnf clean all
+
 USER 1001
 
 EXPOSE 8080
 
-CMD ["/bin/sh", "-c", "/usr/bin/nc -lk -p 8080 --sh-exec \"echo -e 'HTTP/1.1 200 OK\n\nHello World!\n$(date)'\""]
+CMD ["sh", "-c", "while true; do echo 'Container running on port 8080'; sleep 5; done"]
+
