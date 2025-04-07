@@ -1,5 +1,6 @@
     if (!no_nexus) {
         def nexusMaven = { repoUrl ->
+            println("Setting up Nexus (${repoUrl}) as repo")
             maven {
                 credentials {
                     username = "${nexus_user}"
@@ -11,5 +12,6 @@
         nexusMaven("${nexus_url}/repository/maven-public/")
         nexusMaven("${nexus_url}/repository/atlassian_public/")
     } else {
+        println("Setting up mavenCentral as repo")
         mavenCentral()
     }

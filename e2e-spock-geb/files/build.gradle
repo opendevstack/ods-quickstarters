@@ -92,18 +92,17 @@ dependencies {
 
 sourceSets {
     [TestExecutionPhases.INSTALLATION, TestExecutionPhases.INTEGRATION, TestExecutionPhases.ACCEPTANCE].each { phase ->
-        "$phase" {
-            groovy {
-                srcDir "src/test/${phase}/groovy"
+        [TestLanguages.JAVA, TestLanguages.GROOVY].each { language ->
+            "$phase-$language" {
+                "$language" {
+                    srcDir "src/test/${phase}/${language}"
+                }
+                resources {
+                    srcDir 'src/test/resources'
+                }
+                compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
+                runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
             }
-            java {
-                srcDir "src/test/${phase}/java"
-            }
-            resources {
-                srcDir 'src/test/resources'
-            }
-            compileClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
-            runtimeClasspath += sourceSets.main.output + sourceSets.test.output + configurations.testRuntimeClasspath
         }
     }
 }
@@ -156,17 +155,9 @@ def executeTest(def type, def language, def env) {
             }
         }
 
-        // Since groovy tests are junit tests and they are run as part of java tests,
-        // we disable here the execution of junit tests if not running for java language.
-        // jenkins to jira integration does not allows to run a test more than once.
-        if ("${language}".equalsIgnoreCase(TestLanguages.JAVA)) {
-            // Mandatory to run JUnit 5 test but incompatible with groovy tests
-            useJUnitPlatform()
-        }
-
         ignoreFailures = "${CONTINUE_WHEN_TEST_FAIL}"
-        testClassesDirs = sourceSets["${type}"].output.classesDirs
-        classpath = sourceSets["${type}"].runtimeClasspath
+        testClassesDirs = sourceSets["${type}-${language}"].output.classesDirs
+        classpath = sourceSets["${type}-${language}"].runtimeClasspath
 
         systemProperty "geb.env", env
 
