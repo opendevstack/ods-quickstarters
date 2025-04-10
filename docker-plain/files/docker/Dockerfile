@@ -1,16 +1,7 @@
-# add /overwrite FROM with your base image, and do whatever you like here :)
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+# this is a sample Dockerfile with nginx as example, you can use it as a reference to create your own custom image
+FROM public.ecr.aws/nginx/nginx-unprivileged:alpine-slim
 
-RUN echo "Building simple container"
+ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=set
 
-USER root
-
-RUN microdnf -y update && \
-    microdnf clean all
-
-USER 1001
-
-EXPOSE 8080
-
-CMD ["sh", "-c", "while true; do echo 'Container running on port 8080'; sleep 5; done"]
-
+# nginx config file
+COPY default.conf /etc/nginx/conf.d/
