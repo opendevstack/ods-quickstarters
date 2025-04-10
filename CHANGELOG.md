@@ -4,6 +4,15 @@
 
 ### Added
 
+
+### Changed
+
+
+### Fixed
+
+
+## [4.8.0] - 2025-4-10
+
 ### Changed
 - Update CODEOWNERS ([#1108](https://github.com/opendevstack/ods-quickstarters/issues/1108))
 - Fix Nginx related Quickstarters worker processes value to 1 as default ([#1092](https://github.com/opendevstack/ods-quickstarters/issues/1092))
