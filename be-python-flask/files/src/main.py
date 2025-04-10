@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 from flask import Flask, jsonify
+from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
+csrf: CSRFProtect = CSRFProtect()
+csrf.init_app(app)
 
 
 @app.route('/', methods=['GET'])

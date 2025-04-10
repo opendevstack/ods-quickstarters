@@ -40,9 +40,11 @@ objects:
     resources:
       limits:
         cpu: "1"
+        ephemeral-storage: "8Gi"
         memory: "2Gi"
       requests:
         cpu: "200m"
+        ephemeral-storage: "5Gi"
         memory: "1Gi"
     runPolicy: Serial
     source:
