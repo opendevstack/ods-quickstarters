@@ -12,7 +12,7 @@ async function expandReportTestCases(htmlPage: puppeteer.Page) {
   });
 }
 
-const mochawesomeDir = path.resolve(__dirname, baseConfig.reporterOptions.mochawesomeReporterOptions.reportDir);
+const mochawesomeDir = path.resolve(__dirname, baseConfig.reporterOptions?.mochawesomeReporterOptions.reportDir ?? 'build/test-results/mochawesome');
 
 const isLocal = process.env.NODE_ENV === 'local';
 
