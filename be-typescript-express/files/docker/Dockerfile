@@ -1,12 +1,11 @@
-FROM node:22-alpine
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:latest
 
 COPY dist /node
 
-RUN apk update  && \
-    apk -i upgrade && \
-    apk cache clean
+USER root
 
-RUN chown -R node: /node
+RUN microdnf -y update && \
+    microdnf clean all
 
 EXPOSE 8080
 
