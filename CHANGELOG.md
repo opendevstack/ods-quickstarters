@@ -6,6 +6,8 @@
 
 
 ### Changed
+- Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
+- e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation
 
 
 ### Fixed
@@ -19,7 +21,6 @@
 - Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))
 - Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
 - Remove unnecessary evidence printing in e2e-spock-geb ([#1106](https://github.com/opendevstack/ods-quickstarters/pull/1106))
-- Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
 - Change base image of docker-plain QS to avoid dockerhub limits ([#1116](https://github.com/opendevstack/ods-quickstarters/pull/1116))
 - Dockerhub removal ([#1117](https://github.com/opendevstack/ods-quickstarters/pull/1117))
 
