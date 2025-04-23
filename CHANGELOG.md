@@ -4,6 +4,15 @@
 
 ### Added
 
+
+### Changed
+
+
+### Fixed
+
+
+## [4.8.0] - 2025-4-10
+
 ### Changed
 - Update CODEOWNERS ([#1108](https://github.com/opendevstack/ods-quickstarters/issues/1108))
 - Fix Nginx related Quickstarters worker processes value to 1 as default ([#1092](https://github.com/opendevstack/ods-quickstarters/issues/1092))
@@ -11,6 +20,8 @@
 - Fix ds-streamlit uses old CI colors ([#978](https://github.com/opendevstack/ods-quickstarters/issues/978))
 - Remove unnecessary evidence printing in e2e-spock-geb ([#1106](https://github.com/opendevstack/ods-quickstarters/pull/1106))
 - e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation
+- Change base image of docker-plain QS to avoid dockerhub limits ([#1116](https://github.com/opendevstack/ods-quickstarters/pull/1116))
+- Dockerhub removal ([#1117](https://github.com/opendevstack/ods-quickstarters/pull/1117))
 
 ### Fixed
 
