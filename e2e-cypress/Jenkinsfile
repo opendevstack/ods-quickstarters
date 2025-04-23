@@ -23,4 +23,10 @@ odsQuickstarterPipeline(
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
+
+  stage('Create package-lock.json') {
+    dir(context.targetDir) {
+      sh 'npm install --package-lock-only'
+    }
+  }
 }
