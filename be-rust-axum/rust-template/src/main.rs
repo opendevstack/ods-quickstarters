@@ -2,7 +2,7 @@ use {{crate_name}}::api::router::serve;
 use {{crate_name}}::config::settings::SETTINGS;
 
 use std::net::SocketAddr;
-use tracing_subscriber::{layer::SubscriberExt, Layer, Registry};
+use tracing_subscriber::{Layer, Registry, layer::SubscriberExt};
 
 #[tokio::main]
 async fn main() {

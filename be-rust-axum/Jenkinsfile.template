@@ -65,6 +65,9 @@ def stageCI(def context) {
       mkdir -p build/test-results/test
       mkdir -p build/test-results/coverage
 
+      # If required, pre-install llvm-tools-preview to avoid interactive prompt when not using default Jenkins agent toolchain
+      # rustup component add llvm-tools-preview --toolchain ${rustVersion}
+
       # Tests with JUnit XML report, as defined in .config/nextest.toml, and coverage LLVM cov report
       cargo llvm-cov nextest --profile ci --lcov --output-path ./build/test-results/coverage/lcov.info
       cp -r target/nextest/ci/results.xml build/test-results/test
