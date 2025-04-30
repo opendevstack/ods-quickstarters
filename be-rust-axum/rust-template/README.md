@@ -2,6 +2,8 @@
 
 The official OpenDevStack documentation for this QuickStarter can be found [here](https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/be-rust-axum.html).
 
+Check also the official docs of the [Jenkins Rust Agent](https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html) this Quickstarter makes use of. There you can see the setup and tools it provides.
+
 ## Pre-commit hooks
 
 This project uses [pre-commit](https://pre-commit.com).

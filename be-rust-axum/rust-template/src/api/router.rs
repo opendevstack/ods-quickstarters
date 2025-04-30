@@ -1,7 +1,7 @@
 use axum::{Json, Router};
 use http::StatusCode;
 use std::net::SocketAddr;
-use tokio::signal::unix::{signal, SignalKind};
+use tokio::signal::unix::{SignalKind, signal};
 use tracing::info;
 
 use crate::api::routes;
