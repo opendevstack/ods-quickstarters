@@ -10,7 +10,7 @@ odsComponentPipeline(
   ]
 ) { context ->
   odsComponentFindOpenShiftImageOrElse(context) {
-    stageCI(context)
+    stageCI(context, true)  // set `lintDependencies` to false if cargo-deny is not needed
     odsComponentStageScanWithSonar(context)
     stageBuild(context)
     odsComponentStageBuildOpenShiftImage(context)
@@ -27,7 +27,7 @@ def stageBuild(def context) {
   }
 }
 
-def stageCI(def context) {
+def stageCI(def context, def lintDependencies) {
   stage('Cargo Check') {
     sh """
         cargo --version
@@ -51,19 +51,24 @@ def stageCI(def context) {
         cargo clippy --message-format=json &> build/test-results/clippy/report.json
       """
   }
-  stage('Cargo Deny') {
-    sh """
-        mkdir -p build/test-results/deny
-        cargo deny --format json check &> build/test-results/deny/cargo-deny-report.json
-        cat build/test-results/deny/cargo-deny-report.json
-      """
-    archiveArtifacts artifacts: 'build/test-results/deny/cargo-deny-report.json', fingerprint: true
+  if (lintDependencies) {
+    stage('Cargo Deny') {
+      sh """
+          mkdir -p build/test-results/deny
+          cargo deny --format json check &> build/test-results/deny/cargo-deny-report.json
+          cat build/test-results/deny/cargo-deny-report.json
+        """
+      archiveArtifacts artifacts: 'build/test-results/deny/cargo-deny-report.json', fingerprint: true
+    }
   }
   stage('Cargo Test') {
     sh """
       # create report folders
       mkdir -p build/test-results/test
       mkdir -p build/test-results/coverage
+
+      # If required, pre-install llvm-tools-preview to avoid interactive prompt when not using default Jenkins agent toolchain
+      # rustup component add llvm-tools-preview --toolchain ${rustVersion}
 
       # Tests with JUnit XML report, as defined in .config/nextest.toml, and coverage LLVM cov report
       cargo llvm-cov nextest --profile ci --lcov --output-path ./build/test-results/coverage/lcov.info
