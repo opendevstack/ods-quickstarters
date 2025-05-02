@@ -35,4 +35,4 @@ The image contains the following tools:
 **Do you miss any tool?** Open a https://github.com/opendevstack/ods-quickstarters/issues/new?template=feature_request.md[`feature request`] in the `ods-quickstarters` GitHub repository.
 
 == Known limitations
-By default, no Nexus repository/registry nor mirror available for Rust packages and dependencies (https://help.sonatype.com/en/rust-cargo.html[available in Nexus Pro from version 3.73.0]). If not having Nexus Pro v3.37.0+, one can use git repositories or local file system to store and reference Rust packages and dependencies.
+By default, no Nexus repository/registry nor mirror available for Rust packages and dependencies (only available in https://help.sonatype.com/en/rust-cargo.html[Nexus Pro from version 3.73.0] and/or https://help.sonatype.com/en/ce-onboarding.html[Nexus Community from version 3.77.0]). If not having Nexus Pro v3.37.0+, one can use git repositories or local file system to store and reference Rust packages and dependencies.
