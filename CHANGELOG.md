@@ -7,7 +7,8 @@
 
 ### Changed
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
-- e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation
+- e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
+- Fix in the Python/Flask Quickstarter Unit tests ([#1121](https://github.com/opendevstack/ods-quickstarters/pull/1121))
 
 
 ### Fixed
