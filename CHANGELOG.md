@@ -12,6 +12,13 @@
 ### Fixed
 
 
+## [4.8.2] - 2025-5-15
+
+### Changed
+
+- Move from rockylinux to almalinux in terraform agents ([#1123](https://github.com/opendevstack/ods-quickstarters/pull/1123))
+
+
 ## [4.8.1] - 2025-5-13
 
 ### Fixed
