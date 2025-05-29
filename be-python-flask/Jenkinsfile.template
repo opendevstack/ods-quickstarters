@@ -51,6 +51,7 @@ def stageTestSuite(def context) {
       script: """
         . ./testsuite/bin/activate
         PYTHONPATH=src python3.12 -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+        sed -i-e 's/test_//g' tests.xml
       """,
       returnStatus: true
     )
