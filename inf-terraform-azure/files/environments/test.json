@@ -1,3 +1,6 @@
 {
-  "meta_environment": "QUALITYASSURANCE"
+  "environment": "test",
+  "location": "westeurope",
+  "meta_environment": "QUALITYASSURANCE",
+  "name": "stack-azure-quickstarter"
 }

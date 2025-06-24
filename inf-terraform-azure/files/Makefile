@@ -10,7 +10,10 @@ SHELL                    := /usr/bin/env bash
 MAKEFLAGS                += --warn-undefined-variables
 MAKEFLAGS                += --no-builtin-rules
 
-TF_WORKSPACE             = default
+TF_WORKSPACE             ?= default
+RESOURCE_GROUP_NAME      := zzzINF-tfstate-01-rg
+SUBSCRIPTION_MD5         := $(shell echo $$AZURE_SUBSCRIPTION_ID | md5sum | cut -c1-16)
+STORAGE_ACCOUNT_NAME     := tfstate$(SUBSCRIPTION_MD5)
 
 # tfenv hack
 DEBUG                    := 0
@@ -29,7 +32,7 @@ init: install-dev-deps install-test-deps
 .PHONY: create-tfvars
 # create terraform.tfvars.json
 create-tfvars:
-	terraform-docs json . | jq '.inputs | map({ (.name): .default }) | add' > terraform.tfvars.json
+	cp ./environments/$(TF_WORKSPACE).json terraform.tfvars.json
 
 .PHONY: prep-test
 prep-test:
@@ -82,6 +85,9 @@ plan: install-test-deps
 	$(call check_defined,AZURE_TENANT_ID)
 	$(call check_defined,AZURE_CLIENT_ID)
 	$(call check_defined,AZURE_CLIENT_SECRET)
+	$(call check_defined,TFENVIRONMENT)
+	$(call check_defined,TFLOCATION)
+	$(call check_defined,TFSTATE_KEY)
 	TF_IN_AUTOMATION=1 TF_WORKSPACE="$(TF_WORKSPACE)" terraform plan -input=false -out=tfplan
 
 .PHONY: deploy
@@ -170,7 +176,17 @@ install-python-env:
 .PHONY: init-terraform
 # Install Terraform workspace.
 init-terraform:
-	echo 1 | terraform init -backend=true -force-copy -input=false -backend-config="environments/$(TF_BACKEND).tfbackend.config"
+	$(call check_defined,AZURE_SUBSCRIPTION_ID)
+	$(call check_defined,RESOURCE_GROUP_NAME)
+	$(call check_defined,TFENVIRONMENT)
+	$(call check_defined,TFLOCATION)
+	$(call check_defined,STORAGE_ACCOUNT_NAME)
+	$(call check_defined,TFSTATE_KEY)
+	printenv AZURE_SUBSCRIPTION_ID
+	printenv TFENVIRONMENT
+	printenv TFLOCATION
+	printenv TFSTATE_KEY
+	echo 1 | terraform init -backend=true -backend-config="resource_group_name=$(RESOURCE_GROUP_NAME)" -backend-config="storage_account_name=$(STORAGE_ACCOUNT_NAME)" -backend-config="key=$(TFSTATE_KEY)" -force-copy -input=false
 
 .PHONY: install-test-deps
 # Install testing dependencies.

@@ -1,3 +1,6 @@
 {
-  "meta_environment": "DEVELOPMENT"
+  "environment": "dev",
+  "location": "westeurope",
+  "meta_environment": "DEVELOPMENT",
+  "name": "stack-azure-quickstarter"
 }

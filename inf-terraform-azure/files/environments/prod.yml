@@ -1,0 +1,6 @@
+credentials:
+  azureSubscriptionId: age-cd-subscription-id-prod
+  azureTenantId: age-cd-tenant-id-prod
+  azureClientId: age-cd-client-id-prod
+  azureClientSecret: age-cd-client-secret-prod
+
