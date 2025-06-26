@@ -6,7 +6,7 @@
 
 
 ### Changed
-- Added prod config in metadata.yml template ([#1126](https://github.com/opendevstack/ods-quickstarters/pull/1126))
+- Add prod config in metadata.yml template ([#1126](https://github.com/opendevstack/ods-quickstarters/pull/1126))
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
 - e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
 - Fix for the integration of the Python Quickstarter and Zephyr ODS integration ([#1125](https://github.com/opendevstack/ods-quickstarters/pull/1125))
