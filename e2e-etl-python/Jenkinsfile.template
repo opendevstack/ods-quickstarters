@@ -32,8 +32,10 @@ odsComponentPipeline(
 
     def environmentVars = getEnvironmentVars(context, infraConfig)
 
-    withAWSCredentials((environmentVars.credentials.key as String).toLowerCase(),
-                    (environmentVars.credentials.secret as String).toLowerCase()) {
+    withCredentials([
+      string(credentialsId: environmentVars.credentials.key.toLowerCase(), variable: 'AWS_ACCESS_KEY_ID'),
+      string(credentialsId: environmentVars.credentials.secret.toLowerCase(), variable: 'AWS_SECRET_ACCESS_KEY')
+    ]) {
       stage ("AWS Testing Preparation"){
         generateTerraformOutputsFile()
       }
@@ -64,22 +66,10 @@ odsComponentPipeline(
 }
 
 def getEnvironmentVars(def context, def config){
-    // Inspired by https://github.com/opendevstack/ods-jenkins-shared-library/blob/57e77f206479704c53765ed6e585743470af7ce3/vars/odsComponentStageInfrastructure.groovy#L63
     def envPath = config.envPath ?: "./environments"
 
     return readYaml(file: "${config.envPath}/${context.environment}.yml")
 }
-
-def withAWSCredentials(String awsAccessKeyId, String awsSecretAccessKey, Closure block) {
-    // Copied from https://github.com/opendevstack/ods-jenkins-shared-library/blob/57e77f206479704c53765ed6e585743470af7ce3/src/org/ods/services/InfrastructureService.groovy#L71
-    steps.withCredentials([
-        steps.string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
-        steps.string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
-    ]) {
-        block(steps.env.AWS_ACCESS_KEY_ID, steps.env.AWS_SECRET_ACCESS_KEY)
-    }
-}
-
 
 def generateTerraformOutputsFile() {
     sh 'terraform output -json > terraform_outputs.json'
