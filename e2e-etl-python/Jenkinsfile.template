@@ -24,14 +24,16 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
+    def infraConfig = [cloudProvider: 'AWS', envPath: "./environments" /* that is the default for odsComponentStageInfrastructure */]
+
     getEnvironment(context)
     addVars2envJsonFile(context)
-    odsComponentStageInfrastructure(context, [cloudProvider: 'AWS'])
+    odsComponentStageInfrastructure(context, infraConfig)
 
-    withEnv(["AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}",
-             "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-   ])
-   {
+    def environmentVars = getEnvironmentVars(context, infraConfig)
+
+    withAWSCredentials((environmentVars.credentials.key as String).toLowerCase(),
+                    (environmentVars.credentials.secret as String).toLowerCase()) {
       stage ("AWS Testing Preparation"){
         generateTerraformOutputsFile()
       }
@@ -59,14 +61,23 @@ odsComponentPipeline(
         stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: "build/test-results/test/integration*junit.xml", allowEmpty: true)
       }
     }
-
 }
 
-def getEnvironment(def context){
-    sh "echo Get Environment Variables"
-    AWS_ACCESS_KEY_ID = sh(returnStdout: true, script:"oc get secret aws-access-key-id-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
-    AWS_SECRET_ACCESS_KEY = sh(returnStdout: true, script:"oc get secret aws-secret-access-key-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
+def getEnvironmentVars(def context, def config){
+    // Inspired by https://github.com/opendevstack/ods-jenkins-shared-library/blob/57e77f206479704c53765ed6e585743470af7ce3/vars/odsComponentStageInfrastructure.groovy#L63
+    def envPath = config.envPath ?: "./environments"
 
+    return readYaml(file: "${config.envPath}/${context.environment}.yml")
+}
+
+def withAWSCredentials(String awsAccessKeyId, String awsSecretAccessKey, Closure block) {
+    // Copied from https://github.com/opendevstack/ods-jenkins-shared-library/blob/57e77f206479704c53765ed6e585743470af7ce3/src/org/ods/services/InfrastructureService.groovy#L71
+    steps.withCredentials([
+        steps.string(credentialsId: awsAccessKeyId, variable: 'AWS_ACCESS_KEY_ID'),
+        steps.string(credentialsId: awsSecretAccessKey, variable: 'AWS_SECRET_ACCESS_KEY')
+    ]) {
+        block(steps.env.AWS_ACCESS_KEY_ID, steps.env.AWS_SECRET_ACCESS_KEY)
+    }
 }
 
 
