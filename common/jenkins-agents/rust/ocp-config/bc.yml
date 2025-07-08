@@ -19,7 +19,7 @@ parameters:
 - name: RUST_VERSION
   description: "The Rust version"
   required: true
-  value: "1.81.0"
+  value: "1.83.0"
 - name: RUST_TOOLCHAIN
   description: "The Rust target toolchain"
   required: true
@@ -27,19 +27,19 @@ parameters:
 - name: CARGO_NEXTEST_VERSION
   description: "The Cargo Nextest testing framework version"
   required: true
-  value: "0.9.78"
+  value: "0.9.87"
 - name: CARGO_LLVM_COV_VERSION
   description: "The Cargo LLVM Coverage tool version"
   required: true
-  value: "0.6.13"
+  value: "0.6.15"
 - name: CARGO_GENERATE_VERSION
   description: "The Cargo Generate tool version"
   required: true
-  value: "0.22.0"
+  value: "0.22.1"
 - name: CARGO_DENY_VERSION
   description: "The Cargo Deny tool version"
   required: true
-  value: "0.16.1"
+  value: "0.16.3"
 objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
@@ -57,11 +57,13 @@ objects:
     postCommit: {}
     resources:
       limits:
-        cpu: "1"
-        memory: "1Gi"
+        cpu: "2"
+        memory: "4Gi"
+        ephemeral-storage: "30Gi"
       requests:
-        cpu: "200m"
-        memory: "0.5Gi"
+        cpu: "500m"
+        memory: "3Gi"
+        ephemeral-storage: "20Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/rust/docker
