@@ -71,7 +71,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://www.rust-lang.org/[Rust 1.86.x]
+* https://www.rust-lang.org/[Rust 1.88.x]
 * https://github.com/tokio-rs/axum[Axum 0.8.x]
 * https://nexte.st/[Nextest 0.9.x]
 * https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.6.x]

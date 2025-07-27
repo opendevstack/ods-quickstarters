@@ -11,7 +11,7 @@ Rust installation is managed by `rustup`, which offers a convenient way to load 
 
 And, the version defined in the `rust-toolchain` file is the one that the Jenkins Agent will use (even if it is not the default). That file MUST be in the root of the projects' repository.
 
-Default Minimum Supported Rust Version (MSRV) **1.86**.
+Default Minimum Supported Rust Version (MSRV) **1.88**.
 
 Default Rust edition in use is **2024**. See https://doc.rust-lang.org/edition-guide/introduction.html[Rust Edition Guide] for further information.
 
