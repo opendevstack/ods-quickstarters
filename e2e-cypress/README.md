@@ -1,7 +1,9 @@
 # End-to-end tests with Cypress (e2e-cypress)
 
-Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/ods-quickstarters/latest/index.html)
+This quickstarter tracks its own version in the files/package.json file. Make sure to update it accordingly.
 
-Please update documentation in the [antora page directory](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
+Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/e2e-cypress.html)
 
-Tested thru [automated tests](../tests/e2e-cypress)
+Please update documentation in the [antora page directory](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/quickstarters/pages)
+
+Tested thru [automated tests](./testdata)
