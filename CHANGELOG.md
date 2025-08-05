@@ -5,14 +5,29 @@
 ### Added
 
 ### Changed
+- Add prod config in metadata.yml template ([#1126](https://github.com/opendevstack/ods-quickstarters/pull/1126))
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
-- e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation
+- e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
+- Fix for the integration of the Python Quickstarter and Zephyr ODS integration ([#1125](https://github.com/opendevstack/ods-quickstarters/pull/1125))
 - Rust QS flag to enable or disable cargo-deny for dependency linting, default to true ([#1107](https://github.com/opendevstack/ods-quickstarters/issues/1107))
 - Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
 
+### Fixed
 
+- Fix the credentials for the test environment for e2e-etl-python ([#1127](https://github.com/opendevstack/ods-quickstarters/pull/1127))
+
+## [4.8.2] - 2025-5-15
+
+### Changed
+
+- Move from rockylinux to almalinux in terraform agents ([#1123](https://github.com/opendevstack/ods-quickstarters/pull/1123))
+
+
+## [4.8.1] - 2025-5-13
 
 ### Fixed
+
+- Fix in the Python/Flask Quickstarter Unit tests ([#1121](https://github.com/opendevstack/ods-quickstarters/pull/1121))
 
 
 ## [4.8.0] - 2025-4-10

@@ -51,15 +51,15 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/rockylinux.repo /etc/yum.repos.d/rockylinux.repo
+COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/rockylinux.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo rockylinux-baseos --enablerepo rockylinux-appstream $INSTALL_DNF_PKGS \
+    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
     && dnf clean all
 
 RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
