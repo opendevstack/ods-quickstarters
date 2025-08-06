@@ -12,6 +12,10 @@
 ### Fixed
 
 
+## [4.9.0] - 2025-8-06
+### Changed
+- Add prod config in metadata.yml template ([#1126](https://github.com/opendevstack/ods-quickstarters/pull/1126))
+
 ## [4.8.2] - 2025-5-15
 
 ### Changed
