@@ -20,12 +20,17 @@ odsQuickstarterPipeline(
 
   odsQuickstarterStageCopyFiles(context)
 
-  odsQuickstarterStageCreateOpenShiftResources(
-    context,
-    [directory: 'common/ocp-config/component-environment']
-  )
-
   odsQuickstarterStageRenderJenkinsfile(context)
 
   odsQuickstarterStageRenderSonarProperties(context)
+
+  renderHelmChart(context)
+}
+
+def renderHelmChart(def context) {
+  def relativeSourceFilePath = "Chart.yaml.template"
+  def relativeDestinationFilePath = "chart/Chart.yaml"
+  def absoluteSourceFilePath = "${context.sourceDir}/${relativeSourceFilePath}"
+  def absoluteDestinationFilePath = "${context.targetDir}/${relativeDestinationFilePath}"
+  sh(script: "sed 's|@component_id@|${context.componentId}|g' ${absoluteSourceFilePath} > ${absoluteDestinationFilePath}", label: "Render Helm Chart.yaml file")
 }
