@@ -13,6 +13,14 @@ This project uses [pre-commit](https://pre-commit.com).
 pre-commit install
 ```
 
+The provided pre-commit hooks are:
+- gitleaks (check for secrets)
+- cargo-deny (dependency auditing, see/update `deny.toml` config file)
+- cargo-fmt (formatter, see/update `rustfmt.toml` config file)
+- cargo-clippy (linter)
+
+**NOTE**: the cargo hooks also run in Jenkins CICD, but cargo deny is disabled by default, see Jenkinsfile.
+
 ## Adding caching in your CICD
 
 One can improve the build pipeline time by implementing a caching mechanism as shown next:

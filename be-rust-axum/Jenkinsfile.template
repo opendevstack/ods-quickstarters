@@ -10,7 +10,7 @@ odsComponentPipeline(
   ]
 ) { context ->
   odsComponentFindOpenShiftImageOrElse(context) {
-    stageCI(context, true)  // set `lintDependencies` to false if cargo-deny is not needed
+    stageCI(context, false)  // set `auditDependencies` to true if using cargo-deny
     odsComponentStageScanWithSonar(context)
     stageBuild(context)
     odsComponentStageBuildOpenShiftImage(context)
@@ -27,7 +27,7 @@ def stageBuild(def context) {
   }
 }
 
-def stageCI(def context, def lintDependencies) {
+def stageCI(def context, def auditDependencies) {
   stage('Cargo Check') {
     sh """
         cargo --version
@@ -51,7 +51,7 @@ def stageCI(def context, def lintDependencies) {
         cargo clippy --message-format=json &> build/test-results/clippy/report.json
       """
   }
-  if (lintDependencies) {
+  if (auditDependencies) {
     stage('Cargo Deny') {
       sh """
           mkdir -p build/test-results/deny
