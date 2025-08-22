@@ -58,17 +58,11 @@ odsQuickstarterPipeline(
         sleep 2
       done
       set -e
-      if [ "\$ready" -ne 1 ]; then
-        echo "WARNING: Docgen pod did not become ready after waiting. Attempting recovery..."
-        oc rollout cancel dc/docgen -n ${context.projectId}-cd || true
-        oc scale dc/docgen --replicas=0 -n ${context.projectId}-cd
-        oc rollout latest dc/docgen -n ${context.projectId}-cd
-        oc scale dc/docgen --replicas=1 -n ${context.projectId}-cd
+      if [ "\$ready" -eq 1 ]; then
         echo "Idling Docgen deployment in project ${context.projectId}-cd..."
         oc idle -n ${context.projectId}-cd docgen
       else
-        echo "Idling Docgen deployment in project ${context.projectId}-cd..."
-        oc idle -n ${context.projectId}-cd docgen
+        echo "Docgen not ready in time, not idling."
       fi
       """,
       label: 'Wait for Docgen and Idle'
