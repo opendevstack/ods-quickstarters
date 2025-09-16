@@ -1,6 +1,6 @@
 {
   "name": "e2e-cypress",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "start": "npm run cypress:open",
