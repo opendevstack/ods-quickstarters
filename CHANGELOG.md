@@ -10,8 +10,7 @@
 - Fix for the integration of the Python Quickstarter and Zephyr ODS integration ([#1125](https://github.com/opendevstack/ods-quickstarters/pull/1125))
 - Rust QS flag to enable or disable cargo-deny for dependency linting, default to true ([#1107](https://github.com/opendevstack/ods-quickstarters/issues/1107))
 - Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
-
-
+- Added e2e-cypress specific versioning ([#1128](https://github.com/opendevstack/ods-quickstarters/pull/1128))
 
 ### Fixed
 
