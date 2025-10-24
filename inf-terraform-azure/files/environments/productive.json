@@ -2,5 +2,5 @@
   "environment": "prod",
   "location": "westeurope",
   "meta_environment": "PRODUCTIVE",
-  "name": "stack-azure-quickstarter"
+  "name": "stack-azure-skeleton-westeurope"
 }

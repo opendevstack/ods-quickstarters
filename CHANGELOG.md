@@ -6,6 +6,16 @@
 
 
 ### Changed
+<<<<<<< HEAD
+=======
+- Upgrade with dynamic backend configuration of Azure quickstarter ([#1131](https://github.com/opendevstack/ods-quickstarters/pull/1131))
+
+### Fixed
+
+
+## [4.10.0] - 2025-10-13
+### Changed
+>>>>>>> c8c6fd9 (feat: INFIAAS-9233 Upgrade with dynamic backend configuration of Azure quickstarter (#1131))
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
 - e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
 

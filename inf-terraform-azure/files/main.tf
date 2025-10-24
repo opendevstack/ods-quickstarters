@@ -1,6 +1,5 @@
 locals {
   unique_name = var.is_test ? "${var.name}-${local.id}" : var.name
-  location    = "westeurope"
 
   tags = merge(local.common_tags, {
     DeploymentDate        = formatdate("YYYYMMDD", timestamp())
@@ -12,7 +11,7 @@ resource "time_static" "deployment" {}
 
 resource "azurerm_resource_group" "this" {
   name     = local.unique_name
-  location = local.location
+  location = var.location
 
   tags = local.tags
 }
