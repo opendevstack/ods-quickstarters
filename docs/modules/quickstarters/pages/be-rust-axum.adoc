@@ -7,13 +7,13 @@ For Database/Postgres integration it is recommended to use https://github.com/la
 
 == Purpose of this quickstarter
 
-This is a Rust project with a common Rust project folder and files structure, with its `main.rs` file for the final binary to be built, and that makes use of the `lib.rs` file, which exposes the crates (AKA modules or packages) of the project (where the business logic happens). Similar to Python project structures.
+This is a Rust project with a common Rust project folder and files structure, with its `main.rs` file for the final binary to be built, and that makes use of the `lib.rs` file, which exposes the crates (AKA modules or packages) of the project (where the business logic happens). Similar to Python project structures. One could leverage the use of https://doc.rust-lang.org/cargo/reference/workspaces.html[workspaces] to split the project into multiple crates, but this is not the default behavior of this quickstarter.
 
 The quickstarter comes with a simple API-server example written in https://www.rust-lang.org/[Rust] and using the https://github.com/tokio-rs/axum/[Axum] web framework.
 The package allows to easily build a Rust project, using different Rust crates (packages).
 It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
-**NOTE** The project can be also extended to build other types of solutions with, for example, https://www.rust-lang.org/what/wasm/[WASM] or https://esp-rs.github.io/book/introduction.html[IoT].
+**NOTE** The project can be also extended to build other types of solutions like, for example, https://www.rust-lang.org/what/wasm/[WASM] or https://esp-rs.github.io/book/introduction.html[IoT].
 
 == What files / architecture is generated?
 
@@ -63,16 +63,19 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 ├── 📚 README.md - The README file
 ├── 📄 release-manager.yml - Configuration file for the Release Manager
 ├── 📄 rustfmt.toml - The Rust formatter configuration file (for cargo fmt)
+├── 📄 rust-toolchain - Making sure teams and CICD use the same Rust toolchain for this project
 └── 📄 sonar-project.properties - This file contains SonarQube configuration settings
 ----
 
+**IMPORTANT**: The Jenkins Rust Agent is using `rustup` to manage the Rust toolchain, so it is important to keep the `rust-toolchain` file up to date, in the root of the project. This file should contain the version of Rust in use for the project. The agent will automatically load (if not being the default at the moment) and use this version when building the project.
+
 == Frameworks used
 
-* https://www.rust-lang.org/[Rust 1.83.x]
+* https://www.rust-lang.org/[Rust 1.88.x]
 * https://github.com/tokio-rs/axum[Axum 0.8.x]
 * https://nexte.st/[Nextest 0.9.x]
 * https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.6.x]
-* https://github.com/EmbarkStudios/cargo-deny/[Deny 0.16.x]
+* https://github.com/EmbarkStudios/cargo-deny/[Deny 0.18.x]
 
 == Usage - how do you start after you provisioned this quickstarter
 
@@ -123,7 +126,7 @@ cargo install cargo-deny
 # ...
 ----
 
-**NOTE** For an extended list of awesome `cargo` extensions and Rust tools check https://blessed.rs/crates/[here] and https://github.com/rust-unofficial/awesome-rust/[here].
+**NOTE** For an extended list of awesome `cargo` extensions and Rust tools check https://blessed.rs/[here] and https://github.com/rust-unofficial/awesome-rust/[here].
 
 === Metadata
 
@@ -190,11 +193,11 @@ The Jenkinsfile is provisioned with this quick starter to ease CI/CD process. In
 
 include::partials$secret-scanning-with-gitleaks.adoc
 
-== Builder agent used
+== Builder agent used by the Jenkins CICD
 
 This quickstarter uses https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html[Rust] Jenkins builder agent.
 
-**NOTE**: The ODS Jenkins Rust Agent supports Rust versions 1.83.x, and depending on project's dependencies it can also handle Minor Rust versions above and below the supported one.
+**IMPORTANT**: By using `rustup` to manage the Rust toolchain, one can easily switch between different versions of Rust and toolchain as needed. This is particularly useful for projects that require specific versions of Rust or when working with multiple projects that have different requirements.
 
 See the docker spec and openshift templates https://github.com/opendevstack/ods-quickstarters/tree/master/common/jenkins-agents/rust[here].
 
@@ -209,7 +212,7 @@ The following main Rust technologies are in use when running this boilerplate:
 
 == Known limitations
 
-First of all, please, let us know if you find any limitation or issue to comment on, thanks!
+If any, please, open a https://github.com/opendevstack/ods-quickstarters/issues/new?template=feature_request.md[`feature request`] or https://github.com/opendevstack/ods-quickstarters/issues/new?template=bug_report.md[bug report] in the `ods-quickstarters` GitHub repository.
 
 === Building with OpenSSL crate or using alternatives ===
 

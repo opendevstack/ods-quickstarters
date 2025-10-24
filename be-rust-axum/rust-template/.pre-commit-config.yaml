@@ -1,10 +1,10 @@
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.22.1
+    rev: v8.25.1
     hooks:
       - id: gitleaks
   - repo: https://github.com/EmbarkStudios/cargo-deny
-    rev: 0.16.3
+    rev: 0.18.2
     hooks:
       - id: cargo-deny
         args: ["--all-features", "check"] # optionally modify the arguments for cargo-deny (default arguments shown here)
