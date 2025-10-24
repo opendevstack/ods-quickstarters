@@ -23,7 +23,6 @@
 variable "name" {
   description = "The name of the stack."
   type        = string
-  default     = "stack-azure-quickstarter"
 }
 
 variable "is_test" {
@@ -35,6 +34,9 @@ variable "is_test" {
 variable "meta_environment" {
   description = "The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION."
   type        = string
-  default     = "DEVELOPMENT"
 }
 
+variable "location" {
+  description = "The location of the stack."
+  type        = string
+}

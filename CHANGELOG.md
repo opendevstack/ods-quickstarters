@@ -6,7 +6,7 @@
 
 
 ### Changed
-
+- Upgrade with dynamic backend configuration of Azure quickstarter ([#1131](https://github.com/opendevstack/ods-quickstarters/pull/1131))
 
 ### Fixed
 
