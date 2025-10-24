@@ -1,0 +1,17 @@
+= Node.js 24 - Jenkins agent
+
+== Introduction
+This agent is used to build Node.js-based projects, through `npm` or `yarn`.
+
+The image is built in the global `ods` project and is named `jenkins-agent-nodejs24`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-nodejs24`.
+
+IMPORTANT: Node.js 24 is an LTS release (see https://nodejs.org/) and will be supported while maintained upstream.
+
+== Features
+1. Nexus configuration
+2. HTTP proxy awareness
+3. Yarn & Cypress dependencies pre-installed
+
+== Known limitations
+n/a
