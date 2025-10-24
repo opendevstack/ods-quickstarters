@@ -46,6 +46,10 @@
 
 ### Fixed
 
+### Removed
+
+- Remove `jenkins-agent-nodejs18` (Node.js 18 reached end-of-life on 2025-04-30) — the agent image and associated OpenShift templates/docs were removed from the repository. Please migrate pipelines to supported Node.js agents such as `jenkins-agent-nodejs20` or `jenkins-agent-nodejs22`.
+
 
 ## [4.10.0] - 2025-10-13
 ### Changed

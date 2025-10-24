@@ -1,6 +1,0 @@
-[edge]
-name=Microsoft Edge Browser
-baseurl=https://packages.microsoft.com/yumrepos/edge
-enabled=0
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
