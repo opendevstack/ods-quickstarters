@@ -1,17 +1,7 @@
-= Node.js 18 - Jenkins agent
+= Node.js 18 - Jenkins agent (removed)
 
-== Introduction
-This agent is used to build Node.js-based projects, through `npm` or `yarn`.
+This agent has been removed because Node.js 18 reached its end-of-life on 2025-04-30 and is no longer maintained.
 
-The image is built in the global `ods` project and is named `jenkins-agent-nodejs18`.
-It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-nodejs18`.
+If you previously used `jenkins-agent-nodejs18`, please migrate your Jenkinsfiles and pipeline configurations to a supported Node.js agent (for example `jenkins-agent-nodejs20` or `jenkins-agent-nodejs22`).
 
-IMPORTANT: Node.js version 18 reaches end-of-life in 2025-04-30. Support for this version will be removed in releases after this date. Please consider switching to newer versions of this agent as soon as they are available.
-
-== Features
-1. Nexus configuration
-2. HTTP proxy awareness
-3. Yarn & Cypress dependencies pre-installed
-
-== Known limitations
-n/a
+See the Jenkins agents index for available, supported images.

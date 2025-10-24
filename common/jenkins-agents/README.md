@@ -17,9 +17,8 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 
 1. [GoLang](golang)
 2. [Jdk](jdk)
-3. [Node.js 18](nodejs18)
-4. [Node.js 20](nodejs20)
-5. [Node.js 22](nodejs22)
+3. [Node.js 20](nodejs20)
+4. [Node.js 22](nodejs22)
 6. [Python](python)
 7. [Rust](rust)
 8. [Scala & SBT](scala)
