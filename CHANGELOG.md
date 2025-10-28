@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-
+- Added gh action for custom e2e QS notification ([#1137](https://github.com/opendevstack/ods-quickstarters/pull/1137))
 - Added Node.js 24 Jenkins agent and related CI/Makefile/docs updates ([#1133]) (common/jenkins-agents/nodejs24) ([#1134](https://github.com/opendevstack/ods-quickstarters/pull/1134))
 
 
