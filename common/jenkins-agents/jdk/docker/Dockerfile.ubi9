@@ -1,8 +1,8 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-jdk-35-rhel8-container" \
-      name="openshift4/jenkins-agent-jdk-35-rhel8" \
+LABEL com.redhat.component="jenkins-agent-jdk-35-rhel9-container" \
+      name="openshift4/jenkins-agent-jdk-35-rhel9" \
       architecture="x86_64" \
       io.k8s.display-name="Jenkins Agent JDK" \
       io.k8s.description="The jenkins agent jdk image has java 11, 17 and 21 installed on top of the jenkins agent base image." \
