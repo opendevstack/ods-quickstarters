@@ -4,7 +4,7 @@ use tower::ServiceExt; // for `call`, `oneshot`, and `ready`
 use {{crate_name}}::{api::router::app, models::status::Status};
 
 mod common;
-use common::{response_json, RequestBuilderExt};
+use common::{RequestBuilderExt, response_json};
 
 #[tokio::test]
 async fn get_status_route_ok() {

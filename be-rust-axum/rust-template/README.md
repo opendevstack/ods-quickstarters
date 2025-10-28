@@ -2,6 +2,8 @@
 
 The official OpenDevStack documentation for this QuickStarter can be found [here](https://www.opendevstack.org/ods-documentation/opendevstack/latest/quickstarters/be-rust-axum.html).
 
+Check also the official docs of the [Jenkins Rust Agent](https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-agents/rust.html) this Quickstarter makes use of. There you can see the setup and tools it provides.
+
 ## Pre-commit hooks
 
 This project uses [pre-commit](https://pre-commit.com).
@@ -10,6 +12,14 @@ This project uses [pre-commit](https://pre-commit.com).
 ```bash
 pre-commit install
 ```
+
+The provided pre-commit hooks are:
+- gitleaks (check for secrets)
+- cargo-deny (dependency auditing, see/update `deny.toml` config file)
+- cargo-fmt (formatter, see/update `rustfmt.toml` config file)
+- cargo-clippy (linter)
+
+**NOTE**: the cargo hooks also run in Jenkins CICD, but cargo deny is disabled by default, see Jenkinsfile.
 
 ## Adding caching in your CICD
 
