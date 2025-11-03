@@ -32,6 +32,8 @@ odsComponentPipeline(
 
   def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
 
+  stageInstall(context)
+  stageTypeCheck(context)
   stageTest(context)
   odsComponentStageScanWithSonar(context)
 
@@ -67,6 +69,19 @@ odsComponentPipeline(
   }
 }
 
+
+def stageInstall(def context) {
+  stage('Install dependencies') {
+    sh 'npm ci'
+  }
+}
+
+def stageTypeCheck(def context) {
+  stage('Check types') {
+    sh 'npx tsc --noEmit'
+  }
+}
+
 def stageTest(def context) {
   stage('Functional Tests') {
     // Define your DEV and QA base URLs in a config map in OpenShift; please adapt variable names to your OpenShift config
@@ -97,8 +112,6 @@ def stageTest(def context) {
         // usernamePassword(credentialsId: "${context.projectId}-cd-e2e-user", passwordVariable: 'CYPRESS_PASSWORD', usernameVariable: 'CYPRESS_USERNAME'),
         // string(credentialsId: "${context.projectId}-cd-otp-secret", variable: 'OTP_SECRET')
       ]) {
-        sh 'npm install'
-
         // Note: Testing in the production environment is not enabled by default as it can lead to unintended consequences,
         // including potential downtime, data corruption, or exposure of sensitive information.
         // This block is designed to skip acceptance and integration tests in the production environment to avoid these risks.

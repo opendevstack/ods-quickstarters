@@ -11,12 +11,16 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform-2306 install-jenkins-agent-terraform-2408 install-jenkins-agent-rust
 .PHONY: install-jenkins-agent
 
-## Update OpenShift resources related Jenkins agent resources.
-apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-terraform-build-2408 apply-jenkins-agent-rust-build
+.## Update OpenShift resources related Jenkins agent resources.
+apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-nodejs24-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-terraform-build-2408 apply-jenkins-agent-rust-build
 .PHONY: apply-jenkins-agent-build
 
 ## Start builds of Jenkins agents.
-start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2408 start-jenkins-agent-rust-build
+.PHONY: apply-jenkins-agent-build
+
+## Start builds of Jenkins agents.
+start-jenkins-agent-build: start-jenkins-agent-golang-build start-jenkins-agent-jdk-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build start-jenkins-agent-nodejs22-build start-jenkins-agent-nodejs24-build start-jenkins-agent-python-build start-jenkins-agent-scala-build start-jenkins-agent-terraform-build-2306 start-jenkins-agent-terraform-build-2408 start-jenkins-agent-rust-build
+.PHONY: start-jenkins-agent-build
 .PHONY: start-jenkins-agent-build
 
 
@@ -54,7 +58,7 @@ start-jenkins-agent-jdk-build:
 
 # JENKINS AGENT NODEJS
 ## Install or update Jenkins Node agent resources.
-install-jenkins-agent-nodejs: apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build start-jenkins-agent-nodejs22-build
+install-jenkins-agent-nodejs: apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-nodejs24-build start-jenkins-agent-nodejs18-build start-jenkins-agent-nodejs20-build start-jenkins-agent-nodejs22-build start-jenkins-agent-nodejs24-build
 .PHONY: install-jenkins-agent-nodejs
 
 ## Update OpenShift resources related to Jenkins Node 18 agent image.
@@ -72,6 +76,11 @@ apply-jenkins-agent-nodejs22-build:
 	cd common/jenkins-agents/nodejs22/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
 .PHONY: apply-jenkins-agent-nodejs22-build
 
+## Update OpenShift resources related to Jenkins Node 24 agent image.
+apply-jenkins-agent-nodejs24-build:
+	cd common/jenkins-agents/nodejs24/ocp-config && tailor apply --namespace $(ODS_NAMESPACE)
+.PHONY: apply-jenkins-agent-nodejs24-build
+
 ## Start build of BuildConfig "jenkins-agent-nodejs18".
 start-jenkins-agent-nodejs18-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs18 --follow
@@ -86,6 +95,11 @@ start-jenkins-agent-nodejs20-build:
 start-jenkins-agent-nodejs22-build:
 	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs22 --follow
 .PHONY: start-jenkins-agent-nodejs22-build
+
+## Start build of BuildConfig "jenkins-agent-nodejs24".
+start-jenkins-agent-nodejs24-build:
+	oc -n $(ODS_NAMESPACE) start-build jenkins-agent-nodejs24 --follow
+.PHONY: start-jenkins-agent-nodejs24-build
 
 # JENKINS AGENT PYTHON
 ## Install or update Jenkins Python agent resources.

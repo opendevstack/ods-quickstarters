@@ -1,4 +1,4 @@
-import * as puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer-core';
 import * as path from 'path';
 import * as fs from 'fs';
 import baseConfig from './cypress.config';
@@ -12,7 +12,7 @@ async function expandReportTestCases(htmlPage: puppeteer.Page) {
   });
 }
 
-const mochawesomeDir = path.resolve(__dirname, baseConfig.reporterOptions.mochawesomeReporterOptions.reportDir);
+const mochawesomeDir = path.resolve(__dirname, baseConfig.reporterOptions?.mochawesomeReporterOptions.reportDir ?? 'build/test-results/mochawesome');
 
 const isLocal = process.env.NODE_ENV === 'local';
 
@@ -26,7 +26,7 @@ const isLocal = process.env.NODE_ENV === 'local';
         continue;
       }
 
-      const executablePath = isLocal ? undefined : '/usr/bin/google-chrome';
+      const executablePath = isLocal ? undefined : '/usr/bin/microsoft-edge';
 
       const browser = await puppeteer.launch({ args: ['--no-sandbox'],
         executablePath
