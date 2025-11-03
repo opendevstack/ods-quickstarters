@@ -20,9 +20,12 @@ odsComponentPipeline(
     */
     odsComponentStageBuildOpenShiftImage(context)
   }
+  def releaseName = context.componentId // can be customized as needed
+  def componentId = context.componentId // needs to match name in Chart.yaml
   odsComponentStageRolloutOpenShiftDeployment(context, [
-    'selector': "app.kubernetes.io/name=${context.componentId}",
+    'selector': "app.kubernetes.io/instance=${releaseName},app.kubernetes.io/name=${componentId}",
     'helmEnvBasedValuesFiles': ["values.env.yaml"],
+    'helmReleaseName': releaseName
   ])
 }
 

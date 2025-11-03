@@ -5,6 +5,7 @@
 
 ## The number of replicas to deploy.
 ## For high availability use more than 1 replica
+## Before enabling check the official ODS documentation about replicate support: https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-shared-library/orchestration-pipeline.html#_known_limitations
 replicaCount: 1
 
 imagePullSecrets: []
@@ -111,6 +112,7 @@ resources:
     memory: 16Mi
     ephemeral-storage: 1Mi
 
+## Before enabling check the official ODS documentation about replicate support: https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-shared-library/orchestration-pipeline.html#_known_limitations
 autoscaling:
   enabled: false
   minReplicas: 1
