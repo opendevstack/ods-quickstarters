@@ -6,18 +6,33 @@ This agent is used to build / execute Rust code and tools.
 The image is built in the global `ods` project and is named `jenkins-agent-rust`.
 It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-rust`.
 
-Minimum Supported Rust Version (MSRV) **1.83**.
+== Default MSRV and Edition
+Rust installation is managed by `rustup`, which offers a convenient way to load and manage Rust versions automatically.
 
-**NOTE**: Current Rust edition in use is **2021**. See https://doc.rust-lang.org/edition-guide/introduction.html[Rust Edition Guide] for further information.
+And, the version defined in the `rust-toolchain` file is the one that the Jenkins Agent will use (even if it is not the default). That file MUST be in the root of the projects' repository.
+
+Default Minimum Supported Rust Version (MSRV) **1.88**.
+
+Default Rust edition in use is **2024**. See https://doc.rust-lang.org/edition-guide/introduction.html[Rust Edition Guide] for further information.
 
 == Features
-1. https://www.rust-lang.org/[Rust]
-2. https://github.com/tokio-rs/axum/[Axum]
-3. https://doc.rust-lang.org/cargo/[Cargo]
-4. https://nexte.st/[Nextest]
-5. https://github.com/taiki-e/cargo-llvm-cov[LLVM Coverage]
-6. https://cargo-generate.github.io/cargo-generate/[Generate]
+The image contains the following tools:
+
+* Rust toolchain (https://www.rust-lang.org/tools/install[Rustup])
+
+* Rust compiler (https://doc.rust-lang.org/rustc/[Rustc])
+
+* Rust package manager (https://doc.rust-lang.org/cargo/[Cargo])
+
+* Rust Next generation test runner (https://nexte.st/[Cargo Nextest])
+
+* Rust code coverage (https://github.com/taiki-e/cargo-llvm-cov[Cargo LLVM Coverage])
+
+* Rust code generation (https://cargo-generate.github.io/cargo-generate/[Cargo Generate])
+
+* Rust project's dependency graph linter (https://embarkstudios.github.io/cargo-deny/[Cargo Deny])
+
+**Do you miss any tool?** Open a https://github.com/opendevstack/ods-quickstarters/issues/new?template=feature_request.md[`feature request`] in the `ods-quickstarters` GitHub repository.
 
 == Known limitations
-No special HTTP Proxy configuration.
-Fixed Rust compiler version (although dependending on specific project's dependencies, it can build on lower or higher Minor **Rust** versions from **1.83.x**).
+By default, no Nexus repository/registry nor mirror available for Rust packages and dependencies (only available in https://help.sonatype.com/en/rust-cargo.html[Nexus Pro from version 3.73.0] and/or https://help.sonatype.com/en/ce-onboarding.html[Nexus Community from version 3.77.0]). If not having Nexus Pro v3.37.0+, one can use git repositories or local file system to store and reference Rust packages and dependencies.
