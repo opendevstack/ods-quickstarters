@@ -6,7 +6,6 @@
 - Added gh action for custom e2e QS notification ([#1137](https://github.com/opendevstack/ods-quickstarters/pull/1137))
 - Added Node.js 24 Jenkins agent and related CI/Makefile/docs updates ([#1133]) (common/jenkins-agents/nodejs24) ([#1134](https://github.com/opendevstack/ods-quickstarters/pull/1134))
 
-
 ### Changed
 - Upgrade with dynamic backend configuration of Azure quickstarter ([#1131](https://github.com/opendevstack/ods-quickstarters/pull/1131))
 
@@ -18,6 +17,8 @@
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
 - e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
 - Fix for the integration of the Python Quickstarter and Zephyr ODS integration ([#1125](https://github.com/opendevstack/ods-quickstarters/pull/1125))
+- Rust QS flag to enable or disable cargo-deny for dependency linting, default to true ([#1107](https://github.com/opendevstack/ods-quickstarters/issues/1107))
+- Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
 - Added e2e-cypress specific versioning ([#1128](https://github.com/opendevstack/ods-quickstarters/pull/1128))
 
 ### Fixed
