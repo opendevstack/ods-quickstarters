@@ -1,0 +1,131 @@
+## Default values for chart.
+## This is a YAML-formatted file. Intendation matters!
+## Comments are prefixed with two hashes (##), examples are commented with one hash (#)
+## Declare variables to be passed into your templates.
+
+## The number of replicas to deploy.
+## For high availability use more than 1 replica
+## Before enabling check the official ODS documentation about replicate support: https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-shared-library/orchestration-pipeline.html#_known_limitations
+replicaCount: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# NOTE: By default image Values are injected from CICD Jenkins pipeline, values defined here are used when not being on CICD Jenkins pipeline context.
+# Default values here are provided in case one needs to use the chart without CICD (i.e.: testing the chart).
+image:
+  # registry: "public.ecr.aws"
+  # path: "nginx"
+  # name: "nginx-unprivileged"
+  # tag: "alpine-slim"
+  # see https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
+  pullPolicy: IfNotPresent
+
+## Prefer using ingress over openshift routes
+ingress:
+  enabled: false
+  className: 'openshift-default'
+  # router: external
+  annotations:
+    ## adjust openshift timeouts (default is 60s)
+    haproxy.router.openshift.io/timeout: 300s
+    haproxy.router.openshift.io/timeout-tunnel: 300s
+    ## e.g. add cert-manager support by annotating the ingress https://cert-manager.io/docs/usage/ingress/
+    ## ask in your company for good defaults
+
+  hosts: [] # When defining a host you must define also a path
+  # - host: yourapp.yourdomain.com
+  #   paths:
+  #     - path: /
+  #       pathType: Prefix
+  tls: [] # If `tls` is left empty then the default OpenShift TLS config will be loaded (i.e.: TLS edge termination with HTTP redirect to HTTPS)
+  # - secretName: chart-example-tls
+  #   hosts:
+  #     - yourapp.yourdomain.com
+
+service:
+  enabled: true
+  port: 8080
+  type: ClusterIP
+
+# There are two types of strategy: `Recreate` and `RollingUpdate`
+# Please refer to https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0%
+    maxSurge: 50%
+
+probes:
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: "/health"
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+
+  readinessProbe:
+    failureThreshold: 1
+    httpGet:
+      path: "/health"
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 3
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 3
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  # name: "default"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 32Mi
+    ephemeral-storage: 1Mi
+  requests:
+    cpu: 10m
+    memory: 16Mi
+    ephemeral-storage: 1Mi
+
+## Before enabling check the official ODS documentation about replicate support: https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-shared-library/orchestration-pipeline.html#_known_limitations
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## PodAntiAffinity is a way to control that not all of your pods are scheduled
+## onto the same node.
+## possible values: soft, hard, null
+podAntiAffinity: soft
