@@ -45,6 +45,7 @@
 ## [4.8.0] - 2025-4-10
 
 ### Changed
+- Add Helm Chart to Docker Plain Quickstarter ([#1035](https://github.com/opendevstack/ods-quickstarters/pull/1035))
 - Update CODEOWNERS ([#1108](https://github.com/opendevstack/ods-quickstarters/issues/1108))
 - Fix Nginx related Quickstarters worker processes value to 1 as default ([#1092](https://github.com/opendevstack/ods-quickstarters/issues/1092))
 - Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))
