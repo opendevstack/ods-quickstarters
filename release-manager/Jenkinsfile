@@ -41,4 +41,31 @@ odsQuickstarterPipeline(
       """
     }
   }
+
+  stage('Wait for Docgen and Idle') {
+    echo "Waiting for Docgen to be up and running in project ${context.projectId}-cd..."
+    sh(
+      script: """
+      set +e
+      ready=0
+      for i in {1..30}; do
+        oc get pods -n ${context.projectId}-cd -l app=${context.projectId}-docgen -o json | jq -e '
+          .items[0].status.conditions
+          | map(select((.type=="Ready" or .type=="ContainersReady") and .status=="True"))
+          | length == 2
+        ' && { ready=1; break; }
+        echo "Docgen not ready yet, waiting 2s..."
+        sleep 2
+      done
+      set -e
+      if [ "\$ready" -eq 1 ]; then
+        echo "Idling Docgen deployment in project ${context.projectId}-cd..."
+        oc idle -n ${context.projectId}-cd docgen
+      else
+        echo "Docgen not ready in time, not idling."
+      fi
+      """,
+      label: 'Wait for Docgen and Idle'
+    )
+  }
 }
