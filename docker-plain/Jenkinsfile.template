@@ -20,7 +20,7 @@ odsComponentPipeline(
     */
     odsComponentStageBuildOpenShiftImage(context)
   }
-  def releaseName = context.componentId // can be customized as needed
+  def releaseName = context.componentId // can be customized as needed, the value provided here will be used as the release name for the installation
   def componentId = context.componentId // needs to match name in Chart.yaml
   odsComponentStageRolloutOpenShiftDeployment(context, [
     'selector': "app.kubernetes.io/instance=${releaseName},app.kubernetes.io/name=${componentId}",
