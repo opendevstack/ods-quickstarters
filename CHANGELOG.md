@@ -12,7 +12,7 @@
 - Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
 
 ### Fixed
-
+- Fix Springboot version parameter ([#1138](https://github.com/opendevstack/ods-quickstarters/issues/1138))
 
 ## [4.10.0] - 2025-10-13
 ### Changed
