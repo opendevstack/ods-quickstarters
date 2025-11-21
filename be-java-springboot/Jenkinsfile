@@ -21,7 +21,7 @@ odsQuickstarterPipeline(
 
   stage('Build spring project') {
     dir(context.targetDir) {
-      def springBootVersion = '3.3.3'
+      def springBootVersion = '4.0.0'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
       def springInitializrUrl = "https://start.spring.io/starter.tgz?" +
