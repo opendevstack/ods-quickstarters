@@ -24,20 +24,21 @@ odsQuickstarterPipeline(
       def springBootVersion = '3.3.3'
       echo "--- create spring boot (v${springBootVersion}) project via spring initializr ---"
 
+      def springInitializrUrl = "https://start.spring.io/starter.tgz?" +
+        "type=gradle-project&" +
+        "language=java&" +
+        "dependencies=web,data-rest,data-jpa,h2,security,devtools&" +
+        "bootVersion=${springBootVersion}&" +
+        "packaging=jar&" +
+        "jvmVersion=${javaVersion}&" +
+        "groupId=${context.projectId}&" +
+        "artifactId=${context.componentId}&" +
+        "name=${context.componentId}&" +
+        "description=OpenDevStack%20Demo%20Project%20for%20Spring%20Boot&" +
+        "packageName=${context.packageName}"
+
       sh """
-        curl -L "https://start.spring.io/starter.tgz\
-        ?type=gradle-project\
-        &language=java\
-        &dependencies=web,data-rest,data-jpa,h2,security,devtools\
-        &bootVersion=${springBootVersion}\
-        &packaging=jar\
-        &jvmVersion=${javaVersion}\
-        &groupId=${context.projectId}\
-        &artifactId=${context.componentId}\
-        &name=${context.componentId}\
-        &description=OpenDevStack%20Demo%20Project%20for%20Spring%20Boot\
-        &packageName=${context.packageName}" \
-        | tar -xzvf -
+        curl -L "${springInitializrUrl}" | tar -xzvf -
       """
 
       echo "--- configure application.properties ---"
