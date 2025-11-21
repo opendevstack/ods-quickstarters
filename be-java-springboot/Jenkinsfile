@@ -28,7 +28,7 @@ odsQuickstarterPipeline(
             -d type=gradle-project \
             -d language=java \
             -d dependencies='web,data-rest,data-jpa,h2,security,devtools' \
-            -d platformVersion=${springBootVersion} \
+            -d bootVersion=${springBootVersion} \
             -d packaging=jar \
             -d jvmVersion=${javaVersion} \
             -d groupId=${context.projectId} \
