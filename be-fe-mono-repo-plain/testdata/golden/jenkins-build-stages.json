@@ -4,6 +4,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Build OpenShift Image (monorepo-iq-test-frontend)",
     "status": "SUCCESS"
   },

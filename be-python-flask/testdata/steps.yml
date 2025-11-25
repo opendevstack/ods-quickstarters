@@ -1,25 +1,79 @@
 componentID: python-flask-iq-test
 steps:
-- type: provision
-  provisionParams:
-    verify:
-      jenkinsStages: golden/jenkins-provision-stages.json
-- type: build
-  buildParams:
-    verify:
-      jenkinsStages: golden/jenkins-build-stages.json
-      sonarScan: golden/sonar-scan.json
-      runAttachments:
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
-      testResults: 1
-      openShiftResources:
-        imageTags:
-        - name: "{{.ComponentID}}"
-          tag: latest
-        imageStreams:
-        - "{{.ComponentID}}"
-        deploymentConfigs:
-        - "{{.ComponentID}}"
-        services:
-        - "{{.ComponentID}}"
+  - type: provision
+    provisionParams:
+      verify:
+        jenkinsStages: golden/jenkins-provision-stages.json
+  - type: build
+    buildParams:
+      verify:
+        jenkinsStages: golden/jenkins-build-stages.json
+        sonarScan: golden/sonar-scan.json
+        runAttachments:
+          - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+        testResults: 1
+        openShiftResources:
+          imageTags:
+            - name: "{{.ComponentID}}"
+              tag: latest
+          imageStreams:
+            - "{{.ComponentID}}"
+          deploymentConfigs:
+            - "{{.ComponentID}}"
+          services:
+            - "{{.ComponentID}}"
+  # Step 3: Wait for deployment to be ready
+  - type: wait
+    description: Wait for application pod to be ready
+    waitParams:
+      condition: pod-ready
+      resource: "-l app={{.ProjectID}}-{{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      timeout: "300s"
+      interval: "5s"
+
+  # Step 4: Verify logs don't contain errors (NEW)
+  - type: inspect
+    description: Verify container logs
+    inspectParams:
+      resource: "deploymentconfig/{{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      checks:
+        logs:
+          contains:
+            - "Starting gunicorn 23.0.0"
+            - "Listening at: http://0.0.0.0:8080"
+            - "Using worker: sync"
+            - "Booting worker with pid:"
+          notContains:
+            - "panic:"
+            - "fatal error"
+            - "ERROR"
+
+  # Step 5: Expose services
+  - type: "expose-service"
+    description: "Expose service with defaults"
+    exposeServiceParams:
+      services:
+        - serviceName: "{{.ComponentID}}"
+
+  # Step 6: Test health endpoint
+  - type: http
+    description: Verify health endpoint returns 200
+    httpParams:
+      url: "http://{{.ComponentID}}.{{.ProjectID}}-dev.svc.cluster.local:8080/"
+      method: GET
+      expectedStatus: 200
+      expectedBody: "functional/api/health-response.json"
+      timeout: 30
+      retry:
+        attempts: 10
+        delay: "5s"
+
+  # Step 7: Run integration smoke tests
+  - type: run
+    description: Run integration smoke tests
+    runParams:
+      file: "functional/integration/smoke_test.sh"      
+      services: 
+        app: "{{.ComponentID}}"    

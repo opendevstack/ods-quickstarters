@@ -22,3 +22,6 @@ steps:
         services:
         - "{{.ComponentID}}-backend"
         - "{{.ComponentID}}-frontend"
+      runAttachments:
+      - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+

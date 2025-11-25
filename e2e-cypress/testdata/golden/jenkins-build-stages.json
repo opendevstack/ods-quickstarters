@@ -12,11 +12,19 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Integration Test",
+    "stage": "Functional Tests",
     "status": "SUCCESS"
   },
   {
     "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Upload to Nexus",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Upload to Nexus",
     "status": "SUCCESS"
   },
   {

@@ -16,6 +16,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Create Credentials",
+    "status": "SUCCESS"
+  },  
+  {
     "stage": "Create sonar-project.properties",
     "status": "SUCCESS"
   },

@@ -1,4 +1,4 @@
-componentID: releasemanager
+componentID: qs-test-releaese-manager
 steps:
 - type: provision
   description: 'provision RM repo'
@@ -15,17 +15,18 @@ steps:
 - type: build
   description: 'run RM pipeline without any repos'
   buildParams:
-    pipeline: mro-pipeline
+    pipeline: "{{.ProjectID}}-mro-pipeline-master"
     verify:
       jenkinsStages: golden/jenkins-build-stages-after-provisioning.json
 - type: upload
   description: 'configure one component in RM repo'
   uploadParams:
+    render: true
     file: fixtures/metadata.yml
 - type: build
   description: 'RM defaults run (WIP)'
   buildParams:
-    pipeline: mro-pipeline
+    pipeline: "{{.ProjectID}}-mro-pipeline-master"
     verify:
       jenkinsStages: golden/jenkins-build-stages-with-added-repo.json
       runAttachments:
@@ -36,7 +37,7 @@ steps:
 - type: build
   description: 'RM version=1 target=DEV run'
   buildParams:
-    pipeline: mro-pipeline
+    pipeline: "{{.ProjectID}}-mro-pipeline-master"
     env:
     - name: environment
       value: DEV
@@ -65,7 +66,7 @@ steps:
 - type: build
   description: 'RM version=1 target=QA run'
   buildParams:
-    pipeline: mro-pipeline
+    pipeline: "{{.ProjectID}}-mro-pipeline-master"
     env:
     - name: environment
       value: QA

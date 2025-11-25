@@ -3,6 +3,7 @@
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
+  "branch": "master",
   "extensions": [],
   "qualityProfiles": [
     {
@@ -12,7 +13,7 @@
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

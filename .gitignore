@@ -27,3 +27,4 @@
 
 test-setup.bin
 /tests/
+e2e-spock-geb/files/.gradle

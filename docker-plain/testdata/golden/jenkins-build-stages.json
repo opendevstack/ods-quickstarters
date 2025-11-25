@@ -4,11 +4,15 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },  
+  {
     "stage": "Build OpenShift Image",
     "status": "SUCCESS"
   },
   {
-    "stage": "Deploy to OpenShift",
+    "stage": "Deploy to OpenShift (app.kubernetes.io/instance=docker-plain-test,app.kubernetes.io/name=docker-plain-test)",
     "status": "SUCCESS"
   },
   {
