@@ -24,14 +24,18 @@ odsComponentPipeline(
     // 'release/': 'test'
   ]
 ) { context ->
+    def infraConfig = [cloudProvider: 'AWS', envPath: "./environments" /* that is the default for odsComponentStageInfrastructure */]
+
     getEnvironment(context)
     addVars2envJsonFile(context)
-    odsComponentStageInfrastructure(context, [cloudProvider: 'AWS'])
+    odsComponentStageInfrastructure(context, infraConfig)
 
-    withEnv(["AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}",
-             "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-   ])
-   {
+    def environmentVars = getEnvironmentVars(context, infraConfig)
+
+    withCredentials([
+      string(credentialsId: environmentVars.credentials.key.toLowerCase(), variable: 'AWS_ACCESS_KEY_ID'),
+      string(credentialsId: environmentVars.credentials.secret.toLowerCase(), variable: 'AWS_SECRET_ACCESS_KEY')
+    ]) {
       stage ("AWS Testing Preparation"){
         generateTerraformOutputsFile()
       }
@@ -59,16 +63,13 @@ odsComponentPipeline(
         stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: "build/test-results/test/integration*junit.xml", allowEmpty: true)
       }
     }
-
 }
 
-def getEnvironment(def context){
-    sh "echo Get Environment Variables"
-    AWS_ACCESS_KEY_ID = sh(returnStdout: true, script:"oc get secret aws-access-key-id-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
-    AWS_SECRET_ACCESS_KEY = sh(returnStdout: true, script:"oc get secret aws-secret-access-key-${context.environment} --namespace ${context.cdProject} --output jsonpath='{.data.secrettext}' | base64 -d")
+def getEnvironmentVars(def context, def config){
+    def envPath = config.envPath ?: "./environments"
 
+    return readYaml(file: "${config.envPath}/${context.environment}.yml")
 }
-
 
 def generateTerraformOutputsFile() {
     sh 'terraform output -json > terraform_outputs.json'
