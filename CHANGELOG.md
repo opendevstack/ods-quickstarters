@@ -3,6 +3,14 @@
 ## Unreleased
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [4.11.0] - 2025-12-03
+
+### Added
 - Added gh action for custom e2e QS notification ([#1137](https://github.com/opendevstack/ods-quickstarters/pull/1137))
 - Added Node.js 24 Jenkins agent and related CI/Makefile/docs updates ([#1133]) (common/jenkins-agents/nodejs24) ([#1134](https://github.com/opendevstack/ods-quickstarters/pull/1134))
 
@@ -10,6 +18,7 @@
 - Upgrade with dynamic backend configuration of Azure quickstarter ([#1131](https://github.com/opendevstack/ods-quickstarters/pull/1131))
 - Rust QS flag to enable or disable cargo-deny for dependency linting, default to true ([#1107](https://github.com/opendevstack/ods-quickstarters/issues/1107))
 - Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
+- Docker Plain Helm chart ([#1135](https://github.com/opendevstack/ods-quickstarters/pull/1135))
 
 ### Fixed
 - Fix Springboot version parameter ([#1138](https://github.com/opendevstack/ods-quickstarters/issues/1138))
