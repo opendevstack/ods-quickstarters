@@ -4,7 +4,26 @@
 
 ### Added
 
+### Changed
 
+### Fixed
+
+## [4.11.0] - 2025-12-03
+
+### Added
+- Added gh action for custom e2e QS notification ([#1137](https://github.com/opendevstack/ods-quickstarters/pull/1137))
+- Added Node.js 24 Jenkins agent and related CI/Makefile/docs updates ([#1133]) (common/jenkins-agents/nodejs24) ([#1134](https://github.com/opendevstack/ods-quickstarters/pull/1134))
+
+### Changed
+- Upgrade with dynamic backend configuration of Azure quickstarter ([#1131](https://github.com/opendevstack/ods-quickstarters/pull/1131))
+- Rust QS flag to enable or disable cargo-deny for dependency linting, default to true ([#1107](https://github.com/opendevstack/ods-quickstarters/issues/1107))
+- Rust QS enable dynamic toolchain/version support ([#1119](https://github.com/opendevstack/ods-quickstarters/issues/1119))
+- Docker Plain Helm chart ([#1135](https://github.com/opendevstack/ods-quickstarters/pull/1135))
+
+### Fixed
+- Fix Springboot version parameter ([#1138](https://github.com/opendevstack/ods-quickstarters/issues/1138))
+
+## [4.10.0] - 2025-10-13
 ### Changed
 
 
@@ -42,6 +61,7 @@
 ## [4.8.0] - 2025-4-10
 
 ### Changed
+- Add Helm Chart to Docker Plain Quickstarter ([#1035](https://github.com/opendevstack/ods-quickstarters/pull/1035))
 - Update CODEOWNERS ([#1108](https://github.com/opendevstack/ods-quickstarters/issues/1108))
 - Fix Nginx related Quickstarters worker processes value to 1 as default ([#1092](https://github.com/opendevstack/ods-quickstarters/issues/1092))
 - Set Request and Limits with Ephemeral storage and Make use of Nexus in terraform agents ([#1104](https://github.com/opendevstack/ods-quickstarters/pull/1104))

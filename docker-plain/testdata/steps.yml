@@ -9,12 +9,7 @@ steps:
     verify:
       jenkinsStages: golden/jenkins-build-stages.json
       openShiftResources:
-        imageTags:
-        - name: "{{.ComponentID}}"
-          tag: latest
         imageStreams:
-        - "{{.ComponentID}}"
-        deploymentConfigs:
         - "{{.ComponentID}}"
         services:
         - "{{.ComponentID}}"

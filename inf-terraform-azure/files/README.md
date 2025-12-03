@@ -49,8 +49,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_is_test"></a> [is\_test](#input\_is\_test) | Whether whether it is part of a test execution or not. Defaults to false. | `bool` | `false` | no |
-| <a name="input_meta_environment"></a> [meta\_environment](#input\_meta\_environment) | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | `"DEVELOPMENT"` | no |
-| <a name="input_name"></a> [name](#input\_name) | The name of the stack. | `string` | `"stack-azure-quickstarter"` | no |
+| <a name="input_location"></a> [location](#input\_location) | The location of the stack. | `string` | n/a | yes |
+| <a name="input_meta_environment"></a> [meta\_environment](#input\_meta\_environment) | The type of the environment. Can be any of DEVELOPMENT, EVALUATION, PRODUCTIVE, QUALITYASSURANCE, TRAINING, VALIDATION. | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | The name of the stack. | `string` | n/a | yes |
 
 ## Outputs
 

@@ -1,0 +1,6 @@
+{
+  "environment": "prod",
+  "location": "westeurope",
+  "meta_environment": "PRODUCTIVE",
+  "name": "stack-azure-skeleton-westeurope"
+}

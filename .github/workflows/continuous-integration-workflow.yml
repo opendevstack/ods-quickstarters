@@ -83,6 +83,22 @@ jobs:
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
+  jenkins-agent-nodejs24-ubi8:
+    name: Jenkins agent NodeJS 24 (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v4.2.2
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/nodejs24/docker
+        run: |
+            docker build --tag agent-nodejs24-test-ubi8 --file Dockerfile.ubi8 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              .
+
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
     runs-on: ubuntu-22.04
@@ -108,12 +124,12 @@ jobs:
         working-directory: common/jenkins-agents/rust/docker
         run: |
           docker build --tag agent-rust-test-ubi8 --file Dockerfile.ubi8 \
-            --build-arg rustVersion=1.83.0 \
+            --build-arg rustVersion=1.88.0 \
             --build-arg rustToolchain=x86_64-unknown-linux-gnu \
-            --build-arg cargoNextestVersion=0.9.87 \
-            --build-arg cargoLlvmCovVersion=0.6.15 \
-            --build-arg cargoGenerateVersion=0.22.1 \
-            --build-arg cargoDenyVersion=0.16.3 \
+            --build-arg cargoNextestVersion=0.9.94 \
+            --build-arg cargoLlvmCovVersion=0.6.16 \
+            --build-arg cargoGenerateVersion=0.23.3 \
+            --build-arg cargoDenyVersion=0.18.2 \
             .
 
   jenkins-agent-terraform-2306-ubi8:

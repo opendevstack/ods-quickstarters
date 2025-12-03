@@ -1,0 +1,7 @@
+# TODO: map credentials here as they are stored prefixed with project_id?
+
+credentials:
+  azureSubscriptionId: age-cd-subscription-id-testing
+  azureTenantId: age-cd-tenant-id-testing
+  azureClientId: age-cd-client-id-testing
+  azureClientSecret: age-cd-client-secret-testing

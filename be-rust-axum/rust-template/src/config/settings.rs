@@ -30,10 +30,7 @@ impl Settings {
   pub fn new() -> Result<Self, envy::Error> {
     dotenv().ok();
 
-    let settings = match envy::from_env::<Settings>() {
-      Ok(config) => config,
-      Err(error) => return Err(error),
-    };
+    let settings = envy::from_env::<Settings>()?;
     Ok(settings)
   }
 }
