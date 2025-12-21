@@ -3,7 +3,7 @@
 name = "{{project-name}}"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.88"
+rust-version = "1.92"
 description = "{{project-name}} component - from the OpenDevStack Rust QuickStarter."
 license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -25,7 +25,13 @@ bytes = "1.7"
 thiserror = "2.0"
 
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["tracing", "env-filter", "json", "ansi", "fmt"] }
+tracing-subscriber = { version = "0.3", features = [
+    "tracing",
+    "env-filter",
+    "json",
+    "ansi",
+    "fmt",
+] }
 
 lazy_static = "1.5"
 
@@ -73,5 +79,7 @@ dotenvy = "0.15"
 
 [dev-dependencies]
 # mockito = "1.7"  # mockito is recommended when requiring mocking network requests to either external or internal services
-temp-env = { version = "0.3", features = ["async_closure"] }  # it is highly recommended the usage of cargo nextest run instead of cargo test; this way each test runs on its own process
+temp-env = { version = "0.3", features = [
+    "async_closure",
+] } # it is highly recommended the usage of cargo nextest run instead of cargo test; this way each test runs on its own process
 tower = { version = "0.5", features = ["util"] }
