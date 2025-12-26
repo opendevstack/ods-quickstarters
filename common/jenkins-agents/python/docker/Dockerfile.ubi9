@@ -7,28 +7,32 @@ ARG nexusAuth
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
-    PIP_NO_CACHE_DIR=off \
-    PATH=$JAVA_HOME/bin:$PATH
+    UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+    UV_EXTRA_INDEX_URL=https://pypi.org/simple \
+    PIP_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+    PIP_EXTRA_INDEX_URL=https://pypi.org/simple \
+    PATH=$HOME/.cargo/bin:$JAVA_HOME/bin:$PATH
 
-RUN yum module install -y python38:3.8/build && \
-    yum module install -y python39:3.9/build --allowerasing && \
-    yum install -y python3.11 python3.11-pip python3.11-devel python3.11-setuptools --allowerasing && \
-    yum install -y python3.12 python3.12-pip python3.12-devel python3.12-setuptools --allowerasing && \
-    yum install -y autoconf automake gcc-c++ openssl-devel libffi-devel && \
+RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo "alias pip='uv pip'" >> ~/.bashrc && \
     yum -y clean all
 
-RUN pipVersions=( pip3.8 pip3.9 pip3.11 pip3.12 ); \
-    for pipV in "${pipVersions[@]}"; \
-    do \
-        if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
-        then $pipV config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-            && $pipV config set global.trusted-host ${nexusHost} \
-            && $pipV config set global.extra-index-url https://pypi.org/simple; \
-        fi; \
-        $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
-        $pipV install --upgrade pip --user && \
-        $pipV install virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13; \
-    done;
+RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
+        uv pip install --python $pyVersion \
+            virtualenv==20.26.3 \
+            setuptools==72.2.0 \
+            Cython==3.0.11 \
+            pypandoc==1.13; \
+    done && \
+    uv tool update-shells
+
+# Configure pip to use Nexus repository for retrocompatibility
+RUN mkdir -p $HOME/.pip && \
+    echo "[global]" > $HOME/.pip/pip.conf && \
+    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.pip/pip.conf && \
+    echo "extra-index-url = https://pypi.org/simple" >> $HOME/.pip/pip.conf && \
+    chown 1001:0 $HOME/.pip
 
 # Enables default user to access $HOME folder
 RUN chown -R 1001:0 $HOME && \
