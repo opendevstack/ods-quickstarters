@@ -22,7 +22,7 @@ RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
 
 RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
         uv python install $pyVersion && \
-        uv pip install --system --break-system-packages --python $pyVersion \
+        uv pip install --verbose --system --break-system-packages --python $pyVersion \
             virtualenv==20.26.3 \
             setuptools==72.2.0 \
             Cython==3.0.11 \
