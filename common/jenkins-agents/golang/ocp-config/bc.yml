@@ -14,7 +14,7 @@ parameters:
 - name: ODS_GIT_REF
   required: true
 - name: JENKINS_AGENT_DOCKERFILE_PATH
-  value: Dockerfile.ubi8
+  value: Dockerfile.ubi9
   description: Dockerfile variant to use
 - name: GO_DISTRIBUTION_URL
   value: https://go.dev/dl/go1.23.0.linux-amd64.tar.gz

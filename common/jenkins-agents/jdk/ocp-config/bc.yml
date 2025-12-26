@@ -20,7 +20,7 @@ parameters:
 - name: ODS_GIT_REF
   required: true
 - name: JENKINS_AGENT_DOCKERFILE_PATH
-  value: Dockerfile.ubi8
+  value: Dockerfile.ubi9
   description: Dockerfile variant to use
 objects:
 - apiVersion: build.openshift.io/v1

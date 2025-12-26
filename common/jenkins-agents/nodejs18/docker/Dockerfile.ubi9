@@ -1,8 +1,8 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-nodejs-rhel8-container" \
-      name="openshift4/jenkins-agent-nodejs-rhel8" \
+LABEL com.redhat.component="jenkins-agent-nodejs-rhel9-container" \
+      name="openshift4/jenkins-agent-nodejs-rhel9" \
       architecture="x86_64" \
       io.k8s.display-name="Jenkins Agent Nodejs" \
       io.k8s.description="The jenkins agent nodejs image has the nodejs tools on top of the jenkins agent base image." \
@@ -12,8 +12,8 @@ LABEL com.redhat.component="jenkins-agent-nodejs-rhel8-container" \
 ARG nexusUrl
 ARG nexusAuth
 
-ENV NODEJS_VERSION=20 \
-    YARN_VERSION=1.22.19 \
+ENV NODEJS_VERSION=18 \
+    YARN_VERSION=1.22.18 \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
@@ -39,7 +39,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERS
 # Install Cypress dependencies
 # https://docs.cypress.io/guides/getting-started/installing-cypress.html#System-requirements
 COPY yum.repos.d/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
-COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux8.repo
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux9.repo
 COPY yum.repos.d/microsoft-edge.repo /etc/yum.repos.d/microsoft-edge.repo
 RUN yum repolist \
     && yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel GConf2 nss libXScrnSaver alsa-lib \

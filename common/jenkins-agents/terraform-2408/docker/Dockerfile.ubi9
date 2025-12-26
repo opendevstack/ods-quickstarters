@@ -3,8 +3,8 @@ FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
-      name="openshift/jenkins-agent-terraform-ubi8" \
+LABEL com.redhat.component="jenkins-agent-terraform-ubi9-docker" \
+      name="openshift/jenkins-agent-terraform-ubi9" \
       version="0.1" \
       architecture="x86_64" \
       release="1" \
@@ -16,34 +16,39 @@ ARG nexusUrl
 ARG nexusAuth
 ARG NPMJS_REGISTRY_FLAG
 
-ENV TERRAFORM_VERSION=1.4.6 \
+ENV TERRAFORM_VERSION=1.9.4 \
     TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
-    TERRAFORM_DOCS_VERSION=v0.16.0 \
-    RUBY_VERSION=3.2.2 \
-    PACKER_VERSION=1.8.7 \
-    CONSUL_VERSION=1.15.2 \
-    TFENV_VERSION=3.0.0 \
-    TFLINT_VERSION=0.46.1 \
-    NODEJS_VERSION=18 \
-    BUNDLER_VERSION=2.4.13 \
-    AGE_VERSION=1.1.1 \
+    TERRAFORM_DOCS_VERSION=v0.18.0 \
+    RUBY_VERSION=3.3.4 \
+    PACKER_VERSION=1.11.2 \
+    CONSUL_VERSION=1.19.1 \
+    TENV_VERSION=3.0.0 \
+    TENV_AUTO_INSTALL=true \
+    TENV_ROOT=/opt/tenv \
+    GO_VERSION=1.21.13 \
+    GOBIN=/usr/local/go/bin \
+    TFLINT_VERSION=0.52.0 \
+    NODEJS_VERSION=20 \
+    BUNDLER_VERSION=2.5.17 \
+    AGE_VERSION=1.2.0 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
     RBENV_SHELL=bash \
+    TASK_VERSION=3.38.0 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
-    python38 python38-pip python38-setuptools \
     python39 python39-pip python39-setuptools \
     python3.11 python3.11-pip python3.11-setuptools \
+    python3.12 python3.12-pip python3.12-setuptools \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
     jq parallel"
-ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
-ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
+ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool xorriso"
+ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/bin:/usr/local/go/bin:$PATH
 ENV HOME=/home/jenkins
 
-RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true"
+RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
 COPY python_requirements /tmp/requirements.txt
 
 # Workaroud we use when running behind proxy
@@ -51,22 +56,22 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux8.repo
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux9.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux8.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux9.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
-    && dnf clean all
+    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
 
-RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
-    && python3 get-pip.py
+RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "/tmp/get-pip.py" \
+    && python3 /tmp/get-pip.py \
+    && rm -f /tmp/get-pip.py
 
 # Upgrade pip
-RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
+RUN pipVersions=( pip3 pip3.9 pip3.11 pip3.12 ); \
     for pipV in "${pipVersions[@]}"; \
     do \
         if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
@@ -78,13 +83,13 @@ RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
         $pipV install --upgrade pip --user && \
         $pipV install virtualenv pycodestyle; \
     done; \
-    alternatives --set python /usr/bin/python3.11 \
-    && alternatives --set python3 /usr/bin/python3.11
+    alternatives --set python /usr/bin/python3.12 \
+    && alternatives --set python3 /usr/bin/python3.12
 
 # Install python requirements
-RUN python3.8 -m pip install -r /tmp/requirements.txt \
-    && python3.9 -m pip install -r /tmp/requirements.txt \
+RUN python3.9 -m pip install -r /tmp/requirements.txt \
     && python3.11 -m pip install -r /tmp/requirements.txt \
+    && python3.12 -m pip install -r /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt
 
 # Install awscli2
@@ -115,20 +120,29 @@ RUN npm install -g ${NPMJS_REGISTRY_FLAG} aws-cdk \
     && node --version \
     && cdk --version
 
-# Install terraform
-RUN wget -q -O /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
-    && unzip /tmp/terraform.zip -d /usr/local/bin \
-    && rm -rf /tmp/terraform.zip \
-    && terraform -h
-
-# Install tfenv
-RUN umask 0002 && cd /opt && git clone --branch v${TFENV_VERSION} https://github.com/tfutils/tfenv.git \
-    && TFENV_CURL_OUTPUT=0 /opt/tfenv/bin/tfenv install ${TERRAFORM_VERSION} \
-    && /opt/tfenv/bin/tfenv use ${TERRAFORM_VERSION} \
-    && chown -R 1001:0 /opt/tfenv \
-    && chmod +x /opt/tfenv/bin/* \
+# Install tenv & install terraform
+RUN mkdir -p "${TENV_ROOT}" && chmod 2775 "${TENV_ROOT}" && chown 1001:0 "${TENV_ROOT}" \
+    && dnf install -y https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_amd64.rpm \
+    && dnf clean all \
+    && tenv tf install ${TERRAFORM_VERSION} \
+    && tenv tf use ${TERRAFORM_VERSION} \
+    && tenv version \
     && terraform -version \
-    && tfenv list
+    && tenv tf list \
+    && echo 'export PATH=$(/usr/bin/tenv update-path)' > /etc/profile.d/tenv.sh \
+    && chown -R 1001:0 "${TENV_ROOT}" \
+    && chmod -R 2775 "${TENV_ROOT}"
+
+# Install GO for terratest
+RUN cd /tmp \
+    && curl -LfSso /tmp/go.tar.gz https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go.tar.gz \
+    && rm -f /tmp/go.tar.gz \
+    && /usr/local/go/bin/go version
+
+# Install go-task
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d v${TASK_VERSION} \
+    && task --version
 
 # Install tflint
 RUN wget -q -O /tmp/tflint.zip "https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip" \
@@ -138,24 +152,25 @@ RUN wget -q -O /tmp/tflint.zip "https://github.com/terraform-linters/tflint/rele
 
 # Install packer
 RUN wget -q -O /tmp/packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip" \
-    && unzip /tmp/packer.zip -d /usr/local/bin \
+    && unzip /tmp/packer.zip -d /usr/local/bin packer \
     && rm -rf /tmp/packer.zip \
     && packer --version
 
 # Install terraform-config-inspect
 RUN wget -q -O /tmp/terraform-config-inspect.tar.gz https://github.com/nichtraunzer/terraform-config-inspect/releases/download/v${TERRAFORM_CONFIG_INSPECT_VERSION}/terraform-config-inspect_${TERRAFORM_CONFIG_INSPECT_VERSION}_linux_amd64.tar.gz \
-    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ \
+    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ terraform-config-inspect \
     && rm -f /tmp/terraform-config-inspect.tar.gz \
     && chmod 755 /usr/local/bin/terraform-config-inspect
 
 # Install terraform-docs
 RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && tar zxpf /tmp/terraform-docs.tar.gz -C /usr/local/bin/ terraform-docs \
-    && chmod +x /usr/local/bin/terraform-docs
+    && chmod +x /usr/local/bin/terraform-docs \
+    && rm -f /tmp/terraform-docs.tar.gz
 
 # Install consul-cli
 RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
-    && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
+    && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin consul \
     && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/consul \
     && /usr/local/bin/consul -version
@@ -201,4 +216,3 @@ RUN cd /opt \
     && rm -Rf /home/jenkins/.bundle/cache
 
 USER 1001
-

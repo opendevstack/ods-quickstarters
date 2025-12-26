@@ -3,8 +3,8 @@ FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
-      name="openshift/jenkins-agent-terraform-ubi8" \
+LABEL com.redhat.component="jenkins-agent-terraform-ubi9-docker" \
+      name="openshift/jenkins-agent-terraform-ubi9" \
       version="0.1" \
       architecture="x86_64" \
       release="1" \
@@ -43,7 +43,7 @@ ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
 ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
 ENV HOME=/home/jenkins
 
-RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true"
+RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
 COPY python_requirements /tmp/requirements.txt
 
 # Workaroud we use when running behind proxy
@@ -51,9 +51,9 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux8.repo
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux9.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux8.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux9.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
