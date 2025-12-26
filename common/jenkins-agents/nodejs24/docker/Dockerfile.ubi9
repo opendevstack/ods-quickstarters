@@ -22,9 +22,6 @@ ENV NODEJS_VERSION=24 \
 
 COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 
-# Generate machine ID
-RUN dbus-uuidgen > /etc/machine-id
-
 # Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
     curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - && \
