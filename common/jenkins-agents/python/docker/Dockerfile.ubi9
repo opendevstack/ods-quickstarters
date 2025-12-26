@@ -27,13 +27,6 @@ RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
     done && \
     uv tool update-shells
 
-# Configure pip to use Nexus repository for retrocompatibility
-RUN mkdir -p $HOME/.pip && \
-    echo "[global]" > $HOME/.pip/pip.conf && \
-    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.pip/pip.conf && \
-    echo "extra-index-url = https://pypi.org/simple" >> $HOME/.pip/pip.conf && \
-    chown 1001:0 $HOME/.pip
-
 # Enables default user to access $HOME folder
 RUN chown -R 1001:0 $HOME && \
     chmod -R a+rw $HOME
