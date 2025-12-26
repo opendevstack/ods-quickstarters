@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
     UV_EXTRA_INDEX_URL=https://pypi.org/simple \
     PIP_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
     PIP_EXTRA_INDEX_URL=https://pypi.org/simple \
-    PATH=$HOME/.cargo/bin:$JAVA_HOME/bin:$PATH
+    PATH=/root/.cargo/bin:/root/.local/bin:$JAVA_HOME/bin:$PATH
 
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
@@ -19,6 +19,7 @@ RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     yum -y clean all
 
 RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
+        uv python install $pyVersion && \
         uv pip install --python $pyVersion \
             virtualenv==20.26.3 \
             setuptools==72.2.0 \
