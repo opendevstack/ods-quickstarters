@@ -20,13 +20,13 @@ RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
 
 RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
         uv python install $pyVersion && \
-        uv pip install --system --python $pyVersion \
+        uv pip install --system --break-system-packages --python $pyVersion \
             virtualenv==20.26.3 \
             setuptools==72.2.0 \
             Cython==3.0.11 \
             pypandoc==1.13; \
     done && \
-    uv tool update-shells
+    uv tool update-shell
 
 # Enables default user to access $HOME folder
 RUN chown -R 1001:0 $HOME && \
