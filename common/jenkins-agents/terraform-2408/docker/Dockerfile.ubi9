@@ -65,8 +65,8 @@ RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
 
 RUN set -x \
     && dnf -y repolist \
-    && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
+    && dnf -y install --allowerasing $INSTALL_PKGS \
+    && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     echo "alias pip='uv pip'" >> ~/.bashrc
