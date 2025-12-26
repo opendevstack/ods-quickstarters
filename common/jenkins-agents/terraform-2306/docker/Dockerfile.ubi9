@@ -71,8 +71,8 @@ RUN for pyVersion in 3.8 3.9 3.11; do \
         uv python install $pyVersion && \
         uv pip install --system --break-system-packages --python $pyVersion \
             virtualenv \
-            pycodestyle; \
-        uv pip install --system --break-system-packages --python $pyVersion -r /tmp/requirements.txt \
+            pycodestyle \
+        uv pip install --system --break-system-packages --python $pyVersion -r /tmp/requirements.txt; \
     done && \
     rm -f /tmp/requirements.txt && \
     uv python pin 3.11 && \
