@@ -41,11 +41,11 @@ objects:
       limits:
         cpu: "1"
         memory: "2Gi"
-        ephemeral-storage: "8Gi"
+        ephemeral-storage: "16Gi"
       requests:
         cpu: "200m"
         memory: "1Gi"
-        ephemeral-storage: "5Gi"
+        ephemeral-storage: "10Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/jdk/docker

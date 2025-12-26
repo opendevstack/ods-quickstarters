@@ -39,11 +39,11 @@ objects:
       limits:
         cpu: "1"
         memory: "3Gi"
-        ephemeral-storage: "20Gi"
+        ephemeral-storage: "30Gi"
       requests:
         cpu: "200m"
         memory: "2Gi"
-        ephemeral-storage: "15Gi"
+        ephemeral-storage: "20Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/nodejs24/docker
