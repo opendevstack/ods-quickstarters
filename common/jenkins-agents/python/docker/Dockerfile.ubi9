@@ -9,8 +9,10 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
     UV_EXTRA_INDEX_URL=https://pypi.org/simple \
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
     PIP_INDEX_URL=$UV_INDEX_URL \
     PIP_EXTRA_INDEX_URL=$UV_EXTRA_INDEX_URL \
+    PIP_CERT=$UV_CA_CERTIFICATE \
     PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH
 
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \

@@ -38,16 +38,17 @@ ENV TERRAFORM_VERSION=1.9.4 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
     UV_EXTRA_INDEX_URL=https://pypi.org/simple \
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
     PIP_INDEX_URL=$UV_INDEX_URL \
     PIP_EXTRA_INDEX_URL=$UV_EXTRA_INDEX_URL \
-    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt
+    PIP_CERT=$UV_CA_CERTIFICATE
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
     jq parallel"
 ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool xorriso"
-ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/bin:/usr/local/go/bin:$PATH
+ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/bin:/usr/local/go/bin:$HOME/.local/bin:$JAVA_HOME/bin:$PATH
 ENV HOME=/home/jenkins
 
 RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
