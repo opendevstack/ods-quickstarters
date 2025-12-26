@@ -56,7 +56,7 @@ objects:
     strategy:
       dockerStrategy:
         buildArgs:
-          - name: nexusUrl
+          - name: nexusHost
             value: ${NEXUS_URL}
           - name: nexusAuth
             value: ${NEXUS_AUTH}
