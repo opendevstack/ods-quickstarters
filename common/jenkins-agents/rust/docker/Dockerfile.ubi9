@@ -17,7 +17,7 @@ ENV CARGO_NEXTEST_VERSION=${cargoNextestVersion} \
     CARGO_DENY_VERSION=${cargoDenyVersion} \
     RUST_VERSION=${rustVersion}
 
-RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic \
+RUN yum install -y binutils cpp gcc glibc-devel glibc-headers kernel-headers libasan libatomic \
     libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config \
     openssl-devel cpan perl-IPC-Cmd && \
     cpan install FindBin
