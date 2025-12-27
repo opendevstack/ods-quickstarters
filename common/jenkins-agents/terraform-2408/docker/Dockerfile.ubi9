@@ -38,12 +38,14 @@ ENV TERRAFORM_VERSION=1.9.4 \
     TASK_VERSION=3.38.0 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-    UV_DEFAULT_INDEX=$UV_INDEX_URL \
     UV_TRUSTED_HOST=${nexusHost} \
     PIP_TRUSTED_HOST=${nexusHost} \
-    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
-    PIP_INDEX_URL=$UV_INDEX_URL \
-    PIP_CERT=$UV_CA_CERTIFICATE
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt
+    
+
+ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
+    PIP_INDEX_URL=${UV_INDEX_URL} \
+    PIP_CERT=${UV_CA_CERTIFICATE}
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     readline \

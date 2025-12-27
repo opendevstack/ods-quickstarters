@@ -8,13 +8,14 @@ ARG nexusAuth
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-    UV_DEFAULT_INDEX=$UV_INDEX_URL \
     UV_TRUSTED_HOST=${nexusHost} \
     PIP_TRUSTED_HOST=${nexusHost} \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
-    PIP_INDEX_URL=$UV_INDEX_URL \
-    PIP_CERT=$UV_CA_CERTIFICATE \
     PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH
+
+ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
+    PIP_INDEX_URL=${UV_INDEX_URL} \
+    PIP_CERT=${UV_CA_CERTIFICATE}
 
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
