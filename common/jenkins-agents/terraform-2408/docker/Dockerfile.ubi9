@@ -13,6 +13,7 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi9-docker" \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
 ARG nexusHost
+ARG nexusUrl=https://${nexusHost}
 ARG nexusAuth
 ARG NPMJS_REGISTRY_FLAG
 
