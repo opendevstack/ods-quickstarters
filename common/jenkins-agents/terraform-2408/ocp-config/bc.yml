@@ -6,7 +6,7 @@ parameters:
 - name: ODS_BITBUCKET_PROJECT
   description: Bitbucket project name.
   value: opendevstack
-- name: NEXUS_URL
+- name: NEXUS_HOST
   required: true
 - name: NEXUS_AUTH
   required: true
@@ -57,7 +57,7 @@ objects:
       dockerStrategy:
         buildArgs:
           - name: nexusHost
-            value: ${NEXUS_URL}
+            value: ${NEXUS_HOST}
           - name: nexusAuth
             value: ${NEXUS_AUTH}
           - name: nexusAuth
