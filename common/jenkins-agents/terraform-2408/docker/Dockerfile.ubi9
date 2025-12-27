@@ -78,7 +78,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
 
 RUN for pyVersion in 3.9 3.11 3.12; do \
         uv python install $pyVersion && \
-        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} \
+        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} --prerelease=allow \
             virtualenv \
             pycodestyle \
             -r /tmp/requirements.txt; \
