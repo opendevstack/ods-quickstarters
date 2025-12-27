@@ -32,10 +32,11 @@ ENV TERRAFORM_VERSION=1.4.6 \
     RBENV_SHELL=bash \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-    UV_EXTRA_INDEX_URL=https://pypi.org/simple \
+    UV_DEFAULT_INDEX=$UV_INDEX_URL \
+    UV_TRUSTED_HOST=${nexusHost} \
+    PIP_TRUSTED_HOST=${nexusHost} \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
     PIP_INDEX_URL=$UV_INDEX_URL \
-    PIP_EXTRA_INDEX_URL=$UV_EXTRA_INDEX_URL \
     PIP_CERT=$UV_CA_CERTIFICATE
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
@@ -66,11 +67,14 @@ RUN set -x \
     && dnf clean all
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    echo "alias pip='uv pip'" >> ~/.bashrc
+    mkdir -p $HOME/.config/pip && \
+    echo "[global]" > $HOME/.config/pip/pip.conf && \
+    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+    echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf
 
 RUN for pyVersion in 3.8 3.9 3.11; do \
         uv python install $pyVersion && \
-        uv pip install --system --break-system-packages --python $pyVersion \
+        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} \
             virtualenv \
             pycodestyle \
         -r /tmp/requirements.txt; \
