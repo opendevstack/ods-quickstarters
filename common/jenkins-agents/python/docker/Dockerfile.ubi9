@@ -19,9 +19,9 @@ ENV PYTHONUNBUFFERED=1 \
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
-    echo '[global]' > $HOME/.config/pip/pip.conf && \
-    echo 'index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple' >> $HOME/.config/pip/pip.conf && \
-    echo 'trusted-host = ${nexusHost}' >> $HOME/.config/pip/pip.conf && \
+    echo "[global]" > $HOME/.config/pip/pip.conf && \
+    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+    echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf && \
     yum -y clean all
 
 RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
