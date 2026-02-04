@@ -31,3 +31,4 @@
 *** xref:jenkins-agents:rust.adoc[Rust]
 *** xref:jenkins-agents:scala.adoc[Scala]
 ** xref:quickstarters:authoring-quickstarters.adoc[Authoring Quickstarters]
+** xref:quickstarters:quickstarters-automated-tests.adoc[Quickstarters Automated Tests]
