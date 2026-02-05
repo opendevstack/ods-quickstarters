@@ -1,0 +1,63 @@
+componentID: renovate-qs
+steps:
+  - type: provision
+    provisionParams:
+      verify:
+        jenkinsStages: golden/jenkins-provision-stages.json
+
+  - type: upload
+    description: "Upload configmap with configuration"
+    uploadParams:
+      file: fixtures/configmap.yaml
+      fileName: chart/templates/configmap.yaml
+      render: true
+
+  - type: build
+    buildParams:
+      verify:
+        jenkinsStages: golden/jenkins-build-stages.json
+        sonarScan: golden/sonar-scan.json
+        runAttachments:
+          - "sonarqube-report-{{.ProjectID}}-renovate-qs.pdf"
+        openShiftResources:
+          namespace: "{{.ProjectID}}-cd"
+          imageStreams:
+            - renovate
+          cronJobs:
+            - renovate-qs
+
+  - type: provision
+    description: "Provision an component to be tested"
+    componentID: python-test-renovate
+    provisionParams:
+      quickstarter: ods-quickstarters/be-python-flask
+      branch: 4.x
+      verify:
+        jenkinsStages: golden/jenkins-provision-stages-python.json
+
+  - type: run
+    description: "Trigger renovate-qs cron job manually"
+    runParams:
+      file: scripts/run-renovate-cronjob.sh
+
+  - type: wait
+    description: "Wait for renovate-qs manual job to finish"
+    waitParams:
+      condition: job-complete
+      resource: "job/{{.ProjectID}}-renovate-qs-manual"
+      namespace: "{{.ProjectID}}-cd"
+      timeout: "600s"
+      interval: "10s"
+
+  - type: bitbucket
+    description: "Check if a pullrequest has been created"
+    bitbucketParams:
+      action: "get-pullrequest"
+      project: "{{.ProjectID}}"
+      repository: "{{.ProjectID}}-python-test-renovate"
+      pullRequestID: "1"
+      verify:
+        prChecks:
+          state: "OPEN"
+          description: "contains: To activate Renovate, merge this Pull Request"
+

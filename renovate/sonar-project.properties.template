@@ -1,0 +1,25 @@
+# Project identification, see: https://docs.sonarsource.com/sonarqube-server/10.8/analyzing-source-code/analysis-parameters/#project-identification
+## The project's unique key. Can include up to 400 characters. All letters, digits, dash, underscore, periods, and colons are accepted. (required)
+sonar.projectKey=@project_id@-@component_id@
+
+# Project Information, see: https://docs.sonarsource.com/sonarqube-server/10.8/analyzing-source-code/analysis-parameters/#project-information
+## The name of the project that will be displayed on the SonarQube Server UI. (optional)
+sonar.projectName=@project_id@-@component_id@
+## The project version. It should be set for branch analysis in case you use the new code definition based on the previous version. (optional, default short git commit hash)
+#sonar.projectVersion=1.0.0 
+## The project description. (optional)
+sonar.projectDescription=A Renovate bot for automating dependency updates in software projects.
+
+# Analysis scope, see: https://docs.sonarsource.com/sonarqube-server/10.8/analyzing-source-code/analysis-parameters/#analysis-scope
+## The initial analysis scope for main source code (non-test code) in the project. Comma-separated paths to directories with sources (required)
+sonar.sources=.
+## The initial analysis scope for test code in the project. Comma-separated paths to directories containing test source files (optional but recommended for performance reasons).
+# sonar.tests=
+
+# Links displayed in the UI: https://docs.sonarsource.com/sonarqube-server/10.8/analyzing-source-code/analysis-parameters/#links-displayed-in-the-ui
+## The URL of the continuous integration system used. (optional)
+sonar.links.ci=${env.JOB_URL}
+
+# Other Parameters, see: https://docs.sonarsource.com/sonarqube-server/10.8/analyzing-source-code/analysis-parameters/#other-parameters
+## Encoding of the source files (optional but recommended as default is ASCII)
+sonar.sourceEncoding=UTF-8

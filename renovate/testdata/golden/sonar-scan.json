@@ -1,0 +1,32 @@
+{
+  "key": "{{.ProjectID}}-renovate-qs",
+  "name": "{{.ProjectID}}-renovate-qs",
+  "description": "A Renovate bot for automating dependency updates in software projects.",
+  "isFavorite": false,
+  "branch": "master",
+  "visibility": "public",
+  "extensions": [],
+  "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "docker",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "yaml",
+      "deleted": false
+    }
+  ],
+  "qualityGate": {
+    "name": "ODS Default Quality Gate",
+    "isDefault": true
+  },
+  "breadcrumbs": [
+    {
+      "key": "{{.ProjectID}}-{{.ComponentID}}",
+      "name": "{{.ProjectID}}-{{.ComponentID}}",
+      "qualifier": "TRK"
+    }
+  ]
+}
