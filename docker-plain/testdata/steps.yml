@@ -1,15 +1,137 @@
+# Enhanced test example for docker-plain quickstarter
+# This demonstrates the new testing framework features:
+# - Lifecycle hooks (beforeStep, afterStep)
+# - Retry logic with transient error detection
+# - Conditional step execution (skip, skipIf)
+# - Structured test reporting (enable with EXPORT_TEST_REPORTS=true)
+
 componentID: docker-plain-test
+
 steps:
-- type: provision
-  provisionParams:
-    verify:
-      jenkinsStages: golden/jenkins-provision-stages.json
-- type: build
-  buildParams:
-    verify:
-      jenkinsStages: golden/jenkins-build-stages.json
-      openShiftResources:
-        imageStreams:
-        - "{{.ComponentID}}"
-        services:
-        - "{{.ComponentID}}"
+  # Step 1: Provision with pre-check hook
+  - type: provision
+    description: Provision docker-plain quickstarter with validation
+    beforeStep: hooks/validate-cluster.sh
+    provisionParams:
+      quickstarter: docker-plain
+      verify:
+        jenkinsStages: golden/jenkins-provision-stages.json
+
+  # Step 2: Build and deploy with retry
+  - type: build
+    description: Build container image and deploy
+    retry:
+      attempts: 2
+      delay: "10s"
+      onlyTransient: true
+    buildParams:
+      verify:
+        strategy: aggregate
+        jenkinsStages: golden/jenkins-build-stages.json
+        openShiftResources:
+          imageStreams:
+            - "{{.ComponentID}}"
+          services:
+            - "{{.ComponentID}}"
+          deployments:
+            - "{{.ComponentID}}"
+        runAttachments:
+          - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+
+  # Step 3: Wait for deployment to complete
+  - type: wait
+    description: Wait for nginx deployment to be ready
+    waitParams:
+      condition: deployment-complete
+      resource: "deployment/{{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      timeout: "5m"
+      interval: "5s"
+
+  # Step 4: Wait for pod to be ready
+  - type: wait
+    description: Wait for pod to be running
+    waitParams:
+      condition: pod-ready
+      resource: "-l app.kubernetes.io/name={{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      timeout: "3m"
+      interval: "5s"
+
+  # Step 5: Expose service for testing
+  - type: expose-service
+    description: Make nginx service accessible for tests
+    exposeServiceParams:
+      services:
+        - serviceName: "{{.ComponentID}}"
+          namespace: "{{.ProjectID}}-dev"
+          port: "8080"
+
+  # Step 6: Test health endpoint with retry
+  - type: http
+    description: Verify health endpoint returns OK
+    retry:
+      attempts: 10
+      delay: "2s"
+      onlyTransient: true
+    httpParams:
+      url: "http://{{.ComponentID}}.{{.ProjectID}}-dev.svc.cluster.local:8080/health"
+      method: GET
+      expectedStatus: 200
+      assertions:
+        - path: "status"
+          equals: "UP"
+
+  # Step 7: Test default nginx page
+  - type: http
+    description: Verify nginx serves default page
+    httpParams:
+      url: "http://{{.ComponentID}}.{{.ProjectID}}-dev.svc.cluster.local:8080/"
+      method: GET
+      expectedStatus: 200
+      timeout: 30
+
+  # Step 8: Inspect deployment runtime
+  - type: inspect
+    description: Verify container configuration
+    inspectParams:
+      resource: "deployment/{{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      checks:
+        logs:
+          contains:
+            - "nginx"
+          notContains:
+            - "error"
+            - "fatal"
+
+
+  # Step 9: Run functional tests (optional, can be skipped in CI)
+  - type: run
+    description: Execute custom functional tests
+    skip: false  # Set to true to skip this step
+    runParams:
+      file: functional/nginx-test.sh
+      services:
+        web: "{{.ComponentID}}"
+
+  # Step 10: Performance check (conditional - skip in dev)
+  - type: run
+    description: Run performance tests
+    skipIf: "{{eq .Environment \"dev\"}}"
+    runParams:
+      file: functional/performance-test.sh
+      services:
+        web: "{{.ComponentID}}"
+
+  # Step 11: Diagnostic inspection (always skipped, enable for debugging)
+  - type: inspect
+    description: Debug pod details (diagnostic only)
+    skip: true
+    afterStep: hooks/cleanup-debug-logs.sh
+    inspectParams:
+      resource: "deployment/{{.ComponentID}}"
+      namespace: "{{.ProjectID}}-dev"
+      checks:
+        logs:
+          contains: []

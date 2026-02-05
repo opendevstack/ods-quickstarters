@@ -4,7 +4,15 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },  
+  {
     "stage": "Build OpenShift Image",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Build OpenShift Image (jupyter-oauth)",
     "status": "SUCCESS"
   },
   {

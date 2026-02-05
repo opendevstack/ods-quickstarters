@@ -32,7 +32,7 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Deploy to OpenShift (app=rust-axum-iq-test)",
+    "stage": "Deploy to OpenShift (app.kubernetes.io/name=rust-axum-iq-test)",
     "status": "SUCCESS"
   },
   {

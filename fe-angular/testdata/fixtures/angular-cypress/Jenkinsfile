@@ -1,0 +1,134 @@
+@Library("ods-jenkins-shared-library@4.x") _
+
+node {
+  dockerRegistry = env.DOCKER_REGISTRY
+  cypressRecordKey = env.CYPRESS_RECORD_KEY
+  agentImageTag = "4.x"
+}
+
+odsComponentPipeline(
+  podContainers: [
+    containerTemplate(
+      name: 'jnlp',
+      image: "${dockerRegistry}/ods/jenkins-agent-nodejs22:${agentImageTag}",
+      workingDir: '/tmp',
+      envVars: [
+        envVar(key: 'CYPRESS_RECORD_KEY', value: cypressRecordKey)
+      ],
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '1Gi',
+      resourceLimitMemory: '2Gi',
+      alwaysPullImage: true,
+      args: '${computer.jnlpmac} ${computer.name}'
+    )
+  ],
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+  ]
+) { context ->
+
+  def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
+
+  stageInstall(context)
+  stageTypeCheck(context)
+  stageTest(context)
+  odsComponentStageScanWithSonar(context)
+
+  if (fileExists('cypress/screenshots.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/screenshots.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
+  }
+  if (fileExists('cypress/videos.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/videos.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
+  }
+  if (fileExists('cypress/cypress-test-reports-pdf.zip')) {
+    odsComponentStageUploadToNexus(context,
+      [
+        distributionFile: 'cypress/cypress-test-reports-pdf.zip',
+        repository: 'leva-documentation',
+        repositoryType: 'raw',
+        targetDirectory: "${targetDirectory}"
+      ]
+    )
+  }
+}
+
+
+def stageInstall(def context) {
+  stage('Install dependencies') {
+    sh 'npm ci'
+  }
+}
+
+def stageTypeCheck(def context) {
+  stage('Check types') {
+    sh 'npx tsc --noEmit'
+  }
+}
+
+def stageTest(def context) {
+  stage('Functional Tests') {
+    // Prefer an explicit BASE_URL passed from the test harness, fall back to the Angular service inside the cluster.
+    def baseUrl = env.BASE_URL ?: "http://fe-angular-test.${context.projectId}-dev.svc.cluster.local:8080"
+
+    withEnv([
+      "TAGVERSION=${context.tagversion}",
+      "NEXUS_HOST=${context.nexusHost}",
+      "OPENSHIFT_PROJECT=${context.targetProject}",
+      "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
+      "COMMIT_INFO_SHA=${context.gitCommit}",
+      "BUILD_NUMBER=${context.buildNumber}",
+      "BASE_URL=${baseUrl}",
+    ]) {
+      withCredentials([
+        // usernamePassword(credentialsId: "${context.projectId}-cd-e2e-user", passwordVariable: 'CYPRESS_PASSWORD', usernameVariable: 'CYPRESS_USERNAME'),
+        // string(credentialsId: "${context.projectId}-cd-otp-secret", variable: 'OTP_SECRET')
+      ]) {
+        def status
+        if (context.environment == 'prod') {
+          status = sh(script: 'npm run e2e:prod', returnStatus: true)
+          sh 'npm run junit-installation-report'
+          junit(testResults:'build/test-results/*.xml')
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+        } else {
+          status = sh(script: 'npm run e2e', returnStatus: true)
+          sh 'npm run combine:reports'
+          junit(testResults:'build/test-results/*.xml')
+          stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+          stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
+          stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+        }
+
+        sh 'npm run generate:pdf'
+        zip zipFile: 'cypress/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
+        archiveArtifacts artifacts: 'cypress/cypress-test-reports-pdf.zip', fingerprint: true
+
+        if (fileExists('cypress/videos')) {
+          zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+        }
+
+        if (fileExists('build/test-results/screenshots')) {
+          zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+        }
+
+        if (status != 0) {
+          unstable "Some tests have failed or encountered errors. Please check the logs for more details."
+        }
+      }
+    }
+  }
+}

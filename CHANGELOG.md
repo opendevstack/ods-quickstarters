@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-
+- Update Quickstarter Tests to Support New Framework Test Capabilities ([#1144](https://github.com/opendevstack/ods-quickstarters/pull/1144))
 ### Added
 
 ### Changed
