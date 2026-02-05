@@ -8,6 +8,8 @@ steps:
   buildParams:
     verify:
       jenkinsStages: golden/jenkins-build-stages.json
+      runAttachments:
+      - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
       openShiftResources:
         imageTags:
         - name: "{{.ComponentID}}"

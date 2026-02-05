@@ -33,3 +33,7 @@ It is highly recommended to use the xref:jenkins:agent-base.adoc[jenkins-agent-b
 . Reference the built image from your `Jenkinsfile` like this: `imageStreamTag: 'foo-cd/jenkins-agent-bar:latest'`
 
 If you want to contribute your Jenkins agent image to OpenDevStack, make sure to add documentation according to the https://github.com/opendevstack/ods-quickstarters/blob/master/docs/modules/jenkins-agents/pages/__JENKINS_agent_TEMPLATE_README.adoc[agent image template].
+
+== Testing Quickstarters
+
+Every quickstarter must include a complete end-to-end (e2e) test that exercises the generated project; these tests are executed using the testing framework provided in the ods-core/test project. See xref:quickstarters:quickstarters-automated-tests.adoc[Quickstarter automated tests] for additional details and guidelines.

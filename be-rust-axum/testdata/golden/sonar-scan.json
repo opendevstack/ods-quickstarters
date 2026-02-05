@@ -3,16 +3,27 @@
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
+  "branch": "master",
   "extensions": [],
   "qualityProfiles": [
     {
-      "name": "Community Rust",
+      "name": "Sonar way",
+      "language": "docker",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
       "language": "rust",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "yaml",
       "deleted": false
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

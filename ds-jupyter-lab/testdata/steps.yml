@@ -16,7 +16,9 @@ steps:
         - "{{.ComponentID}}"
         deploymentConfigs:
         - "{{.ComponentID}}"
-        - "{{.ComponentID}}-auth-proxy"
         services:
+        - "{{.ComponentID}}-oauth"
+        routes:
         - "{{.ComponentID}}"
-        - "{{.ComponentID}}-auth-proxy"
+      runAttachments:
+      - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf

@@ -10,6 +10,5 @@ steps:
       jenkinsStages: golden/jenkins-build-stages.json
       sonarScan: golden/sonar-scan.json
       runAttachments:
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
+      - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
       testResults: 2
