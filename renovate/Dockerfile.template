@@ -1,0 +1,26 @@
+# Custom docker image with certificate import capability
+# Documentation: https://github.com/renovatebot/renovate/blob/main/docs/usage/examples/self-hosting.md#renovate-docker-image
+
+FROM docker-group-@ods_namespace@.@app_domain@/renovate/renovate:latest
+
+# Updating certificates needs root privileges
+USER root
+
+# Install script to fetch certificates from APP_DNS environment variable
+# Usage: Set APP_DNS="host1:port1;host2:port2" to fetch and install certificates
+COPY import-certs.sh /usr/local/bin/import-certs.sh
+RUN chmod +x /usr/local/bin/import-certs.sh
+
+# Required for import-certs.sh and update-ca-certificates to work at runtime
+RUN chmod -R 777 /usr/local/share/ca-certificates && \
+    chmod 777 /etc/ssl/certs && \
+    chmod 666 /etc/ca-certificates.conf
+
+# This is required because Node.js doesn't use the system CA store by default
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt    
+
+# Switch back to non-root user
+USER 12021
+
+# Debug mode: set -x to show all commands in logs for troubleshooting
+ENTRYPOINT [ "/bin/sh", "-c", "set -x; /usr/local/bin/import-certs.sh && exec /usr/local/sbin/renovate-entrypoint.sh" ]

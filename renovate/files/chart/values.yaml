@@ -1,0 +1,53 @@
+renovate:
+  cronjob:
+    # -- Schedules the job to run using cron notation
+    schedule: "0 1,3 * * *" # At 01:00 and 03:00 every morning
+    # -- You can specify a time zone for a CronJob by setting timeZone to the name of a valid time zone. (starting with k8s 1.27) <https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#time-zones>
+    timeZone: "Europe/Berlin" # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for valid names
+    # Delete pod after 3 days (in seconds)
+    ttlSecondsAfterFinished: 259200
+
+  image:
+    # -- Registry to pull image from
+    registry: image-registry.openshift-image-registry.svc:5000
+    # -- Image name to pull
+    # repository: PROJECTID/renovate # will be set during deployment
+    # -- Renovate image tag to pull
+    # tag: latest # will be set during deployment
+    # -- "IfNotPresent" to pull the image if no image with the specified tag exists on the node, "Always" to always pull the image or "Never" to try and use pre-pulled images
+    pullPolicy: Always
+
+  # -- Additional env. Helpful too if you want to use anything other than a `value` source.
+  envList:
+    - name: CD_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: cd-user-with-password
+          key: username
+    - name: CD_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: cd-user-with-password
+          key: password
+
+  # -- Additional volumes to the pod
+  extraVolumes:
+    - name: config-volume
+      configMap:
+        name: renovateconfigjs
+
+  # -- Additional volumeMounts to the container
+  extraVolumeMounts:
+    - name: config-volume
+      mountPath: /usr/src/app
+
+  # Double nested because renovate subchart is a dependency (called renovate)
+  renovate:
+    # -- Custom exiting global renovate config => loaded via configmap
+    existingConfigFile: "/usr/src/app/config.js"
+
+    # -- Options related to persistence
+    persistence:
+      cache:
+        # -- Allow the cache to persist between runs
+        enabled: false
