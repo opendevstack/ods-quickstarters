@@ -1,0 +1,33 @@
+    module.exports = {
+        "repositories": ["{{.ProjectID}}/{{.ProjectID}}-python-test-renovate"],
+        "autodiscover": false,
+        "branchPrefix": "renovate/",
+        "username": process.env.CD_USERNAME,
+        "password": process.env.CD_PASSWORD,
+        "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
+        "onboarding": true,
+        "platform": "bitbucket-server",
+        "endpoint": "{{.BITBUCKET_URL}}",
+        "configMigration": true,
+        "dryRun": false,
+        "printConfig": true,
+        "extends": [
+          "config:recommended",
+          "helpers:pinGitHubActionDigests",
+          ":pinDevDependencies",
+          ":disableDependencyDashboard",
+          ":semanticPrefixFixDepsChoreOthers",
+          ":ignoreModulesAndTests",
+          "group:monorepos",
+          "group:recommended",
+          "replacements:all",
+          "workarounds:all",
+          "mergeConfidence:all-badges"
+        ],
+        "hostRules": [
+          {
+            "hostType": "github",
+            "token": process.env.GITHUB_TOKEN
+          }
+        ]      
+      }

@@ -1,0 +1,6 @@
+---
+name: Renovate
+description: A tool for automating dependency updates in software projects.
+supplier: https://www.opendevstack.org
+version: 4.x
+type: ods-service
