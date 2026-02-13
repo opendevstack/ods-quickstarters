@@ -62,5 +62,5 @@ module.exports = {
 
 #### Secrets Management
 
-- [Helm Secrets Documentation ARC-F](https://arcf-docroot-arcf-prod.apps.eu-prod.ocp.aws.pp/reference-guides/arcf-use-secrets-with-helm/docs/source/age.html)
+- [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets)
 - [Transcrypt](https://github.com/elasticdog/transcrypt)
