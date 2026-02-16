@@ -105,11 +105,11 @@ securityContext: {}
 resources:
   limits:
     cpu: 100m
-    memory: 32Mi
+    memory: 64Mi
     ephemeral-storage: 1Mi
   requests:
     cpu: 10m
-    memory: 16Mi
+    memory: 32Mi
     ephemeral-storage: 1Mi
 
 ## Before enabling check the official ODS documentation about replicate support: https://www.opendevstack.org/ods-documentation/opendevstack/latest/jenkins-shared-library/orchestration-pipeline.html#_known_limitations

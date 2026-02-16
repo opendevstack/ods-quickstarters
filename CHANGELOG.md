@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- Increase Docker-plain QS default memory resources ([#1147](https://github.com/opendevstack/ods-quickstarters/pull/1147))
 
 ## [4.11.0] - 2025-12-03
 
