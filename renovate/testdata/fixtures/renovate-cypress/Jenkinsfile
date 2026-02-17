@@ -91,11 +91,11 @@ def stageTest(def context) {
       "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
-      "BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
-      "PROJECT_ID=${context.projectId}",
+      "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
+      "CYPRESS_PROJECT_ID=${context.projectId}",
     ]) {
       withCredentials([
-        usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'BITBUCKET_PASSWORD', usernameVariable: 'BITBUCKET_USERNAME')
+        usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'CYPRESS_BITBUCKET_PASSWORD', usernameVariable: 'CYPRESS_BITBUCKET_USERNAME')
       ]) {
         def status = sh(script: 'npm run e2e', returnStatus: true)
         sh 'npm run combine:reports'
