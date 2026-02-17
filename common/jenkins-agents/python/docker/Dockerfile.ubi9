@@ -1,0 +1,42 @@
+FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+
+LABEL maintainer="Gerard Castillo <gerard.castillo@boehringer-ingelheim.com>"
+
+ARG nexusHost
+ARG nexusAuth
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8 \
+    UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+    UV_TRUSTED_HOST=${nexusHost} \
+    PIP_TRUSTED_HOST=${nexusHost} \
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
+    PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH
+
+ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
+    PIP_INDEX_URL=${UV_INDEX_URL} \
+    PIP_CERT=${UV_CA_CERTIFICATE}
+
+RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    mkdir -p $HOME/.config/pip && \
+    echo "[global]" > $HOME/.config/pip/pip.conf && \
+    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+    echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf && \
+    yum -y clean all
+
+RUN for pyVersion in 3.8 3.9 3.11 3.12; do \
+        uv python install $pyVersion && \
+        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} \
+            virtualenv==20.26.3 \
+            setuptools==72.2.0 \
+            Cython==3.0.11 \
+            pypandoc==1.13; \
+    done && \
+    uv tool update-shell
+
+# Enables default user to access $HOME folder
+RUN chown -R 1001:0 $HOME && \
+    chmod -R a+rw $HOME
+
+USER 1001

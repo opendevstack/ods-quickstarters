@@ -11,7 +11,7 @@ ODS_NAMESPACE := $(shell grep ODS_NAMESPACE $(CURDIR)/../ods-configuration/ods-c
 install-jenkins-agent: install-jenkins-agent-golang install-jenkins-agent-jdk install-jenkins-agent-nodejs install-jenkins-agent-python install-jenkins-agent-scala install-jenkins-agent-terraform-2306 install-jenkins-agent-terraform-2408 install-jenkins-agent-rust
 .PHONY: install-jenkins-agent
 
-.## Update OpenShift resources related Jenkins agent resources.
+## Update OpenShift resources related Jenkins agent resources.
 apply-jenkins-agent-build: apply-jenkins-agent-golang-build apply-jenkins-agent-jdk-build apply-jenkins-agent-nodejs18-build apply-jenkins-agent-nodejs20-build apply-jenkins-agent-nodejs22-build apply-jenkins-agent-nodejs24-build apply-jenkins-agent-python-build apply-jenkins-agent-scala-build apply-jenkins-agent-terraform-build-2306 apply-jenkins-agent-terraform-build-2408 apply-jenkins-agent-rust-build
 .PHONY: apply-jenkins-agent-build
 

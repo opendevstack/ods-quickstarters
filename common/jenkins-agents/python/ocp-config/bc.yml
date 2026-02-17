@@ -14,7 +14,7 @@ parameters:
 - name: ODS_GIT_REF
   required: true
 - name: JENKINS_AGENT_DOCKERFILE_PATH
-  value: Dockerfile.ubi8
+  value: Dockerfile.ubi9
   description: Dockerfile variant to use
 - name: NEXUS_HOST
   description: "Your Nexus Instance Host"
@@ -40,11 +40,11 @@ objects:
     resources:
       limits:
         cpu: "1"
-        ephemeral-storage: "8Gi"
+        ephemeral-storage: "16Gi"
         memory: "2Gi"
       requests:
         cpu: "200m"
-        ephemeral-storage: "5Gi"
+        ephemeral-storage: "10Gi"
         memory: "1Gi"
     runPolicy: Serial
     source:

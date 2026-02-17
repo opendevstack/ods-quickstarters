@@ -12,7 +12,7 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.k8s.description="The jenkins agent image has terraform and other tools on top of the jenkins agent base image." \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
-ARG nexusUrl
+ARG nexusHost
 ARG nexusAuth
 ARG NPMJS_REGISTRY_FLAG
 
@@ -56,9 +56,9 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/almalinux.repo /etc/yum.repos.d/almalinux.repo
+COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux8.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux8.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
@@ -110,8 +110,8 @@ RUN INSTALL_NODE="nodejs nodejs-nodemon" \
     && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
     && rpm -V $INSTALL_NODE \
     && yum clean all -y \
-    && npm config set registry=$nexusUrl/repository/npmjs/ \
-    && npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
+    && npm config set registry=$nexusHost/repository/npmjs/ \
+    && npm config set //${nexusHost#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
     && npm config set email=no-reply@opendevstack.org \
     && npm config set strict-ssl=true
 

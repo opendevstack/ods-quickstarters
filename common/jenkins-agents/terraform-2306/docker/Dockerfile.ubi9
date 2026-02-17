@@ -3,8 +3,8 @@ FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
 # Labels consumed by Red Hat build service
-LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
-      name="openshift/jenkins-agent-terraform-ubi8" \
+LABEL com.redhat.component="jenkins-agent-terraform-ubi9-docker" \
+      name="openshift/jenkins-agent-terraform-ubi9" \
       version="0.1" \
       architecture="x86_64" \
       release="1" \
@@ -13,6 +13,7 @@ LABEL com.redhat.component="jenkins-agent-terraform-ubi8-docker" \
       io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
 
 ARG nexusHost
+ARG nexusUrl=https://${nexusHost}
 ARG nexusAuth
 ARG NPMJS_REGISTRY_FLAG
 
@@ -30,20 +31,26 @@ ENV TERRAFORM_VERSION=1.4.6 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
     RBENV_SHELL=bash \
-    NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem
+    NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
+    UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
+    UV_TRUSTED_HOST=${nexusHost} \
+    PIP_TRUSTED_HOST=${nexusHost} \
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt
+    
+
+ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
+    PIP_INDEX_URL=${UV_INDEX_URL} \
+    PIP_CERT=${UV_CA_CERTIFICATE}
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
-    python38 python38-pip python38-setuptools \
-    python39 python39-pip python39-setuptools \
-    python3.11 python3.11-pip python3.11-setuptools \
     readline \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
     jq parallel"
 ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool"
-ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$PATH
+ENV PATH=/opt/tfenv/bin:/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:$HOME/.local/bin:$JAVA_HOME/bin:$PATH
 ENV HOME=/home/jenkins
 
-RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true"
+RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
 COPY python_requirements /tmp/requirements.txt
 
 # Workaroud we use when running behind proxy
@@ -51,41 +58,33 @@ COPY python_requirements /tmp/requirements.txt
 # COPY certs/* /etc/pki/ca-trust/source/anchors/
 # RUN update-ca-trust force-enable && update-ca-trust extract
 
-COPY yum.repos.d/almalinux8.repo /etc/yum.repos.d/almalinux8.repo
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux9.repo
 RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
-    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux8.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux9.repo \
     && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
 
 RUN set -x \
     && dnf -y repolist \
-    && dnf -y install $INSTALL_PKGS \
-    && dnf -y install --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
+    && dnf -y install --allowerasing $INSTALL_PKGS \
+    && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
     && dnf clean all
 
-RUN curl -sSL "https://bootstrap.pypa.io/pip/3.6/get-pip.py" -o "get-pip.py" \
-    && python3 get-pip.py
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    mkdir -p $HOME/.config/pip && \
+    echo "[global]" > $HOME/.config/pip/pip.conf && \
+    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+    echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf
 
-# Upgrade pip
-RUN pipVersions=( pip3 pip3.8 pip3.9 pip3.11 ); \
-    for pipV in "${pipVersions[@]}"; \
-    do \
-        if [ ! -z ${nexusHost} ] && [ ! -z ${nexusAuth} ]; \
-        then $pipV config set global.index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-            && $pipV config set global.trusted-host ${nexusHost} \
-            && $pipV config set global.extra-index-url https://pypi.org/simple; \
-        fi; \
-        $pipV config set global.cert /etc/ssl/certs/ca-bundle.crt && \
-        $pipV install --upgrade pip --user && \
-        $pipV install virtualenv pycodestyle; \
-    done; \
-    alternatives --set python /usr/bin/python3.11 \
-    && alternatives --set python3 /usr/bin/python3.11
-
-# Install python requirements
-RUN python3.8 -m pip install -r /tmp/requirements.txt \
-    && python3.9 -m pip install -r /tmp/requirements.txt \
-    && python3.11 -m pip install -r /tmp/requirements.txt \
-    && rm -f /tmp/requirements.txt
+RUN for pyVersion in 3.8 3.9 3.11; do \
+        uv python install $pyVersion && \
+        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} --prerelease=allow \
+            virtualenv \
+            pycodestyle \
+        -r /tmp/requirements.txt; \
+    done && \
+    rm -f /tmp/requirements.txt && \
+    uv python pin 3.11 && \
+    uv tool update-shell
 
 # Install awscli2
 RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
@@ -105,8 +104,8 @@ RUN INSTALL_NODE="nodejs nodejs-nodemon" \
     && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
     && rpm -V $INSTALL_NODE \
     && yum clean all -y \
-    && npm config set registry=$nexusHost/repository/npmjs/ \
-    && npm config set //${nexusHost#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
+    && npm config set registry=$nexusUrl/repository/npmjs/ \
+    && npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
     && npm config set email=no-reply@opendevstack.org \
     && npm config set strict-ssl=true
 
