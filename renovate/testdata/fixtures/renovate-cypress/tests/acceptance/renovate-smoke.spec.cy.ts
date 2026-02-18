@@ -22,6 +22,18 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
   const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
   const targetRepo = `${projectId}-python-test-renovate`;
 
+  before(() => {
+    cy.log('=== DEBUG: Environment Variables ===');
+    cy.log(`BITBUCKET_BASE_URL: "${bitbucketBaseUrl}"`);
+    cy.log(`PROJECT_ID: "${projectId}"`);
+    cy.log(`BITBUCKET_USERNAME: "${username}"`);
+    cy.log(`BITBUCKET_PASSWORD is set: ${!!password}`);
+    cy.log(`Computed apiBase: "${apiBase}"`);
+    cy.log(`Target repo: "${targetRepo}"`);
+    cy.log('=== All Cypress.env() ===');
+    cy.log(JSON.stringify(Cypress.env(), null, 2));
+  });
+
   it('Should have at least one Pull Request in the target repository', () => {
     cy.request({
       method: 'GET',

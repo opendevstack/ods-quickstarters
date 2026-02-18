@@ -21,6 +21,17 @@ describe('Renovate Bot Integration Tests - CronJob Deployment Verification', () 
   const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
   const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
 
+  before(() => {
+    cy.log('=== DEBUG: Environment Variables ===');
+    cy.log(`BITBUCKET_BASE_URL: "${bitbucketBaseUrl}"`);
+    cy.log(`PROJECT_ID: "${projectId}"`);
+    cy.log(`BITBUCKET_USERNAME: "${username}"`);
+    cy.log(`BITBUCKET_PASSWORD is set: ${!!password}`);
+    cy.log(`Computed apiBase: "${apiBase}"`);
+    cy.log('=== All Cypress.env() ===');
+    cy.log(JSON.stringify(Cypress.env(), null, 2));
+  });
+
   it('Should confirm the renovate-qs repository is accessible in the -cd project context', () => {
     // Verifies that the Bitbucket project (which maps to the OCP namespace) is properly set up
     cy.request({
