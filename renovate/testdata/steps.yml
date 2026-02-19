@@ -140,15 +140,11 @@ steps:
           value: "https://bitbucket-{{.ProjectID}}-cd.apps.us-test.ocp.aws.boehringer.com"
         - name: PROJECT_ID
           value: "{{.ProjectID}}"
-        - name: BITBUCKET_USERNAME
-          value: "admin"
-        - name: BITBUCKET_PASSWORD
-          value: "admin"
       verify:
         jenkinsStages: "golden/jenkins-build-cypress.json"
         sonarScan: "golden/sonar-scan-cypress.json"
         runAttachments:
         - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
-        - cypress/cypress-test-reports-pdf.zip
+        - cypress-test-reports-pdf.zip
         testResults: 1
 
