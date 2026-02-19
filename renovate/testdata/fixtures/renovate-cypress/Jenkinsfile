@@ -35,30 +35,30 @@ odsComponentPipeline(
   stageTest(context)
   odsComponentStageScanWithSonar(context)
 
-  if (fileExists('cypress/screenshots.zip')) {
+  if (fileExists('artifacts/screenshots.zip')) {
     odsComponentStageUploadToNexus(context,
       [
-        distributionFile: 'cypress/screenshots.zip',
+        distributionFile: 'artifacts/screenshots.zip',
         repository: 'leva-documentation',
         repositoryType: 'raw',
         targetDirectory: "${targetDirectory}"
       ]
     )
   }
-  if (fileExists('cypress/videos.zip')) {
+  if (fileExists('artifacts/videos.zip')) {
     odsComponentStageUploadToNexus(context,
       [
-        distributionFile: 'cypress/videos.zip',
+        distributionFile: 'artifacts/videos.zip',
         repository: 'leva-documentation',
         repositoryType: 'raw',
         targetDirectory: "${targetDirectory}"
       ]
     )
   }
-  if (fileExists('cypress/cypress-test-reports-pdf.zip')) {
+  if (fileExists('artifacts/cypress-test-reports-pdf.zip')) {
     odsComponentStageUploadToNexus(context,
       [
-        distributionFile: 'cypress/cypress-test-reports-pdf.zip',
+        distributionFile: 'artifacts/cypress-test-reports-pdf.zip',
         repository: 'leva-documentation',
         repositoryType: 'raw',
         targetDirectory: "${targetDirectory}"
@@ -98,6 +98,7 @@ def stageTest(def context) {
       withCredentials([
         usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'CYPRESS_BITBUCKET_PASSWORD', usernameVariable: 'CYPRESS_BITBUCKET_USERNAME')
       ]) {
+        sh 'mkdir -p artifacts'
         def status = sh(script: 'npm run e2e', returnStatus: true)
         sh 'npm run combine:reports'
         junit(testResults:'build/test-results/*.xml')
@@ -106,20 +107,17 @@ def stageTest(def context) {
         stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
 
         sh 'npm run generate:pdf'
-        zip zipFile: 'cypress/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-        sh 'mkdir -p artifacts && cp cypress/cypress-test-reports-pdf.zip artifacts/cypress-test-reports-pdf.zip'
-        archiveArtifacts artifacts: 'cypress/cypress-test-reports-pdf.zip, artifacts/cypress-test-reports-pdf.zip', fingerprint: true
+        zip zipFile: 'artifacts/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
+        archiveArtifacts artifacts: 'artifacts/cypress-test-reports-pdf.zip', fingerprint: true
 
         if (fileExists('cypress/videos')) {
-          zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
-          sh 'cp cypress/videos.zip artifacts/videos.zip'
-          archiveArtifacts artifacts: 'cypress/videos.zip, artifacts/videos.zip', fingerprint: true
+          zip zipFile: 'artifacts/videos.zip', archive: false, dir: 'cypress/videos'
+          archiveArtifacts artifacts: 'artifacts/videos.zip', fingerprint: true
         }
 
         if (fileExists('build/test-results/screenshots')) {
-          zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
-          sh 'cp cypress/screenshots.zip artifacts/screenshots.zip'
-          archiveArtifacts artifacts: 'cypress/screenshots.zip, artifacts/screenshots.zip', fingerprint: true
+          zip zipFile: 'artifacts/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+          archiveArtifacts artifacts: 'artifacts/screenshots.zip', fingerprint: true
         }
 
         if (status != 0) {
