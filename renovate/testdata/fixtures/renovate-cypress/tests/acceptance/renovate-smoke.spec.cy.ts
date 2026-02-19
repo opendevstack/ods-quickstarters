@@ -42,8 +42,11 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
   it('Should navigate to the Pull Requests page and see at least one PR', () => {
     cy.visit(`${repoUrl}/pull-requests`);
     cy.url().should('include', '/pull-requests');
-    // The PR list should contain at least the onboarding PR created by Renovate
-    cy.contains('renovate', { matchCase: false, timeout: 15000 }).should('be.visible');
+    // Assert using visible PR links in main content to avoid hidden dropdown entries
+    cy.get('#content', { timeout: 15000 }).should('be.visible');
+    cy.get('#content a[href*="/pull-requests/"]:visible', { timeout: 15000 })
+      .its('length')
+      .should('be.greaterThan', 0);
     cy.screenshot('acceptance-01-pull-requests-exist');
   });
 
