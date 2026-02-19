@@ -15,8 +15,8 @@
 describe('Renovate Bot Integration Tests - CronJob Deployment Verification', () => {
   const bitbucketBaseUrl = "{{.BITBUCKET_URL}}";
   const projectId = "{{.ProjectID}}";
-  const username = Cypress.env("CYPRESS_BITBUCKET_USERNAME");
-  const password = Cypress.env("CYPRESS_BITBUCKET_PASSWORD");
+  const username = Cypress.env("BITBUCKET_USERNAME");
+  const password = Cypress.env("BITBUCKET_PASSWORD");
 
   const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
   const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
