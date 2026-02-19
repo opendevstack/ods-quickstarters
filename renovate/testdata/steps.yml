@@ -63,7 +63,7 @@ steps:
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Cypress E2E evidence collection steps
-  # These steps provision an e2e-cypress component and run smoke / installation /
+  # These steps provision an e2e-cypress component and run acceptance / installation /
   # integration tests against the Bitbucket UI / API to capture screenshots
   # covering the following risks:
   #   - Bitbucket repository creation with configuration files
@@ -106,9 +106,9 @@ steps:
     componentID: renovate-cypress-test
     bitbucketParams:
       action: "upload-file"
-      file: "fixtures/renovate-cypress/tests/acceptance/renovate-smoke.spec.cy.ts"
+      file: "fixtures/renovate-cypress/tests/acceptance/renovate-acceptance.spec.cy.ts"
       repository: "{{.ProjectID}}-renovate-cypress-test"
-      filename: "tests/acceptance/renovate-smoke.spec.cy.ts"
+      filename: "tests/acceptance/renovate-acceptance.spec.cy.ts"
       render: true
 
   - description: "Add Cypress installation tests - Bitbucket repository verification"
