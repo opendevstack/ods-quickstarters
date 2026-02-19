@@ -13,23 +13,15 @@
  */
 
 describe('Renovate Bot Integration Tests - CronJob Deployment Verification', () => {
-  const bitbucketBaseUrl = Cypress.env('BITBUCKET_BASE_URL');
-  const projectId = Cypress.env('PROJECT_ID');
-  const username = Cypress.env('BITBUCKET_USERNAME');
-  const password = Cypress.env('BITBUCKET_PASSWORD');
+  const bitbucketBaseUrl = {{.BITBUCKET_URL}};
+  const projectId = {{.ProjectID}};
+  const username = {{.BITBUCKET_USERNAME}};
+  const password = {{.BITBUCKET_PASSWORD}};
 
   const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
   const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
 
   before(() => {
-    cy.log('=== DEBUG: Environment Variables ===');
-    cy.log(`BITBUCKET_BASE_URL: "${bitbucketBaseUrl}"`);
-    cy.log(`PROJECT_ID: "${projectId}"`);
-    cy.log(`BITBUCKET_USERNAME: "${username}"`);
-    cy.log(`BITBUCKET_PASSWORD is set: ${!!password}`);
-    cy.log(`Computed apiBase: "${apiBase}"`);
-    cy.log('=== All Cypress.env() ===');
-    cy.log(JSON.stringify(Cypress.env(), null, 2));
   });
 
   it('Should confirm the renovate-qs repository is accessible in the -cd project context', () => {
