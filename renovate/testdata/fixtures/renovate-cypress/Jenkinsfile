@@ -91,6 +91,7 @@ def stageTest(def context) {
       "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
+      "CYPRESS_VIDEO=true",
       "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
       "CYPRESS_PROJECT_ID=${context.projectId}",
     ]) {
@@ -111,10 +112,14 @@ def stageTest(def context) {
 
         if (fileExists('cypress/videos')) {
           zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
+          sh 'cp cypress/videos.zip artifacts/videos.zip'
+          archiveArtifacts artifacts: 'cypress/videos.zip, artifacts/videos.zip', fingerprint: true
         }
 
         if (fileExists('build/test-results/screenshots')) {
           zip zipFile: 'cypress/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
+          sh 'cp cypress/screenshots.zip artifacts/screenshots.zip'
+          archiveArtifacts artifacts: 'cypress/screenshots.zip, artifacts/screenshots.zip', fingerprint: true
         }
 
         if (status != 0) {
