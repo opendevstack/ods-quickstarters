@@ -6,6 +6,7 @@
 ### Added
 
 ### Changed
+- Add specific quickstarter versioning to e2e-spock-geb and e2e-etl-python ([#1148](https://github.com/opendevstack/ods-quickstarters/pull/1148))
 
 ### Fixed
 - Increase Docker-plain QS default memory resources ([#1147](https://github.com/opendevstack/ods-quickstarters/pull/1147))
