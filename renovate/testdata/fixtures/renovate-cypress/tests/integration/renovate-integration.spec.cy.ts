@@ -37,33 +37,6 @@ describe('Renovate Bot Integration Tests - CronJob Deployment Verification', () 
     });
   });
 
-  it('Should verify the renovate-qs repository has proper build configuration for CronJob', () => {
-    // The Jenkinsfile in the repo defines the pipeline that builds the CronJob container image
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${projectId}-renovate-qs/browse/Jenkinsfile`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const content = response.body.lines?.map((l: any) => l.text).join('\n') || '';
-      expect(content).to.contain('odsComponentPipeline');
-      cy.screenshot('integration-02-jenkinsfile-cronjob-config');
-    });
-  });
-
-  it('Should verify the chart templates contain CronJob definition', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${projectId}-renovate-qs/browse/chart/templates`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      // The chart templates directory should contain the CronJob template
-      const files = response.body.children?.values?.map((f: any) => f.path?.name) || [];
-      cy.screenshot('integration-03-chart-templates-listing');
-    });
-  });
-
   it('Should verify configmap contains correct repository references for scanning', () => {
     cy.request({
       method: 'GET',

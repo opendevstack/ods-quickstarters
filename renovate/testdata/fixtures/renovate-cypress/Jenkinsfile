@@ -35,36 +35,14 @@ odsComponentPipeline(
   stageTest(context)
   odsComponentStageScanWithSonar(context)
 
-  if (fileExists('artifacts/screenshots.zip')) {
-    odsComponentStageUploadToNexus(context,
-      [
-        distributionFile: 'artifacts/screenshots.zip',
-        repository: 'leva-documentation',
-        repositoryType: 'raw',
-        targetDirectory: "${targetDirectory}"
-      ]
-    )
-  }
-  if (fileExists('artifacts/videos.zip')) {
-    odsComponentStageUploadToNexus(context,
-      [
-        distributionFile: 'artifacts/videos.zip',
-        repository: 'leva-documentation',
-        repositoryType: 'raw',
-        targetDirectory: "${targetDirectory}"
-      ]
-    )
-  }
-  if (fileExists('artifacts/cypress-test-reports-pdf.zip')) {
-    odsComponentStageUploadToNexus(context,
-      [
-        distributionFile: 'artifacts/cypress-test-reports-pdf.zip',
-        repository: 'leva-documentation',
-        repositoryType: 'raw',
-        targetDirectory: "${targetDirectory}"
-      ]
-    )
-  }
+  odsComponentStageUploadToNexus(context,
+    [
+      distributionFile: 'artifacts/cypress-evidence.zip',
+      repository: 'leva-documentation',
+      repositoryType: 'raw',
+      targetDirectory: "${targetDirectory}"
+    ]
+  )
 }
 
 
@@ -94,6 +72,7 @@ def stageTest(def context) {
       "CYPRESS_VIDEO=true",
       "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
       "CYPRESS_PROJECT_ID=${context.projectId}",
+      "CYPRESS_OC_CONSOLE_CRONJOB_URL=https://console-openshift-console.${context.getOpenshiftApplicationDomain()}/k8s/ns/${context.targetProject}/cronjobs/renovate-qs/",
     ]) {
       withCredentials([
         usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'CYPRESS_BITBUCKET_PASSWORD', usernameVariable: 'CYPRESS_BITBUCKET_USERNAME')
@@ -119,6 +98,10 @@ def stageTest(def context) {
           zip zipFile: 'artifacts/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
           archiveArtifacts artifacts: 'artifacts/screenshots.zip', fingerprint: true
         }
+
+        // Bundle all generated zips into one archive for the single Nexus upload
+        sh 'cd artifacts && zip cypress-evidence.zip *.zip'
+        archiveArtifacts artifacts: 'artifacts/cypress-evidence.zip', fingerprint: true
 
         if (status != 0) {
           unstable "Some tests have failed or encountered errors. Please check the logs for more details."

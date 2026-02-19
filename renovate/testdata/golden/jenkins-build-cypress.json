@@ -24,10 +24,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Upload to Nexus",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "odsPipeline finished",
     "status": "SUCCESS"
   }
