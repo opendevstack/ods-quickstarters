@@ -1,5 +1,7 @@
 # End-to-end tests with Spock, Geb and Unirest (e2e-spock-geb)
 
+This quickstarter tracks its own version in the files/build.gradle file. Make sure to update it accordingly.
+
 Documentation is located in our [official documentation](https://www.opendevstack.org/ods-documentation/opendevstack/3.x/quickstarters/e2e-spock-geb.html)
 
 Please update documentation in the [antora page directory](https://github.com/opendevstack/ods-quickstarters/tree/master/docs/modules/ROOT/pages)
