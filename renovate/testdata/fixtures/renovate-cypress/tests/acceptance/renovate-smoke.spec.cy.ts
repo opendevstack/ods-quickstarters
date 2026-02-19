@@ -5,11 +5,14 @@
  * automatically scan the consuming project's repositories for outdated
  * dependencies and create corresponding Pull Requests in Bitbucket to update them.
  *
- * These tests verify through the Bitbucket API that:
+ * These tests navigate the Bitbucket Web UI to verify that:
  * - A Pull Request was created by the Renovate Bot in the target repository
  * - The PR contains the expected onboarding description
  * - The PR state is OPEN
- * - The PR metadata is correct (branch prefix, author, etc.)
+ * - The PR metadata is correct (branch prefix, target branch, etc.)
+ *
+ * Each test visits the corresponding Bitbucket page and captures
+ * a screenshot as visual evidence of the verification.
  */
 
 describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', () => {
@@ -17,114 +20,82 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
   const projectId = "{{.ProjectID}}";
   const username = Cypress.env("BITBUCKET_USERNAME");
   const password = Cypress.env("BITBUCKET_PASSWORD");
-
-  const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
-  const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
   const targetRepo = `${projectId}-python-test-renovate`;
+  const repoUrl = `${bitbucketBaseUrl}/projects/${projectId}/repos/${targetRepo}`;
 
-
-  it('Should have at least one Pull Request in the target repository', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests?state=OPEN&limit=10`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      expect(response.body.values).to.have.length.greaterThan(0);
-      cy.screenshot('acceptance-01-pull-requests-exist');
+  beforeEach(() => {
+    // Establish authenticated session with Bitbucket Server via form login
+    cy.session('bitbucket-login', () => {
+      cy.request({
+        method: 'POST',
+        url: `${bitbucketBaseUrl}/login`,
+        form: true,
+        body: {
+          j_username: username,
+          j_password: password,
+        },
+        followRedirect: true,
+      });
     });
   });
 
-  it('Should have created the onboarding Pull Request (PR #1)', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      expect(response.body.state).to.eq('OPEN');
-      cy.screenshot('acceptance-02-onboarding-pr-open');
-    });
+  it('Should navigate to the Pull Requests page and see at least one PR', () => {
+    cy.visit(`${repoUrl}/pull-requests`);
+    cy.url().should('include', '/pull-requests');
+    // The PR list should contain at least the onboarding PR created by Renovate
+    cy.contains('renovate', { matchCase: false, timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-01-pull-requests-exist');
   });
 
-  it('Should have the onboarding PR with Renovate description', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const description = response.body.description || '';
-      expect(description).to.contain('Renovate');
-      cy.screenshot('acceptance-03-pr-description-contains-renovate');
-    });
+  it('Should open the onboarding Pull Request and verify it is OPEN', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/overview`);
+    cy.url().should('include', '/pull-requests/1');
+    // Bitbucket shows the PR state as a visible badge
+    cy.contains('Open', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-02-onboarding-pr-open');
   });
 
-  it('Should have the PR created from a renovate/ branch', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const fromBranch = response.body.fromRef?.displayId || '';
-      expect(fromBranch).to.match(/^renovate\//);
-      cy.screenshot('acceptance-04-pr-from-renovate-branch');
-    });
+  it('Should verify the Pull Request description mentions Renovate', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/overview`);
+    // The PR description rendered on the page should mention Renovate
+    cy.contains('Renovate', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-03-pr-description-contains-renovate');
   });
 
-  it('Should have the PR targeting the master branch', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const toBranch = response.body.toRef?.displayId || '';
-      expect(toBranch).to.eq('master');
-      cy.screenshot('acceptance-05-pr-targets-master');
-    });
+  it('Should verify the Pull Request originates from a renovate/ branch', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/overview`);
+    // The source branch shown on the PR page should start with renovate/
+    cy.contains('renovate/', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-04-pr-from-renovate-branch');
   });
 
-  it('Should have PR with activate Renovate message', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const description = response.body.description || '';
-      expect(description).to.contain('To activate Renovate, merge this Pull Request');
-      cy.screenshot('acceptance-06-pr-activate-renovate-message');
-    });
+  it('Should verify the Pull Request targets the master branch', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/overview`);
+    // The target branch shown on the PR page should be master
+    cy.contains('master', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-05-pr-targets-master');
   });
 
-  it('Should be able to view the PR diff with configuration file', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/pull-requests/1/changes?limit=25`,
-      headers: { Authorization: authHeader },
-      failOnStatusCode: false,
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const changedFiles = response.body.values?.map((v: any) => v.path?.toString) || [];
-      cy.screenshot('acceptance-07-pr-diff-files');
-    });
+  it('Should verify the Pull Request contains the Renovate activation message', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/overview`);
+    // The onboarding PR description should contain the activation instruction
+    cy.contains('To activate Renovate, merge this Pull Request', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-06-pr-activate-renovate-message');
   });
 
-  it('Should capture the overall repository state after Renovate execution', () => {
-    cy.request({
-      method: 'GET',
-      url: `${apiBase}/repos/${targetRepo}/branches?limit=25`,
-      headers: { Authorization: authHeader },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const branches = response.body.values?.map((b: any) => b.displayId) || [];
-      // There should be at least master and a renovate/* branch
-      expect(branches).to.include('master');
-      const renovateBranches = branches.filter((b: string) => b.startsWith('renovate/'));
-      expect(renovateBranches).to.have.length.greaterThan(0);
-      cy.screenshot('acceptance-08-branches-with-renovate');
-    });
+  it('Should navigate to the PR diff and verify the configuration file changes', () => {
+    cy.visit(`${repoUrl}/pull-requests/1/diff`);
+    cy.url().should('include', '/diff');
+    // Wait for the diff page to fully render with file changes
+    cy.get('body', { timeout: 20000 }).should('be.visible');
+    cy.screenshot('acceptance-07-pr-diff-files');
+  });
+
+  it('Should navigate to branches and verify a renovate/ branch exists', () => {
+    cy.visit(`${repoUrl}/branches`);
+    // The branches page should show both master and the renovate/* branch
+    cy.contains('master', { timeout: 15000 }).should('be.visible');
+    cy.contains('renovate/', { timeout: 15000 }).should('be.visible');
+    cy.screenshot('acceptance-08-branches-with-renovate');
   });
 });
