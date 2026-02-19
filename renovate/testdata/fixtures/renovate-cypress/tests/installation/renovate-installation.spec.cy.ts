@@ -14,8 +14,8 @@
 describe('Renovate Bot Installation Tests - Bitbucket Repository Verification', () => {
   const bitbucketBaseUrl = "{{.BITBUCKET_URL}}";
   const projectId = "{{.ProjectID}}";
-  const username = "{{.BITBUCKET_USERNAME}}";
-  const password = "{{.BITBUCKET_PASSWORD}}";
+  const username = "admin";
+  const password = "admin";
 
   const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
   const apiBase = `${bitbucketBaseUrl}/rest/api/1.0/projects/${projectId}`;
