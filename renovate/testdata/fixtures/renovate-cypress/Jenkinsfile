@@ -106,8 +106,8 @@ def stageTest(def context) {
 
         sh 'npm run generate:pdf'
         zip zipFile: 'cypress/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-        sh 'cp cypress/cypress-test-reports-pdf.zip cypress-test-reports-pdf.zip'
-        archiveArtifacts artifacts: 'cypress/cypress-test-reports-pdf.zip, cypress-test-reports-pdf.zip', fingerprint: true
+        sh 'mkdir -p artifacts && cp cypress/cypress-test-reports-pdf.zip artifacts/cypress-test-reports-pdf.zip'
+        archiveArtifacts artifacts: 'cypress/cypress-test-reports-pdf.zip, artifacts/cypress-test-reports-pdf.zip', fingerprint: true
 
         if (fileExists('cypress/videos')) {
           zip zipFile: 'cypress/videos.zip', archive: false, dir: 'cypress/videos'
