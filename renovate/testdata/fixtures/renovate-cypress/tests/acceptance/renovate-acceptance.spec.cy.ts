@@ -46,7 +46,7 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
     cy.visit(ocConsoleCronJobUrl, { failOnStatusCode: false });
     // Wait for the main content area to render (OC console is a SPA, needs time)
     cy.get('body', { timeout: 30000 }).should('be.visible');
-    cy.wait(5000);
+    cy.get('a[data-test-id="renovate-qs"]', { timeout: 30000 }).should('be.visible');
     cy.screenshot('acceptance-01-oc-console-cronjob');
   });
 
