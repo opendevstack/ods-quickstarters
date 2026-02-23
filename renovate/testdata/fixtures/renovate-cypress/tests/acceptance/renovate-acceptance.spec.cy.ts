@@ -25,7 +25,6 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
   const repoUrl = `${bitbucketBaseUrl}/projects/${projectId}/repos/${targetRepo}`;
 
   beforeEach(() => {
-    // Establish authenticated session with Bitbucket Server via form login
     cy.session('bitbucket-login', () => {
       cy.request({
         method: 'POST',
@@ -43,14 +42,12 @@ describe('Renovate Bot Acceptance Tests - Pull Request Creation Verification', (
   it('Should show the Renovate CronJob in the OpenShift Console', () => {
     const ocNamespace = Cypress.env("OC_NAMESPACE") || `${projectId}-cd`;
     const cronJobName = Cypress.env("CRONJOB_NAME") || "renovate-qs";
-    // Ejecuta el comando oc get cronjob usando cy.exec
     cy.exec(`oc get cronjob ${cronJobName} -n ${ocNamespace} -o json`, { failOnNonZeroExit: false }).then(({ code, stdout, stderr }) => {
       expect(code).to.eq(0);
       const cronjob = JSON.parse(stdout);
       expect(cronjob).to.have.property('metadata');
       expect(cronjob.metadata.name).to.eq(cronJobName);
-      // Guardar el JSON como evidencia en build/test-results/screenshots
-      cy.writeFile('build/test-results/screenshots/acceptance-01-oc-cronjob.json', JSON.stringify(cronjob, null, 2));
+      cy.writeFile('build/test-results/screenshots/renovate-acceptance.spec.cy.ts/acceptance-01-oc-cronjob.json', JSON.stringify(cronjob, null, 2));
     });
   });
 

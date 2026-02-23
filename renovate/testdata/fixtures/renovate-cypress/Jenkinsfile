@@ -70,7 +70,7 @@ def stageTest(def context) {
       "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
       "COMMIT_INFO_SHA=${context.gitCommit}",
       "BUILD_NUMBER=${context.buildNumber}",
-      "CYPRESS_VIDEO=true",
+      "CYPRESS_VIDEO=false",
       "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
       "CYPRESS_PROJECT_ID=${context.projectId}",
       "CYPRESS_OC_CONSOLE_CRONJOB_URL=https://console-openshift-console.${context.getOpenshiftApplicationDomain()}/k8s/ns/${context.targetProject}/cronjobs/renovate-qs/",
@@ -102,25 +102,14 @@ def stagePackageEvidences(def context) {
   stage('Package Evidences') {
     sh '''
       mkdir -p artifacts/evidence
-      # Copiar PDFs del reporte de pruebas
       if [ -d build/test-results/mochawesome/pdf ]; then
         cp -r build/test-results/mochawesome/pdf artifacts/evidence/test-reports-pdf
       fi
-      # Copiar videos
-      if [ -d cypress/videos ]; then
-        cp -r cypress/videos artifacts/evidence/videos
-      fi
-      # Copiar screenshots (incluyendo el JSON del CronJob)
       if [ -d build/test-results/screenshots ]; then
         cp -r build/test-results/screenshots artifacts/evidence/screenshots
       fi
-      # Copiar el reporte SonarQube si existe
       find . -name "sonarqube-report-*.pdf" -exec cp {} artifacts/evidence/ \\; 2>/dev/null || true
-
-      # Crear el ZIP final con todas las evidencias
       cd artifacts && zip -r cypress-evidence.zip evidence
-
-      # Limpiar el PDF del reporte SonarQube que está fuera del ZIP
       rm -f artifacts/sonarqube-report-*.pdf
     '''
     archiveArtifacts artifacts: 'artifacts/cypress-evidence.zip', fingerprint: true
