@@ -145,6 +145,6 @@ steps:
         sonarScan: "golden/sonar-scan-cypress.json"
         runAttachments:
         - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
-        - cypress-test-reports-pdf.zip
+        - cypress-evidence.zip
         testResults: 1
 
