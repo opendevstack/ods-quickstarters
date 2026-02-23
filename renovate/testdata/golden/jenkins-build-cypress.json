@@ -20,6 +20,10 @@
     "status": "SUCCESS"
   },
   {
+    "stage": "Package Evidences",
+    "status": "SUCCESS"
+  },
+  {
     "stage": "Upload to Nexus",
     "status": "SUCCESS"
   },

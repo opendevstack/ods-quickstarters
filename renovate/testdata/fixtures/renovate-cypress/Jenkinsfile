@@ -34,6 +34,7 @@ odsComponentPipeline(
   stageTypeCheck(context)
   stageTest(context)
   odsComponentStageScanWithSonar(context)
+  stagePackageEvidences(context)
 
   odsComponentStageUploadToNexus(context,
     [
@@ -73,6 +74,8 @@ def stageTest(def context) {
       "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
       "CYPRESS_PROJECT_ID=${context.projectId}",
       "CYPRESS_OC_CONSOLE_CRONJOB_URL=https://console-openshift-console.${context.getOpenshiftApplicationDomain()}/k8s/ns/${context.targetProject}/cronjobs/renovate-qs/",
+      "OC_NAMESPACE=${context.targetProject}",
+      "CRONJOB_NAME=renovate-qs",
     ]) {
       withCredentials([
         usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'CYPRESS_BITBUCKET_PASSWORD', usernameVariable: 'CYPRESS_BITBUCKET_USERNAME')
@@ -86,27 +89,40 @@ def stageTest(def context) {
         stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
 
         sh 'npm run generate:pdf'
-        zip zipFile: 'artifacts/cypress-test-reports-pdf.zip', archive: false, dir: 'build/test-results/mochawesome/pdf'
-        archiveArtifacts artifacts: 'artifacts/cypress-test-reports-pdf.zip', fingerprint: true
-
-        if (fileExists('cypress/videos')) {
-          zip zipFile: 'artifacts/videos.zip', archive: false, dir: 'cypress/videos'
-          archiveArtifacts artifacts: 'artifacts/videos.zip', fingerprint: true
-        }
-
-        if (fileExists('build/test-results/screenshots')) {
-          zip zipFile: 'artifacts/screenshots.zip', archive: false, dir: 'build/test-results/screenshots'
-          archiveArtifacts artifacts: 'artifacts/screenshots.zip', fingerprint: true
-        }
-
-        // Bundle all generated zips into one archive for the single Nexus upload
-        sh 'cd artifacts && zip cypress-evidence.zip *.zip'
-        archiveArtifacts artifacts: 'artifacts/cypress-evidence.zip', fingerprint: true
 
         if (status != 0) {
           unstable "Some tests have failed or encountered errors. Please check the logs for more details."
         }
       }
     }
+  }
+}
+
+def stagePackageEvidences(def context) {
+  stage('Package Evidences') {
+    sh '''
+      mkdir -p artifacts/evidence
+      # Copiar PDFs del reporte de pruebas
+      if [ -d build/test-results/mochawesome/pdf ]; then
+        cp -r build/test-results/mochawesome/pdf artifacts/evidence/test-reports-pdf
+      fi
+      # Copiar videos
+      if [ -d cypress/videos ]; then
+        cp -r cypress/videos artifacts/evidence/videos
+      fi
+      # Copiar screenshots (incluyendo el JSON del CronJob)
+      if [ -d build/test-results/screenshots ]; then
+        cp -r build/test-results/screenshots artifacts/evidence/screenshots
+      fi
+      # Copiar el reporte SonarQube si existe
+      find . -name "sonarqube-report-*.pdf" -exec cp {} artifacts/evidence/ \\; 2>/dev/null || true
+
+      # Crear el ZIP final con todas las evidencias
+      cd artifacts && zip -r cypress-evidence.zip evidence
+
+      # Limpiar el PDF del reporte SonarQube que está fuera del ZIP
+      rm -f artifacts/sonarqube-report-*.pdf
+    '''
+    archiveArtifacts artifacts: 'artifacts/cypress-evidence.zip', fingerprint: true
   }
 }
