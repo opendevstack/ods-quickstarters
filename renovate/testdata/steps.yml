@@ -137,7 +137,7 @@ steps:
     buildParams:
       env:
         - name: BITBUCKET_URL
-          value: "https://bitbucket-{{.ProjectID}}-cd.apps.us-test.ocp.aws.boehringer.com"
+          value: "{{.BITBUCKET_URL}}"
         - name: PROJECT_ID
           value: "{{.ProjectID}}"
       verify:
