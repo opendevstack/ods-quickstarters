@@ -61,3 +61,90 @@ steps:
           state: "OPEN"
           description: "contains: To activate Renovate, merge this Pull Request"
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Cypress E2E evidence collection steps
+  # These steps provision an e2e-cypress component and run acceptance / installation /
+  # integration tests against the Bitbucket UI / API to capture screenshots
+  # covering the following risks:
+  #   - Bitbucket repository creation with configuration files
+  #   - CronJob deployment in the -cd namespace
+  #   - Pull Request creation by the Renovate Bot
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  - description: "Provision e2e-cypress test component for Renovate evidence"
+    type: provision
+    componentID: renovate-cypress-test
+    provisionParams:
+      quickstarter: e2e-cypress
+      verify:
+        jenkinsStages: "../../e2e-cypress/testdata/golden/jenkins-provision-stages.json"
+
+  - description: "Remove default test files from e2e-cypress"
+    type: bitbucket
+    componentID: renovate-cypress-test
+    bitbucketParams:
+      action: delete-files
+      repository: "{{.ProjectID}}-renovate-cypress-test"
+      paths:
+        - "tests/acceptance/"
+        - "tests/integration/"
+        - "tests/installation/"
+      commitMessage: "Remove default test files"
+
+  - description: "Point Cypress pipeline to Bitbucket for Renovate tests"
+    type: bitbucket
+    componentID: renovate-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/renovate-cypress/Jenkinsfile"
+      repository: "{{.ProjectID}}-renovate-cypress-test"
+      filename: "Jenkinsfile"
+      render: true
+
+  - description: "Add Cypress acceptance tests - Renovate PR creation verification"
+    type: bitbucket
+    componentID: renovate-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/renovate-cypress/tests/acceptance/renovate-acceptance.spec.cy.ts"
+      repository: "{{.ProjectID}}-renovate-cypress-test"
+      filename: "tests/acceptance/renovate-acceptance.spec.cy.ts"
+      render: true
+
+  - description: "Add Cypress installation tests - Bitbucket repository verification"
+    type: bitbucket
+    componentID: renovate-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/renovate-cypress/tests/installation/renovate-installation.spec.cy.ts"
+      repository: "{{.ProjectID}}-renovate-cypress-test"
+      filename: "tests/installation/renovate-installation.spec.cy.ts"
+      render: true
+
+  - description: "Add Cypress integration tests - CronJob deployment verification"
+    type: bitbucket
+    componentID: renovate-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/renovate-cypress/tests/integration/renovate-integration.spec.cy.ts"
+      repository: "{{.ProjectID}}-renovate-cypress-test"
+      filename: "tests/integration/renovate-integration.spec.cy.ts"
+      render: true
+
+  - description: "Run Cypress tests against Bitbucket to collect Renovate evidence"
+    type: build
+    componentID: renovate-cypress-test
+    buildParams:
+      env:
+        - name: BITBUCKET_URL
+          value: "{{.BITBUCKET_URL}}"
+        - name: PROJECT_ID
+          value: "{{.ProjectID}}"
+      verify:
+        jenkinsStages: "golden/jenkins-build-cypress.json"
+        sonarScan: "golden/sonar-scan-cypress.json"
+        runAttachments:
+        - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+        - cypress-evidence.zip
+        testResults: 1
+
