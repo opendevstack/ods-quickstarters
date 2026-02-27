@@ -1,0 +1,123 @@
+def odsNamespace = ''
+def odsGitRef = ''
+def odsImageTag = ''
+def sharedLibraryRef = ''
+def agentImageTag = ''
+
+node {
+  odsNamespace = env.ODS_NAMESPACE ?: 'ods'
+  odsGitRef = env.ODS_GIT_REF ?: 'master'
+  odsImageTag = env.ODS_IMAGE_TAG ?: 'latest'
+  sharedLibraryRef = env.SHARED_LIBRARY_REF ?: odsImageTag
+  agentImageTag = env.AGENT_IMAGE_TAG ?: odsImageTag
+  dockerRegistry = env.DOCKER_REGISTRY
+}
+
+library("ods-jenkins-shared-library@${sharedLibraryRef}")
+
+odsComponentPipeline(
+  podContainers: [
+    containerTemplate(
+      name: 'jnlp',
+      image: "${dockerRegistry}/${odsNamespace}/jenkins-agent-nodejs22:${agentImageTag}",
+      workingDir: '/tmp',
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '300m',
+      resourceRequestMemory: '1Gi',
+      resourceLimitMemory: '2Gi',
+      alwaysPullImage: true,
+      args: '${computer.jnlpmac} ${computer.name}'
+    )
+  ],
+  branchToEnvironmentMapping: [
+    'master': 'dev',
+  ]
+) { context ->
+
+  def targetDirectory = "${context.projectId}/${context.componentId}/${context.gitBranch.replaceAll('/', '-')}/${context.buildNumber}"
+
+  stageInstall(context)
+  stageTypeCheck(context)
+  stageTest(context)
+  odsComponentStageScanWithSonar(context)
+  stagePackageEvidences(context)
+
+  odsComponentStageUploadToNexus(context,
+    [
+      distributionFile: 'artifacts/cypress-evidence.zip',
+      repository: 'leva-documentation',
+      repositoryType: 'raw',
+      targetDirectory: "${targetDirectory}"
+    ]
+  )
+}
+
+
+def stageInstall(def context) {
+  stage('Install dependencies') {
+    sh 'npm ci'
+  }
+}
+
+def stageTypeCheck(def context) {
+  stage('Check types') {
+    sh 'npx tsc --noEmit'
+  }
+}
+
+def stageTest(def context) {
+  stage('Functional Tests') {
+    def bitbucketBaseUrl = env.BITBUCKET_URL
+
+    withEnv([
+      "TAGVERSION=${context.tagversion}",
+      "NEXUS_HOST=${context.nexusHost}",
+      "OPENSHIFT_PROJECT=${context.targetProject}",
+      "OPENSHIFT_APP_DOMAIN=${context.getOpenshiftApplicationDomain()}",
+      "COMMIT_INFO_SHA=${context.gitCommit}",
+      "BUILD_NUMBER=${context.buildNumber}",
+      "CYPRESS_VIDEO=false",
+      "CYPRESS_BITBUCKET_BASE_URL=${bitbucketBaseUrl}",
+      "CYPRESS_PROJECT_ID=${context.projectId}",
+      "CYPRESS_OC_CONSOLE_CRONJOB_URL=https://console-openshift-console.${context.getOpenshiftApplicationDomain()}/k8s/ns/${context.targetProject}/cronjobs/renovate-qs/",
+      "OC_NAMESPACE=${context.targetProject}",
+      "CRONJOB_NAME=renovate-qs",
+    ]) {
+      withCredentials([
+        usernamePassword(credentialsId: "${context.projectId}-cd-cd-user-with-password", passwordVariable: 'CYPRESS_BITBUCKET_PASSWORD', usernameVariable: 'CYPRESS_BITBUCKET_USERNAME')
+      ]) {
+        sh 'mkdir -p artifacts'
+        def status = sh(script: 'npm run e2e', returnStatus: true)
+        sh 'npm run combine:reports'
+        junit(testResults:'build/test-results/*.xml')
+        stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation-junit.xml', allowEmpty: true)
+        stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration-junit.xml', allowEmpty: true)
+        stash(name: "acceptance-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/acceptance-junit.xml', allowEmpty: true)
+
+        sh 'npm run generate:pdf'
+
+        if (status != 0) {
+          unstable "Some tests have failed or encountered errors. Please check the logs for more details."
+        }
+      }
+    }
+  }
+}
+
+def stagePackageEvidences(def context) {
+  stage('Package Evidences') {
+    sh '''
+      mkdir -p artifacts/evidence
+      if [ -d build/test-results/mochawesome/pdf ]; then
+        cp -r build/test-results/mochawesome/pdf artifacts/evidence/test-reports-pdf
+      fi
+      if [ -d build/test-results/screenshots ]; then
+        cp -r build/test-results/screenshots artifacts/evidence/screenshots
+      fi
+      find . -name "sonarqube-report-*.pdf" -exec cp {} artifacts/evidence/ \\; 2>/dev/null || true
+      cd artifacts && zip -r cypress-evidence.zip evidence
+      rm -f artifacts/sonarqube-report-*.pdf
+    '''
+    archiveArtifacts artifacts: 'artifacts/cypress-evidence.zip', fingerprint: true
+  }
+}
