@@ -3,8 +3,19 @@
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
+  "branch": "master",
   "extensions": [],
   "qualityProfiles": [
+    {
+      "name": "Sonar way",
+      "language": "docker",
+      "deleted": false
+    },
+    {
+      "name": "{{.SonarQualityProfile}}",
+      "language": "js",
+      "deleted": false
+    },    
     {
       "name": "{{.SonarQualityProfile}}",
       "language": "py",
@@ -12,7 +23,7 @@
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

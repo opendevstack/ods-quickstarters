@@ -2,17 +2,24 @@
   "key": "{{.ProjectID}}-{{.ComponentID}}",
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
+  "branch": "master",
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
+      "name": "Sonar way",
+      "language": "docker",
+      "deleted": false
+    },
+    {
       "name": "{{.SonarQualityProfile}}",
       "language": "java",
       "deleted": false
+      
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

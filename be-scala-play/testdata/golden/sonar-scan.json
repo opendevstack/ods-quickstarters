@@ -2,17 +2,38 @@
   "key": "{{.ProjectID}}-{{.ComponentID}}",
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
+  "branch": "master",
   "visibility": "public",
   "extensions": [],
   "qualityProfiles": [
     {
+      "name": "Sonar way",
+      "language": "css",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "docker",
+      "deleted": false
+    },
+    {
+      "name": "{{.SonarQualityProfile}}",
+      "language": "js",
+      "deleted": false
+    },
+    {
       "name": "{{.SonarQualityProfile}}",
       "language": "scala",
+      "deleted": false
+    },
+    {
+      "name": "Sonar way",
+      "language": "web",
       "deleted": false
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

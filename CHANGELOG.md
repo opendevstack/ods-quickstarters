@@ -1,12 +1,19 @@
 # Changelog
 
 ## Unreleased
-
 ### Added
 
 ### Changed
 
 ### Fixed
+
+## [4.12.0] - 2026-03-02
+### Changed
+- Add specific quickstarter versioning to e2e-spock-geb and e2e-etl-python ([#1148](https://github.com/opendevstack/ods-quickstarters/pull/1148))
+- Update Quickstarter Tests to Support New Framework Test Capabilities ([#1144](https://github.com/opendevstack/ods-quickstarters/pull/1144))
+
+### Fixed
+- Increase Docker-plain QS default memory resources ([#1147](https://github.com/opendevstack/ods-quickstarters/pull/1147))
 
 ## [4.11.0] - 2025-12-03
 

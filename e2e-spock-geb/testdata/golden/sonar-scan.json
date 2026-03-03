@@ -3,13 +3,9 @@
   "name": "{{.ProjectID}}-{{.ComponentID}}",
   "isFavorite": false,
   "visibility": "public",
+  "branch": "master",
   "extensions": [],
   "qualityProfiles": [
-    {
-      "name": "{{.SonarQualityProfile}}",
-      "language": "grvy",
-      "deleted": false
-    },
     {
       "name": "{{.SonarQualityProfile}}",
       "language": "java",
@@ -17,7 +13,7 @@
     }
   ],
   "qualityGate": {
-    "name": "Sonar way",
+    "name": "{{.SonarQualityGate}}",
     "isDefault": true
   },
   "breadcrumbs": [

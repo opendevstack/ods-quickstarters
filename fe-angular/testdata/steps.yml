@@ -1,25 +1,123 @@
 componentID: fe-angular-test
 steps:
-- type: provision
-  provisionParams:
-    verify:
-      jenkinsStages: golden/jenkins-provision-stages.json
-- type: build
-  buildParams:
-    verify:
-      jenkinsStages: golden/jenkins-build-stages.json
-      sonarScan: golden/sonar-scan.json
-      runAttachments:
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.docx
-      - SCRR-{{.ProjectID}}-{{.ComponentID}}.md
-      testResults: 3
-      openShiftResources:
-        imageTags:
-        - name: "{{.ComponentID}}"
-          tag: latest
-        imageStreams:
-        - "{{.ComponentID}}"
-        deploymentConfigs:
-        - "{{.ComponentID}}"
-        services:
-        - "{{.ComponentID}}"
+  # Step 1: Provision the angular component
+  - description: "Provision fe-angular quickstarter"
+    type: provision
+    provisionParams:
+      verify:
+        jenkinsStages: golden/jenkins-provision-stages.json
+
+  # Step 2: Build the component        
+  - description: "Build the component"
+    type: build
+    buildParams:
+      verify:
+        jenkinsStages: golden/jenkins-build-stages.json
+        sonarScan: golden/sonar-scan.json
+        runAttachments:
+        - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+        testResults: 3
+        openShiftResources:
+          imageTags:
+          - name: "{{.ComponentID}}"
+            tag: latest
+          imageStreams:
+          - "{{.ComponentID}}"
+          deploymentConfigs:
+          - "{{.ComponentID}}"
+          services:
+          - "{{.ComponentID}}"
+
+  # Step 3: Expose services
+  - description: "Expose service with defaults"
+    type: "expose-service"
+    exposeServiceParams:
+      services:
+        - serviceName: "{{.ComponentID}}"
+
+  # Step 4: Test health endpoint
+  - description: "Verify health endpoint returns 200"
+    type: http
+    httpParams:
+      url: "http://{{.ComponentID}}.{{.ProjectID}}-dev.svc.cluster.local:8080/"
+      method: GET
+      expectedStatus: 200
+      timeout: 30
+      retry:
+        attempts: 10
+        delay: "5s"
+
+  - description: "Provision e2e-cypress test component"
+    type: provision
+    componentID: angular-cypress-test
+    provisionParams:
+      quickstarter: e2e-cypress
+      verify:
+        jenkinsStages: "../../e2e-cypress/testdata/golden/jenkins-provision-stages.json"
+
+  - description: "Remove default test files from e2e-cypress"
+    type: bitbucket
+    componentID: angular-cypress-test
+    bitbucketParams:
+      action: delete-files
+      repository: "{{.ProjectID}}-angular-cypress-test"
+      paths:
+        - "tests/acceptance/"
+        - "tests/integration/"
+        - "tests/installation/"
+      commitMessage: "Remove default test files"
+
+  - description: "Point Cypress pipeline to Angular service"
+    type: bitbucket
+    componentID: angular-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/angular-cypress/Jenkinsfile"
+      repository: "{{.ProjectID}}-angular-cypress-test"
+      filename: "Jenkinsfile"
+      render: true
+
+  - description: "Add Cypress smoke test for Angular UI"
+    type: bitbucket
+    componentID: angular-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/angular-cypress/tests/acceptance/angular-smoke.spec.cy.ts"
+      repository: "{{.ProjectID}}-angular-cypress-test"
+      filename: "tests/acceptance/angular-smoke.spec.cy.ts"
+      render: true
+
+  - description: "Add Cypress installation tests for Angular"
+    type: bitbucket
+    componentID: angular-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/angular-cypress/tests/installation/angular-installation.spec.cy.ts"
+      repository: "{{.ProjectID}}-angular-cypress-test"
+      filename: "tests/installation/angular-installation.spec.cy.ts"
+      render: true
+
+  - description: "Add Cypress integration tests for Angular"
+    type: bitbucket
+    componentID: angular-cypress-test
+    bitbucketParams:
+      action: "upload-file"
+      file: "fixtures/angular-cypress/tests/integration/angular-integration.spec.cy.ts"
+      repository: "{{.ProjectID}}-angular-cypress-test"
+      filename: "tests/integration/angular-integration.spec.cy.ts"
+      render: true
+      
+  - description: "Run Cypress tests against Angular app"
+    type: build
+    componentID: angular-cypress-test
+    buildParams:
+      env:
+        - name: BASE_URL
+          value: "http://fe-angular-test.{{.ProjectID}}-dev.svc.cluster.local:8080"
+      verify:
+        jenkinsStages: "golden/jenkins-build-cypress.json"
+        sonarScan: "golden/sonar-scan-cypress.json"
+        runAttachments:
+        - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
+        - cypress/cypress-test-reports-pdf.zip
+        testResults: 1

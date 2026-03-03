@@ -12,10 +12,6 @@
     "status": "SUCCESS"
   },
   {
-    "stage": "Create OpenShift resources",
-    "status": "SUCCESS"
-  },
-  {
     "stage": "Create Jenkinsfile",
     "status": "SUCCESS"
   },

@@ -1,0 +1,30 @@
+[
+  {
+    "stage": "odsPipeline start",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Install dependencies",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Check types",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Functional Tests",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "SonarQube Analysis",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "Upload to Nexus",
+    "status": "SUCCESS"
+  },
+  {
+    "stage": "odsPipeline finished",
+    "status": "SUCCESS"
+  }
+]

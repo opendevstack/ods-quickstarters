@@ -1,0 +1,37 @@
+// See https://www.opendevstack.org/ods-documentation/ for usage and customization.
+
+/* groovylint-disable-next-line CompileStatic, NoDef, UnusedVariable, VariableName, VariableTypeRequired */
+@Library('ods-jenkins-shared-library@4.x') _
+
+odsComponentPipeline(
+  imageStreamTag: 'ods/jenkins-agent-base:4.x',
+  branchToEnvironmentMapping: [
+    'master': 'cd',
+  ]
+) { context ->
+  stagePrepareHelm()
+  stageBuild(context)
+  odsComponentStageScanWithSonar(context)
+
+  odsComponentStageRolloutOpenShiftDeployment(context, [
+    helmValues: [
+      "renovate.image.repository": "${context.projectId}-cd/renovate",
+      "renovate.image.tag": "${context.shortGitCommit}"
+    ]
+  ])
+}
+
+void stagePrepareHelm() {
+  stage('Prepare Helm') {
+    sh 'helm dependency update chart'
+  }
+}
+
+void stageBuild(def context) {
+  odsComponentFindOpenShiftImageOrElse(context, [resourceName: 'renovate']) {
+    odsComponentStageBuildOpenShiftImage(context, [
+      dockerDir: '.',
+      resourceName: 'renovate',
+    ])
+  }
+}
