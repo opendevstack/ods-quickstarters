@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Added rhel9 dockerfiles for all jenkins agents ([#1140](https://github.com/opendevstack/ods-quickstarters/pull/1140))
 
 ### Changed
 

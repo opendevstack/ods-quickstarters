@@ -6,7 +6,7 @@ parameters:
 - name: ODS_BITBUCKET_PROJECT
   description: Bitbucket project name.
   value: opendevstack
-- name: NEXUS_URL
+- name: NEXUS_HOST
   required: true
 - name: NEXUS_AUTH
   required: true
@@ -18,7 +18,7 @@ parameters:
 - name: ODS_GIT_REF
   required: true
 - name: JENKINS_AGENT_DOCKERFILE_PATH
-  value: Dockerfile.ubi8
+  value: Dockerfile.ubi9
   description: Dockerfile variant to use
 objects:
 - apiVersion: build.openshift.io/v1
@@ -39,11 +39,11 @@ objects:
       limits:
         cpu: "2"
         memory: "8Gi"
-        ephemeral-storage: "30Gi"
+        ephemeral-storage: "50Gi"
       requests:
         cpu: "500m"
         memory: "5Gi"
-        ephemeral-storage: "20Gi"
+        ephemeral-storage: "30Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/terraform-2408/docker
@@ -56,8 +56,8 @@ objects:
     strategy:
       dockerStrategy:
         buildArgs:
-          - name: nexusUrl
-            value: ${NEXUS_URL}
+          - name: nexusHost
+            value: ${NEXUS_HOST}
           - name: nexusAuth
             value: ${NEXUS_AUTH}
           - name: nexusAuth
