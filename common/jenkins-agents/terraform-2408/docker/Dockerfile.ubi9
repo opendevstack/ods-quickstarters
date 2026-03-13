@@ -39,7 +39,6 @@ ENV TERRAFORM_VERSION=1.9.4 \
     UV_VERSION=0.10.9 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-    UV_TRUSTED_HOST=${nexusHost} \
     PIP_TRUSTED_HOST=${nexusHost} \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt
     
