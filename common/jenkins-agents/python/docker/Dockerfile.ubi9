@@ -11,14 +11,15 @@ ENV PYTHONUNBUFFERED=1 \
     UV_TRUSTED_HOST=${nexusHost} \
     PIP_TRUSTED_HOST=${nexusHost} \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
-    PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH
+    PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH \
+    UV_VERSION=0.10.9
 
 ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
     PIP_INDEX_URL=${UV_INDEX_URL} \
     PIP_CERT=${UV_CA_CERTIFICATE}
 
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
-    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
     echo "[global]" > $HOME/.config/pip/pip.conf && \
     echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \

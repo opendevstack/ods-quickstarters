@@ -28,6 +28,7 @@ ENV TERRAFORM_VERSION=1.4.6 \
     NODEJS_VERSION=18 \
     BUNDLER_VERSION=2.4.13 \
     AGE_VERSION=1.1.1 \
+    UV_VERSION=0.10.9 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
     RBENV_SHELL=bash \
@@ -69,7 +70,7 @@ RUN set -x \
     && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
     && dnf clean all
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
     echo "[global]" > $HOME/.config/pip/pip.conf && \
     echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \

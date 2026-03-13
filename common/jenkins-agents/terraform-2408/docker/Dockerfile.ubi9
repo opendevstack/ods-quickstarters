@@ -36,6 +36,7 @@ ENV TERRAFORM_VERSION=1.9.4 \
     RBENV_ROOT=/opt/rbenv \
     RBENV_SHELL=bash \
     TASK_VERSION=3.38.0 \
+    UV_VERSION=0.10.9 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
     UV_TRUSTED_HOST=${nexusHost} \
@@ -73,7 +74,7 @@ RUN set -x \
     && dnf -y install --allowerasing $INSTALL_PKGS \
     && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
     echo "[global]" > $HOME/.config/pip/pip.conf && \
     echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
