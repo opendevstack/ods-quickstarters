@@ -8,6 +8,11 @@
 
 ### Fixed
 
+## [4.12.1] - 2026-03-16
+### Fixed
+- Fix CVE-2025-66614 in Java Springboot QS ([#1153](https://github.com/opendevstack/ods-quickstarters/pull/1153))
+
+
 ## [4.12.0] - 2026-03-02
 ### Changed
 - Add specific quickstarter versioning to e2e-spock-geb and e2e-etl-python ([#1148](https://github.com/opendevstack/ods-quickstarters/pull/1148))
