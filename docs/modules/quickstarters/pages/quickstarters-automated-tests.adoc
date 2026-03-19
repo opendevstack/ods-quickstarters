@@ -231,7 +231,6 @@ Build/deploy; optionally verify Jenkins stages, Sonar scan, test results, and Op
     verify:
       strategy: aggregate
       jenkinsStages: golden/jenkins-build-stages.json
-      sonarScan: golden/sonar-scan.json
       runAttachments: ["metadata.json"]
       testResults: 5
       openShiftResources:
@@ -759,7 +758,6 @@ steps:
     buildParams:
       verify:
         jenkinsStages: golden/jenkins-build-stages.json
-        sonarScan: golden/sonar-scan.json
         testResults: 1
         openShiftResources:
           deployments: ["{{.ComponentID}}"]
