@@ -8,7 +8,6 @@ steps:
   buildParams:
     verify:
       jenkinsStages: golden/jenkins-build-stages.json
-      sonarScan: golden/sonar-scan.json
       runAttachments:
       - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
       testResults: 1

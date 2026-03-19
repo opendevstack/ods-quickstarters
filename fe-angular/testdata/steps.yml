@@ -13,7 +13,6 @@ steps:
     buildParams:
       verify:
         jenkinsStages: golden/jenkins-build-stages.json
-        sonarScan: golden/sonar-scan.json
         runAttachments:
         - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
         testResults: 3
@@ -116,7 +115,6 @@ steps:
           value: "http://fe-angular-test.{{.ProjectID}}-dev.svc.cluster.local:8080"
       verify:
         jenkinsStages: "golden/jenkins-build-cypress.json"
-        sonarScan: "golden/sonar-scan-cypress.json"
         runAttachments:
         - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
         - cypress/cypress-test-reports-pdf.zip

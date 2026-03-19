@@ -16,7 +16,6 @@ steps:
     buildParams:
       verify:
         jenkinsStages: golden/jenkins-build-stages.json
-        sonarScan: golden/sonar-scan.json
         runAttachments:
           - "sonarqube-report-{{.ProjectID}}-renovate-qs.pdf"
         openShiftResources:
@@ -142,7 +141,6 @@ steps:
           value: "{{.ProjectID}}"
       verify:
         jenkinsStages: "golden/jenkins-build-cypress.json"
-        sonarScan: "golden/sonar-scan-cypress.json"
         runAttachments:
         - sonarqube-report-{{.ProjectID}}-{{.ComponentID}}.pdf
         - cypress-evidence.zip
