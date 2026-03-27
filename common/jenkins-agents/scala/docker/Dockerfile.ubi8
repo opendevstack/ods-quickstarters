@@ -25,10 +25,11 @@ RUN chmod +x /usr/local/bin/use-j*.sh && \
     chmod ugo+s /usr/local/bin/use-j*.sh && \
     sh -c 'chmod ugo+s $(which alternatives)' && \
     ls -la /usr/local/bin/use-j*.sh && \
-    echo "--- STARTS JDK 11/17 TESTS ---" && \
+    echo "--- STARTS JDK 11/17/21 TESTS ---" && \
     use-j11.sh && \
     use-j17.sh && \
-    echo "--- ENDS JDK 11/17 TESTS ---"
+    use-j21.sh && \
+    echo "--- ENDS JDK 11/17/21 TESTS ---"
 
 COPY sbtconfig/repositories $HOME/.sbt/repositories
 COPY sbtconfig/credentials.sbt $HOME/.sbt/1.0/plugins/credentials.sbt
