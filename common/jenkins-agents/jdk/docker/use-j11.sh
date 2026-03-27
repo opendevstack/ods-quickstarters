@@ -1,7 +1,8 @@
 #!/bin/bash
 
-JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "java-11-openjdk-11.*\.x86_64" | awk '{print $NF}' | head -1)
 JAVA_VERSION="11"
+JAVA_HOME_FOLDER=$(ls -lah /usr/lib/jvm | grep "java-${JAVA_VERSION}-openjdk-.*\.x86_64" | awk '{print $NF}' | head -1)
+
 
 function msg_and_exit() {
   echo "ERROR: ${1}"
