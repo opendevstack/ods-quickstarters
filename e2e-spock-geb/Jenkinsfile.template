@@ -50,11 +50,11 @@ def stageTest(def context) {
         // Remember that any test case in the installation folder will be executed in production.
         def status
         if (context.environment == 'prod') {
-          status = sh(script: 'source use-j17.sh && ./gradlew clean testProd --stacktrace --no-daemon && source use-j21.sh', returnStatus: true)
+          status = sh(script: './gradlew clean testProd --stacktrace --no-daemon', returnStatus: true)
           junit(testResults:"build/test-results/installation*/*.xml", allowEmptyResults:true)
           stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
         } else {
-          status = sh(script: 'source use-j17.sh && ./gradlew clean test --stacktrace --no-daemon && source use-j21.sh', returnStatus: true)
+          status = sh(script: './gradlew clean test --stacktrace --no-daemon', returnStatus: true)
           junit(testResults:"build/test-results/installation*/*.xml, build/test-results/integration*/*.xml, build/test-results/acceptance*/*.xml", allowEmptyResults:true)
           stash(name: "installation-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/installation*/*.xml', allowEmpty: true)
           stash(name: "integration-test-reports-junit-xml-${context.componentId}-${context.buildNumber}", includes: 'build/test-results/integration*/*.xml', allowEmpty: true)
