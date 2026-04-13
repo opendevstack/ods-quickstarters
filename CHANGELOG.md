@@ -6,6 +6,7 @@
 - Test remove sonar profile check ([#1155](https://github.com/opendevstack/ods-quickstarters/pull/1155))
 
 ### Changed
+- Updated Rust Quickstarter and Agent to version 1.94.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
 
 ### Fixed
 - Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))

@@ -71,11 +71,11 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://www.rust-lang.org/[Rust 1.88.x]
+* https://www.rust-lang.org/[Rust 1.94.x]
 * https://github.com/tokio-rs/axum[Axum 0.8.x]
 * https://nexte.st/[Nextest 0.9.x]
-* https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.6.x]
-* https://github.com/EmbarkStudios/cargo-deny/[Deny 0.18.x]
+* https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.8.x]
+* https://github.com/EmbarkStudios/cargo-deny/[Deny 0.19.x]
 
 == Usage - how do you start after you provisioned this quickstarter
 
@@ -243,7 +243,7 @@ which makes use of the crate `rustls` and disabling default features, like:
 
 ```
 [dependencies]
-reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.13", features = ["stream", "json"]}
 ```
 
 See reqwest's https://docs.rs/reqwest/latest/reqwest/#optional-features[features list] for further learning.
