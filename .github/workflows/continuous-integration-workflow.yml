@@ -4,18 +4,18 @@ jobs:
 
   jenkins-agent-base-ubi9:
     name: Jenkins agent base (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       -
         name: Checkout ods-core repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
         with:
           repository: ${{ github.repository_owner }}/ods-core
           token: ${{ secrets.GH_REPO_READ_TOKEN || github.token }}
           path: ods-core
       -
         name: Login to Red Hat Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4.1.0
         with:
           registry: registry.redhat.io
           username: ${{ secrets.REDHAT_REGISTRY_USERNAME }}
@@ -31,22 +31,22 @@ jobs:
           docker save --output ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar opendevstackorg/ods-jenkins-agent-base-ubi9:latest
       -
         name: Upload base image artifact
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
 
   jenkins-agent-golang-ubi9:
     name: Jenkins agent Go (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -65,15 +65,15 @@ jobs:
 
   jenkins-agent-jdk-ubi9:
     name: Jenkins agent JDK (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -93,15 +93,15 @@ jobs:
 
   jenkins-agent-nodejs18-ubi9:
     name: Jenkins agent NodeJS 18 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -120,15 +120,15 @@ jobs:
 
   jenkins-agent-nodejs20-ubi9:
     name: Jenkins agent NodeJS 20 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -147,15 +147,15 @@ jobs:
 
   jenkins-agent-nodejs22-ubi9:
     name: Jenkins agent NodeJS 22 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -174,15 +174,15 @@ jobs:
 
   jenkins-agent-nodejs24-ubi9:
     name: Jenkins agent NodeJS 24 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -201,15 +201,15 @@ jobs:
 
   jenkins-agent-python-ubi9:
     name: Jenkins agent Python (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -225,15 +225,15 @@ jobs:
 
   jenkins-agent-rust-ubi9:
     name: Jenkins agent Rust (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -256,15 +256,15 @@ jobs:
 
   jenkins-agent-terraform-2306-ubi9:
     name: Jenkins agent Terraform 2306 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -284,15 +284,15 @@ jobs:
 
   jenkins-agent-terraform-2408-ubi9:
     name: Jenkins agent Terraform 2408 (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -312,15 +312,15 @@ jobs:
 
   jenkins-agent-scala-ubi9:
     name: Jenkins agent Scala (UBI9)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
       -
         name: Download base image artifact
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v8.0.1
         with:
           name: jenkins-agent-base-ubi9
           path: ${{ runner.temp }}
@@ -340,13 +340,13 @@ jobs:
 
   cleanup-artifact:
     name: Cleanup base image artifact
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ jenkins-agent-golang-ubi9, jenkins-agent-jdk-ubi9, jenkins-agent-nodejs18-ubi9, jenkins-agent-nodejs20-ubi9, jenkins-agent-nodejs22-ubi9, jenkins-agent-nodejs24-ubi9, jenkins-agent-python-ubi9, jenkins-agent-rust-ubi9, jenkins-agent-terraform-2306-ubi9, jenkins-agent-terraform-2408-ubi9, jenkins-agent-scala-ubi9 ]
     if: always()
     steps:
       -
         name: Delete artifact
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9.0.0
         with:
           script: |
             try {
