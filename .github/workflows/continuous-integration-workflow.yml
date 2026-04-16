@@ -330,3 +330,15 @@ jobs:
              --build-arg nexusUsername=developer \
              --build-arg nexusPassword=s3cr3t \
              .
+
+  cleanup-artifact:
+    name: Cleanup base image artifact
+    runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-golang-ubi8, jenkins-agent-jdk-ubi8, jenkins-agent-nodejs18-ubi8, jenkins-agent-nodejs20-ubi8, jenkins-agent-nodejs22-ubi8, jenkins-agent-nodejs24-ubi8, jenkins-agent-python-ubi8, jenkins-agent-rust-ubi8, jenkins-agent-terraform-2306-ubi8, jenkins-agent-terraform-2408-ubi8, jenkins-agent-scala-ubi8 ]
+    if: always()
+    steps:
+      -
+        name: Delete artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: jenkins-agent-base-ubi8
