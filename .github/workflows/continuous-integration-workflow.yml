@@ -2,13 +2,51 @@ name: Continous Integration Tests
 on: [ push, pull_request ]
 jobs:
 
+  jenkins-agent-base-ubi8:
+    name: Jenkins agent base (UBI8)
+    runs-on: ubuntu-22.04
+    steps:
+      -
+        name: Checkout ods-core repository
+        uses: actions/checkout@v4.2.2
+        with:
+          repository: ${{ github.repository_owner }}/ods-core
+          token: ${{ secrets.GH_REPO_READ_TOKEN || github.token }}
+          path: ods-core
+      -
+        name: Build base docker image
+        working-directory: ods-core/jenkins/agent-base
+        run: |
+          docker build --tag opendevstackorg/ods-jenkins-agent-base-ubi8:latest --file Dockerfile.ubi8 .
+      -
+        name: Save base image as artifact
+        run: |
+          docker save --output ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+      -
+        name: Upload base image artifact
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
+
   jenkins-agent-golang-ubi8:
     name: Jenkins agent Go (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/golang/docker
@@ -21,10 +59,21 @@ jobs:
   jenkins-agent-jdk-ubi8:
     name: Jenkins agent JDK (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/jdk/docker
@@ -38,10 +87,21 @@ jobs:
   jenkins-agent-nodejs18-ubi8:
     name: Jenkins agent NodeJS 18 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs18/docker
@@ -54,10 +114,21 @@ jobs:
   jenkins-agent-nodejs20-ubi8:
     name: Jenkins agent NodeJS 20 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs20/docker
@@ -70,10 +141,21 @@ jobs:
   jenkins-agent-nodejs22-ubi8:
     name: Jenkins agent NodeJS 22 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs22/docker
@@ -86,10 +168,21 @@ jobs:
   jenkins-agent-nodejs24-ubi8:
     name: Jenkins agent NodeJS 24 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs24/docker
@@ -102,10 +195,21 @@ jobs:
   jenkins-agent-python-ubi8:
     name: Jenkins agent Python (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
@@ -115,10 +219,21 @@ jobs:
   jenkins-agent-rust-ubi8:
     name: Jenkins agent Rust (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/rust/docker
@@ -135,10 +250,21 @@ jobs:
   jenkins-agent-terraform-2306-ubi8:
     name: Jenkins agent Terraform 2306 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
@@ -152,10 +278,21 @@ jobs:
   jenkins-agent-terraform-2408-ubi8:
     name: Jenkins agent Terraform 2408 (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2408/docker
@@ -169,10 +306,21 @@ jobs:
   jenkins-agent-scala-ubi8:
     name: Jenkins agent Scala (UBI8)
     runs-on: ubuntu-22.04
+    needs: [ jenkins-agent-base-ubi8 ]
     steps:
       -
         name: Checkout repository
         uses: actions/checkout@v4.2.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: jenkins-agent-base-ubi8
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi8.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker
