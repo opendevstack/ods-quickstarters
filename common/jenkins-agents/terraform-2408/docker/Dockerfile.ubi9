@@ -1,4 +1,4 @@
-FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
 
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
