@@ -7,8 +7,10 @@
 - Update base java version to java 21, remove ubi8 and fix tests ([#1156](https://github.com/opendevstack/ods-quickstarters/pull/1156))
 
 ### Changed
+- Updated Rust Quickstarter and Agent to version 1.94.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
 
 ### Fixed
+- Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
 
 ## [4.12.1] - 2026-03-16
 ### Fixed

@@ -1,6 +1,6 @@
 FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
 
-LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>"
+LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>, Philipp Schugt <philipp.schugt@boehringer-ingelheim.com>"
 
 ARG rustVersion
 ARG rustToolchain

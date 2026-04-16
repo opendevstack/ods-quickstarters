@@ -3,10 +3,10 @@
 /be-golang-plain/ @henrjk
 /be-java-springboot/ @stitakis @renedupont
 /be-python-flask/ @buegelbeatz @henrjk @gerardcl
-/be-rust-axum/ @gerardcl @flightlama
+/be-rust-axum/ @gerardcl @flightlama @pschugt
 /be-scala-play/ @oalyman
 /be-typescript-express/ @sino92
-/docker-plain/ 
+/docker-plain/
 /ds-jupyter-lab/ @gerardcl @hugowschneider
 /ds-rshiny/ @gerardcl
 /ds-streamlit/ @sklingel
