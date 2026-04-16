@@ -339,6 +339,27 @@ jobs:
     steps:
       -
         name: Delete artifact
-        uses: geekyeggo/delete-artifact@v2
+        uses: actions/github-script@v7
         with:
-          name: jenkins-agent-base-ubi8
+          script: |
+            try {
+              const artifacts = await github.rest.actions.listArtifactsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'jenkins-agent-base-ubi8'
+              });
+              if (artifacts.data.artifacts.length > 0) {
+                for (const artifact of artifacts.data.artifacts) {
+                  await github.rest.actions.deleteArtifact({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    artifact_id: artifact.id,
+                  });
+                  console.log(`Deleted artifact: ${artifact.name}`);
+                }
+              } else {
+                console.log('No artifacts found to delete');
+              }
+            } catch (error) {
+              console.log(`Warning: Failed to delete artifact - ${error.message}`);
+            }
