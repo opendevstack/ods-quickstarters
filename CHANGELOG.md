@@ -4,6 +4,7 @@
 ### Added
 - Added rhel9 dockerfiles for all jenkins agents ([#1140](https://github.com/opendevstack/ods-quickstarters/pull/1140))
 - Test remove sonar profile check ([#1155](https://github.com/opendevstack/ods-quickstarters/pull/1155))
+- Update base java version to java 21, remove ubi8 and fix tests ([#1156](https://github.com/opendevstack/ods-quickstarters/pull/1156))
 
 ### Changed
 
