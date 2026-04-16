@@ -129,7 +129,7 @@ If you need other versions support in your project, change:
 
 * in the provided `Jenkinsfile`, the mentions of `python3.12` binary to, for example, `python3.9` binary,
 
-* and switch the `FROM` statement in your `Dockerfile` to the python version required, for example, `registry.access.redhat.com/ubi8/python-39`.
+* and switch the `FROM` statement in your `Dockerfile` to the python version required, for example, `registry.access.redhat.com/ubi9/python-39`.
 
 == Known limitations
 
