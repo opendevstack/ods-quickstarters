@@ -1,4 +1,4 @@
-FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-agent-nodejs-rhel9-container" \
