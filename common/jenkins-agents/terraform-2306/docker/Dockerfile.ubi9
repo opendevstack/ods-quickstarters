@@ -78,12 +78,12 @@ RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
 RUN for pyVersion in 3.8 3.9 3.11; do \
         uv python install $pyVersion && \
         if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
-          uv pip install --verbose --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} --prerelease=allow \
+          uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} --prerelease=allow \
               virtualenv \
               pycodestyle \
               -r /tmp/requirements.txt; \
         else \
-          uv pip install --verbose --system --break-system-packages --python $pyVersion --prerelease=allow \
+          uv pip install --system --break-system-packages --python $pyVersion --prerelease=allow \
               virtualenv \
               pycodestyle \
               -r /tmp/requirements.txt; \

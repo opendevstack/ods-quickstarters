@@ -30,9 +30,9 @@ RUN PACKAGES="virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.
     for pyVersion in 3.8 3.9 3.11 3.12; do \
       uv python install $pyVersion && \
       if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
-        uv pip install --verbose --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} $PACKAGES; \
+        uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} $PACKAGES; \
       else \
-        uv pip install --verbose --system --break-system-packages --python $pyVersion $PACKAGES; \
+        uv pip install --system --break-system-packages --python $pyVersion $PACKAGES; \
       fi; \
     done && \
     uv tool update-shell
