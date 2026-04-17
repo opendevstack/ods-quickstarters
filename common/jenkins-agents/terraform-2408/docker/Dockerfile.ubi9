@@ -1,4 +1,4 @@
-FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
 
 LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
 
@@ -38,14 +38,8 @@ ENV TERRAFORM_VERSION=1.9.4 \
     TASK_VERSION=3.38.0 \
     UV_VERSION=0.10.9 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
-    UV_INDEX_URL=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple \
-    PIP_TRUSTED_HOST=${nexusHost} \
-    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt
-    
-
-ENV UV_DEFAULT_INDEX=${UV_INDEX_URL} \
-    PIP_INDEX_URL=${UV_INDEX_URL} \
-    PIP_CERT=${UV_CA_CERTIFICATE}
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
+    PIP_CERT=/etc/ssl/certs/ca-bundle.crt
 
 ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     readline \
@@ -76,15 +70,24 @@ RUN set -x \
 RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
     echo "[global]" > $HOME/.config/pip/pip.conf && \
-    echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
-    echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf
+    if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
+      echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+      echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf; \
+    fi
 
 RUN for pyVersion in 3.9 3.11 3.12; do \
         uv python install $pyVersion && \
-        uv pip install --verbose --system --break-system-packages --python $pyVersion --trusted-host ${nexusHost} --prerelease=allow \
-            virtualenv \
-            pycodestyle \
-            -r /tmp/requirements.txt; \
+        if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
+          uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} --prerelease=allow \
+              virtualenv \
+              pycodestyle \
+              -r /tmp/requirements.txt; \
+        else \
+          uv pip install --system --break-system-packages --python $pyVersion --prerelease=allow \
+              virtualenv \
+              pycodestyle \
+              -r /tmp/requirements.txt; \
+        fi; \
     done && \
     rm -f /tmp/requirements.txt && \
     uv python pin 3.12 && \

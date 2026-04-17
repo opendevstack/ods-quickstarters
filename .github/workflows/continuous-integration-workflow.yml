@@ -2,128 +2,250 @@ name: Continous Integration Tests
 on: [ push, pull_request ]
 jobs:
 
-  jenkins-agent-golang-ubi8:
-    name: Jenkins agent Go (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-base-ubi9:
+    name: Jenkins agent base (UBI9)
+    runs-on: ubuntu-24.04
+    steps:
+      -
+        name: Checkout ods-core repository
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: ${{ github.repository_owner }}/ods-core
+          token: ${{ secrets.GH_REPO_READ_TOKEN || github.token }}
+          path: ods-core
+      -
+        name: Login to Red Hat Registry
+        uses: docker/login-action@v4.1.0
+        with:
+          registry: registry.redhat.io
+          username: ${{ secrets.REDHAT_REGISTRY_USERNAME }}
+          password: ${{ secrets.REDHAT_REGISTRY_PASSWORD }}
+      -
+        name: Build base docker image
+        working-directory: ods-core/jenkins/agent-base
+        run: |
+          docker build --tag opendevstackorg/ods-jenkins-agent-base-ubi9:latest --file Dockerfile.ubi9 .
+      -
+        name: Save base image as artifact
+        run: |
+          docker save --output ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar opendevstackorg/ods-jenkins-agent-base-ubi9:latest
+      -
+        name: Upload base image artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
+
+  jenkins-agent-golang-ubi9:
+    name: Jenkins agent Go (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/golang/docker
         run: |
-          docker build --tag agent-go-test-ubi8 --file Dockerfile.ubi8 \
+          docker build --tag agent-go-test-ubi9 --file Dockerfile.ubi9 \
             --build-arg goDistributionUrl=https://go.dev/dl/go1.23.0.linux-amd64.tar.gz \
             --build-arg golangciVersion=v1.60.1 \
             .
 
-  jenkins-agent-jdk-ubi8:
-    name: Jenkins agent JDK (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-jdk-ubi9:
+    name: Jenkins agent JDK (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/jdk/docker
         run: |
-            docker build --tag agent-jdk-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-jdk-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusUsername=developer \
               --build-arg nexusPassword=s3cr3t \
               .
 
-  jenkins-agent-nodejs18-ubi8:
-    name: Jenkins agent NodeJS 18 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-nodejs18-ubi9:
+    name: Jenkins agent NodeJS 18 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs18/docker
         run: |
-            docker build --tag agent-nodejs18-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-nodejs18-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-nodejs20-ubi8:
-    name: Jenkins agent NodeJS 20 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-nodejs20-ubi9:
+    name: Jenkins agent NodeJS 20 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs20/docker
         run: |
-            docker build --tag agent-nodejs20-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-nodejs20-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-nodejs22-ubi8:
-    name: Jenkins agent NodeJS 22 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-nodejs22-ubi9:
+    name: Jenkins agent NodeJS 22 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs22/docker
         run: |
-            docker build --tag agent-nodejs22-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-nodejs22-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-nodejs24-ubi8:
-    name: Jenkins agent NodeJS 24 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-nodejs24-ubi9:
+    name: Jenkins agent NodeJS 24 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/nodejs24/docker
         run: |
-            docker build --tag agent-nodejs24-test-ubi8 --file Dockerfile.ubi8 \
+            docker build --tag agent-nodejs24-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               .
 
-  jenkins-agent-python-ubi8:
-    name: Jenkins agent Python (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-python-ubi9:
+    name: Jenkins agent Python (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/python/docker
         run: |
-          docker build --tag agent-python-test-ubi8 --file Dockerfile.ubi8 .
+          docker build --tag agent-python-test-ubi9 --file Dockerfile.ubi9 .
 
-  jenkins-agent-rust-ubi8:
-    name: Jenkins agent Rust (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-rust-ubi9:
+    name: Jenkins agent Rust (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/rust/docker
         run: |
-          docker build --tag agent-rust-test-ubi8 --file Dockerfile.ubi8 \
+          docker build --tag agent-rust-test-ubi9 --file Dockerfile.ubi9 \
             --build-arg rustVersion=1.94.1 \
             --build-arg rustToolchain=x86_64-unknown-linux-gnu \
             --build-arg cargoNextestVersion=0.9.132 \
@@ -132,53 +254,119 @@ jobs:
             --build-arg cargoDenyVersion=0.19.1 \
             .
 
-  jenkins-agent-terraform-2306-ubi8:
-    name: Jenkins agent Terraform 2306 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-terraform-2306-ubi9:
+    name: Jenkins agent Terraform 2306 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2306/docker
         run: |
-          docker build --tag agent-terraform-2306-test-ubi8 --file Dockerfile.ubi8 \
+          docker build --tag agent-terraform-2306-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
               .
 
-  jenkins-agent-terraform-2408-ubi8:
-    name: Jenkins agent Terraform 2408 (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-terraform-2408-ubi9:
+    name: Jenkins agent Terraform 2408 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/terraform-2408/docker
         run: |
-          docker build --tag agent-terraform-2408-test-ubi8 --file Dockerfile.ubi8 \
+          docker build --tag agent-terraform-2408-test-ubi9 --file Dockerfile.ubi9 \
               --build-arg nexusUrl=https://nexus.example.com \
               --build-arg nexusAuth=developer:s3cr3t \
               --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
               .
 
-  jenkins-agent-scala-ubi8:
-    name: Jenkins agent Scala (UBI8)
-    runs-on: ubuntu-22.04
+  jenkins-agent-scala-ubi9:
+    name: Jenkins agent Scala (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
     steps:
       -
         name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
       -
         name: Build docker image
         working-directory: common/jenkins-agents/scala/docker
         run: |
-          docker build --tag agent-scala-test-ubi8 --file Dockerfile.ubi8 \
+          docker build --tag agent-scala-test-ubi9 --file Dockerfile.ubi9 \
              --build-arg nexusUrl=https://nexus.example.com \
              --build-arg nexusUsername=developer \
              --build-arg nexusPassword=s3cr3t \
              .
+
+  cleanup-artifact:
+    name: Cleanup base image artifact
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-golang-ubi9, jenkins-agent-jdk-ubi9, jenkins-agent-nodejs18-ubi9, jenkins-agent-nodejs20-ubi9, jenkins-agent-nodejs22-ubi9, jenkins-agent-nodejs24-ubi9, jenkins-agent-python-ubi9, jenkins-agent-rust-ubi9, jenkins-agent-terraform-2306-ubi9, jenkins-agent-terraform-2408-ubi9, jenkins-agent-scala-ubi9 ]
+    if: always()
+    steps:
+      -
+        name: Delete artifact
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            try {
+              const artifacts = await github.rest.actions.listArtifactsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'jenkins-agent-base-ubi9'
+              });
+              if (artifacts.data.artifacts.length > 0) {
+                for (const artifact of artifacts.data.artifacts) {
+                  await github.rest.actions.deleteArtifact({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    artifact_id: artifact.id,
+                  });
+                  console.log(`Deleted artifact: ${artifact.name}`);
+                }
+              } else {
+                console.log('No artifacts found to delete');
+              }
+            } catch (error) {
+              console.log(`Warning: Failed to delete artifact - ${error.message}`);
+            }
