@@ -8,6 +8,7 @@
 
 ### Changed
 - Updated Rust Quickstarter and Agent to version 1.94.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
+- Freeze allure-commandline version in e2e-etl-python quickstarter ([#1158](https://github.com/opendevstack/ods-quickstarters/issues/1158))
 
 ### Fixed
 - Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
