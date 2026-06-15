@@ -6,6 +6,7 @@ Use this for automating dependency updates in software projects. Lives in your c
 
 == What files / which architecture is generated?
 
+----
 ├── README.md
 ├── chart
 │   ├── Chart.lock
@@ -20,6 +21,7 @@ Use this for automating dependency updates in software projects. Lives in your c
 ├── import-certs.sh
 ├── metadata.yml
 └── release-manager.yml
+----
 
 == Frameworks used
 
