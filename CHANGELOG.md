@@ -11,7 +11,7 @@
 
 ### Fixed
 - Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
-- Hardened Renovate Quickstarter by moving Tokens into secrets and narrowed permissions
+- Moving tokens into Kubernetes Secrets and narrowing permissions
 
 ## [4.12.1] - 2026-03-16
 ### Fixed
