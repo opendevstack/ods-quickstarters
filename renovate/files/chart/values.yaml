@@ -29,6 +29,11 @@ renovate:
         secretKeyRef:
           name: cd-user-with-password
           key: password
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-token
+          key: GITHUB_TOKEN
 
   # -- Additional volumes to the pod
   extraVolumes:
@@ -51,3 +56,8 @@ renovate:
       cache:
         # -- Allow the cache to persist between runs
         enabled: false
+
+# -- GitHub token used to pull release changelogs. Provide via values.yaml.secret as github.token.
+# The value is stored in a Kubernetes Secret (renovate-github-token) and injected via secretKeyRef.
+github:
+  token: ""
