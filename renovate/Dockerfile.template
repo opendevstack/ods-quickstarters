@@ -12,9 +12,7 @@ COPY import-certs.sh /usr/local/bin/import-certs.sh
 RUN chmod +x /usr/local/bin/import-certs.sh
 
 # Required for import-certs.sh and update-ca-certificates to work at runtime
-RUN chmod -R 777 /usr/local/share/ca-certificates && \
-    chmod 777 /etc/ssl/certs && \
-    chmod 666 /etc/ca-certificates.conf
+RUN chown -R 12021 /usr/local/share/ca-certificates /etc/ssl/certs /etc/ca-certificates.conf
 
 # This is required because Node.js doesn't use the system CA store by default
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt    
