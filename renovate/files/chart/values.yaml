@@ -34,6 +34,7 @@ renovate:
         secretKeyRef:
           name: renovate-github-token
           key: GITHUB_TOKEN
+          optional: true
 
   # -- Additional volumes to the pod
   extraVolumes:
