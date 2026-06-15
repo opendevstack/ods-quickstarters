@@ -15,8 +15,10 @@ RUN chmod +x /usr/local/bin/import-certs.sh
 # Recursive only on /usr/local/share/ca-certificates (needs to write cert files there).
 # /etc/ssl/certs and /etc/ca-certificates.conf: directory/file ownership only — existing
 # system cert files stay root-owned, limiting write surface if container is compromised.
+# ca-certificates.crt is the bundle output file rewritten by update-ca-certificates — must be writable.
 RUN chown -R 12021 /usr/local/share/ca-certificates \
     && chown 12021 /etc/ssl/certs \
+    && chown 12021 /etc/ssl/certs/ca-certificates.crt \
     && chown 12021 /etc/ca-certificates.conf
 
 # This is required because Node.js doesn't use the system CA store by default
