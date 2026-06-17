@@ -1,0 +1,40 @@
+= Renovate
+
+== Purpose of this quickstarter
+
+Use this for automating dependency updates in software projects. Lives in your cd-namespace.
+
+== What files / which architecture is generated?
+
+----
+├── README.md
+├── chart
+│   ├── Chart.lock
+│   ├── Chart.yaml
+│   ├── charts
+│   │   └── renovate-46.8.4.tgz
+│   ├── templates
+│   │   ├── configmap.yaml
+│   │   └── secret.yaml
+│   ├── values.yaml
+│   └── values.yaml.secret.example
+├── import-certs.sh
+├── metadata.yml
+└── release-manager.yml
+----
+
+== Frameworks used
+
+* https://docs.renovatebot.com[Renovate]
+
+== Usage - How do you start after you provisioned this quickstarter?
+
+See README.
+
+== Jenkins agent image used
+
+ods/jenkins-agent-base:4.x
+
+== Known limitations
+
+Let us know if you find any. Feel free to open issues and pull requests, thank you!
