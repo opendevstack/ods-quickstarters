@@ -29,6 +29,12 @@ renovate:
         secretKeyRef:
           name: cd-user-with-password
           key: password
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-token
+          key: GITHUB_TOKEN
+          optional: true
 
   # -- Additional volumes to the pod
   extraVolumes:
@@ -51,3 +57,8 @@ renovate:
       cache:
         # -- Allow the cache to persist between runs
         enabled: false
+
+# -- GitHub token for renovate. If set, creates a secret `renovate-github-token`.
+# DO NOT SET IN HERE, THIS FILE IS NOT ENCRYPTED! USE values.yaml.secret
+github:
+  token: ""
