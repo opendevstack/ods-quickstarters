@@ -85,7 +85,7 @@ objects:
         spec:
           containers:
             - image: '${DOCKER_REGISTRY}/${ODS_NAMESPACE}/ods-doc-gen-svc:${ODS_IMAGE_TAG}'
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               name: 'docgen'
               ports:
                 - containerPort: 8080
