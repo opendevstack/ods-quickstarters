@@ -6,6 +6,10 @@
 ### Changed
 
 ### Fixed
+- Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
+- Moving tokens into Kubernetes Secrets and narrowing permissions
+- Change imagePullPolicy to Always for docgen ([#1160](https://github.com/opendevstack/ods-quickstarters/pull/1160))
+
 
 ## [4.12.1] - 2026-03-16
 ### Fixed
