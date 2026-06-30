@@ -2,6 +2,13 @@
 
 ## Unreleased
 ### Added
+
+### Changed
+
+### Fixed
+
+## [4.13.0] - 2026-06-30
+### Added
 - Added config-rs to rust template ([#1162](https://github.com/opendevstack/ods-quickstarters/issues/1162))
 - Added rhel9 dockerfiles for all jenkins agents ([#1140](https://github.com/opendevstack/ods-quickstarters/pull/1140))
 - Test remove sonar profile check ([#1155](https://github.com/opendevstack/ods-quickstarters/pull/1155))
@@ -13,7 +20,7 @@
 
 ### Fixed
 - Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
-- Moving tokens into Kubernetes Secrets and narrowing permissions
+- Moving tokens into Kubernetes Secrets and narrowing permissions ([#1159](https://github.com/opendevstack/ods-quickstarters/pull/1159))
 
 ## [4.12.2] - 2026-06-18
 ### Fixed
