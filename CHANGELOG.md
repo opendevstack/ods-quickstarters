@@ -56,6 +56,17 @@
 
 ## [4.10.0] - 2025-10-13
 ### Changed
+
+
+### Fixed
+
+### Removed
+
+- Remove `jenkins-agent-nodejs18` (Node.js 18 reached end-of-life on 2025-04-30) — the agent image and associated OpenShift templates/docs were removed from the repository. Please migrate pipelines to supported Node.js agents such as `jenkins-agent-nodejs20` or `jenkins-agent-nodejs22`.
+
+
+## [4.10.0] - 2025-10-13
+### Changed
 - Use npm ci in e2e-cypress quickstarter & Better TypeScript support in e2e-cypress quickstarter ([#1114](https://github.com/opendevstack/ods-quickstarters/pull/1114))
 - e2e-cypress get rid of additional chrome installation and switch to edge for pdf generation ([#1112](https://github.com/opendevstack/ods-quickstarters/pull/1112))
 - Fix for the integration of the Python Quickstarter and Zephyr ODS integration ([#1125](https://github.com/opendevstack/ods-quickstarters/pull/1125))
