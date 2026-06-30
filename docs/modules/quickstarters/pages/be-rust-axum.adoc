@@ -71,7 +71,7 @@ It contains the basic setup for Docker, Jenkins, SonarQube and OpenShift.
 
 == Frameworks used
 
-* https://www.rust-lang.org/[Rust 1.94.x]
+* https://www.rust-lang.org/[Rust 1.96.x]
 * https://github.com/tokio-rs/axum[Axum 0.8.x]
 * https://nexte.st/[Nextest 0.9.x]
 * https://github.com/taiki-e/cargo-llvm-cov/[LLVM coverage 0.8.x]
@@ -231,7 +231,7 @@ which makes use of the crate `rustls`, like:
 
 ```
 [dependencies]
-sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "chrono", "macros", "migrate" ] }
+sqlx = { version = "0.9", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid", "json", "chrono", "macros", "migrate" ] }
 ```
 
 See SQLx's https://docs.rs/sqlx/latest/sqlx/#tls-support[TLS features list support], or https://github.com/launchbadge/sqlx?tab=readme-ov-file#cargo-feature-flags[all SQLx feature flags], for further learning.
