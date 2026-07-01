@@ -1,6 +1,6 @@
-FROM opendevstackorg/ods-jenkins-agent-base-ubi8:latest
+FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
 
-LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>"
+LABEL maintainer="Gerard C.L. <gerard.castillo@boehringer-ingelheim.com>, Philipp Schugt <philipp.schugt@boehringer-ingelheim.com>"
 
 ARG rustVersion
 ARG rustToolchain
@@ -17,7 +17,7 @@ ENV CARGO_NEXTEST_VERSION=${cargoNextestVersion} \
     CARGO_DENY_VERSION=${cargoDenyVersion} \
     RUST_VERSION=${rustVersion}
 
-RUN yum install -y binutils cpp gcc glibc-devel glibc-headers isl kernel-headers libasan libatomic \
+RUN yum install -y binutils cpp gcc glibc-devel glibc-headers kernel-headers libasan libatomic \
     libgomp libmpc libpkgconf libubsan libxcrypt-devel llvm-libs pkgconf pkgconf-m4 pkgconf-pkg-config \
     openssl-devel cpan perl-IPC-Cmd && \
     cpan install FindBin

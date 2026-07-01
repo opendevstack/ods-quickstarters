@@ -14,12 +14,12 @@ parameters:
 - name: ODS_GIT_REF
   required: true
 - name: JENKINS_AGENT_DOCKERFILE_PATH
-  value: Dockerfile.ubi8
+  value: Dockerfile.ubi9
   description: Dockerfile variant to use
 - name: RUST_VERSION
   description: "The Rust version"
   required: true
-  value: "1.88.0"
+  value: "1.96.0"
 - name: RUST_TOOLCHAIN
   description: "The Rust target toolchain"
   required: true
@@ -27,19 +27,19 @@ parameters:
 - name: CARGO_NEXTEST_VERSION
   description: "The Cargo Nextest testing framework version"
   required: true
-  value: "0.9.94"
+  value: "0.9.138"
 - name: CARGO_LLVM_COV_VERSION
   description: "The Cargo LLVM Coverage tool version"
   required: true
-  value: "0.6.16"
+  value: "0.8.7"
 - name: CARGO_GENERATE_VERSION
   description: "The Cargo Generate tool version"
   required: true
-  value: "0.23.3"
+  value: "0.23.12"
 - name: CARGO_DENY_VERSION
   description: "The Cargo Deny tool version"
   required: true
-  value: "0.18.2"
+  value: "0.19.9"
 objects:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
@@ -59,11 +59,11 @@ objects:
       limits:
         cpu: "2"
         memory: "4Gi"
-        ephemeral-storage: "30Gi"
+        ephemeral-storage: "50Gi"
       requests:
         cpu: "500m"
         memory: "3Gi"
-        ephemeral-storage: "20Gi"
+        ephemeral-storage: "30Gi"
     runPolicy: Serial
     source:
       contextDir: common/jenkins-agents/rust/docker
