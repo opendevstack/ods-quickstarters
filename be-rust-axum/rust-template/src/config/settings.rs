@@ -1,3 +1,4 @@
+use config::{Config, Environment};
 use dotenvy::dotenv;
 use lazy_static::lazy_static;
 use serde::Deserialize;
@@ -27,10 +28,11 @@ fn default_logging() -> String {
 }
 
 impl Settings {
-  pub fn new() -> Result<Self, envy::Error> {
+  pub fn new() -> Result<Self, config::ConfigError> {
     dotenv().ok();
-
-    let settings = envy::from_env::<Settings>()?;
-    Ok(settings)
+    let config = Config::builder()
+      .add_source(Environment::default())
+      .build()?;
+    config.try_deserialize()
   }
 }

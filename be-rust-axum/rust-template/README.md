@@ -21,6 +21,12 @@ The provided pre-commit hooks are:
 
 **NOTE**: the cargo hooks also run in Jenkins CICD, but cargo deny is disabled by default, see Jenkinsfile.
 
+## Configuration with config-rs
+
+This project uses [config-rs](https://github.com/rust-cli/config-rs) for configuration management. The configuration is loaded from environment variables and `.env` files. The `Settings` struct in `src/config/settings.rs` defines the configuration options for the application.
+
+It enables Layered configuration system for Rust applications (with strong support for [12-factor](https://12factor.net/config) applications).
+
 ## Adding caching in your CICD
 
 One can improve the build pipeline time by implementing a caching mechanism as shown next:
