@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
     PIP_CERT=/etc/ssl/certs/ca-bundle.crt \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
     PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH \
     UV_VERSION=0.10.9
 
@@ -26,7 +27,7 @@ RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     fi && \
     yum -y clean all
 
-RUN PACKAGES="virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13" && \
+RUN PACKAGES="pip==25.0.1 virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13" && \
     for pyVersion in 3.8 3.9 3.11 3.12; do \
       uv python install $pyVersion && \
       if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
