@@ -11,6 +11,7 @@
 
 ### Fixed
 - Fixed Cargo Deny failure with updating to version 0.19.1 ([#1140](https://github.com/opendevstack/ods-quickstarters/issues/1140))
+- Fix jenkins agents python issues with UV ([#1167](https://github.com/opendevstack/ods-quickstarters/pull/1167))
 
 ## [4.12.1] - 2026-03-16
 ### Fixed
