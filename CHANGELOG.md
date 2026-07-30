@@ -7,6 +7,10 @@
 
 ### Fixed
 
+## [4.13.1] - 2026-07-30
+### Fixed
+- Fix jenkins agents python issues with UV ([#1167](https://github.com/opendevstack/ods-quickstarters/pull/1167))
+
 ## [4.13.0] - 2026-06-30
 ### Added
 - Added config-rs to rust template ([#1162](https://github.com/opendevstack/ods-quickstarters/issues/1162))
