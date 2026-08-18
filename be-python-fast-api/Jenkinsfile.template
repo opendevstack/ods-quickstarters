@@ -20,7 +20,13 @@ odsComponentPipeline(
       ]
     ])
   }
-  odsComponentStageRolloutOpenShiftDeployment(context)
+  def releaseName = context.componentId
+  def componentId = context.componentId
+  odsComponentStageRolloutOpenShiftDeployment(context, [
+    'selector': "app.kubernetes.io/instance=${releaseName},app.kubernetes.io/name=${componentId}",
+    'helmEnvBasedValuesFiles': ["values.env.yaml"],
+    'helmReleaseName': releaseName
+  ])
 }
 
 def stageTestSuite(def context) {
