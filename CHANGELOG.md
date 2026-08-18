@@ -7,6 +7,9 @@
 
 ### Fixed
 
+### Added
+- Migrate Python Flask Quickstarter to FastAPI ([#1170](https://github.com/opendevstack/ods-quickstarters/issues/1170))
+
 ## [4.13.1] - 2026-07-30
 ### Fixed
 - Fix jenkins agents python issues with UV ([#1167](https://github.com/opendevstack/ods-quickstarters/pull/1167))
