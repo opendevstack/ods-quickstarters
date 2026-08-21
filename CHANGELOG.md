@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- Fix Jenkinsfile of e2e-etl-python called non-existent getEnvironment ([#1171](https://github.com/opendevstack/ods-quickstarters/pull/1171))
 
 ## [4.13.1] - 2026-07-30
 ### Fixed
