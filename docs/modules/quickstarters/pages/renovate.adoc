@@ -8,11 +8,13 @@ Use this for automating dependency updates in software projects. Lives in your c
 
 ----
 ├── README.md
+├── Dockerfile
+├── renovate.json
 ├── chart
 │   ├── Chart.lock
 │   ├── Chart.yaml
 │   ├── charts
-│   │   └── renovate-46.8.4.tgz
+│   │   └── renovate-x.x.x.tgz
 │   ├── templates
 │   │   ├── configmap.yaml
 │   │   └── secret.yaml
