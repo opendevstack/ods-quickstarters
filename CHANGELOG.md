@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- Updated the Renovate quickstarter to Renovate 44.133.0 and Helm chart 46.337.0, with grouped Docker image and chart self-updates ([#1173](https://github.com/opendevstack/ods-quickstarters/pull/1173))
 
 ### Fixed
 

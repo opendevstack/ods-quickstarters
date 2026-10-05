@@ -50,6 +50,14 @@ module.exports = {
 }
 ```
 
+## Renovate Version Updates
+
+The included `renovate.json` groups updates to the Renovate Docker image and Helm chart by update type. The Docker image and Helm chart rules use the same group name for each update type, so Renovate can propose the two version changes together. Minor and patch updates share one group, while major updates have a separate group so the automerge can be toggled independently. Updates are held for three days after release.
+
+To enable automerge for minor and patch updates, set `"automerge": true` in both `renovate runtime (minor and patch)` package rules in `renovate.json`. Leave it disabled in the `renovate runtime (major)` rules to keep major updates manual. Configure your branch protection and CI checks appropriately before enabling automerge.
+
+If you do not want to enable automerge for minor/patch versions, you can combine the grouping by and remove two of the four groups.
+
 ## Further Resources
 
 ### Documentation
