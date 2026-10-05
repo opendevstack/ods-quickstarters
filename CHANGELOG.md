@@ -2,8 +2,10 @@
 
 ## Unreleased
 ### Added
+- Added grouped Renovate self-updates for the Docker image and Helm chart, with separate major and minor/patch groups and optional minor/patch automerge guidance.
 
 ### Changed
+- Pinned the Renovate Docker image to 44.133.0 and updated the Helm chart dependency to 46.337.0.
 
 ### Fixed
 
