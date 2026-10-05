@@ -1,0 +1,67 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "groupName": "renovate runtime (minor and patch)",
+      "automerge": false,
+      "minimumReleaseAge": "3 days",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "renovate"
+      ]
+    },
+    {
+      "groupName": "renovate runtime (minor and patch)",
+      "automerge": false,
+      "minimumReleaseAge": "3 days",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "/renovate/renovate$/"
+      ],
+      "overrideDatasource": "github-releases",
+      "overridePackageName": "renovatebot/renovate"
+    },
+    {
+      "groupName": "renovate runtime (major)",
+      "automerge": false,
+      "minimumReleaseAge": "3 days",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "renovate"
+      ]
+    },
+    {
+      "groupName": "renovate runtime (major)",
+      "automerge": false,
+      "minimumReleaseAge": "3 days",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "/renovate/renovate$/"
+      ],
+      "overrideDatasource": "github-releases",
+      "overridePackageName": "renovatebot/renovate"
+    }
+  ]
+}
