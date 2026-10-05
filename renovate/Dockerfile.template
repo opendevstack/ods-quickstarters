@@ -1,7 +1,7 @@
 # Custom docker image with certificate import capability
 # Documentation: https://github.com/renovatebot/renovate/blob/main/docs/usage/examples/self-hosting.md#renovate-docker-image
 
-FROM docker-group-@ods_namespace@.@app_domain@/renovate/renovate:latest
+FROM docker-group-@ods_namespace@.@app_domain@/renovate/renovate:44.133.0
 
 # Updating certificates needs root privileges
 USER root
