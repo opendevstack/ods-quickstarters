@@ -1,0 +1,6 @@
+---
+name: FastAPI
+description: "FastAPI is a modern, high-performance web framework for building APIs with Python. Technologies: FastAPI 0.115, Python 3.12, Uvicorn"
+supplier: https://fastapi.tiangolo.com/
+version: 4.x
+type: ods
