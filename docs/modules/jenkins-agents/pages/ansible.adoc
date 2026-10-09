@@ -1,0 +1,12 @@
+= Ansible Jenkins agent
+
+== Introduction
+This agent is used to execute Ansible code.
+
+The image is built in the global `ods` project and is named `jenkins-agent-ansible`.
+It can be referenced in a `Jenkinsfile` with `ods/jenkins-agent-ansible`.
+
+It includes Python version **3.12** and Ansible version **2.18.x**.
+
+== Known limitations
+No special HTTP Proxy configuration.
