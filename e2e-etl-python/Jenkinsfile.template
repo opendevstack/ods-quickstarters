@@ -26,7 +26,6 @@ odsComponentPipeline(
 ) { context ->
     def infraConfig = [cloudProvider: 'AWS', envPath: "./environments" /* that is the default for odsComponentStageInfrastructure */]
 
-    getEnvironment(context)
     addVars2envJsonFile(context)
     odsComponentStageInfrastructure(context, infraConfig)
 
