@@ -18,8 +18,11 @@ Check out the [Renovate documentation](https://docs.renovatebot.com/) for more i
 1. Modify the `configmap.yaml` file to customize the Renovate configuration for your project
 2. Supply the necessary credentials
    1. Configure your preferred way of specifying credentials (e.g. Helm Secrets or repository secrets with Transcrypt)
-   2. (Recommended) For GitHub, create a personal access token to fetch changelogs of dependencies
-   3. (Optional) For Nexus, create a token to access special packages
+   2. Configure APP_DNS in values.yaml (uncomment and insert your values)
+   3. (Recommended) For GitHub, create a personal access token to fetch changelogs of dependencies => add it to the encrypted `values.yaml.secret` file.
+   4. (Optional) For Nexus, create a token to access special packages => follow the example of the GITHUB_TOKEN
+
+The container imports certificates for the Bitbucket endpoint and the private Docker registry from `APP_DNS` (configured in `chart/values.yaml`). If your environment uses a private CA, prefer installing the CA certificate itself into the container's trust store rather than relying on certificates fetched from a live endpoint.
 
 ## Recommended Configuration Options
 

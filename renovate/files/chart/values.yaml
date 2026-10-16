@@ -19,6 +19,9 @@ renovate:
 
   # -- Additional env. Helpful too if you want to use anything other than a `value` source.
   envList:
+    # UNCOMMENT BELOW AND REPLACE, e.g. bitbucket.example.com;docker-group-ods.example.com
+    # - name: APP_DNS
+    #   value: "<your-bitbucket-url>:443;<your-docker-registry-host>:443"
     - name: CD_USERNAME
       valueFrom:
         secretKeyRef:
