@@ -14,6 +14,7 @@ odsComponentPipeline(
   odsComponentStageScanWithSonar(context)
 
   odsComponentStageRolloutOpenShiftDeployment(context, [
+    helmValuesFiles: ['values.yaml', 'values.yaml.secret'],
     helmValues: [
       "renovate.image.repository": "${context.projectId}-cd/renovate",
       "renovate.image.tag": "${context.shortGitCommit}"
