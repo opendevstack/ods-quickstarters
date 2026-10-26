@@ -5,8 +5,13 @@
 
 ### Changed
 - Updated the Renovate quickstarter to Renovate 44.133.0 and Helm chart 46.337.0, with grouped Docker image and chart self-updates ([#1173](https://github.com/opendevstack/ods-quickstarters/pull/1173))
+- jenkins-agent-terraform-2306: `python3`, `python` and `python3-config` are now the uv-managed default Python 3.11 with the agent's libraries (before: the RHEL platform Python 3.9), and pipenv creates Python 3.11 environments by default (before: 3.8) ([#NNNN](https://github.com/opendevstack/ods-quickstarters/pull/NNNN))
 
 ### Fixed
+- jenkins-agent-terraform-2306: Node 24 LTS, CA store refresh for eMudhra/emSign (pip>=26.2.2, certifi>=2026.10.23, ca-certificates, uv 0.13.5) ([#NNNN](https://github.com/opendevstack/ods-quickstarters/pull/NNNN))
+
+### Removed
+- jenkins-agent-terraform-2306: Python 3.8 and 3.9 (EOL, and no pip release with the CA fix supports them); install them on demand with `uv python install 3.8` / `3.9` ([#NNNN](https://github.com/opendevstack/ods-quickstarters/pull/NNNN))
 
 ## [4.13.1] - 2026-07-30
 ### Fixed
