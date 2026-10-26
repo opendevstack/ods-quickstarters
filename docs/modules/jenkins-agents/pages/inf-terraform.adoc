@@ -4,7 +4,7 @@
 This agents are used to deploy (Cloud) resources using terraform code.
 
 There are two terraform jenkins agents available:
-1. jenkins-agent-terraform-2306 (ruby 3.2.2, terraform 1.4.6, and matching tools).
+1. jenkins-agent-terraform-2306 (ruby 3.2.2, terraform 1.4.6, Node.js 24 LTS, Python 3.11 (default, also `python3`), and matching tools).
 1. jenkins-agent-terraform-2408 (ruby 3.3.4, terraform 1.9.4, and matching tools) - this is the current active jenkins agent.
 
 The images are built in the global `ods` project and are named `jenkins-agent-terraform-2306` and `jenkins-agent-terraform-2408`.
@@ -13,6 +13,7 @@ It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-terraform-2
 == Features
 1. support of multiple terraform versions using tfenv
 2. integrated test-framework using kitchen-terraform and cinc-auditor
+3. Python versions managed by uv in jenkins-agent-terraform-2306 (default 3.11, which is also `python3` and `python` and has the agent's Python libraries; pipenv creates 3.11 environments by default); other versions, e.g. the EOL 3.8 or 3.9, can be installed with `uv python install <version>`. `/usr/bin/python3` is the RHEL platform Python, kept for the OS tools only.
 
 == Known limitations
 n/a
