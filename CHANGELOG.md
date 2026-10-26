@@ -4,8 +4,13 @@
 ### Added
 
 ### Changed
+- jenkins-agent-terraform-2408: `python3`, `python` and `python3-config` are now the uv-managed default Python 3.12 with the agent's libraries (before: the RHEL platform Python 3.9), and pipenv creates Python 3.12 environments by default (before: 3.9) ([#1177](https://github.com/opendevstack/ods-quickstarters/pull/1177))
 
 ### Fixed
+- jenkins-agent-terraform-2408: Node 24 LTS, CA store refresh for eMudhra/emSign (pip>=26.2.2, certifi>=2026.10.23, ca-certificates, uv 0.13.5), Go 1.26.10 with SHA-256 check ([#1177](https://github.com/opendevstack/ods-quickstarters/pull/1177))
+
+### Removed
+- jenkins-agent-terraform-2408: Python 3.9 (EOL, and no pip release with the CA fix supports it); install it on demand with `uv python install 3.9` ([#1177](https://github.com/opendevstack/ods-quickstarters/pull/1177))
 
 ## [4.13.1] - 2026-07-30
 ### Fixed
