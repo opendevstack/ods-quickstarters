@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Harden Python agent and align uv tooling with the aim to fix CVE-2026-115557 ([#1179](https://github.com/opendevstack/ods-quickstarters/issues/1179))
+
 ## [4.13.1] - 2026-07-30
 ### Fixed
 - Fix jenkins agents python issues with UV ([#1167](https://github.com/opendevstack/ods-quickstarters/pull/1167))

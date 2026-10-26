@@ -7,11 +7,12 @@ ARG nexusAuth
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
-    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt \
+    UV_SYSTEM_CERTS=true \
     PIP_CERT=/etc/ssl/certs/ca-bundle.crt \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     PATH=$HOME/.local/bin:$JAVA_HOME/bin:$PATH \
-    UV_VERSION=0.10.9
+    UV_VERSION=0.13.5
 
 # Set PyPI URLs and configure Python packages
 RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
@@ -20,22 +21,25 @@ RUN yum install -y autoconf automake gcc gcc-c++ openssl-devel libffi-devel && \
     echo "[global]" > $HOME/.config/pip/pip.conf && \
     if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
       echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
-      echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf && \
       echo "export UV_DEFAULT_INDEX=https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" > /etc/profile.d/uv-index.sh; \
     else \
       echo "export UV_DEFAULT_INDEX=https://pypi.org/simple" > /etc/profile.d/uv-index.sh; \
     fi && \
     yum -y clean all
 
-RUN PACKAGES="pip==25.0.1 virtualenv==20.26.3 setuptools==72.2.0 Cython==3.0.11 pypandoc==1.13" && \
-    for pyVersion in 3.8 3.9 3.11 3.12; do \
+RUN PACKAGES="pip==26.2.2 virtualenv==21.14.13 setuptools==84.2.1 Cython==3.3.0 pypandoc==1.17" && \
+    for pyVersion in 3.11 3.12; do \
       uv python install $pyVersion && \
       if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
-        uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} $PACKAGES; \
+        uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple $PACKAGES; \
       else \
         uv pip install --system --break-system-packages --python $pyVersion $PACKAGES; \
       fi; \
+      pythonPath="$(uv python find $pyVersion)" && \
+      echo -n "Installed Python ${pyVersion}: " && \
+      "$pythonPath" --version; \
     done && \
+    uv python list --only-installed && \
     uv tool update-shell
 
 # Enables default user to access $HOME folder

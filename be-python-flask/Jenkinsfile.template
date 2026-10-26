@@ -29,10 +29,11 @@ def stageTestSuite(def context) {
 
   stage('Prepare Test Suite') {
     sh """
-      python3.12 -m venv testsuite
+      . /etc/profile.d/uv-index.sh
+      uv venv --python 3.12 testsuite
       . ./testsuite/bin/activate
-      pip install -r tests_requirements.txt
-      pip check
+      uv pip install -r tests_requirements.txt
+      uv pip check
       mkdir -p ${testLocation}
       mkdir -p ${coverageLocation}
     """
@@ -50,7 +51,7 @@ def stageTestSuite(def context) {
     def status = sh(
       script: """
         . ./testsuite/bin/activate
-        PYTHONPATH=src python3.12 -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
+        PYTHONPATH=src python -m pytest --junitxml=tests.xml -o junit_family=xunit2 --cov-report term-missing --cov-report xml --cov=src -o testpaths=tests
         sed -i-e 's/test_//g' tests.xml
       """,
       returnStatus: true
