@@ -16,6 +16,9 @@ ARG nexusHost
 ARG nexusUrl=https://${nexusHost}
 ARG nexusAuth
 ARG NPMJS_REGISTRY_FLAG
+# SHA-256 of go${GO_VERSION}.linux-amd64.tar.gz, from https://go.dev/dl/?mode=json&include=all.
+# Change it together with GO_VERSION.
+ARG GO_SHA256=ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5
 
 ENV TERRAFORM_VERSION=1.9.4 \
     TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
@@ -26,17 +29,18 @@ ENV TERRAFORM_VERSION=1.9.4 \
     TENV_VERSION=3.0.0 \
     TENV_AUTO_INSTALL=true \
     TENV_ROOT=/opt/tenv \
-    GO_VERSION=1.21.13 \
+    GO_VERSION=1.26.10 \
     GOBIN=/usr/local/go/bin \
     TFLINT_VERSION=0.52.0 \
-    NODEJS_VERSION=20 \
+    NODEJS_VERSION=24 \
     BUNDLER_VERSION=2.5.17 \
     AGE_VERSION=1.2.0 \
     GEM_HOME=/opt/bundle \
     RBENV_ROOT=/opt/rbenv \
     RBENV_SHELL=bash \
     TASK_VERSION=3.38.0 \
-    UV_VERSION=0.10.9 \
+    UV_VERSION=0.13.5 \
+    PYTHON_DEFAULT_VERSION=3.12 \
     NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
     UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
     PIP_CERT=/etc/ssl/certs/ca-bundle.crt
@@ -46,7 +50,9 @@ ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
     libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
     jq parallel"
 ENV INSTALL_DNF_PKGS="readline-devel bison automake libtool xorriso"
-ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/bin:/usr/local/go/bin:$HOME/.local/bin:$JAVA_HOME/bin:$PATH
+# /usr/local/bin comes before /usr/bin so that python3/python resolve to the default Python
+# (linked below), not to the RHEL platform python3 (dnf keeps using it via its shebang).
+ENV PATH=/opt/rbenv/shims:/opt/rbenv/bin:/opt/node/bin:/usr/local/bin:/usr/bin:/usr/local/go/bin:$HOME/.local/bin:$JAVA_HOME/bin:$PATH
 ENV HOME=/home/jenkins
 
 RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
@@ -65,7 +71,9 @@ RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
 RUN set -x \
     && dnf -y repolist \
     && dnf -y install --allowerasing $INSTALL_PKGS \
-    && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS
+    && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
+    && dnf -y update ca-certificates \
+    && dnf clean all
 
 RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
     mkdir -p $HOME/.config/pip && \
@@ -75,23 +83,58 @@ RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
       echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf; \
     fi
 
-RUN for pyVersion in 3.9 3.11 3.12; do \
+# Python 3.9 is not installed any more: it is EOL and pip >= 26.2.2 (the release with the
+# refreshed vendored CA store, see eMudhra/emSign incident) requires Python >= 3.10.
+# Users who still need it can run `uv python install 3.9` themselves.
+# pip is upgraded explicitly because pip always loads its vendored certifi CA store in
+# addition to the system store; the floor makes the build fail if it cannot be met.
+# The default Python (PYTHON_DEFAULT_VERSION) becomes `python3`, `python` and `python3-config`, and
+# its console scripts (pipenv, virtualenv, az, pre-commit, ...) are linked into /usr/local/bin.
+# Before, `python3` and these scripts had the agent's libraries only as a side effect of
+# `--system --python 3.9` resolving to the RHEL platform /usr/bin/python3.9; a uv-managed
+# interpreter keeps its scripts in its own bin dir, which is not on PATH. /usr/bin/python3 stays
+# the platform Python, which dnf uses through its shebang; the build checks that dnf still works.
+# python3-config is an exec wrapper, not a symlink: the script derives its prefix from its own path.
+RUN for pyVersion in 3.11 ${PYTHON_DEFAULT_VERSION}; do \
         uv python install $pyVersion && \
         if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
           uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} --prerelease=allow \
+              "pip>=26.2.2" \
               virtualenv==20.26.3 \
               pycodestyle==2.12.1 \
               -r /tmp/requirements.txt; \
         else \
           uv pip install --system --break-system-packages --python $pyVersion --prerelease=allow \
+              "pip>=26.2.2" \
               virtualenv==20.26.3 \
               pycodestyle==2.12.1 \
               -r /tmp/requirements.txt; \
-        fi; \
+        fi && \
+        "$(uv python find $pyVersion)" -m pip --version && \
+        "$(uv python find $pyVersion)" -c "import certifi; print('certifi', certifi.__version__)" || exit 1; \
     done && \
     rm -f /tmp/requirements.txt && \
-    uv python pin 3.12 && \
-    uv tool update-shell
+    uv python pin ${PYTHON_DEFAULT_VERSION} && \
+    uv tool update-shell && \
+    PY_DEFAULT="$(uv python find ${PYTHON_DEFAULT_VERSION})" && \
+    PY_SCRIPTS="$("$PY_DEFAULT" -c 'import sysconfig; print(sysconfig.get_path("scripts"))')" && \
+    ln -sf "$PY_DEFAULT" /usr/local/bin/python3 && \
+    ln -sf "$PY_DEFAULT" /usr/local/bin/python && \
+    printf '#!/bin/sh\nexec "%s" "$@"\n' "$PY_SCRIPTS/python${PYTHON_DEFAULT_VERSION}-config" >/usr/local/bin/python3-config && \
+    chmod 755 /usr/local/bin/python3-config && \
+    for script in "$PY_SCRIPTS"/*; do \
+        name="$(basename "$script")"; \
+        case "$name" in python*|pip|pip3|pip3.*|idle*|pydoc*|2to3*) continue ;; esac; \
+        [ -e "/usr/local/bin/$name" ] || ln -s "$script" "/usr/local/bin/$name" || exit 1; \
+    done && \
+    [ "$(command -v python3)" = /usr/local/bin/python3 ] && \
+    python3 --version | grep -q "^Python ${PYTHON_DEFAULT_VERSION}\." && \
+    python3 -c 'import boto3, botocore, requests, hcl2, certifi' && \
+    PY_INCLUDE="$(python3 -c 'import sysconfig; print(sysconfig.get_paths()["include"])')" && \
+    [ -f "$PY_INCLUDE/Python.h" ] && \
+    [ "$(python3-config --includes | awk '{print $1}')" = "-I$PY_INCLUDE" ] && \
+    pipenv --version && virtualenv --version && pre-commit --version && pycodestyle --version && command -v az && \
+    /usr/bin/python3 -c 'import dnf' && dnf --version
 
 # Install awscli2
 RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
@@ -137,6 +180,7 @@ RUN mkdir -p "${TENV_ROOT}" && chmod 2775 "${TENV_ROOT}" && chown 1001:0 "${TENV
 # Install GO for terratest
 RUN cd /tmp \
     && curl -LfSso /tmp/go.tar.gz https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
+    && echo "${GO_SHA256}  /tmp/go.tar.gz" | sha256sum -c - \
     && tar -C /usr/local -xzf go.tar.gz \
     && rm -f /tmp/go.tar.gz \
     && /usr/local/go/bin/go version
