@@ -1,5 +1,5 @@
 [toolchain]
-channel = "1.96.0"
+channel = "1.99.0"
 # https://rust-lang.github.io/rustup/concepts/profiles.html
 profile = "default"
 # Pins the rust-analyzer LSP server to this toolchain so editors (VS Code, Zed, etc.)
