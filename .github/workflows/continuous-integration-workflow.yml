@@ -246,12 +246,13 @@ jobs:
         working-directory: common/jenkins-agents/rust/docker
         run: |
           docker build --tag agent-rust-test-ubi9 --file Dockerfile.ubi9 \
-            --build-arg rustVersion=1.96.0 \
+            --build-arg rustVersion=1.99.0 \
             --build-arg rustToolchain=x86_64-unknown-linux-gnu \
-            --build-arg cargoNextestVersion=0.9.138 \
-            --build-arg cargoLlvmCovVersion=0.8.7 \
-            --build-arg cargoGenerateVersion=0.23.12 \
-            --build-arg cargoDenyVersion=0.19.9 \
+            --build-arg rustupVersion=1.29.2 \
+            --build-arg cargoNextestVersion=0.9.150 \
+            --build-arg cargoLlvmCovVersion=0.9.1 \
+            --build-arg cargoGenerateVersion=0.25.1 \
+            --build-arg cargoDenyVersion=0.20.2 \
             .
 
   jenkins-agent-terraform-2306-ubi9:
