@@ -262,4 +262,15 @@ RUN chmod +t /tmp \
     && chown -R 1001:0 $HOME \
     && chmod -R g+rwX $HOME
 
+# The self-test, and the versions it expects: written from the same ARGs as the installs above
+COPY bin/agent-selftest /usr/local/bin/agent-selftest
+RUN chmod 0755 /usr/local/bin/agent-selftest \
+    && mkdir -p /etc/qs-agent \
+    && printf 'tofu=%s\ntrivy=%s\n' "${TOFU_VERSION}" "${TRIVY_VERSION}" > /etc/qs-agent/versions
+
 USER 1001
+
+# The image checks its own contract, so that a successful build is a real test.
+# A build argument is an environment variable of every RUN step. The two version arguments
+# are removed for this step: the self-test requires that they are not set, as in a running agent.
+RUN env -u TOFU_VERSION -u TRIVY_VERSION agent-selftest
