@@ -1,0 +1,14 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-opentofu-2611
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: jenkins-agent-opentofu-2611
+    labels:
+      app: jenkins-agent-opentofu-2611
+  spec:
+    lookupPolicy:
+      local: false
