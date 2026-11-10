@@ -26,6 +26,7 @@ The ODS [jenkins shared library](https://github.com/opendevstack/ods-jenkins-sha
 8. [Scala & SBT](scala)
 9. [Terraform 2306](terraform-2306)
 10. [Terraform 2408](terraform-2408)
+11. [OpenTofu 2611](opentofu-2611)
 
 ## OCP Config / Installation
 
