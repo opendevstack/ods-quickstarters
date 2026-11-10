@@ -310,6 +310,34 @@ jobs:
               --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
               .
 
+  jenkins-agent-opentofu-2611-ubi9:
+    name: Jenkins agent OpenTofu 2611 (UBI9)
+    runs-on: ubuntu-24.04
+    needs: [ jenkins-agent-base-ubi9 ]
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v6.0.2
+      -
+        name: Download base image artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: jenkins-agent-base-ubi9
+          path: ${{ runner.temp }}
+      -
+        name: Load base image
+        run: |
+          docker load --input ${{ runner.temp }}/ods-jenkins-agent-base-ubi9.tar
+      -
+        name: Build docker image
+        working-directory: common/jenkins-agents/opentofu-2611/docker
+        run: |
+          docker build --tag agent-opentofu-2611-test-ubi9 --file Dockerfile.ubi9 \
+              --build-arg nexusUrl=https://nexus.example.com \
+              --build-arg nexusAuth=developer:s3cr3t \
+              --build-arg NPMJS_REGISTRY_FLAG=--registry=https://registry.npmjs.org \
+              .
+
   jenkins-agent-scala-ubi9:
     name: Jenkins agent Scala (UBI9)
     runs-on: ubuntu-24.04
@@ -341,7 +369,7 @@ jobs:
   cleanup-artifact:
     name: Cleanup base image artifact
     runs-on: ubuntu-24.04
-    needs: [ jenkins-agent-golang-ubi9, jenkins-agent-jdk-ubi9, jenkins-agent-nodejs18-ubi9, jenkins-agent-nodejs20-ubi9, jenkins-agent-nodejs22-ubi9, jenkins-agent-nodejs24-ubi9, jenkins-agent-python-ubi9, jenkins-agent-rust-ubi9, jenkins-agent-terraform-2306-ubi9, jenkins-agent-terraform-2408-ubi9, jenkins-agent-scala-ubi9 ]
+    needs: [ jenkins-agent-golang-ubi9, jenkins-agent-jdk-ubi9, jenkins-agent-nodejs18-ubi9, jenkins-agent-nodejs20-ubi9, jenkins-agent-nodejs22-ubi9, jenkins-agent-nodejs24-ubi9, jenkins-agent-python-ubi9, jenkins-agent-rust-ubi9, jenkins-agent-terraform-2306-ubi9, jenkins-agent-terraform-2408-ubi9, jenkins-agent-opentofu-2611-ubi9, jenkins-agent-scala-ubi9 ]
     if: always()
     steps:
       -
