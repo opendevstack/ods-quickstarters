@@ -19,10 +19,10 @@ ARG NPMJS_REGISTRY_FLAG
 # SHA-256 of go${GO_VERSION}.linux-amd64.tar.gz, from https://go.dev/dl/?mode=json&include=all.
 # Change it together with GO_VERSION.
 ARG GO_SHA256=ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5
-# OpenTofu and Trivy, at the versions the quickstarters pin (.opentofu-version and the
-# TRIVY_VERSION default of their Makefile). They are ARG plus LABEL and must not become ENV:
-# the quickstarter Makefile reads TRIVY_VERSION and tenv reads TOFU_VERSION from the
-# environment, so an exported value would replace the pin of the component being built.
+# The OpenTofu and Trivy versions this agent installs. They are ARG plus LABEL and must not
+# become ENV: tenv reads TOFU_VERSION from the environment, and a component Makefile that
+# declares `TRIVY_VERSION ?= <version>` takes TRIVY_VERSION from it. An exported value would
+# replace the pin of the component being built.
 ARG TOFU_VERSION=1.12.5
 ARG TRIVY_VERSION=0.69.3
 
