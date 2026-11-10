@@ -19,6 +19,15 @@ ARG NPMJS_REGISTRY_FLAG
 # SHA-256 of go${GO_VERSION}.linux-amd64.tar.gz, from https://go.dev/dl/?mode=json&include=all.
 # Change it together with GO_VERSION.
 ARG GO_SHA256=ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5
+# OpenTofu and Trivy, at the versions the quickstarters pin (.opentofu-version and the
+# TRIVY_VERSION default of their Makefile). They are ARG plus LABEL and must not become ENV:
+# the quickstarter Makefile reads TRIVY_VERSION and tenv reads TOFU_VERSION from the
+# environment, so an exported value would replace the pin of the component being built.
+ARG TOFU_VERSION=1.12.5
+ARG TRIVY_VERSION=0.69.3
+
+LABEL org.opendevstack.agent.tofu.version="${TOFU_VERSION}" \
+      org.opendevstack.agent.trivy.version="${TRIVY_VERSION}"
 
 ENV TERRAFORM_VERSION=1.9.4 \
     TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
@@ -219,6 +228,35 @@ RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CO
 RUN wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
     && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
     && rm -f /tmp/age.tar.gz
+
+# Download and checksum helpers for the two steps below
+COPY bin/fetch bin/verify_sha256_from_checksums /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/fetch /usr/local/bin/verify_sha256_from_checksums
+
+# Install OpenTofu, verified against the checksums published with the release.
+# tenv ships a shim at /usr/bin/tofu; this binary wins because /usr/local/bin is first on PATH.
+# amd64 is written out: the OpenShift builder does not populate TARGETARCH.
+RUN set -eux; \
+    BASE="https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}"; \
+    FNAME="tofu_${TOFU_VERSION}_linux_amd64.tar.gz"; \
+    fetch -o "/tmp/${FNAME}" "${BASE}/${FNAME}"; \
+    verify_sha256_from_checksums "${BASE}/tofu_${TOFU_VERSION}_SHA256SUMS" "/tmp/${FNAME}"; \
+    tar -xzf "/tmp/${FNAME}" -C /usr/local/bin tofu; \
+    rm -f "/tmp/${FNAME}"; \
+    chmod 0755 /usr/local/bin/tofu; \
+    tofu -version
+
+# Install Trivy, verified the same way. It is installed even if the base agent ships one:
+# the pinned binary in /usr/local/bin is the one that resolves either way.
+RUN set -eux; \
+    BASE="https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}"; \
+    FNAME="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"; \
+    fetch -o "/tmp/${FNAME}" "${BASE}/${FNAME}"; \
+    verify_sha256_from_checksums "${BASE}/trivy_${TRIVY_VERSION}_checksums.txt" "/tmp/${FNAME}"; \
+    tar -xzf "/tmp/${FNAME}" -C /usr/local/bin trivy; \
+    rm -f "/tmp/${FNAME}"; \
+    chmod 0755 /usr/local/bin/trivy; \
+    trivy version
 
 RUN chmod +t /tmp \
     && chown -R 1001:0 $HOME \
