@@ -142,7 +142,7 @@ check "trivy resolves from /usr/local/bin" \
 check "trivy is ${want_trivy:-unknown}" \
   prints_line "Version: ${want_trivy}" trivy version
 
-# Python: the report scripts of the quickstarters need 3.12 and python-hcl2.
+# Python: python3 is the agent's default Python, with the agent's libraries.
 check "python3 is 3.12 or newer" \
   python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 12) else 1)'
 check "python3 can import hcl2" \
@@ -160,8 +160,9 @@ check "group id is 0" \
 check "HOME is writable" \
   home_is_writable
 
-# The quickstarter Makefile reads TRIVY_VERSION and tenv reads TOFU_VERSION.
-# An image that exports them replaces the pin of the component being built.
+# tenv reads TOFU_VERSION, and a component Makefile that declares
+# `TRIVY_VERSION ?= <version>` reads TRIVY_VERSION. An image that exports them
+# replaces the pin of the component being built.
 for name in TRIVY_VERSION TOFU_VERSION; do
   check "${name} is not set in the environment" not_in_environment "$name"
 done
