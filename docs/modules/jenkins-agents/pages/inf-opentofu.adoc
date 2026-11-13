@@ -1,0 +1,18 @@
+= OpenTofu Jenkins agent
+
+== Introduction
+This agent is used to deploy (Cloud) resources using OpenTofu code.
+
+It is `jenkins-agent-terraform-2408` (see xref:jenkins-agents:inf-terraform.adoc[Terraform Jenkins agents]) without the Ruby stack, plus OpenTofu and Trivy at pinned versions.
+
+The image is built in the global `ods` project and is named `jenkins-agent-opentofu-2611`.
+It can be referenced in a `Jenkinsfile` with e.g. `ods/jenkins-agent-opentofu-2611:latest`.
+
+== Features
+1. OpenTofu 1.12.5 and Trivy 0.69.3, verified against the checksums published with each release and installed to `/usr/local/bin`
+2. the tools known from `jenkins-agent-terraform-2408`: terraform 1.9.4 through tenv, tflint, terraform-docs, terraform-config-inspect, packer, consul, uv with Python 3.11 and 3.12 (`python3` is 3.12), AWS CLI, AWS SAM CLI, aws-cdk, Azure CLI, Node.js 24, Go, go-task and age
+3. `agent-selftest`, which checks the contract of the image. It is the last step of the image build, and `sh 'agent-selftest'` in a pipeline shows why a tool is missing or shadowed
+
+== Known limitations
+1. The image has no Ruby, bundler, kitchen-terraform, Test Kitchen and cinc-auditor / InSpec. Components that use them, such as the ones created from the `inf-terraform-aws` and `inf-terraform-azure` quickstarters, need `jenkins-agent-terraform-2408`.
+2. `TOFU_VERSION` and `TRIVY_VERSION` are not environment variables of the image. The installed versions are in the image labels `org.opendevstack.agent.tofu.version` and `org.opendevstack.agent.trivy.version`, and in `/etc/qs-agent/versions`.

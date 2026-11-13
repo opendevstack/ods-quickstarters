@@ -2,6 +2,7 @@
 
 ## Unreleased
 ### Added
+- Added OpenTofu Jenkins agent `jenkins-agent-opentofu-2611`: `jenkins-agent-terraform-2408` without the Ruby stack, plus OpenTofu 1.12.5 and Trivy 0.69.3, with a self-test as last build step, and related CI/Makefile/docs updates (common/jenkins-agents/opentofu-2611)
 
 ### Changed
 - Updated the Renovate quickstarter to Renovate 44.133.0 and Helm chart 46.337.0, with grouped Docker image and chart self-updates ([#1173](https://github.com/opendevstack/ods-quickstarters/pull/1173))

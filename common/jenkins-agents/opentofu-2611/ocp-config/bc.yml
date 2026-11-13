@@ -1,0 +1,71 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: jenkins-agent-opentofu-2611
+parameters:
+- name: ODS_BITBUCKET_PROJECT
+  description: Bitbucket project name.
+  value: opendevstack
+- name: NEXUS_HOST
+  required: true
+- name: NEXUS_AUTH
+  required: true
+- name: REPO_BASE
+  required: true
+- name: ODS_IMAGE_TAG
+  required: true
+  value: latest
+- name: ODS_GIT_REF
+  required: true
+- name: JENKINS_AGENT_DOCKERFILE_PATH
+  value: Dockerfile.ubi9
+  description: Dockerfile variant to use
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    name: jenkins-agent-opentofu-2611
+    labels:
+      app: jenkins-agent-opentofu-2611
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: jenkins-agent-opentofu-2611:${ODS_IMAGE_TAG}
+    postCommit: {}
+    resources:
+      limits:
+        cpu: "2"
+        memory: "8Gi"
+        ephemeral-storage: "50Gi"
+      requests:
+        cpu: "500m"
+        memory: "5Gi"
+        ephemeral-storage: "30Gi"
+    runPolicy: Serial
+    source:
+      contextDir: common/jenkins-agents/opentofu-2611/docker
+      git:
+        ref: ${ODS_GIT_REF}
+        uri: ${REPO_BASE}/${ODS_BITBUCKET_PROJECT}/ods-quickstarters.git
+      sourceSecret:
+        name: cd-user-token
+      type: Git
+    strategy:
+      dockerStrategy:
+        buildArgs:
+          - name: nexusHost
+            value: ${NEXUS_HOST}
+          - name: nexusAuth
+            value: ${NEXUS_AUTH}
+          - name: nexusAuth
+            value: ${NEXUS_AUTH}
+        dockerfilePath: ${JENKINS_AGENT_DOCKERFILE_PATH}
+        from:
+          kind: ImageStreamTag
+          name: jenkins-agent-base:${ODS_IMAGE_TAG}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers: []
