@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Robust downloader with retries.
+#
+# Lifted from terrarium/docker/Dockerfile.terrarium (the `fetch` helper it
+# writes to /usr/local/bin). Kept behaviourally identical so the two images
+# fail the same way on a flaky mirror. Needs only bash, curl and coreutils.
+set -euo pipefail
+: "${FETCH_RETRIES:=5}"
+: "${FETCH_RETRY_DELAY:=2}"
+: "${FETCH_CONNECT_TIMEOUT:=20}"
+: "${FETCH_MAX_TIME:=900}"
+exec curl --fail --silent --show-error --location \
+          --retry "$FETCH_RETRIES" --retry-connrefused \
+          --retry-delay "$FETCH_RETRY_DELAY" \
+          --connect-timeout "$FETCH_CONNECT_TIMEOUT" \
+          --max-time "$FETCH_MAX_TIME" \
+          "$@"

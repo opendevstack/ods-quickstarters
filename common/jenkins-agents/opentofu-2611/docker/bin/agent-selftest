@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+# agent-selftest [--expect-ca "<label>"]
+#
+# States the contract of the jenkins-agent-opentofu-2611 image and checks it.
+# It runs as the last step of the image build, and can be run in a pipeline
+# (sh 'agent-selftest') to find out why a tool is missing, shadowed or at the
+# wrong version.
+#
+# Every check prints one line that starts with "ok" or "FAIL". Nothing exits
+# early, so one run reports every problem.
+#
+# Exit status: 0 when every check passed, 1 when at least one failed, 2 when
+# the arguments are wrong.
+#
+# --expect-ca "<label>"  also require that `trust list` contains a certificate
+#                        with this label. The image build does not pass it,
+#                        because a build outside the cluster has no corporate CA.
+set -uo pipefail
+
+# Written by the Dockerfile from the build arguments that select the versions
+# to install. One "<tool>=<version>" per line.
+readonly VERSIONS_FILE=/etc/qs-agent/versions
+
+usage() {
+  echo 'Usage: agent-selftest [--expect-ca "<label>"]'
+}
+
+expect_ca=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --expect-ca)
+      if [ $# -lt 2 ] || [ -z "$2" ]; then
+        echo "agent-selftest: --expect-ca needs a label" >&2
+        usage >&2
+        exit 2
+      fi
+      expect_ca="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "agent-selftest: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+checks=0
+failures=0
+
+# check <description> <command> [<argument>...]
+# Runs the command and records the result. The command's output is discarded,
+# so that every check is exactly one line.
+check() {
+  local description="$1"
+  shift
+  checks=$((checks + 1))
+  if "$@" >/dev/null 2>&1; then
+    printf 'ok   %s\n' "$description"
+  else
+    failures=$((failures + 1))
+    printf 'FAIL %s\n' "$description"
+  fi
+}
+
+on_path() {
+  command -v "$1"
+}
+
+not_on_path() {
+  ! command -v "$1"
+}
+
+resolves_to() {
+  [ "$(command -v "$1")" = "$2" ]
+}
+
+# prints_line <line> <command> [<argument>...]
+# True when the command succeeds and one line of its output equals <line>.
+# The output is captured first: a pipe into `grep -q` can end the command with
+# SIGPIPE, which `pipefail` would report as a failure.
+prints_line() {
+  local line="$1" output
+  shift
+  output="$("$@" 2>/dev/null)" || return 1
+  grep -qxF -- "$line" <<<"$output"
+}
+
+not_in_environment() {
+  [ -z "${!1+set}" ]
+}
+
+does_not_exist() {
+  [ ! -e "$1" ] && [ ! -L "$1" ]
+}
+
+home_is_writable() {
+  local probe
+  [ -n "${HOME:-}" ] || return 1
+  probe="$(mktemp "${HOME}/.agent-selftest.XXXXXX")" || return 1
+  rm -f "$probe"
+}
+
+# True when `trust list` has a certificate whose label is exactly <label>.
+trust_has_label() {
+  local output
+  output="$(trust list 2>/dev/null)" || return 1
+  WANTED="label: $1" awk '
+    { sub(/^[ \t]+/, "") }
+    $0 == ENVIRON["WANTED"] { found = 1 }
+    END { exit found ? 0 : 1 }
+  ' <<<"$output"
+}
+
+declare -A want=()
+if [ -r "$VERSIONS_FILE" ]; then
+  while IFS='=' read -r tool version || [ -n "$tool" ]; do
+    case "$tool" in
+      ''|'#'*) continue ;;
+    esac
+    want["$tool"]="$version"
+  done <"$VERSIONS_FILE"
+fi
+want_tofu="${want[tofu]:-}"
+want_trivy="${want[trivy]:-}"
+
+# OpenTofu and Trivy: the pinned binaries, not a shim or a copy from the base.
+check "${VERSIONS_FILE} names the tofu version" \
+  test -n "$want_tofu"
+check "${VERSIONS_FILE} names the trivy version" \
+  test -n "$want_trivy"
+check "tofu resolves from /usr/local/bin" \
+  resolves_to tofu /usr/local/bin/tofu
+check "tofu is ${want_tofu:-unknown}" \
+  prints_line "OpenTofu v${want_tofu}" tofu -version
+check "trivy resolves from /usr/local/bin" \
+  resolves_to trivy /usr/local/bin/trivy
+check "trivy is ${want_trivy:-unknown}" \
+  prints_line "Version: ${want_trivy}" trivy version
+
+# Python: python3 is the agent's default Python, with the agent's libraries.
+check "python3 is 3.12 or newer" \
+  python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 12) else 1)'
+check "python3 can import hcl2" \
+  python3 -c 'import hcl2'
+check "uv finds Python 3.12 without a download" \
+  env UV_PYTHON_DOWNLOADS=never UV_OFFLINE=1 uv python find 3.12
+
+for tool in terraform-docs uv aws az jq make git bash tar curl oc; do
+  check "${tool} is on PATH" on_path "$tool"
+done
+
+# OpenShift runs the agent under an arbitrary user id in group 0.
+check "group id is 0" \
+  test "$(id -g)" = 0
+check "HOME is writable" \
+  home_is_writable
+
+# tenv reads TOFU_VERSION, and a component Makefile that declares
+# `TRIVY_VERSION ?= <version>` reads TRIVY_VERSION. An image that exports them
+# replaces the pin of the component being built.
+for name in TRIVY_VERSION TOFU_VERSION; do
+  check "${name} is not set in the environment" not_in_environment "$name"
+done
+
+# This agent is terraform-2408 without the Ruby stack.
+for tool in ruby gem bundle rbenv kitchen inspec cinc-auditor; do
+  check "${tool} is not on PATH" not_on_path "$tool"
+done
+for path in /opt/rbenv /opt/bundle; do
+  check "${path} does not exist" does_not_exist "$path"
+done
+
+if [ -n "$expect_ca" ]; then
+  check "trust list contains \"${expect_ca}\"" trust_has_label "$expect_ca"
+fi
+
+echo "agent-selftest: ${checks} checks, ${failures} failed"
+if [ "$failures" -gt 0 ]; then
+  exit 1
+fi
+exit 0

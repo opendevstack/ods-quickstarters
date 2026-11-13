@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# verify_sha256_from_checksums <checksums-url> <artifact-file>
+#
+# Lifted verbatim from terrarium/docker/Dockerfile.terrarium (the `verify_*`
+# helper block). Fail-closed: an artifact whose name is absent from the
+# checksums document is an error, not a skipped check -- otherwise a renamed
+# or moved release asset would silently install unverified.
+#
+# The grep supports both `sha  name` and `sha *name` checksum formats.
+set -euo pipefail
+sums_url="$1"; file="$2"
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+fetch -o "$tmp/checksums.txt" "$sums_url"
+expected="$(grep -E "([[:space:]]|[*])$(basename "$file")$" "$tmp/checksums.txt" | awk '{print $1}')"
+[ -n "$expected" ] || { echo "checksum for $(basename "$file") not found in $sums_url"; exit 1; }
+echo "${expected}  ${file}" | sha256sum -c -

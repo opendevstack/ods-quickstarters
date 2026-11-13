@@ -1,0 +1,276 @@
+FROM opendevstackorg/ods-jenkins-agent-base-ubi9:latest
+
+LABEL maintainer="Erhard Wais <erhard.wais@boehringer-ingelheim.com>, Frank Joas <frank.joas@boehringer-ingelheim.com>, Josef Hartmann <josef.hartmann@boehringer-ingelheim.com>, Steve Taylor <steve.taylor@boehringer-ingelheim.com>"
+
+# Labels consumed by Red Hat build service
+LABEL com.redhat.component="jenkins-agent-opentofu-ubi9-docker" \
+      name="openshift/jenkins-agent-opentofu-ubi9" \
+      version="0.1" \
+      architecture="x86_64" \
+      release="1" \
+      io.k8s.display-name="Jenkins Agent OpenTofu" \
+      io.k8s.description="The jenkins agent image has OpenTofu, Trivy, terraform and other tools on top of the jenkins agent base image." \
+      io.openshift.tags="openshift,jenkins,agent,terraform,aws,azure"
+
+ARG nexusHost
+ARG nexusUrl=https://${nexusHost}
+ARG nexusAuth
+ARG NPMJS_REGISTRY_FLAG
+# SHA-256 of go${GO_VERSION}.linux-amd64.tar.gz, from https://go.dev/dl/?mode=json&include=all.
+# Change it together with GO_VERSION.
+ARG GO_SHA256=ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5
+# The OpenTofu and Trivy versions this agent installs. They are ARG plus LABEL and must not
+# become ENV: tenv reads TOFU_VERSION from the environment, and a component Makefile that
+# declares `TRIVY_VERSION ?= <version>` takes TRIVY_VERSION from it. An exported value would
+# replace the pin of the component being built.
+ARG TOFU_VERSION=1.12.5
+ARG TRIVY_VERSION=0.69.3
+
+LABEL org.opendevstack.agent.tofu.version="${TOFU_VERSION}" \
+      org.opendevstack.agent.trivy.version="${TRIVY_VERSION}"
+
+ENV TERRAFORM_VERSION=1.9.4 \
+    TERRAFORM_CONFIG_INSPECT_VERSION=0.2.0 \
+    TERRAFORM_DOCS_VERSION=v0.18.0 \
+    PACKER_VERSION=1.11.2 \
+    CONSUL_VERSION=1.19.1 \
+    TENV_VERSION=3.0.0 \
+    TENV_AUTO_INSTALL=true \
+    TENV_ROOT=/opt/tenv \
+    GO_VERSION=1.26.10 \
+    GOBIN=/usr/local/go/bin \
+    TFLINT_VERSION=0.52.0 \
+    NODEJS_VERSION=24 \
+    AGE_VERSION=1.2.0 \
+    TASK_VERSION=3.38.0 \
+    UV_VERSION=0.13.5 \
+    PYTHON_DEFAULT_VERSION=3.12 \
+    NPM_CONFIG_CAFILE=/etc/pki/ca-trust/extracted/pem/objsign-ca-bundle.pem \
+    UV_CA_CERTIFICATE=/etc/ssl/certs/ca-bundle.crt \
+    PIP_CERT=/etc/ssl/certs/ca-bundle.crt
+
+ENV INSTALL_PKGS="yum-utils gcc make git-core zlib zlib-devel gcc-c++ patch \
+    readline \
+    libffi-devel libyaml-devel openssl-devel make bzip2 autoconf curl sqlite-devel xz \
+    jq parallel"
+ENV INSTALL_DNF_PKGS="automake libtool xorriso"
+# /usr/local/bin comes before /usr/bin so that python3/python resolve to the default Python
+# (linked below), not to the RHEL platform python3 (dnf keeps using it via its shebang).
+ENV PATH=/opt/node/bin:/usr/local/bin:/usr/bin:/usr/local/go/bin:$HOME/.local/bin:$JAVA_HOME/bin:$PATH
+ENV HOME=/home/jenkins
+
+RUN sh -c "rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm || true"
+COPY python_requirements /tmp/requirements.txt
+
+# Workaroud we use when running behind proxy
+# Basically we put the proxy certificate in certs folder
+# COPY certs/* /etc/pki/ca-trust/source/anchors/
+# RUN update-ca-trust force-enable && update-ca-trust extract
+
+COPY yum.repos.d/almalinux9.repo /etc/yum.repos.d/almalinux9.repo
+RUN sed -i 's@^\s*enabled\s*=.*$@enabled = 1@g' /etc/yum.repos.d/*.repo \
+    && sed -i 's@^\s*enabled\s*=.*$@enabled = 0@g' /etc/yum.repos.d/almalinux9.repo \
+    && grep -i '\(name\|enabled\)' /etc/yum.repos.d/*.repo
+
+RUN set -x \
+    && dnf -y repolist \
+    && dnf -y install --allowerasing $INSTALL_PKGS \
+    && dnf -y install --allowerasing --enablerepo almalinux-baseos --enablerepo almalinux-appstream $INSTALL_DNF_PKGS \
+    && dnf -y update ca-certificates \
+    && dnf clean all
+
+RUN curl -LsSf https://astral.sh/uv/${UV_VERSION}/install.sh | sh && \
+    mkdir -p $HOME/.config/pip && \
+    echo "[global]" > $HOME/.config/pip/pip.conf && \
+    if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
+      echo "index-url = https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple" >> $HOME/.config/pip/pip.conf && \
+      echo "trusted-host = ${nexusHost}" >> $HOME/.config/pip/pip.conf; \
+    fi
+
+# Python 3.9 is not installed any more: it is EOL and pip >= 26.2.2 (the release with the
+# refreshed vendored CA store, see eMudhra/emSign incident) requires Python >= 3.10.
+# Users who still need it can run `uv python install 3.9` themselves.
+# pip is upgraded explicitly because pip always loads its vendored certifi CA store in
+# addition to the system store; the floor makes the build fail if it cannot be met.
+# The default Python (PYTHON_DEFAULT_VERSION) becomes `python3`, `python` and `python3-config`, and
+# its console scripts (pipenv, virtualenv, az, pre-commit, ...) are linked into /usr/local/bin.
+# Before, `python3` and these scripts had the agent's libraries only as a side effect of
+# `--system --python 3.9` resolving to the RHEL platform /usr/bin/python3.9; a uv-managed
+# interpreter keeps its scripts in its own bin dir, which is not on PATH. /usr/bin/python3 stays
+# the platform Python, which dnf uses through its shebang; the build checks that dnf still works.
+# python3-config is an exec wrapper, not a symlink: the script derives its prefix from its own path.
+RUN for pyVersion in 3.11 ${PYTHON_DEFAULT_VERSION}; do \
+        uv python install $pyVersion && \
+        if [ -n "${nexusHost}" ] && [ -n "${nexusAuth}" ]; then \
+          uv pip install --system --break-system-packages --python $pyVersion --index-url https://${nexusAuth}@${nexusHost}/repository/pypi-all/simple --trusted-host ${nexusHost} --prerelease=allow \
+              "pip>=26.2.2" \
+              virtualenv==20.26.3 \
+              pycodestyle==2.12.1 \
+              -r /tmp/requirements.txt; \
+        else \
+          uv pip install --system --break-system-packages --python $pyVersion --prerelease=allow \
+              "pip>=26.2.2" \
+              virtualenv==20.26.3 \
+              pycodestyle==2.12.1 \
+              -r /tmp/requirements.txt; \
+        fi && \
+        "$(uv python find $pyVersion)" -m pip --version && \
+        "$(uv python find $pyVersion)" -c "import certifi; print('certifi', certifi.__version__)" || exit 1; \
+    done && \
+    rm -f /tmp/requirements.txt && \
+    uv python pin ${PYTHON_DEFAULT_VERSION} && \
+    uv tool update-shell && \
+    PY_DEFAULT="$(uv python find ${PYTHON_DEFAULT_VERSION})" && \
+    PY_SCRIPTS="$("$PY_DEFAULT" -c 'import sysconfig; print(sysconfig.get_path("scripts"))')" && \
+    ln -sf "$PY_DEFAULT" /usr/local/bin/python3 && \
+    ln -sf "$PY_DEFAULT" /usr/local/bin/python && \
+    printf '#!/bin/sh\nexec "%s" "$@"\n' "$PY_SCRIPTS/python${PYTHON_DEFAULT_VERSION}-config" >/usr/local/bin/python3-config && \
+    chmod 755 /usr/local/bin/python3-config && \
+    for script in "$PY_SCRIPTS"/*; do \
+        name="$(basename "$script")"; \
+        case "$name" in python*|pip|pip3|pip3.*|idle*|pydoc*|2to3*) continue ;; esac; \
+        [ -e "/usr/local/bin/$name" ] || ln -s "$script" "/usr/local/bin/$name" || exit 1; \
+    done && \
+    [ "$(command -v python3)" = /usr/local/bin/python3 ] && \
+    python3 --version | grep -q "^Python ${PYTHON_DEFAULT_VERSION}\." && \
+    python3 -c 'import boto3, botocore, requests, hcl2, certifi' && \
+    PY_INCLUDE="$(python3 -c 'import sysconfig; print(sysconfig.get_paths()["include"])')" && \
+    [ -f "$PY_INCLUDE/Python.h" ] && \
+    [ "$(python3-config --includes | awk '{print $1}')" = "-I$PY_INCLUDE" ] && \
+    pipenv --version && virtualenv --version && pre-commit --version && pycodestyle --version && command -v az && \
+    /usr/bin/python3 -c 'import dnf' && dnf --version
+
+# Install awscli2
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip -qq awscliv2.zip \
+    && ./aws/install \
+    && rm -f awscliv2.zip \
+    && rm -Rf ./aws
+
+# Install awssamcli
+RUN curl -sSL "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" -o "awssam.zip" \
+    && unzip -qq -d awssam awssam.zip \
+    && ./awssam/install && rm -f awssam.zip && rm -Rf ./awssam
+
+# Install NodeJS
+RUN INSTALL_NODE="nodejs nodejs-nodemon" \
+    && curl -fsSL https://rpm.nodesource.com/setup_${NODEJS_VERSION}.x  | bash - \
+    && yum install -y --setopt=tsflags=nodocs --disableplugin=subscription-manager $INSTALL_NODE \
+    && rpm -V $INSTALL_NODE \
+    && yum clean all -y \
+    && npm config set registry=$nexusUrl/repository/npmjs/ \
+    && npm config set //${nexusUrl#*://}/repository/npmjs/:_auth=$(echo -n $nexusAuth | base64) \
+    && npm config set email=no-reply@opendevstack.org \
+    && npm config set strict-ssl=true
+
+# Install aws cdk
+RUN npm install -g ${NPMJS_REGISTRY_FLAG} aws-cdk \
+    && node --version \
+    && cdk --version
+
+# Install tenv & install terraform
+RUN mkdir -p "${TENV_ROOT}" && chmod 2775 "${TENV_ROOT}" && chown 1001:0 "${TENV_ROOT}" \
+    && dnf install -y https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_amd64.rpm \
+    && dnf clean all \
+    && tenv tf install ${TERRAFORM_VERSION} \
+    && tenv tf use ${TERRAFORM_VERSION} \
+    && tenv version \
+    && terraform -version \
+    && tenv tf list \
+    && echo 'export PATH=$(/usr/bin/tenv update-path)' > /etc/profile.d/tenv.sh \
+    && chown -R 1001:0 "${TENV_ROOT}" \
+    && chmod -R 2775 "${TENV_ROOT}"
+
+# Install GO for terratest
+RUN cd /tmp \
+    && curl -LfSso /tmp/go.tar.gz https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
+    && echo "${GO_SHA256}  /tmp/go.tar.gz" | sha256sum -c - \
+    && tar -C /usr/local -xzf go.tar.gz \
+    && rm -f /tmp/go.tar.gz \
+    && /usr/local/go/bin/go version
+
+# Install go-task
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d v${TASK_VERSION} \
+    && task --version
+
+# Install tflint
+RUN wget -q -O /tmp/tflint.zip "https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_linux_amd64.zip" \
+    && unzip /tmp/tflint.zip -d /usr/local/bin \
+    && rm -rf /tmp/tflint.zip \
+    && tflint --version
+
+# Install packer
+RUN wget -q -O /tmp/packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip" \
+    && unzip /tmp/packer.zip -d /usr/local/bin packer \
+    && rm -rf /tmp/packer.zip \
+    && packer --version
+
+# Install terraform-config-inspect
+RUN wget -q -O /tmp/terraform-config-inspect.tar.gz https://github.com/nichtraunzer/terraform-config-inspect/releases/download/v${TERRAFORM_CONFIG_INSPECT_VERSION}/terraform-config-inspect_${TERRAFORM_CONFIG_INSPECT_VERSION}_linux_amd64.tar.gz \
+    && tar zxpf /tmp/terraform-config-inspect.tar.gz -C /usr/local/bin/ terraform-config-inspect \
+    && rm -f /tmp/terraform-config-inspect.tar.gz \
+    && chmod 755 /usr/local/bin/terraform-config-inspect
+
+# Install terraform-docs
+RUN wget -q -O /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
+    && tar zxpf /tmp/terraform-docs.tar.gz -C /usr/local/bin/ terraform-docs \
+    && chmod +x /usr/local/bin/terraform-docs \
+    && rm -f /tmp/terraform-docs.tar.gz
+
+# Install consul-cli
+RUN wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
+    && unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin consul \
+    && rm -f consul_${CONSUL_VERSION}_linux_amd64.zip \
+    && chmod +x /usr/local/bin/consul \
+    && /usr/local/bin/consul -version
+
+# Install age
+RUN wget -q -O /tmp/age.tar.gz https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+    && tar xzf /tmp/age.tar.gz -C /usr/local/bin \
+    && rm -f /tmp/age.tar.gz
+
+# Download and checksum helpers for the two steps below
+COPY bin/fetch bin/verify_sha256_from_checksums /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/fetch /usr/local/bin/verify_sha256_from_checksums
+
+# Install OpenTofu, verified against the checksums published with the release.
+# tenv ships a shim at /usr/bin/tofu; this binary wins because /usr/local/bin is first on PATH.
+# amd64 is written out: the OpenShift builder does not populate TARGETARCH.
+RUN set -eux; \
+    BASE="https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}"; \
+    FNAME="tofu_${TOFU_VERSION}_linux_amd64.tar.gz"; \
+    fetch -o "/tmp/${FNAME}" "${BASE}/${FNAME}"; \
+    verify_sha256_from_checksums "${BASE}/tofu_${TOFU_VERSION}_SHA256SUMS" "/tmp/${FNAME}"; \
+    tar -xzf "/tmp/${FNAME}" -C /usr/local/bin tofu; \
+    rm -f "/tmp/${FNAME}"; \
+    chmod 0755 /usr/local/bin/tofu; \
+    tofu -version
+
+# Install Trivy, verified the same way. It is installed even if the base agent ships one:
+# the pinned binary in /usr/local/bin is the one that resolves either way.
+RUN set -eux; \
+    BASE="https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}"; \
+    FNAME="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"; \
+    fetch -o "/tmp/${FNAME}" "${BASE}/${FNAME}"; \
+    verify_sha256_from_checksums "${BASE}/trivy_${TRIVY_VERSION}_checksums.txt" "/tmp/${FNAME}"; \
+    tar -xzf "/tmp/${FNAME}" -C /usr/local/bin trivy; \
+    rm -f "/tmp/${FNAME}"; \
+    chmod 0755 /usr/local/bin/trivy; \
+    trivy version
+
+RUN chmod +t /tmp \
+    && chown -R 1001:0 $HOME \
+    && chmod -R g+rwX $HOME
+
+# The self-test, and the versions it expects: written from the same ARGs as the installs above
+COPY bin/agent-selftest /usr/local/bin/agent-selftest
+RUN chmod 0755 /usr/local/bin/agent-selftest \
+    && mkdir -p /etc/qs-agent \
+    && printf 'tofu=%s\ntrivy=%s\n' "${TOFU_VERSION}" "${TRIVY_VERSION}" > /etc/qs-agent/versions
+
+USER 1001
+
+# The image checks its own contract, so that a successful build is a real test.
+# A build argument is an environment variable of every RUN step. The two version arguments
+# are removed for this step: the self-test requires that they are not set, as in a running agent.
+RUN env -u TOFU_VERSION -u TRIVY_VERSION agent-selftest
