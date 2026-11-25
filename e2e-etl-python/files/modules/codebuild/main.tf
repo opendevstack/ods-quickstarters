@@ -35,7 +35,7 @@ resource "aws_codebuild_project" "build_project" {
         pre_build:
           commands:
             - pip install -r requirements.txt
-            - npm install -g allure-commandline --save-dev
+            - npm install -g allure-commandline@2.41.0 --save-dev
 
         build:
           commands:
